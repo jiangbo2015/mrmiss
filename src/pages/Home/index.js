@@ -1,15 +1,15 @@
-import React from 'react';
+import Login from '@/pages/User/Login';
 import { connect } from 'dva';
-// import { } from 'antd'
-import styles from './index.less';
-import Header from '../../components/Header';
-import Banner from '../../components/Banner';
 
-const App = () => {
+const App = props => {
+    console.log(process.env.API_URL);
+    // console.log(object)
+    console.log(props, 'app');
     return (
         <div>
-            <Header />
-            <Banner />
+            {/* <Header /> */}
+            <Login history={props.history} />
+            {/* <Banner /> */}
         </div>
     );
 };

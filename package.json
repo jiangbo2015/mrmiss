@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "start": "umi dev",
-    "build": "umi build",
+    "build-test": "UMI_ENV=test umi build",
+    "build-prod": "UMI_ENV=prod umi build",
     "postinstall": "umi generate tmp",
     "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
   },
@@ -15,12 +16,13 @@
     ]
   },
   "devDependencies": {
-      "@umijs/preset-react": "1.x",
-      "lint-staged": "^10.0.7",
-      "prettier": "^1.19.1",
-      "yorkie": "^2.0.0"
+    "@umijs/preset-react": "1.x",
+    "lint-staged": "^10.0.7",
+    "prettier": "^1.19.1",
+    "yorkie": "^2.0.0"
   },
   "dependencies": {
+    "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "umi": "^3.2.28"
