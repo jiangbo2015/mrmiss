@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "umi dev",
+    "dev": "umi dev",
     "build-test": "UMI_ENV=test umi build",
     "build-prod": "UMI_ENV=prod umi build",
     "postinstall": "umi generate tmp",
@@ -25,6 +25,8 @@
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "rebass": "^4.0.7",
+    "styled-components": "^5.2.1",
     "umi": "^3.2.28"
   }
 }

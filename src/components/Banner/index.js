@@ -1,6 +1,6 @@
-import gif1 from '.@/public/imgs/1.gif';
-import gif2 from '.@/public/imgs/2.gif';
-import gif3 from '.@/public/imgs/3.gif';
+import gif1 from '@/public/imgs/1.gif';
+import gif2 from '@/public/imgs/2.gif';
+import gif3 from '@/public/imgs/3.gif';
 import './index.less';
 
 const Banner = () => {

@@ -1,33 +1,24 @@
-import request from '@/utils/request';
 import { connect } from 'dva';
 import { useState } from 'react';
+import { Box, Button } from 'rebass/styled-components';
 import './index.less';
 
-const Login = ({ dispatch, history }) => {
+const Login = ({ dispatch }) => {
     const [account, setAccount] = useState('xixi');
     const [pwd, setPwd] = useState('123456');
 
     const handleLogin = async () => {
-        const { data } = await request('/user/login', {
-            method: 'post',
-            data: {
+        dispatch({
+            type: 'user/login',
+            payload: {
                 account,
                 password: pwd,
             },
         });
-        // 登录成功，将token写入本地，并跳转到主体
-        if (data && data.token) {
-            localStorage.token = data.token;
-            dispatch({
-                type: 'user/setUserInfo',
-                payload: data,
-            });
-            history.push('/main');
-        }
     };
 
     return (
-        <div className="loginWrapper">
+        <Box bg="background" p="30px">
             <input
                 type="text"
                 value={account}
@@ -38,8 +29,10 @@ const Login = ({ dispatch, history }) => {
                 value={pwd}
                 onChange={e => setPwd(e.target.value)}
             />
-            <button onClick={handleLogin}>提交</button>
-        </div>
+            <Button variant="primary" onClick={handleLogin}>
+                提交abc
+            </Button>
+        </Box>
     );
 };
 
