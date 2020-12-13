@@ -8,6 +8,7 @@ export default defineConfig({
     define: {
         'process.env.API_URL': 'http://localhost:3000/api',
     },
+    locale: {}, // 开启多言语
     /**
      * 权限部分说明
      * 不设置authority，表示没有限制
