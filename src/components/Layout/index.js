@@ -8,7 +8,7 @@ export default props => {
     const intl = useIntl();
     return (
         <ThemeProvider theme={theme}>
-            <Box pt="74px">
+            <Box>
                 {/* 测试多语言：
                 {intl.formatMessage({ id: 'hello', defaultMessage: '你好' })} */}
                 {/* <Button onClick={() => setLocale('zh-CN', false)}>中文</Button>

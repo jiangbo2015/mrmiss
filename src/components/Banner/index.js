@@ -10,6 +10,7 @@ const Banner = () => {
             <img className="banner" src={gif3} />
             <img className="banner" src={gif2} />
             <img className="banner" src={gif1} />
+            <img className="banner-vir" src={gif1} />
             <Login />
         </div>
     );
