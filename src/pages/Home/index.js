@@ -5,6 +5,7 @@ import map from '@/public/map.png';
 import { connect } from 'dva';
 import { Box } from 'rebass/styled-components';
 import Carousel from './Carousel';
+import FeatureImage from './FeatureImage';
 
 const App = props => {
     return (
@@ -12,12 +13,13 @@ const App = props => {
             {/* <Login /> */}
             <Banner />
             <Box bg="#fbf8fa" px="40px" py="40px">
-                <Box bg="transparent">
+                <Box mb="40px">
                     <Title
                         title="我们的胶囊"
                         subtitle="本季胶囊由mrmiss 2021限量胶囊系列-亲子家庭系列推出。 希望您可以在这里找到自己喜欢的产品。"
                     ></Title>
                 </Box>
+                <FeatureImage></FeatureImage>
                 <Carousel></Carousel>
             </Box>
             <Box bg="#fff" px="40px" py="40px">

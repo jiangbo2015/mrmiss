@@ -4,11 +4,11 @@ import { ThemeProvider } from 'styled-components';
 import { useIntl } from 'umi';
 import theme from './theme';
 
-export default props => {
+export default ({ pt, ...props }) => {
     const intl = useIntl();
     return (
         <ThemeProvider theme={theme}>
-            <Box>
+            <Box pt={pt || 0}>
                 {/* 测试多语言：
                 {intl.formatMessage({ id: 'hello', defaultMessage: '你好' })} */}
                 {/* <Button onClick={() => setLocale('zh-CN', false)}>中文</Button>
