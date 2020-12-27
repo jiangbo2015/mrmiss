@@ -3,8 +3,9 @@ import carousel1 from '@/public/carousel1.jpg';
 import temp from '@/public/temp.jpg';
 import React from 'react';
 import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
+import Dot from './Components/Dot';
 
-const Title = ({ title, subtitle }) => (
+export const Title = ({ title, subtitle }) => (
     <Box maxWidth="1300px" mx="auto">
         <Heading fontSize="50px" textAlign="center" color="#020202">
             {title}
@@ -115,14 +116,7 @@ export default class Capsule extends React.Component {
                                         </Text>
 
                                         {new Array(3).fill(0).map((x, i) => (
-                                            <Box
-                                                width="30px"
-                                                height="30px"
-                                                mx="5px"
-                                                key={i}
-                                                bg="red"
-                                                css={{ borderRadius: '50%' }}
-                                            ></Box>
+                                            <Dot bg="red" key={i}></Dot>
                                         ))}
                                     </Flex>
                                 </Box>
