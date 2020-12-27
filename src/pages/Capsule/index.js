@@ -26,18 +26,24 @@ export default class Capsule extends React.Component {
         return (
             <>
                 <Box bg="#FDE7E1" py="90px">
-                    <Title
-                        title="Our capsule"
-                        subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
-                    ></Title>
-                    <Flex justifyContent="center" mt="30px">
-                        <Image src={carousel1}></Image>
-                    </Flex>
-                    <Flex>
-                        {new Array(5).fill(0).map((x, i) => (
-                            <Image src={ca1} width="353px" key={i}></Image>
-                        ))}
-                    </Flex>
+                    <Box maxWidth="1380px" mx="auto">
+                        <Title
+                            title="Our capsule"
+                            subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
+                        ></Title>
+                        <Flex justifyContent="center" mt="30px">
+                            <Image src={carousel1} width="1380px"></Image>
+                        </Flex>
+                        <Flex
+                            justifyContent="space-between"
+                            mx="auto"
+                            mt="30px"
+                        >
+                            {new Array(5).fill(0).map((x, i) => (
+                                <Image src={ca1} width="260px" key={i}></Image>
+                            ))}
+                        </Flex>
+                    </Box>
                 </Box>
                 <Box bg="#fff" py="90px" maxWidth="1400px" mx="auto">
                     <Title
@@ -46,6 +52,32 @@ export default class Capsule extends React.Component {
             series-parent-child family series. I hope you can find your favorite
             products here.."
                     ></Title>
+                    <Flex py="30px" justifyContent="space-between">
+                        <Box>
+                            <input
+                                type="text"
+                                style={{
+                                    borderRadius: '14px',
+                                    height: '28px',
+                                    border: '1px solid #000000',
+                                }}
+                            />
+                        </Box>
+                        <Box>
+                            <Box
+                                width="124px"
+                                bg="#2E2E2E"
+                                textAlign="center"
+                                css={{
+                                    boxShadow: '0px 3px 7px 0px',
+                                    borderRadius: '6px',
+                                    color: '#fff',
+                                }}
+                            >
+                                A
+                            </Box>
+                        </Box>
+                    </Flex>
                     <Flex
                         justifyContent="space-between"
                         flexDirection="row"
