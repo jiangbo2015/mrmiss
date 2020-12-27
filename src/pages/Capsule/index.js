@@ -1,5 +1,7 @@
 import Container from '@/components/Container';
+import Layout from '@/components/Layout';
 import Title from '@/components/Title';
+import banner from '@/public/banner.jpeg';
 import ca1 from '@/public/ca1.jpg';
 import carousel1 from '@/public/carousel1.jpg';
 import React from 'react';
@@ -11,7 +13,18 @@ import Switcher from './Components/Switcher';
 export default class Capsule extends React.Component {
     render() {
         return (
-            <>
+            <Layout>
+                <Flex
+                    justifyContent="center"
+                    height="600px"
+                    width="100%"
+                    css={{
+                        background: `url(${banner}) no-repeat`,
+                        backgroundSize: 'cover',
+                    }}
+                >
+                    {/* <Image src={banner} width="80vw" mx="auto"></Image> */}
+                </Flex>
                 <Box bg="#FDE7E1" py="90px">
                     <Box maxWidth="1380px" mx="auto">
                         <Title
@@ -63,7 +76,7 @@ export default class Capsule extends React.Component {
                         </Container>
                     </Box>
                 </section>
-            </>
+            </Layout>
         );
     }
 }

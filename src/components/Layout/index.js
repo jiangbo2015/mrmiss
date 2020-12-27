@@ -1,14 +1,14 @@
 import Header from '@/components/Header';
-import { Box, Button } from 'rebass/styled-components';
+import { Box } from 'rebass/styled-components';
 import { ThemeProvider } from 'styled-components';
-import { setLocale, useIntl } from 'umi';
+import { useIntl } from 'umi';
 import theme from './theme';
 
 export default props => {
     const intl = useIntl();
     return (
         <ThemeProvider theme={theme}>
-            <Box pt="100px">
+            <Box pt="74px">
                 {/* 测试多语言：
                 {intl.formatMessage({ id: 'hello', defaultMessage: '你好' })} */}
                 {/* <Button onClick={() => setLocale('zh-CN', false)}>中文</Button>
