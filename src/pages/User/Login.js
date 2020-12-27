@@ -18,21 +18,32 @@ const Login = ({ dispatch }) => {
     };
 
     return (
-        <Box bg="background" p="30px">
-            <input
-                type="text"
-                value={account}
-                onChange={e => setAccount(e.target.value)}
-            />
-            <input
-                type="text"
-                value={pwd}
-                onChange={e => setPwd(e.target.value)}
-            />
+        <div
+            // bg="background"
+            // p="30px"
+            // sx={{ position: 'absolute', zIndex: 999 }}
+            className="loginWrapper"
+        >
+            <div className="loginTitle">Sign in</div>
+            <p>
+                <input
+                    type="text"
+                    value={account}
+                    onChange={e => setAccount(e.target.value)}
+                />
+            </p>
+            <p>
+                <input
+                    type="text"
+                    value={pwd}
+                    onChange={e => setPwd(e.target.value)}
+                />
+            </p>
+
             <Button variant="primary" onClick={handleLogin}>
-                提交abc
+                登录
             </Button>
-        </Box>
+        </div>
     );
 };
 
