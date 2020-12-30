@@ -1,6 +1,7 @@
 import Banner from '@/components/Banner';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
+import Footer from '@/components/Footer';
 import map from '@/public/map.png';
 import { connect } from 'dva';
 import { Box } from 'rebass/styled-components';
@@ -25,9 +26,7 @@ const App = props => {
             <Box bg="#fff" px="40px" py="40px">
                 <Title
                     title="关于我们"
-                    subtitle="
-                                我们有效地整合了流程，产品和客户的工作和需求，
-以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。
+                    subtitle=" 我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。
                             "
                 ></Title>
                 <Box
