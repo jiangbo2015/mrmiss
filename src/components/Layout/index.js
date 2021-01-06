@@ -1,8 +1,10 @@
-import Header from '@/components/Header';
 import { Box } from 'rebass/styled-components';
 import { ThemeProvider } from 'styled-components';
 import { useIntl } from 'umi';
 import theme from './theme';
+
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default ({ pt, ...props }) => {
     const intl = useIntl();
@@ -16,6 +18,7 @@ export default ({ pt, ...props }) => {
                 <Header></Header>
                 {props.children}
             </Box>
+            <Footer />
         </ThemeProvider>
     );
 };
