@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 37 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 55.2 (78181) - https://sketchapp.com -->
+    <title>Slice 1</title>
+    <desc>Created with Sketch.</desc>
+    <g id="页面1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icon-search" fill="#7B7B7B" fill-rule="nonzero">
+            <path
+                d="M16.3,31.4 C7.6,31.4 0.6,24.4 0.6,15.7 C0.6,7 7.6,0 16.3,0 C24.9,0 32,7 32,15.7 C32,24.4 24.9,31.4 16.3,31.4 Z M16.3,2 C8.7,2 2.6,8.1 2.6,15.7 C2.6,23.3 8.7,29.4 16.3,29.4 C23.9,29.4 30,23.2 30,15.7 C30,8.2 23.8,2 16.3,2 Z"
+                id="形状"></path>
+            <circle id="椭圆形" cx="16.3" cy="15.7" r="2.9"></circle>
+            <rect id="矩形"
+                transform="translate(31.398810, 30.687030) rotate(-45.000000) translate(-31.398810, -30.687030) "
+                x="30.3988196" y="24.4870895" width="1.99998082" height="12.3998811"></rect>
+        </g>
+    </g>
+</svg>

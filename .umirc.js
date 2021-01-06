@@ -8,6 +8,12 @@ export default defineConfig({
     define: {
         'process.env.API_URL': 'http://localhost:3000/api',
     },
+    proxy: {
+        '/api': {
+            target: 'http://localhost:3001',
+            changeOrigin: true,
+        },
+    },
     locale: {}, // 开启多言语
     /**
      * 权限部分说明
@@ -18,6 +24,7 @@ export default defineConfig({
     routes: [
         { path: '/', component: '@/pages/Home' },
         { path: '/capsule', component: '@/pages/Capsule' },
+        { path: '/diy', component: '@/pages/Diy' },
         {
             path: '/main',
             component: '@/pages/Main',

@@ -12,7 +12,7 @@ function useUserInfo() {
     useEffect(() => {
         const getUser = async () => {
             try {
-                const { data } = await request.get('/user/getCurrentUser');
+                const { data } = await request.get('/api/user/getCurrentUser');
                 if (data) {
                     setInfo(data);
                 }

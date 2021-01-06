@@ -16,6 +16,7 @@ export default {
     },
     effects: {
         *login({ payload }, { call, put }) {
+            // console.log('登录成功，将token写入本地，并跳转到主体');
             const { data } = yield call(api.login, payload);
             // 登录成功，将token写入本地，并跳转到主体
             if (data && data.token) {
@@ -24,7 +25,19 @@ export default {
                     type: 'setInfo',
                     payload: data,
                 });
-                history.push('/main');
+                // history.push('/main');
+            }
+        },
+        *getCurrentUser(_, { call, put }) {
+            const { data } = yield call(api.getCurrentUser);
+            // 登录成功，将token写入本地，并跳转到主体
+            if (data) {
+                // localStorage.token = data.token;
+                yield put({
+                    type: 'setInfo',
+                    payload: data,
+                });
+                // history.push('/main');
             }
         },
         *logout() {

@@ -1,12 +1,13 @@
 import { connect } from 'dva';
+import { useIntl } from 'umi';
 import { useState } from 'react';
 import { Box, Button } from 'rebass/styled-components';
 import './index.less';
 
 const Login = ({ dispatch }) => {
-    const [account, setAccount] = useState('xixi');
+    const [account, setAccount] = useState('paige');
     const [pwd, setPwd] = useState('123456');
-
+    const intl = useIntl();
     const handleLogin = async () => {
         dispatch({
             type: 'user/login',
@@ -24,7 +25,12 @@ const Login = ({ dispatch }) => {
             // sx={{ position: 'absolute', zIndex: 999 }}
             className="loginWrapper"
         >
-            <div className="loginTitle">Sign in</div>
+            <div className="loginTitle">
+                {intl.formatMessage({
+                    id: 'sign_in',
+                    defaultMessage: '登录',
+                })}
+            </div>
             <p>
                 <input
                     type="text"
@@ -41,7 +47,10 @@ const Login = ({ dispatch }) => {
             </p>
 
             <Button variant="primary" onClick={handleLogin}>
-                登录
+                {intl.formatMessage({
+                    id: 'login',
+                    defaultMessage: '登录',
+                })}
             </Button>
         </div>
     );

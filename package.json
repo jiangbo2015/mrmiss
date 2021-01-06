@@ -1,5 +1,6 @@
 {
   "private": true,
+  "proxy": "http://localhost:3001",
   "scripts": {
     "dev": "umi dev",
     "build-test": "UMI_ENV=test umi build",
@@ -25,7 +26,10 @@
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-slick": "^0.27.13",
+    "react-svg": "^11.2.1",
     "rebass": "^4.0.7",
+    "slick-carousel": "^1.8.1",
     "styled-components": "^5.2.1",
     "umi": "^3.2.28"
   }

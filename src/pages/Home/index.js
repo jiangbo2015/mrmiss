@@ -3,15 +3,22 @@ import Layout from '@/components/Layout';
 import Title from '@/components/Title';
 import map from '@/public/map.png';
 import { connect } from 'dva';
+import { useEffect } from 'react';
 import { Box } from 'rebass/styled-components';
 import Carousel from './Carousel';
 import FeatureImage from './FeatureImage';
 
-const App = props => {
+const App = ({ dispatch, currentUser }) => {
+    // const { currentUser } = props;
+    useEffect(() => {
+        dispatch({
+            type: 'user/getCurrentUser',
+        });
+    }, []);
     return (
         <Layout>
             {/* <Login /> */}
-            <Banner />
+            <Banner isLogin={currentUser.id ? true : false} />
             <Box bg="#fbf8fa" px="40px" py="40px">
                 <Box mb="40px">
                     <Title
@@ -43,4 +50,4 @@ const App = props => {
     );
 };
 
-export default connect()(App);
+export default connect(({ user }) => ({ currentUser: user.info }))(App);
