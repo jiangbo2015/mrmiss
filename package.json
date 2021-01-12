@@ -26,11 +26,15 @@
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
+    "react-id-swiper": "^4.0.0",
+    "react-infinite-scroll-component": "^5.1.0",
+    "react-responsive-carousel": "^3.2.11",
     "react-slick": "^0.27.13",
     "react-svg": "^11.2.1",
     "rebass": "^4.0.7",
     "slick-carousel": "^1.8.1",
     "styled-components": "^5.2.1",
+    "swiper": "^5.4.5",
     "umi": "^3.2.28"
   }
 }
