@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 39.5 39.6" style="enable-background:new 0 0 39.5 39.6;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
-	.st1{fill:#FFFFFF;}
-	.st2{fill:#F4EFEF;}
-	.st3{clip-path:url(#SVGID_2_);fill:#FFFFFF;}
-</style>
-<g>
-	<g>
-		<defs>
-			<rect id="SVGID_1_" x="0" width="39.5" height="39.6"/>
-		</defs>
-		<clipPath id="SVGID_2_">
-			<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
-		</clipPath>
-		<path class="st3" d="M38.5,39.6H1c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1h37.5c0.6,0,1,0.4,1,1v37.6C39.5,39.2,39.1,39.6,38.5,39.6z
-			 M2,37.6h35.5V2H2V37.6z"/>
-	</g>
-	<path class="st1" d="M32.9,34H6.6c-0.6,0-1-0.4-1-1V6.6c0-0.6,0.4-1,1-1h26.3c0.6,0,1,0.4,1,1V33C33.9,33.6,33.5,34,32.9,34z
-		 M7.6,32h24.3V7.6H7.6V32z"/>
-</g>
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+    y="0px" viewBox="0 0 39.5 39.6" style="enable-background:new 0 0 39.5 39.6;" xml:space="preserve">
+    <style type="text/css">
+        .st0 {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-miterlimit: 10;
+        }
+
+        .st1-single {
+            fill: #FFFFFF;
+        }
+
+        .st2 {
+            fill: #F4EFEF;
+        }
+
+        .st3 {
+            clip-path: url(#SVGID_2_);
+            fill: #FFFFFF;
+        }
+    </style>
+    <g>
+        <g>
+            <defs>
+                <rect id="SVGID_1_" x="0" width="39.5" height="39.6" />
+            </defs>
+            <clipPath id="SVGID_2_">
+                <use xlink:href="#SVGID_1_" style="overflow:visible;" />
+            </clipPath>
+            <path class="st3" d="M38.5,39.6H1c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1h37.5c0.6,0,1,0.4,1,1v37.6C39.5,39.2,39.1,39.6,38.5,39.6z
+			 M2,37.6h35.5V2H2V37.6z" />
+        </g>
+        <path class="st1-single" d="M32.9,34H6.6c-0.6,0-1-0.4-1-1V6.6c0-0.6,0.4-1,1-1h26.3c0.6,0,1,0.4,1,1V33C33.9,33.6,33.5,34,32.9,34z
+		 M7.6,32h24.3V7.6H7.6V32z" />
+    </g>
 </svg>

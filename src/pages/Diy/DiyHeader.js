@@ -1,12 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
 import Swiper from 'react-id-swiper';
-import { Carousel } from 'antd';
-import Slider from 'react-slick';
 import { ReactSVG } from 'react-svg';
 import CirCleArrow from '@/public/icons/circle_arrow.svg';
 import styles from './index.less';
-// import 'swiper/swiper.css';
 
 const settings = {
     slidesPerView: 3,

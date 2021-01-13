@@ -1,11 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
-
-import { filterImageUrl } from '@/utils/helper';
+import { ReactSVG } from 'react-svg';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
+
+import ExpandIcon from '@/public/icons/icon-expand.svg';
+import MultipleIcon from '@/public/icons/icon-multiple.svg';
+import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
+
 const waitTime = time => {
     let p = new Promise(resovle => {
         setTimeout(() => {
@@ -30,7 +34,6 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
             style={{
                 padding: '28px 20px',
                 background: '#222222',
-                flex: 1,
             }}
         >
             <div
@@ -60,8 +63,19 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
                         ]}
                     />
                 </div>
-                <SearchInput />
-                <div></div>
+                <SearchInput
+                    style={{ width: '180px' }}
+                    placeholder="SEARCH STYLE"
+                />
+                <div style={{ display: 'flex' }}>
+                    <ReactSVG src={ExpandIcon} className="mode-icon" />
+                    <ReactSVG
+                        src={SwitchBgIcon}
+                        className="mode-icon"
+                        style={{ margin: '0 12px' }}
+                    />
+                    <ReactSVG src={MultipleIcon} className="mode-icon" />
+                </div>
             </div>
             <InfiniteScroll
                 dataLength={docs.length}

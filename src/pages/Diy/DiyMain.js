@@ -1,7 +1,7 @@
 import React from 'react';
 import ColorSelector from './ColorSelector';
 import FlowerSelector from './FlowerSelector';
-import StyleDIYCenter from './StyleDIYCenter';
+import StyleDIYCenter from './StyleDIYCenter/index';
 const App = props => {
     console.log('diy sssss');
     return (
