@@ -2,13 +2,13 @@ import './index.less';
 import searchIcon from '@/public/icons/icon-search.svg';
 import { Input } from 'antd';
 import { ReactSVG } from 'react-svg';
-export default ({ onSearch }) => {
+export default ({ onSearch, placeholder = 'Search color' }) => {
     return (
         // <div style={{ background: '#fff' }}>
         <Input
             style={{ padding: '2px' }}
             className="searchInput"
-            placeholder="Search color"
+            placeholder={placeholder}
             prefix={
                 <ReactSVG
                     style={{ width: '28px', height: '28px' }}

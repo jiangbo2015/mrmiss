@@ -3,6 +3,7 @@ import { connect } from 'dva';
 
 import { filterImageUrl } from '@/utils/helper';
 import SearchInput from '@/components/SearchInput';
+import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 const waitTime = time => {
@@ -13,45 +14,6 @@ const waitTime = time => {
     });
     return p;
 };
-const ColotItem = ({ color }) => (
-    <div
-        style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            cursor: 'pointer',
-        }}
-    >
-        <div
-            style={{
-                background: color,
-                width: '50px',
-                height: '50px',
-                borderRadius: '50% 50%',
-            }}
-        />
-    </div>
-);
-
-const ImgItem = ({ img }) => (
-    <div
-        style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            cursor: 'pointer',
-        }}
-    >
-        <div
-            style={{
-                background: `url(${filterImageUrl(img)})`,
-                width: '50px',
-                height: '50px',
-                borderRadius: '50% 50%',
-            }}
-        />
-    </div>
-);
 
 const App = ({ styleList = { docs: [] }, dispatch }) => {
     const { docs } = styleList;
@@ -71,8 +33,35 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
                 flex: 1,
             }}
         >
-            <div style={{ marginBottom: '60px' }}>
+            <div
+                style={{
+                    marginBottom: '60px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                }}
+            >
+                <div
+                    style={{
+                        display: 'flex',
+                    }}
+                >
+                    <Select
+                        style={{ marginRight: '28px' }}
+                        options={[
+                            { label: 'Time', value: 'time' },
+                            { label: 'Color', value: 'color' },
+                        ]}
+                    />
+                    <Select
+                        options={[
+                            { label: 'Time', value: 'time' },
+                            { label: 'Color', value: 'color' },
+                        ]}
+                    />
+                </div>
                 <SearchInput />
+                <div></div>
             </div>
             <InfiniteScroll
                 dataLength={docs.length}

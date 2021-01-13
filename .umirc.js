@@ -31,5 +31,9 @@ export default defineConfig({
             wrappers: ['@/wrappers/auth'],
             authority: ['admin', 'manager', 'user'],
         },
+        {
+            path: '/demo',
+            component: '@/pages/Main',
+        },
     ],
 });
