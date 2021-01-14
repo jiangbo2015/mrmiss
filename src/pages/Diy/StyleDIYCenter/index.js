@@ -7,12 +7,13 @@ import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import MultipleMode from './MultipleMode';
+import SingleMode from './singleMode';
 
 import ExpandIcon from '@/public/icons/icon-expand.svg';
 import MultipleIcon from '@/public/icons/icon-multiple.svg';
 import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
 
-const waitTime = time => {
+const renderContent = pattern => {
     let p = new Promise(resovle => {
         setTimeout(() => {
             resovle('go');
@@ -21,16 +22,39 @@ const waitTime = time => {
     return p;
 };
 
-const App = ({ styleList = { docs: [] }, dispatch }) => {
+const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
     return (
-        <div
-            style={{
-                flex: 1,
-            }}
-        >
-            <MultipleMode />
-        </div>
+        <>
+            <div
+                style={{
+                    flex: 1,
+                    display:
+                        collocationPattern === 'paintPrew' ? 'initial' : 'none',
+                }}
+            ></div>
+            <div
+                style={{
+                    width: 'calc(100% - 656px)',
+                    display:
+                        collocationPattern === 'single' ? 'initial' : 'none',
+                }}
+            >
+                <SingleMode />
+            </div>
+            <div
+                style={{
+                    flex: 1,
+                    display:
+                        collocationPattern === 'multiple' ? 'initial' : 'none',
+                }}
+            >
+                <MultipleMode />
+            </div>
+        </>
     );
 };
 
-export default connect(({ diy }) => ({ styleList: diy.styleList }))(App);
+export default connect(({ diy }) => ({
+    styleList: diy.styleList,
+    collocationPattern: diy.collocationPattern,
+}))(App);

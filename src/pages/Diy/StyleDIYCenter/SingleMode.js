@@ -6,9 +6,50 @@ import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import ArrowIcon from '@/public/icons/icon-arrow.svg';
 import ExpandIcon from '@/public/icons/icon-expand.svg';
 import MultipleIcon from '@/public/icons/icon-multiple.svg';
 import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
+
+import Swiper from 'react-id-swiper';
+import styles from './index.less';
+import { Flex } from 'rebass';
+
+const settings = {
+    slidesPerView: 3,
+    spaceBetween: 30,
+    className: styles.styleSelector,
+    loop: true,
+    navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+    },
+    renderPrevButton: props => (
+        <div {...props} class="swiper-button-next">
+            <ReactSVG
+                src={ArrowIcon}
+                className={styles.nextIcon}
+                style={{
+                    width: '18px',
+                    height: '18px',
+                    transform: 'rotateZ(180deg)',
+                }}
+            />
+        </div>
+    ),
+    renderNextButton: props => (
+        <div {...props} class="swiper-button-prev">
+            <ReactSVG
+                src={ArrowIcon}
+                className={styles.nextIcon}
+                style={{
+                    width: '18px',
+                    height: '18px',
+                }}
+            />
+        </div>
+    ),
+};
 
 const waitTime = time => {
     let p = new Promise(resovle => {
@@ -19,14 +60,27 @@ const waitTime = time => {
     return p;
 };
 
-const App = ({ styleList = { docs: [] }, dispatch }) => {
+const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
     const { docs } = styleList;
     const handleFetchMore = async () => {
         console.log('fetchStyleList');
         await waitTime(1000);
         console.log('go go');
         dispatch({
-            type: 'diy/fetchStyleList',
+            type: 'diy/setCollocationPattern',
+        });
+    };
+    const handleChangeCollocationPattern = pattern => {
+        dispatch({
+            type: 'diy/setCollocationPattern',
+            payload: pattern,
+        });
+    };
+
+    const handleChangeCollocationBg = bg => {
+        dispatch({
+            type: 'diy/setCollocationBg',
+            payload: bg,
         });
     };
     return (
@@ -34,6 +88,9 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
             style={{
                 padding: '28px 20px',
                 background: '#222222',
+                display: Flex,
+                flexDirection: 'column',
+                alignItems: 'center',
             }}
         >
             <div
@@ -73,45 +130,37 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
                         src={SwitchBgIcon}
                         className="mode-icon"
                         style={{ margin: '0 12px' }}
+                        onClick={() => {
+                            handleChangeCollocationBg(true);
+                        }}
                     />
-                    <ReactSVG src={MultipleIcon} className="mode-icon" />
+                    <ReactSVG
+                        src={MultipleIcon}
+                        className="mode-icon"
+                        onClick={() => {
+                            handleChangeCollocationPattern('multiple');
+                        }}
+                    />
                 </div>
             </div>
-            <InfiniteScroll
-                dataLength={docs.length}
-                next={handleFetchMore}
-                hasMore={true}
-                height={600}
-                // inverse={true}
-                style={{
-                    width: '100%',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, 160px)',
-                    justifyItems: 'center',
-                    alignItems: 'center',
-                    gridGap: '20px 10px',
-                    justifyContent: 'center',
 
-                    alignContent: 'start',
-                    overflowY: 'scroll',
-                    gridTemplateRows: 'repeat(3, 1fr)',
-                }}
-                loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center', color: '#fff' }}>
-                        <b>Yay! You have seen it all</b>
-                    </p>
-                }
-            >
+            <StyleItem width="240px" {...currentStyle} />
+
+            <Swiper {...settings}>
                 {docs.map((d, index) => (
                     <StyleItem
                         key={`${d._id}-${index}-${Math.random() * 1000000}`}
                         {...d}
                     />
                 ))}
-            </InfiniteScroll>
+            </Swiper>
         </div>
     );
 };
 
-export default connect(({ diy }) => ({ styleList: diy.styleList }))(App);
+export default connect(({ diy }) => ({
+    styleList: diy.styleList,
+    currentStyle: diy.currentStyle,
+    collocationBg: diy.collocationBg,
+    collocationPattern: diy.collocationPattern,
+}))(App);

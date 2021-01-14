@@ -7,7 +7,7 @@ import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import ExpandIcon from '@/public/icons/icon-expand.svg';
-import MultipleIcon from '@/public/icons/icon-multiple.svg';
+import SingleIcon from '@/public/icons/icon-single.svg';
 import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
 
 const waitTime = time => {
@@ -27,6 +27,12 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
         console.log('go go');
         dispatch({
             type: 'diy/fetchStyleList',
+        });
+    };
+    const handleChangeCollocationPattern = pattern => {
+        dispatch({
+            type: 'diy/setCollocationPattern',
+            payload: pattern,
         });
     };
     return (
@@ -68,13 +74,13 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
                     placeholder="SEARCH STYLE"
                 />
                 <div style={{ display: 'flex' }}>
-                    <ReactSVG src={ExpandIcon} className="mode-icon" />
                     <ReactSVG
-                        src={SwitchBgIcon}
+                        src={SingleIcon}
                         className="mode-icon"
-                        style={{ margin: '0 12px' }}
+                        onClick={() => {
+                            handleChangeCollocationPattern('single');
+                        }}
                     />
-                    <ReactSVG src={MultipleIcon} className="mode-icon" />
                 </div>
             </div>
             <InfiniteScroll
