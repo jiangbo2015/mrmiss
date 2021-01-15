@@ -5,7 +5,8 @@ import { filterImageUrl } from '@/utils/helper';
 
 export default props => {
     const {
-        width = '110px',
+        style = {},
+        width = '100px',
         svgUrl,
         shadowUrl,
         key,
@@ -24,6 +25,7 @@ export default props => {
             style={{
                 position: 'relative',
                 width: width,
+                ...style,
             }}
         >
             <img

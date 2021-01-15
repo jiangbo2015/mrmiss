@@ -88,9 +88,11 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
             style={{
                 padding: '28px 20px',
                 background: '#222222',
-                display: Flex,
+                display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
+                height: '100%',
+                justifyContent: 'space-between',
             }}
         >
             <div
@@ -99,6 +101,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    width: '100%',
                 }}
             >
                 <div
@@ -144,16 +147,50 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
                 </div>
             </div>
 
-            <StyleItem width="240px" {...currentStyle} />
-
-            <Swiper {...settings}>
+            <StyleItem
+                style={{
+                    margin: '0 auto',
+                }}
+                width="180px"
+                {...currentStyle}
+            />
+            <div
+                style={{
+                    display: 'flex',
+                    overflowX: 'scroll',
+                    alignItems: 'center',
+                    width: '100%',
+                    backgroundColor: '#1C1C1C',
+                    paddingTop: '12px',
+                }}
+            >
                 {docs.map((d, index) => (
                     <StyleItem
+                        style={{
+                            margin: '0 100px 0 10px',
+                        }}
                         key={`${d._id}-${index}-${Math.random() * 1000000}`}
                         {...d}
                     />
                 ))}
-            </Swiper>
+                <ReactSVG
+                    src={ArrowIcon}
+                    className={styles.nextIcon}
+                    style={{
+                        width: '18px',
+                        height: '18px',
+                        transform: 'rotateZ(180deg)',
+                    }}
+                />
+                <ReactSVG
+                    src={ArrowIcon}
+                    className={styles.nextIcon}
+                    style={{
+                        width: '18px',
+                        height: '18px',
+                    }}
+                />
+            </div>
         </div>
     );
 };
