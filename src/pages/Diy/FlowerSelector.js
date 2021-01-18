@@ -3,28 +3,10 @@ import { connect } from 'dva';
 
 import { filterImageUrl } from '@/utils/helper';
 import SearchInput from '@/components/SearchInput';
-const ColotItem = ({ color }) => (
-    <div
-        style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            cursor: 'pointer',
-        }}
-    >
-        <div
-            style={{
-                background: color,
-                width: '50px',
-                height: '50px',
-                borderRadius: '50% 50%',
-            }}
-        />
-    </div>
-);
 
-const ImgItem = ({ img }) => (
+const ImgItem = ({ img, isSelected, ...props }) => (
     <div
+        {...props}
         style={{
             display: 'flex',
             justifyContent: 'center',
@@ -35,16 +17,29 @@ const ImgItem = ({ img }) => (
         <div
             style={{
                 background: `url(${filterImageUrl(img)})`,
-                width: '50px',
-                height: '50px',
+                width: '44px',
+                height: '44px',
                 borderRadius: '50% 50%',
+                backgroundSize: '100% 100%',
+                boxSizing: 'content-box',
+                backgroundClip: 'content-box',
+                padding: '5px',
+                border: isSelected
+                    ? '1px solid #fff'
+                    : '1px solid rgba(0,0,0,0)',
             }}
         />
     </div>
 );
 
-const App = ({ flowerList = { docs: [] } }) => {
+const App = ({ flowerList = { docs: [] }, dispatch }) => {
     const { docs } = flowerList;
+    const handleSelectColor = color => {
+        dispatch({
+            type: 'diy/toogleSelectColor',
+            payload: color,
+        });
+    };
     return (
         <div
             style={{
@@ -64,13 +59,19 @@ const App = ({ flowerList = { docs: [] } }) => {
                     gridTemplateColumns: '1fr 1fr 1fr',
                     gridTemplateColumns: '1fr 1fr 1fr',
                     gridRowGap: '55px',
-                    height: '600px',
+                    height: '520px',
                     alignContent: 'start',
                     overflowY: 'scroll',
                 }}
             >
-                {docs.map(d => (
-                    <ImgItem img={d.value} />
+                {docs.map((d, index) => (
+                    <ImgItem
+                        img={d.value}
+                        isSelected={d.isSelected}
+                        onClick={() => {
+                            handleSelectColor({ item: d, index });
+                        }}
+                    />
                 ))}
             </div>
         </div>

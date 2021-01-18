@@ -7,7 +7,7 @@ const { Option } = Select;
 export default ({ onSearch, options, style = {}, ...props }) => {
     return (
         <div style={{ display: 'flex', ...style }}>
-            <Select className="mrmissSelect" options={options} />
+            <Select className="mrmissSelect" options={options} {...props} />
             <div
                 style={{
                     display: 'flex',
