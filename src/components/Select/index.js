@@ -4,10 +4,15 @@ import { Select } from 'antd';
 import { ReactSVG } from 'react-svg';
 
 const { Option } = Select;
-export default ({ onSearch, options, style = {}, ...props }) => {
+export default ({ onSearch, options, width, style = {}, ...props }) => {
     return (
         <div style={{ display: 'flex', ...style }}>
-            <Select className="mrmissSelect" options={options} {...props} />
+            <Select
+                style={{ width }}
+                className="mrmissSelect"
+                options={options}
+                {...props}
+            />
             <div
                 style={{
                     display: 'flex',

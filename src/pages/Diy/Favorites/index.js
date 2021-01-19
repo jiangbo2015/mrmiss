@@ -7,8 +7,8 @@ import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
-import SingleIcon from '@/public/icons/icon-single.svg';
-import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
+import OrderIcon from '@/public/icons/icon-order.svg';
+import CapsuleIcon from '@/public/icons/icon-capsule.svg';
 
 import styles from './index.less';
 
@@ -73,11 +73,35 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                         onChange={val => {
                             handleChangeFavoritePattern(val);
                         }}
+                        width="100px"
                         options={[
                             { label: 'Large', value: 'large' },
                             { label: 'middle', value: 'middle' },
                             { label: 'small', value: 'small' },
                         ]}
+                    />
+                </div>
+                <div style={{ display: 'flex' }}>
+                    <ReactSVG
+                        style={{
+                            padding: '8px',
+                            width: '32px',
+                            height: '32px',
+                            backgroundColor: '#161616',
+                            borderRadius: '50%',
+                            marginRight: '16px',
+                        }}
+                        src={CapsuleIcon}
+                    />
+                    <ReactSVG
+                        style={{
+                            padding: '7px',
+                            width: '32px',
+                            height: '32px',
+                            backgroundColor: '#161616',
+                            borderRadius: '50%',
+                        }}
+                        src={OrderIcon}
                     />
                 </div>
             </div>
@@ -129,9 +153,11 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                     >
                         <ReactSVG
                             style={{
-                                width: '10px',
-                                height: '10px',
+                                margin: '12px 0 0 14px',
+                                width: '14px',
+                                height: '14px',
                                 opacity: favorite.isSelected ? 1 : 0,
+                                alignSelf: 'flex-start',
                             }}
                             src={SelectedIcon}
                         />
@@ -159,25 +185,29 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                                 />
                             ))}
                         </div>
-                        <div className="toolBar" style={{ display: 'flex' }}>
+                        <div
+                            className="toolBar"
+                            style={{ display: 'flex', marginBottom: '10px' }}
+                        >
                             <ReactSVG
                                 style={{
-                                    width: '10px',
-                                    height: '10px',
+                                    width: '14px',
+                                    height: '14px',
                                 }}
                                 src={SelectedIcon}
                             />
                             <ReactSVG
                                 style={{
-                                    width: '10px',
-                                    height: '10px',
+                                    width: '14px',
+                                    height: '14px',
+                                    margin: '0 30px',
                                 }}
                                 src={SelectedIcon}
                             />
                             <ReactSVG
                                 style={{
-                                    width: '10px',
-                                    height: '10px',
+                                    width: '14px',
+                                    height: '14px',
                                 }}
                                 src={SelectedIcon}
                             />
