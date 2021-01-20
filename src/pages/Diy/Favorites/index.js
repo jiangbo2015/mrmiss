@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
 import SearchInput from '@/components/SearchInput';
@@ -11,6 +11,7 @@ import OrderIcon from '@/public/icons/icon-order.svg';
 import CapsuleIcon from '@/public/icons/icon-capsule.svg';
 
 import styles from './index.less';
+import OrderModal from './orderModal';
 
 const favoriteBox = {
     small: { h: '210px', w: '200px', size: '70px' },
@@ -20,7 +21,7 @@ const favoriteBox = {
 
 const App = ({ favoriteArr, dispatch, favoritePattern }) => {
     console.log('favoritePattern', favoritePattern);
-    // const { docs } = styleList;
+    const [orderVisible, setOrderVisible] = useState(false);
     const handleFetchMore = async () => {
         console.log('fetchStyleList');
         // await waitTime(1000);
@@ -48,6 +49,14 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                 background: '#4A4949',
             }}
         >
+            <OrderModal
+                visible={orderVisible}
+                onCancel={() => {
+                    setOrderVisible(false);
+                    console.log('setOrderVisible');
+                }}
+                getContainer={document.body}
+            />
             <div
                 style={{
                     marginBottom: '60px',
@@ -102,6 +111,9 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                             borderRadius: '50%',
                         }}
                         src={OrderIcon}
+                        onClick={() => {
+                            setOrderVisible(true);
+                        }}
                     />
                 </div>
             </div>
