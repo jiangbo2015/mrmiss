@@ -24,7 +24,6 @@ const App = ({ colorList = { docs: [] }, dispatch, visible, onCancel }) => {
             <p>context....</p>
             <p>context....</p>
             <p>context....</p>
-            <p>context....</p>
         </Modal>
     );
 };

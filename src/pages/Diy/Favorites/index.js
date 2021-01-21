@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
-import SearchInput from '@/components/SearchInput';
+import Propmt from '@/components/Propmt';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -22,6 +22,7 @@ const favoriteBox = {
 const App = ({ favoriteArr, dispatch, favoritePattern }) => {
     console.log('favoritePattern', favoritePattern);
     const [orderVisible, setOrderVisible] = useState(false);
+    const [capsuleInputVisible, setCapsuleInputVisible] = useState(false);
     const handleFetchMore = async () => {
         console.log('fetchStyleList');
         // await waitTime(1000);
@@ -56,6 +57,16 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                     console.log('setOrderVisible');
                 }}
                 getContainer={document.body}
+            />
+            <Propmt
+                visible={capsuleInputVisible}
+                placeholder="请输入胶囊名称："
+                onOk={input => {
+                    console.log(input);
+                }}
+                onCancel={() => {
+                    setCapsuleInputVisible(false);
+                }}
             />
             <div
                 style={{
@@ -101,6 +112,9 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                             marginRight: '16px',
                         }}
                         src={CapsuleIcon}
+                        onClick={() => {
+                            setCapsuleInputVisible(true);
+                        }}
                     />
                     <ReactSVG
                         style={{
