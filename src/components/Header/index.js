@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useIntl, setLocale, history } from 'umi';
 import { connect } from 'dva';
 
-const Header = ({ currentUser }) => {
+const Header = ({ currentUser, headerBgColor = '#fff' }) => {
     const intl = useIntl();
     const [headBg, setHeadBg] = useState(false);
     useEffect(() => {
@@ -20,7 +20,13 @@ const Header = ({ currentUser }) => {
     return (
         <header
             className="header"
-            style={{ background: headBg ? '#fff' : 'rgba(0,0,0,0)' }}
+            style={{
+                background:
+                    !headBg && headerBgColor === '#fff'
+                        ? 'rgba(0,0,0,0)'
+                        : headerBgColor,
+                color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+            }}
         >
             <div style={{ display: 'flex' }}>
                 <div className="menuItem">

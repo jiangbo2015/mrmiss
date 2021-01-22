@@ -1,26 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
-import { ReactSVG } from 'react-svg';
-import SearchInput from '@/components/SearchInput';
-import Select from '@/components/Select';
-import StyleItem from '@/components/StyleItem';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 import MultipleMode from './MultipleMode';
-import SingleMode from './singleMode';
-
-import ExpandIcon from '@/public/icons/icon-expand.svg';
-import MultipleIcon from '@/public/icons/icon-multiple.svg';
-import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
-
-const renderContent = pattern => {
-    let p = new Promise(resovle => {
-        setTimeout(() => {
-            resovle('go');
-        }, time);
-    });
-    return p;
-};
+import SingleMode from './SingleMode';
+import ExpandMode from './ExpandMode';
 
 const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
     return (
@@ -32,6 +15,15 @@ const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
                         collocationPattern === 'paintPrew' ? 'initial' : 'none',
                 }}
             ></div>
+            <div
+                style={{
+                    width: 'calc(100% - 656px)',
+                    display:
+                        collocationPattern === 'expand' ? 'initial' : 'none',
+                }}
+            >
+                <ExpandMode />
+            </div>
             <div
                 style={{
                     width: 'calc(100% - 656px)',

@@ -6,7 +6,7 @@ import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import ExpandIcon from '@/public/icons/icon-expand.svg';
+import SelectedIcon from '@/public/icons/icon-selected.svg';
 import SingleIcon from '@/public/icons/icon-single.svg';
 import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
 
@@ -19,7 +19,7 @@ const waitTime = time => {
     return p;
 };
 
-const App = ({ styleList = { docs: [] }, dispatch }) => {
+const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
     const { docs } = styleList;
     const handleFetchMore = async () => {
         console.log('fetchStyleList');
@@ -33,6 +33,12 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
         dispatch({
             type: 'diy/setCollocationPattern',
             payload: pattern,
+        });
+    };
+    const handleSelectStyle = style => {
+        dispatch({
+            type: 'diy/toogleSelectStyle',
+            payload: style,
         });
     };
     return (
@@ -110,14 +116,55 @@ const App = ({ styleList = { docs: [] }, dispatch }) => {
                 }
             >
                 {docs.map((d, index) => (
-                    <StyleItem
-                        key={`${d._id}-${index}-${Math.random() * 1000000}`}
-                        {...d}
-                    />
+                    <div
+                        style={{
+                            position: 'relative',
+                            justifySelf: 'stretch',
+                            alignSelf: 'stretch',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                        }}
+                    >
+                        <ReactSVG
+                            style={{
+                                width: '10px',
+                                height: '10px',
+                                opacity: d.isSelected ? 1 : 0,
+                            }}
+                            src={SelectedIcon}
+                        />
+                        <div
+                            style={{
+                                flex: 1,
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}
+                            onClick={() => {
+                                handleSelectStyle({ item: d, index });
+                            }}
+                        >
+                            <StyleItem
+                                styleId={`${d._id}-item`}
+                                colors={selectColorList}
+                                key={`${d._id}-${index}-${Math.random() *
+                                    1000000}`}
+                                {...d}
+                                style={{
+                                    cursor: 'pointer',
+                                }}
+                            />
+                        </div>
+                    </div>
                 ))}
             </InfiniteScroll>
         </div>
     );
 };
 
-export default connect(({ diy }) => ({ styleList: diy.styleList }))(App);
+export default connect(({ diy }) => ({
+    styleList: diy.styleList,
+    selectColorList: diy.selectColorList,
+}))(App);

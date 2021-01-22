@@ -1,55 +1,21 @@
 import React from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
+import Swiper from 'react-id-swiper';
+
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
-import InfiniteScroll from 'react-infinite-scroll-component';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
 import ArrowIcon from '@/public/icons/icon-arrow.svg';
 import ExpandIcon from '@/public/icons/icon-expand.svg';
 import MultipleIcon from '@/public/icons/icon-multiple.svg';
 import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
 
-import Swiper from 'react-id-swiper';
+// import Swiper from 'react-id-swiper';
 import styles from './index.less';
-import { Flex } from 'rebass';
-
-const settings = {
-    slidesPerView: 3,
-    spaceBetween: 30,
-    className: styles.styleSelector,
-    loop: true,
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-    renderPrevButton: props => (
-        <div {...props} class="swiper-button-next">
-            <ReactSVG
-                src={ArrowIcon}
-                className={styles.nextIcon}
-                style={{
-                    width: '18px',
-                    height: '18px',
-                    transform: 'rotateZ(180deg)',
-                }}
-            />
-        </div>
-    ),
-    renderNextButton: props => (
-        <div {...props} class="swiper-button-prev">
-            <ReactSVG
-                src={ArrowIcon}
-                className={styles.nextIcon}
-                style={{
-                    width: '18px',
-                    height: '18px',
-                }}
-            />
-        </div>
-    ),
-};
+// import { Flex } from 'rebass';
 
 const waitTime = time => {
     let p = new Promise(resovle => {
@@ -60,8 +26,20 @@ const waitTime = time => {
     return p;
 };
 
-const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
+const App = ({
+    styleList = { docs: [] },
+    dispatch,
+    currentStyle = {},
+    selectColorList = [],
+    collocationBg,
+}) => {
     const { docs } = styleList;
+    const params = {
+        scrollbar: {
+            el: '.swiper-scrollbar',
+            hide: false,
+        },
+    };
     const handleFetchMore = async () => {
         console.log('fetchStyleList');
         await waitTime(1000);
@@ -88,7 +66,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
         <div
             style={{
                 padding: '28px 20px',
-                background: '#222222',
+                background: collocationBg ? '#ffffff' : '#222222',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -98,7 +76,6 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
         >
             <div
                 style={{
-                    marginBottom: '60px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -133,7 +110,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
                         src={ExpandIcon}
                         className="mode-icon"
                         onClick={() => {
-                            handleChangeCollocationPattern('paintPrew');
+                            handleChangeCollocationPattern('expand');
                         }}
                     />
                     <ReactSVG
@@ -141,7 +118,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
                         className="mode-icon"
                         style={{ margin: '0 12px' }}
                         onClick={() => {
-                            handleChangeCollocationBg(true);
+                            handleChangeCollocationBg(!collocationBg);
                         }}
                     />
                     <ReactSVG
@@ -154,13 +131,47 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
                 </div>
             </div>
 
-            <StyleItem
-                style={{
-                    margin: '0 auto',
-                }}
-                width="180px"
-                {...currentStyle}
-            />
+            <div style={{ width: '300px' }}>
+                <Swiper
+                    {...params}
+                    style={{
+                        margin: '0 auto',
+                    }}
+                >
+                    <div
+                        style={{
+                            width: '300px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <StyleItem
+                            width="170px"
+                            styleId={`single-${currentStyle._id}`}
+                            colors={selectColorList}
+                            {...currentStyle}
+                            styleId={currentStyle._id}
+                        />
+                    </div>
+                    <div
+                        style={{
+                            width: '300px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <StyleItem
+                            width="170px"
+                            colors={selectColorList}
+                            {...currentStyle}
+                            styleId={`single-${currentStyle._id}`}
+                            svgUrl={currentStyle.svgUrlBack}
+                            shadowUrl={currentStyle.shadowUrlBack}
+                        />
+                    </div>
+                </Swiper>
+            </div>
+
             <div
                 style={{
                     display: 'flex',
@@ -205,6 +216,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
 export default connect(({ diy }) => ({
     styleList: diy.styleList,
     currentStyle: diy.currentStyle,
+    selectColorList: diy.selectColorList,
     collocationBg: diy.collocationBg,
     collocationPattern: diy.collocationPattern,
 }))(App);

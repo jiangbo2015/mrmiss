@@ -6,7 +6,7 @@ import theme from './theme';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
-export default ({ pt, ...props }) => {
+export default ({ pt, headerBgColor, ...props }) => {
     const intl = useIntl();
     return (
         <ThemeProvider theme={theme}>
@@ -15,7 +15,7 @@ export default ({ pt, ...props }) => {
                 {intl.formatMessage({ id: 'hello', defaultMessage: '你好' })} */}
                 {/* <Button onClick={() => setLocale('zh-CN', false)}>中文</Button>
                 <Button onClick={() => setLocale('en-US', false)}>英文</Button> */}
-                <Header></Header>
+                <Header headerBgColor={headerBgColor}></Header>
                 {props.children}
             </Box>
             <Footer />

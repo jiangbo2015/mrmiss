@@ -68,12 +68,7 @@ const DiyHeader = props => {
                 height: '110px',
             }}
         >
-            <div
-                style={{
-                    width: '230px',
-                    margin: 'auto',
-                }}
-            >
+            <div className="diy-switch">
                 <Swiper {...settings}>
                     <ClassifyItem>Italy</ClassifyItem>
                     <ClassifyItem>Spain</ClassifyItem>
