@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import './index.less';
+import styles from './index.less';
 import { Modal, Input, Button } from 'antd';
 
 export default ({ placeholder, style = {}, ...props }) => {
@@ -7,19 +7,25 @@ export default ({ placeholder, style = {}, ...props }) => {
     return (
         // <div style={{ background: '#fff' }}>
         <Modal
-            style={{
-                ...style,
-            }}
+            closable={false}
             mask={false}
             footer={false}
+            className="mrmissPropmt"
             {...props}
         >
             <Input placeholder={placeholder} ref={inputRef} />
-            <div style={{ display: 'flex' }}>
-                <Button onClick={props.onCancel}>取消</Button>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Button onClick={props.onCancel} className="madal-button">
+                    取消
+                </Button>
                 <Button
+                    className="madal-button"
                     onClick={() => {
                         props.onOk(inputRef.current.state.value);
+                    }}
+                    style={{
+                        backgroundColor: '#323232',
+                        marginLeft: '12px',
                     }}
                 >
                     确认

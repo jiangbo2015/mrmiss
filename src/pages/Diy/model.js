@@ -1,4 +1,5 @@
 import defaultData from './defaultData';
+import lodash from 'lodash';
 
 export default {
     namespace: 'diy',
@@ -14,8 +15,16 @@ export default {
         favoriteArr: defaultData.favoriteArr,
         favoritePattern: 'middle', //  large, middle, small
         selectFavoriteList: [],
+        favoriteToOrderGroupList: [],
     },
     reducers: {
+        setFavoriteToOrderGroupList(state, action) {
+            console.log('setFavoriteToOrderGroupList', action);
+            return {
+                ...state,
+                favoriteToOrderGroupList: action.payload,
+            };
+        },
         setFavoritePattern(state, action) {
             console.log('setFavoritePattern', action);
             return {
@@ -173,7 +182,7 @@ export default {
             });
         },
         *toogleSelectFavorite({ payload }, { call, put, select }) {
-            const { favoriteArr, selectFavoriteList = [] } = yield select(
+            const { favoriteArr, selectFavoriteList } = yield select(
                 state => state.diy,
             );
             const { item, index } = payload;
@@ -200,6 +209,25 @@ export default {
             yield put({
                 type: 'setFavoriteArr',
                 payload: [...favoriteArr],
+            });
+        },
+        *toDoOrder({ payload }, { call, put, select }) {
+            const { selectFavoriteList } = yield select(state => state.diy);
+            const gourpByStyle = lodash.groupBy(selectFavoriteList, f =>
+                f.styleAndColor.map(sc => sc.style._id).join('-'),
+            );
+
+            for (var key in gourpByStyle) {
+                gourpByStyle[key] = {
+                    list: gourpByStyle[key],
+                    key,
+                    sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+                };
+            }
+            console.log('gourpByStyle', gourpByStyle);
+            yield put({
+                type: 'setFavoriteToOrderGroupList',
+                payload: Object.values(gourpByStyle),
             });
         },
     },

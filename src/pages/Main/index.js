@@ -1,5 +1,6 @@
 import { connect } from 'dva';
 import Select from '@/components/Select';
+import InputNumber from '@/components/InputNumber';
 const App = props => {
     console.log(props);
     return (
@@ -10,6 +11,9 @@ const App = props => {
                     { label: 'Color', value: 'color' },
                 ]}
             ></Select>
+            <p></p>
+            <p></p>
+            <InputNumber />
         </div>
     );
 };
