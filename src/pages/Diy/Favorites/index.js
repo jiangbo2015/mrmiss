@@ -11,7 +11,7 @@ import OrderIcon from '@/public/icons/icon-order.svg';
 import CapsuleIcon from '@/public/icons/icon-capsule.svg';
 
 import styles from './index.less';
-import OrderModal from './orderModal';
+import OrderModal from './order/OrderModal';
 
 const favoriteBox = {
     small: { h: '210px', w: '200px', size: '70px' },
@@ -127,6 +127,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                         src={OrderIcon}
                         onClick={() => {
                             setOrderVisible(true);
+                            dispatch({ type: 'diy/toDoOrder' });
                         }}
                     />
                 </div>
