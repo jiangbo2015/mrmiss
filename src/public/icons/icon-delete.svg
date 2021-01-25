@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 40 40" style="enable-background:new 0 0 40 40;" xml:space="preserve">
+<style type="text/css">
+	icon-delete0{fill:none;stroke:#000000;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;}
+	icon-delete1{fill:#FFFFFF;}
+	icon-delete2{fill:#F4EFEF;}
+	icon-delete3{clip-path:url(#SVGID_2_);fill:#FFFFFF;}
+</style>
+<g>
+	<path d="M20,40C9,40,0,31,0,20S9,0,20,0s20,9,20,20S31,40,20,40z M20,3C10.6,3,3,10.6,3,20s7.6,17,17,17s17-7.6,17-17S29.4,3,20,3z
+		"/>
+	<path d="M11.9,29.5c-0.4,0-0.8-0.1-1.1-0.4c-0.6-0.6-0.6-1.5,0-2.1L27,10.8c0.6-0.6,1.5-0.6,2.1,0c0.6,0.6,0.6,1.5,0,2.1L13,29.1
+		C12.7,29.4,12.3,29.5,11.9,29.5z"/>
+	<path d="M28.1,29.5c-0.4,0-0.8-0.1-1.1-0.4L10.8,13c-0.6-0.6-0.6-1.5,0-2.1c0.6-0.6,1.5-0.6,2.1,0l16.2,16.1c0.6,0.6,0.6,1.5,0,2.1
+		C28.9,29.4,28.5,29.5,28.1,29.5z"/>
+</g>
+</svg>

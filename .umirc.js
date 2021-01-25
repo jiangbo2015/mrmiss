@@ -32,6 +32,14 @@ export default defineConfig({
             authority: ['admin', 'manager', 'user'],
         },
         {
+            path: '/business',
+            component: '@/pages/Business',
+        },
+        {
+            path: '/usercenter',
+            component: '@/pages/UserCenter',
+        },
+        {
             path: '/demo',
             component: '@/pages/Main',
         },
