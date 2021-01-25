@@ -15,15 +15,6 @@
         .st1-unheart {
             fill: #FFFFFF;
         }
-
-        .st2 {
-            fill: #F4EFEF;
-        }
-
-        .st3 {
-            clip-path: url(#SVGID_2_);
-            fill: #FFFFFF;
-        }
     </style>
     <g>
         <path class="st1-unheart" d="M19.4,30.9c-0.3,0-0.5-0.1-0.7-0.3L9,20.9c-1.2-1.2-1.9-2.8-1.9-4.5c0-1.7,0.7-3.3,1.9-4.5

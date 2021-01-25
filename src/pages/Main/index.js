@@ -10,8 +10,18 @@ const App = props => {
                     { label: 'Time', value: 'time' },
                     { label: 'Color', value: 'color' },
                 ]}
-            ></Select>
+            />
             <p></p>
+            <p style={{ background: '#000000', padding: '20px' }}>
+                <Select
+                    options={[
+                        { label: 'Time', value: 'time' },
+                        { label: 'Color', value: 'color' },
+                    ]}
+                    mode="white"
+                />
+            </p>
+
             <p></p>
             <InputNumber />
         </div>

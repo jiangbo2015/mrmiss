@@ -1,9 +1,9 @@
 import './index.less';
-import searchIcon from '@/public/icons/icon-search.svg';
+// import searchIcon from '@/components/InputNumber/node_modules/@/components/Propmt/node_modules/@/public/icons/icon-search.svg';
 import { Modal } from 'antd';
-import { ReactSVG } from 'react-svg';
+// import { ReactSVG } from 'react-svg';
 
-export default ({ style = {}, ...props }) => {
+export default ({ style = {}, bodyStyle = {}, ...props }) => {
     return (
         // <div style={{ background: '#fff' }}>
         <Modal
@@ -13,6 +13,7 @@ export default ({ style = {}, ...props }) => {
                 width: '100%',
                 ...style,
             }}
+            bodyStyle={bodyStyle}
             {...props}
         />
         // </div>

@@ -2,26 +2,42 @@ import './index.less';
 import arrowIcon from '@/public/icons/arrow.svg';
 import { Select } from 'antd';
 import { ReactSVG } from 'react-svg';
+import { Flex } from 'rebass/styled-components';
 
 const { Option } = Select;
-export default ({ onSearch, options, width, style = {}, ...props }) => {
+export default ({
+    onSearch,
+    options,
+    width,
+    mode = 'default',
+    style = {},
+    ...props
+}) => {
     return (
         <div style={{ display: 'flex', ...style }}>
             <Select
                 style={{ width }}
-                className="mrmissSelect"
+                className={
+                    mode === 'white' ? 'mrmissSelectWhite' : 'mrmissSelect'
+                }
                 options={options}
                 {...props}
             />
-            <div
-                style={{
-                    display: 'flex',
-                    marginLeft: '4px',
-                    padding: '1px',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    height: '22px',
-                }}
+            <Flex
+                flexDirection="column"
+                justifyContent="space-between"
+                p="1px"
+                ml="4px"
+                height="24px"
+                sx={
+                    mode === 'white'
+                        ? {
+                              '.st2-arrow': {
+                                  fill: '#ffffff !important;',
+                              },
+                          }
+                        : {}
+                }
             >
                 <ReactSVG
                     src={arrowIcon}
@@ -40,7 +56,7 @@ export default ({ onSearch, options, width, style = {}, ...props }) => {
                         transform: 'rotateZ(180deg)',
                     }}
                 />
-            </div>
+            </Flex>
         </div>
     );
 };
