@@ -1,0 +1,37 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48.1 39.5">
+    <defs>
+        <style>
+            .icon-chart-1,
+            .icon-chart-2,
+            .icon-chart-4 {
+                fill: none;
+                stroke: #040000;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            .icon-chart-1 {
+                stroke-width: 4px;
+            }
+
+            .icon-chart-2 {
+                stroke-width: 2px;
+            }
+
+            .icon-chart-3 {
+                fill: #040000;
+            }
+
+            .icon-chart-4 {
+                stroke-width: 3px;
+            }
+        </style>
+    </defs>
+    <line class="icon-chart-1" x1="10.2" y1="37.5" x2="10.2" y2="28.5" />
+    <line class="icon-chart-1" x1="19.3" y1="37.5" x2="19.3" y2="19.5" />
+    <line class="icon-chart-1" x1="28.4" y1="37.5" x2="28.4" y2="28.5" />
+    <line class="icon-chart-1" x1="37.5" y1="37.5" x2="37.5" y2="19.5" />
+    <line class="icon-chart-2" x1="1.5" y1="37.5" x2="1.5" y2="1.5" />
+    <circle class="icon-chart-3" cx="19.3" cy="12.7" r="2.2" />
+    <polyline class="icon-chart-4" points="46.6 37.5 46.6 1.5 1.5 1.5 1.5 37.5" />
+</svg>

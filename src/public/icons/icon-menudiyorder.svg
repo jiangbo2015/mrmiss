@@ -1,0 +1,18 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.93 37.95">
+    <defs>
+        <style>
+            .icon-menudiyorder1 {
+                fill: none;
+                stroke: #040000;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-width: 2px;
+            }
+        </style>
+    </defs>
+    <polygon class="icon-menudiyorder1" points="9.93 30.99 9.93 6.96 1 6.96 1 36.95 31.2 36.95 31.2 30.99 9.93 30.99" />
+    <rect class="icon-menudiyorder1" x="9.93" y="1" width="29.99" height="29.99" />
+    <line class="icon-menudiyorder1" x1="16.53" y1="8.44" x2="33.33" y2="8.44" />
+    <line class="icon-menudiyorder1" x1="16.53" y1="23.55" x2="33.33" y2="23.55" />
+    <line class="icon-menudiyorder1" x1="16.53" y1="16.1" x2="33.33" y2="16.1" />
+</svg>

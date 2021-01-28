@@ -1,0 +1,31 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.93 33.14">
+    <defs>
+        <style>
+            .icon-chart-white1,
+            .icon-chart-white2 {
+                fill: none;
+                stroke: #fff;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+            }
+
+            .icon-chart-white1 {
+                stroke-width: 4px;
+            }
+
+            .icon-chart-white2 {
+                stroke-width: 2px;
+            }
+
+            .icon-chart-white3 {
+                fill: #fff;
+            }
+        </style>
+    </defs>
+    <line class="icon-chart-white1" x1="8.44" y1="24.36" x2="8.44" y2="16.57" />
+    <line class="icon-chart-white1" x1="16.4" y1="24.36" x2="16.4" y2="8.79" />
+    <line class="icon-chart-white1" x1="24.27" y1="24.36" x2="24.27" y2="16.57" />
+    <line class="icon-chart-white1" x1="32.14" y1="24.36" x2="32.14" y2="8.79" />
+    <polyline class="icon-chart-white2" points="39.92 32.14 1 32.14 1 1" />
+    <circle class="icon-chart-white3" cx="16.31" cy="2.38" r="1.9" />
+</svg>

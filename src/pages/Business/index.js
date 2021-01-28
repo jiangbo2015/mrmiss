@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box } from 'rebass/styled-components';
-import { Tabs } from 'antd';
-import UserInfoFrom from '@/components/UserInfoFrom';
-
-const { TabPane } = Tabs;
+import { Flex, Box } from 'rebass/styled-components';
+import { Tabs, Button } from 'antd';
+import UserInfo from './components/UserInfo';
+import Layout from '@/components/Layout';
+import UserListTable from './components/UserListTable';
 
 export default class Business extends React.Component {
     callback(key) {
@@ -11,24 +11,22 @@ export default class Business extends React.Component {
     }
     render() {
         return (
-            <Tabs defaultActiveKey="1" onChange={this.callback}>
-                <TabPane
-                    tab="我的信息
-                "
-                    key="1"
+            <Layout>
+                <Box height="116px" width={[1]} bg="#FDDB3B" mt="74px" />
+                <Flex
+                    alignItems="center"
+                    justifyContent="center"
+                    height="84px"
+                    bg="#41444B"
                 >
-                    <UserInfoFrom />
-                </TabPane>
-                <TabPane tab="我的定制订单" key="2">
-                    Content of Tab Pane 2
-                </TabPane>
-                <TabPane tab="我的胶囊订单" key="3">
-                    Content of Tab Pane 3
-                </TabPane>
-                <TabPane tab="我的网店订单" key="4">
-                    Content of Tab Pane 4
-                </TabPane>
-            </Tabs>
+                    <Button type="primary">新增客户</Button>
+                    <Button>通道权限管理</Button>
+                    <Button>客户订单管理</Button>
+                </Flex>
+                <Box p="20px">
+                    <UserListTable />
+                </Box>
+            </Layout>
         );
     }
 }

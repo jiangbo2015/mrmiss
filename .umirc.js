@@ -14,6 +14,11 @@ export default defineConfig({
             changeOrigin: true,
         },
     },
+    theme: {
+        'primary-color': '#191b1d',
+        'table-selected-row-bg': '#F3F3D3',
+    },
+
     locale: {}, // 开启多言语
     /**
      * 权限部分说明

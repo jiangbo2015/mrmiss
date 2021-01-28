@@ -3,6 +3,118 @@ import './index.less';
 import { useEffect, useState } from 'react';
 import { useIntl, setLocale, history } from 'umi';
 import { connect } from 'dva';
+import { Menu, Dropdown } from 'antd';
+import { ReactSVG } from 'react-svg';
+
+import ChartIcon from '@/public/icons/icon-chart.svg';
+import WhiteChartIcon from '@/public/icons/icon-chart-white.svg';
+
+import IconUser from '@/public/icons/icon-menuuser.svg';
+import IconUserSign from '@/public/icons/icon-usersign.svg';
+import IconDIYOrder from '@/public/icons/icon-menudiyorder.svg';
+import IconCapOrder from '@/public/icons/icon-menucaporder.svg';
+import IconManage from '@/public/icons/icon-menumanage.svg';
+import IconShopOrder from '@/public/icons/icon-shop.svg';
+import IconBack from '@/public/icons/icon-menuback.svg';
+
+const menu = (
+    <Menu>
+        <Menu.Item
+            className="menuItemH"
+            icon={
+                <ReactSVG
+                    style={{ display: 'inline-block', width: '24px' }}
+                    src={IconUser}
+                />
+            }
+        >
+            <a rel="noopener noreferrer" href="/usercenter">
+                我的用户信息
+            </a>
+        </Menu.Item>
+        <Menu.Item
+            className="menuItemH"
+            icon={
+                <ReactSVG
+                    style={{ display: 'inline-block', width: '24px' }}
+                    src={IconDIYOrder}
+                />
+            }
+        >
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://www.taobao.com/"
+            >
+                我的定制订单
+            </a>
+        </Menu.Item>
+        <Menu.Item
+            className="menuItemH"
+            icon={
+                <ReactSVG
+                    style={{ display: 'inline-block', width: '24px' }}
+                    src={IconCapOrder}
+                />
+            }
+        >
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://www.tmall.com/"
+            >
+                我的胶囊订单
+            </a>
+        </Menu.Item>
+        <Menu.Item
+            className="menuItemH"
+            icon={
+                <ReactSVG
+                    style={{ display: 'inline-block', width: '24px' }}
+                    src={IconShopOrder}
+                />
+            }
+        >
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://www.tmall.com/"
+            >
+                我的网店订单
+            </a>
+        </Menu.Item>
+        <Menu.Item
+            className="menuItemH"
+            icon={
+                <ReactSVG
+                    style={{ display: 'inline-block', width: '24px' }}
+                    src={IconManage}
+                />
+            }
+        >
+            <a target="_blank" rel="noopener noreferrer" href="/business">
+                业务管理
+            </a>
+        </Menu.Item>
+        <Menu.Item
+            className="menuItemH"
+            icon={
+                <ReactSVG
+                    style={{ display: 'inline-block', width: '24px' }}
+                    src={IconBack}
+                />
+            }
+        >
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href="http://www.tmall.com/"
+            >
+                退出登录
+            </a>
+        </Menu.Item>
+    </Menu>
+);
 
 const Header = ({ currentUser, headerBgColor = '#fff' }) => {
     const intl = useIntl();
@@ -46,7 +158,12 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
                     })}
                 </div>
             </div>
-            <div>chart</div>
+            <div>
+                <ReactSVG
+                    src={headerBgColor !== '#fff' ? WhiteChartIcon : ChartIcon}
+                    style={{ width: '32px' }}
+                />
+            </div>
             <div style={{ display: 'flex' }}>
                 <div
                     className="menuItem"
@@ -70,17 +187,28 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
                 <div className="menuItem">
                     {intl.formatMessage({ id: 'shop', defaultMessage: '网店' })}
                 </div>
-                <div className="menuItem">
-                    {currentUser._id
-                        ? intl.formatMessage({
-                              id: 'logout',
-                              defaultMessage: '登出',
-                          })
-                        : intl.formatMessage({
-                              id: 'login',
-                              defaultMessage: '登录',
-                          })}
-                </div>
+                {!currentUser._id ? (
+                    <div className="menuItem">
+                        {intl.formatMessage({
+                            id: 'login',
+                            defaultMessage: '登录',
+                        })}
+                    </div>
+                ) : null}
+
+                <Dropdown
+                    overlay={menu}
+                    trigger={['click']}
+                    placement="bottomRight"
+                >
+                    <div style={{ padding: '0 50px 0 40px', display: 'flex' }}>
+                        <ReactSVG
+                            src={IconUserSign}
+                            style={{ width: '24px', paddingRight: '4px' }}
+                        />
+                        {currentUser.name}
+                    </div>
+                </Dropdown>
             </div>
         </header>
     );

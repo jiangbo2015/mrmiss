@@ -1,0 +1,22 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 35.15 37.95">
+    <defs>
+        <style>
+            .icon-menucaporder1 {
+                fill: none;
+                stroke: #040000;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-width: 2px;
+            }
+        </style>
+    </defs>
+    <line class="icon-menucaporder1" x1="15.38" y1="8.19" x2="7.71" y2="8.19" />
+    <line class="icon-menucaporder1" x1="7.71" y1="15.38" x2="21.37" y2="15.38" />
+    <line class="icon-menucaporder1" x1="7.71" y1="22.65" x2="19.77" y2="22.65" />
+    <path class="icon-menucaporder1"
+        d="M19.77,19.53a6.41,6.41,0,0,1,6.39-6.39h1.52a8.7,8.7,0,0,1,2.08.32V7.39A6.41,6.41,0,0,0,23.37,1H3.4A2.41,2.41,0,0,0,1,3.4v24a2.41,2.41,0,0,0,2.4,2.4H19.77Z" />
+    <polyline class="icon-menucaporder1" points="22.57 1 22.57 8.19 29.76 8.19" />
+    <path class="icon-menucaporder1"
+        d="M27.76,37H26.24a6.41,6.41,0,0,1-6.39-6.39V19.45a6.41,6.41,0,0,1,6.39-6.39h1.52a6.41,6.41,0,0,1,6.39,6.39V30.56A6.47,6.47,0,0,1,27.76,37Z" />
+    <line class="icon-menucaporder1" x1="19.77" y1="25.04" x2="34.07" y2="25.04" />
+</svg>

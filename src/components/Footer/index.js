@@ -9,6 +9,10 @@ export default ({ title, subtitle }) => (
         bg="#000"
         alignItems="center"
         justifyContent="center"
+        sx={{
+            position: 'fixed',
+            bottom: 0,
+        }}
     >
         <Text fontSize="12px" textAlign="center" color="#fff" px="25px">
             ｜wework｜ commercial｜ © 2020 mrmiss desing studio{' '}
