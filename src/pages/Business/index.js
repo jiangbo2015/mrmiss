@@ -18,10 +18,25 @@ export default class Business extends React.Component {
                     justifyContent="center"
                     height="84px"
                     bg="#41444B"
+                    sx={{
+                        button: {
+                            width: '220px',
+                        },
+                    }}
                 >
-                    <Button type="primary">新增客户</Button>
-                    <Button>通道权限管理</Button>
-                    <Button>客户订单管理</Button>
+                    <Button type="primary" shape="round">
+                        新增客户
+                    </Button>
+                    <Button
+                        type="primary"
+                        shape="round"
+                        style={{ margin: '0 50px' }}
+                    >
+                        通道权限管理
+                    </Button>
+                    <Button type="primary" shape="round">
+                        客户订单管理
+                    </Button>
                 </Flex>
                 <Box p="20px">
                     <UserListTable />
