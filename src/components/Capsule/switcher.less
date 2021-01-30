@@ -1,0 +1,43 @@
+.center {
+    color: #fff;
+    font-size: 20px;
+}
+
+.title {
+    color: #7b7b7b;
+}
+
+.nextIcon {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    flex: none;
+    :hover {
+        g {
+            fill: #000 !important;
+            stroke: #000 !important;
+        }
+    }
+}
+:global {
+    .switcher {
+        position: relative;
+        width: 220px;
+        align-items: center;
+        color: #fff;
+
+        .swiper-container {
+            background: #000;
+            width: 180px;
+            margin: 0 20px;
+            border-radius: 10px;
+        }
+        .swiper-wrapper {
+            align-items: center;
+        }
+        .swiper-slide {
+            text-align: center;
+            margin-right: 5px;
+        }
+    }
+}
