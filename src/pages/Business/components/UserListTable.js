@@ -22,11 +22,13 @@ const UserListTable = ({ orderList = [], ...props }) => {
             title: '客户权限',
             dataIndex: 'totalCount',
             key: 'totalCount',
+            render: () => <a style={{ textDecoration: 'underline' }}>授权</a>,
         },
         {
             title: '客户订单',
             dataIndex: 'totalPrice',
             key: 'totalPrice',
+            render: () => <a style={{ textDecoration: 'underline' }}>查看</a>,
         },
     ];
     return (
