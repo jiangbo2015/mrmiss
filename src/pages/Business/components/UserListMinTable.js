@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 // import { Flex } from 'rebass/styled-components';
-// import { ReactSVG } from 'react-svg';
+import { Button } from 'antd';
 import Table from '@/components/Table';
-import Modal from '@/components/Modal';
-import UserEmpower from './UserEmpower';
+// import Modal from '@/components/Modal';
+import { Flex, Box } from 'rebass/styled-components';
 // import IconDelete from '@/public/icons/icon-delete.svg';
 import { connect } from 'dva';
+import SearchInput from '@/components/SearchInput';
+import { SaveOutlined } from '@ant-design/icons';
 
 const UserListTable = ({ customerList = [], ...props }) => {
     const [empowerSingleCustomer, setEmpowerSingleCustomer] = useState(false);
@@ -20,38 +22,28 @@ const UserListTable = ({ customerList = [], ...props }) => {
             dataIndex: 'date',
             key: 'date',
         },
-        {
-            title: '客户权限',
-            dataIndex: 'totalCount',
-            key: 'totalCount',
-            render: () => (
-                <a
-                    style={{ textDecoration: 'underline' }}
-                    onClick={() => setEmpowerSingleCustomer(true)}
-                >
-                    授权
-                </a>
-            ),
-        },
-        {
-            title: '客户订单',
-            dataIndex: 'totalPrice',
-            key: 'totalPrice',
-            render: () => <a style={{ textDecoration: 'underline' }}>查看</a>,
-        },
     ];
     return (
-        <>
-            <Modal
-                footer={false}
-                visible={empowerSingleCustomer}
-                onCancel={() => {
-                    setEmpowerSingleCustomer(false);
-                }}
-                width="1200px"
+        <Box>
+            <Flex
+                p="0 0 30px 0"
+                alignItems="center"
+                justifyContent="space-between"
             >
-                <UserEmpower />
-            </Modal>
+                <SearchInput
+                    mode="white"
+                    placeholder="SEARCH"
+                    style={{ width: '200px' }}
+                />
+                <Button
+                    shape="circle"
+                    icon={<SaveOutlined />}
+                    style={{ backgroundColor: '#ffffff', borderColor: '#fff' }}
+                    onClick={() => {
+                        // setCopiedUserModal(true);
+                    }}
+                />
+            </Flex>
             <Table
                 columns={columns}
                 dataSource={customerList}
@@ -74,7 +66,7 @@ const UserListTable = ({ customerList = [], ...props }) => {
                     },
                 }}
             />
-        </>
+        </Box>
     );
 };
 

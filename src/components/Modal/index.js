@@ -13,7 +13,6 @@ export default ({ style = {}, bodyStyle = {}, ...props }) => {
                 width: '100%',
                 ...style,
             }}
-            bodyStyle={bodyStyle}
             {...props}
         />
         // </div>

@@ -8,29 +8,6 @@ const OrderTable = props => {
                 '.even': {
                     background: '#F3F3F3',
                 },
-                '.parent-row': {
-                    background: '#C8C8C8',
-                    '>td': {
-                        padding: '8px 20px',
-                    },
-                    ':hover': {
-                        '>td': {
-                            background: 'none !important',
-                        },
-                    },
-                },
-                '.ant-table-row-expand-icon': {
-                    background: '#FDDB3B',
-                },
-                '.ant-table-expanded-row': {
-                    '>td': {
-                        padding: 0,
-                        paddingLeft: '56px',
-                    },
-                    '.ant-table-row': {
-                        background: '#F6F6F6',
-                    },
-                },
                 '.ant-table-row': {
                     textAlign: 'center',
                 },
@@ -43,10 +20,10 @@ const OrderTable = props => {
             }}
         >
             <Table
+                {...props}
                 pagination={false}
                 sticky
                 rowClassName={(_, index) => (index % 2 === 1 ? 'odd' : 'even')}
-                {...props}
             />
         </Box>
     );

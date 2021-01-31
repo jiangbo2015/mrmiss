@@ -1,6 +1,8 @@
 import { connect } from 'dva';
 import Select from '@/components/Select';
+import Select2 from '@/components/Select/Select2';
 import InputNumber from '@/components/InputNumber';
+import Switch from '@/components/Switch';
 const App = props => {
     console.log(props);
     return (
@@ -22,8 +24,14 @@ const App = props => {
                 />
             </p>
 
-            <p></p>
+            <p>
+                <Select2 />
+            </p>
             <InputNumber />
+            <p />
+            <p style={{ paddingTop: '40px' }}>
+                <Switch />
+            </p>
         </div>
     );
 };

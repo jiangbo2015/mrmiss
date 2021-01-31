@@ -3,17 +3,50 @@ import { Flex, Box } from 'rebass/styled-components';
 import { Tabs, Button } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import UserInfo from './components/UserInfo';
+import Modal from '@/components/Modal';
 import Layout from '@/components/Layout';
 import SearchInput from '@/components/SearchInput';
 import UserListTable from './components/UserListTable';
+import UserOrder from './components/UserOrder';
+import ChannelEmpower from './components/ChannelEmpower';
 
 export default class Business extends React.Component {
+    state = {
+        channelEmpowerModal: false,
+        userOrderModal: false,
+    };
     callback(key) {
         console.log(key);
     }
     render() {
         return (
             <Layout>
+                <Modal
+                    visible={this.state.channelEmpowerModal}
+                    footer={false}
+                    width="1200px"
+                    onCancel={() => {
+                        this.setState({
+                            ...this.state,
+                            channelEmpowerModal: false,
+                        });
+                    }}
+                >
+                    <ChannelEmpower />
+                </Modal>
+                <Modal
+                    visible={this.state.userOrderModal}
+                    footer={false}
+                    width="1200px"
+                    onCancel={() => {
+                        this.setState({
+                            ...this.state,
+                            userOrderModal: false,
+                        });
+                    }}
+                >
+                    <UserOrder />
+                </Modal>
                 <Box height="116px" width={[1]} bg="#FDDB3B" mt="74px" />
 
                 <Flex
@@ -39,10 +72,25 @@ export default class Business extends React.Component {
                         type="primary"
                         shape="round"
                         style={{ margin: '0 50px' }}
+                        onClick={() => {
+                            this.setState({
+                                ...this.state,
+                                channelEmpowerModal: true,
+                            });
+                        }}
                     >
                         通道权限管理
                     </Button>
-                    <Button type="primary" shape="round">
+                    <Button
+                        type="primary"
+                        shape="round"
+                        onClick={() => {
+                            this.setState({
+                                ...this.state,
+                                userOrderModal: true,
+                            });
+                        }}
+                    >
                         客户订单管理
                     </Button>
                 </Flex>
