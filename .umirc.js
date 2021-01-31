@@ -29,6 +29,7 @@ export default defineConfig({
     routes: [
         { path: '/', component: '@/pages/Home' },
         { path: '/capsule', component: '@/pages/Capsule' },
+        { path: '/shop', component: '@/pages/Shop' },
         { path: '/diy', component: '@/pages/Diy' },
         {
             path: '/main',
