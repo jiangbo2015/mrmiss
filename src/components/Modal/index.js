@@ -3,7 +3,7 @@ import './index.less';
 import { Modal } from 'antd';
 // import { ReactSVG } from 'react-svg';
 
-export default ({ style = {}, bodyStyle = {}, ...props }) => {
+export default ({ style = {}, ...props }) => {
     return (
         // <div style={{ background: '#fff' }}>
         <Modal

@@ -35,6 +35,7 @@ export default class Business extends React.Component {
                     <ChannelEmpower />
                 </Modal>
                 <Modal
+                    title="客户订单管理"
                     visible={this.state.userOrderModal}
                     footer={false}
                     width="1200px"
@@ -96,17 +97,8 @@ export default class Business extends React.Component {
                 </Flex>
                 <Box p="20px">
                     <Flex p="30px 0" alignItems="center">
-                        <Button
-                            shape="circle"
-                            size="large"
-                            icon={<DeleteOutlined />}
-                            style={{ backgroundColor: '#D2D2D2' }}
-                        />
-                        <SearchInput
-                            mode="white"
-                            placeholder="SEARCH"
-                            style={{ width: '200px', marginLeft: '30px' }}
-                        />
+                        <Button shape="circle" size="large" icon={<DeleteOutlined />} style={{ backgroundColor: '#D2D2D2' }} />
+                        <SearchInput mode="white" placeholder="SEARCH" style={{ width: '200px', marginLeft: '30px' }} />
                     </Flex>
                     <UserListTable />
                 </Box>

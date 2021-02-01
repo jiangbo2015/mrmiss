@@ -10,7 +10,7 @@ export default ({ title, subtitle }) => (
         alignItems="center"
         justifyContent="center"
         sx={{
-            position: 'fixed',
+            position: 'absolute',
             bottom: 0,
         }}
     >

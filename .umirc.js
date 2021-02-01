@@ -31,6 +31,8 @@ export default defineConfig({
         { path: '/capsule', component: '@/pages/Capsule' },
         { path: '/shop', component: '@/pages/Shop' },
         { path: '/diy', component: '@/pages/Diy' },
+        { path: '/contactus', component: '@/pages/ContactUs' },
+
         {
             path: '/main',
             component: '@/pages/Main',

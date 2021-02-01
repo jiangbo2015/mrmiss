@@ -4,11 +4,15 @@ import React, { useState } from 'react';
 import Table from '@/components/Table';
 import Modal from '@/components/Modal';
 import UserEmpower from './UserEmpower';
+import UserOrder from './UserOrder';
+
 // import IconDelete from '@/public/icons/icon-delete.svg';
 import { connect } from 'dva';
 
-const UserListTable = ({ customerList = [], ...props }) => {
+const UserListTable = ({ customerList = [], currentCustomer, ...props }) => {
     const [empowerSingleCustomer, setEmpowerSingleCustomer] = useState(false);
+    const [userOrderModal, setUserOrderModal] = useState(false);
+
     const columns = [
         {
             title: '客户名称',
@@ -25,10 +29,7 @@ const UserListTable = ({ customerList = [], ...props }) => {
             dataIndex: 'totalCount',
             key: 'totalCount',
             render: () => (
-                <a
-                    style={{ textDecoration: 'underline' }}
-                    onClick={() => setEmpowerSingleCustomer(true)}
-                >
+                <a style={{ textDecoration: 'underline' }} onClick={() => setEmpowerSingleCustomer(true)}>
                     授权
                 </a>
             ),
@@ -37,7 +38,16 @@ const UserListTable = ({ customerList = [], ...props }) => {
             title: '客户订单',
             dataIndex: 'totalPrice',
             key: 'totalPrice',
-            render: () => <a style={{ textDecoration: 'underline' }}>查看</a>,
+            render: () => (
+                <a
+                    style={{ textDecoration: 'underline' }}
+                    onClick={() => {
+                        setUserOrderModal(true);
+                    }}
+                >
+                    查看
+                </a>
+            ),
         },
     ];
     return (
@@ -52,6 +62,17 @@ const UserListTable = ({ customerList = [], ...props }) => {
             >
                 <UserEmpower />
             </Modal>
+            <Modal
+                title={`${currentCustomer.name}的订单`}
+                visible={userOrderModal}
+                footer={false}
+                width="1200px"
+                onCancel={() => {
+                    setUserOrderModal(false);
+                }}
+            >
+                <UserOrder />
+            </Modal>
             <Table
                 columns={columns}
                 dataSource={customerList}
@@ -59,11 +80,7 @@ const UserListTable = ({ customerList = [], ...props }) => {
                 rowSelection={{
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
-                        console.log(
-                            `selectedRowKeys: ${selectedRowKeys}`,
-                            'selectedRows:',
-                            selectedRows,
-                        );
+                        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
                         console.log(record);
@@ -81,6 +98,7 @@ const UserListTable = ({ customerList = [], ...props }) => {
 export default connect(({ business }) => {
     // console.log('props', props);
     return {
+        currentCustomer: business.currentCustomer,
         customerList: business.customerList,
     };
 })(UserListTable);

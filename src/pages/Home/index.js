@@ -31,6 +31,7 @@ const App = ({ dispatch, currentUser }) => {
                 <Carousel></Carousel>
             </Box>
             <Box bg="#fff" px="40px" py="40px">
+                {/* <div id="aboutas">aboutas</div> */}
                 <Title
                     title="关于我们"
                     subtitle=" 我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。

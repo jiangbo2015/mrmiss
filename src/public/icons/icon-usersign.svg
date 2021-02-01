@@ -3,13 +3,13 @@
         <style>
             .icon-icon-usersign1 {
                 fill: none;
-                stroke: #231815;
+                stroke: currentColor;
                 stroke-miterlimit: 10;
                 stroke-width: 1.5px;
             }
 
             .icon-icon-usersign2 {
-                fill: #231815;
+                fill: currentColor;
             }
         </style>
     </defs>

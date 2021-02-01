@@ -93,32 +93,16 @@
         z-index: 10;
     }
     .swiper-slide-shadow-left {
-        background-image: linear-gradient(
-            to left,
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0)
-        );
+        background-image: linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
     }
     .swiper-slide-shadow-right {
-        background-image: linear-gradient(
-            to right,
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0)
-        );
+        background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
     }
     .swiper-slide-shadow-top {
-        background-image: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0)
-        );
+        background-image: linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
     }
     .swiper-slide-shadow-bottom {
-        background-image: linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0.5),
-            rgba(0, 0, 0, 0)
-        );
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
     }
 }
 
@@ -305,9 +289,7 @@ button.swiper-pagination-bullet {
             }
         }
     }
-    &.swiper-container-rtl
-        > .swiper-pagination-bullets-dynamic
-        .swiper-pagination-bullet {
+    &.swiper-container-rtl > .swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
         transition: 200ms transform, 200ms right;
     }
 }
@@ -329,9 +311,7 @@ button.swiper-pagination-bullet {
     }
 }
 
-.swiper-container-rtl
-    .swiper-pagination-progressbar
-    .swiper-pagination-progressbar-fill {
+.swiper-container-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill {
     transform-origin: right top;
 }
 
@@ -355,8 +335,7 @@ button.swiper-pagination-bullet {
     top: 0;
 }
 
-.swiper-container-horizontal
-    > .swiper-pagination-progressbar.swiper-pagination-progressbar-opposite {
+.swiper-container-horizontal > .swiper-pagination-progressbar.swiper-pagination-progressbar-opposite {
     width: 4px;
     height: 100%;
     left: 0;
@@ -657,4 +636,8 @@ button.swiper-pagination-bullet {
         background-color: #f0f0f0;
     }
     padding: 0 !important;
+}
+#root {
+    position: relative;
+    min-height: 100vh;
 }
