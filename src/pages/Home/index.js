@@ -9,13 +9,19 @@ import { Box } from 'rebass/styled-components';
 import Carousel from './Carousel';
 import FeatureImage from './FeatureImage';
 
-const App = ({ dispatch, currentUser }) => {
+const App = ({ dispatch, currentUser, location }) => {
     // const { currentUser } = props;
+    console.log('location', location);
     useEffect(() => {
         dispatch({
             type: 'user/getCurrentUser',
         });
     }, []);
+    useEffect(() => {
+        if (location.hash === '#aboutas') {
+            window.scrollTo(0, 1900);
+        }
+    }, [location.hash]);
     return (
         <Layout>
             {/* <Login /> */}
