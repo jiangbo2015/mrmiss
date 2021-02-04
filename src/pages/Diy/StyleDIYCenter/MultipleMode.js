@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
 import SearchInput from '@/components/SearchInput';
@@ -19,15 +19,27 @@ const waitTime = time => {
     return p;
 };
 
-const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
-    const { docs } = styleList;
+const App = ({
+    styleList = { docs: [] },
+    dispatch,
+    selectColorList,
+    currentGood = { category: [] },
+    currentGoodCategory = '',
+}) => {
+    let docs = [];
+    if (styleList[currentGoodCategory]) {
+        docs = styleList[currentGoodCategory];
+        // console.log('docs', docs);
+    }
     const handleFetchMore = async () => {
-        console.log('fetchStyleList');
-        await waitTime(1000);
-        console.log('go go');
-        dispatch({
-            type: 'diy/fetchStyleList',
-        });
+        if (currentGood._id) {
+            dispatch({
+                type: 'diy/fetchStyleList',
+                payload: {
+                    _id: currentGood._id,
+                },
+            });
+        }
     };
     const handleChangeCollocationPattern = pattern => {
         dispatch({
@@ -39,6 +51,19 @@ const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
         dispatch({
             type: 'diy/toogleSelectStyle',
             payload: style,
+        });
+    };
+
+    useEffect(() => {
+        if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
+            handleSetCurrentGoodCategory(currentGood.category[0]._id);
+            handleFetchMore();
+        }
+    }, [currentGood]);
+    const handleSetCurrentGoodCategory = category => {
+        dispatch({
+            type: 'diy/setCurrentGoodCategory',
+            payload: category,
         });
     };
     return (
@@ -62,23 +87,14 @@ const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
                     }}
                 >
                     <Select
+                        value={currentGoodCategory}
                         style={{ marginRight: '28px' }}
-                        options={[
-                            { label: 'Time', value: 'time' },
-                            { label: 'Color', value: 'color' },
-                        ]}
+                        options={currentGood.category.map(c => ({ label: c.name, value: c._id }))}
+                        onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
-                    <Select
-                        options={[
-                            { label: 'Time', value: 'time' },
-                            { label: 'Color', value: 'color' },
-                        ]}
-                    />
+                    <Select value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />
                 </div>
-                <SearchInput
-                    style={{ width: '180px' }}
-                    placeholder="SEARCH STYLE"
-                />
+                <SearchInput style={{ width: '180px' }} placeholder="SEARCH STYLE" />
                 <div style={{ display: 'flex' }}>
                     <ReactSVG
                         src={SingleIcon}
@@ -92,7 +108,7 @@ const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
             <InfiniteScroll
                 dataLength={docs.length}
                 next={handleFetchMore}
-                hasMore={true}
+                hasMore={false}
                 height={600}
                 // inverse={true}
                 style={{
@@ -109,11 +125,6 @@ const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
                     gridTemplateRows: 'repeat(3, 1fr)',
                 }}
                 loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center', color: '#fff' }}>
-                        <b>Yay! You have seen it all</b>
-                    </p>
-                }
             >
                 {docs.map((d, index) => (
                     <div
@@ -147,10 +158,10 @@ const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
                             }}
                         >
                             <StyleItem
+                                width={`${(d.styleSize / 27) * 100}px`}
                                 styleId={`${d._id}-item`}
                                 colors={selectColorList}
-                                key={`${d._id}-${index}-${Math.random() *
-                                    1000000}`}
+                                key={`${d._id}-${index}-${Math.random() * 1000000}`}
                                 {...d}
                                 style={{
                                     cursor: 'pointer',
@@ -167,4 +178,6 @@ const App = ({ styleList = { docs: [] }, dispatch, selectColorList }) => {
 export default connect(({ diy }) => ({
     styleList: diy.styleList,
     selectColorList: diy.selectColorList,
+    currentGood: diy.currentGood,
+    currentGoodCategory: diy.currentGoodCategory,
 }))(App);

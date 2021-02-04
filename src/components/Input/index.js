@@ -1,5 +1,5 @@
 // import './index.less';
-import { Input } from 'antd';
+import { Input, Select } from 'antd';
 import { Box } from 'rebass/styled-components';
 
 export default Input;
@@ -14,6 +14,26 @@ export const InputGray = props => <Input style={{ background: '#C8C8C8', color: 
 
 export const InputBottomBorder = props => <Input style={{ border: 'none', borderBottom: '1px solid #000' }} {...props} />;
 
+export const InputBottomWhiteBorder = props => (
+    <Input
+        style={{
+            border: 'none',
+            borderBottom: '1px solid #fff',
+            color: 'white',
+            background: '#000',
+            height: '18px',
+            width: '24px',
+            padding: '0',
+            textAlign: 'center',
+        }}
+        {...props}
+    />
+);
+
 export const TextAreaBottomBorder = props => (
     <Input.TextArea style={{ border: 'none', borderBottom: '1px solid #000' }} {...props} />
+);
+
+export const SelectGrayRaduis = props => (
+    <Select style={{ background: '#C8C8C8', color: 'white', borderRadius: '16px' }} {...props} />
 );

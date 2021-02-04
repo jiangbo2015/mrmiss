@@ -1,5 +1,6 @@
 // import { parse } from "querystring";
-export const baseUrl = 'http://we-idesign.com/';
+export const baseUrl = 'http://localhost:3001/';
+// export const baseUrl = 'http://we-idesign.com/';
 
 export const imgUrl = 'https://ik.imagekit.io/';
 

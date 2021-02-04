@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
 import Swiper from 'react-id-swiper';
@@ -27,25 +27,34 @@ const waitTime = time => {
 };
 
 const App = ({
-    styleList = { docs: [] },
+    styleList = { '': [] },
     dispatch,
     currentStyle = {},
     selectColorList = [],
     collocationBg,
+    currentGood = { category: [] },
+    currentGoodCategory = '',
 }) => {
-    const { docs } = styleList;
+    let docs = [];
+    if (styleList[currentGoodCategory]) {
+        docs = styleList[currentGoodCategory];
+        // console.log('docs', docs);
+    }
     const params = {
         scrollbar: {
             el: '.swiper-scrollbar',
             hide: false,
         },
     };
-    const handleFetchMore = async () => {
-        console.log('fetchStyleList');
-        await waitTime(1000);
-        console.log('go go');
+    useEffect(() => {
+        if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
+            handleSetCurrentGoodCategory(currentGood.category[0]._id);
+        }
+    }, [currentGood]);
+    const handleSetCurrentGoodCategory = category => {
         dispatch({
-            type: 'diy/setCollocationPattern',
+            type: 'diy/setCurrentGoodCategory',
+            payload: category,
         });
     };
     const handleChangeCollocationPattern = pattern => {
@@ -54,11 +63,25 @@ const App = ({
             payload: pattern,
         });
     };
-
+    useEffect(() => {
+        if (styleList[currentGoodCategory] && styleList[currentGoodCategory].length > 0) {
+            dispatch({
+                type: 'diy/setCurrentStyle',
+                payload: styleList[currentGoodCategory][0],
+            });
+        }
+    }, [styleList, currentGoodCategory]);
     const handleChangeCollocationBg = bg => {
         dispatch({
             type: 'diy/setCollocationBg',
             payload: bg,
+        });
+    };
+
+    const handleSelectStyle = style => {
+        dispatch({
+            type: 'diy/setCurrentStyle',
+            payload: style,
         });
     };
 
@@ -88,23 +111,20 @@ const App = ({
                     }}
                 >
                     <Select
+                        value={currentGoodCategory}
                         style={{ marginRight: '28px' }}
-                        options={[
-                            { label: 'Time', value: 'time' },
-                            { label: 'Color', value: 'color' },
-                        ]}
+                        options={currentGood.category.map(c => ({ label: c.name, value: c._id }))}
+                        onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
                     <Select
-                        options={[
-                            { label: 'Time', value: 'time' },
-                            { label: 'Color', value: 'color' },
-                        ]}
+                        value="Time"
+                        disabled
+                        onClick={() => {
+                            console.log('time time');
+                        }}
                     />
                 </div>
-                <SearchInput
-                    style={{ width: '180px' }}
-                    placeholder="SEARCH STYLE"
-                />
+                <SearchInput style={{ width: '180px' }} placeholder="SEARCH STYLE" />
                 <div style={{ display: 'flex' }}>
                     <ReactSVG
                         src={ExpandIcon}
@@ -146,7 +166,8 @@ const App = ({
                         }}
                     >
                         <StyleItem
-                            width="170px"
+                            // width="170px"
+                            width={`${(currentStyle.styleSize / 27) * 170}px`}
                             styleId={`single-${currentStyle._id}`}
                             colors={selectColorList}
                             {...currentStyle}
@@ -161,7 +182,7 @@ const App = ({
                         }}
                     >
                         <StyleItem
-                            width="170px"
+                            width={`${(currentStyle.styleBackSize / 27) * 170}px`}
                             colors={selectColorList}
                             {...currentStyle}
                             styleId={`single-${currentStyle._id}`}
@@ -187,11 +208,15 @@ const App = ({
                         style={{
                             margin: '0 100px 0 10px',
                         }}
+                        width={`${(d.styleSize / 27) * 100}px`}
                         key={`${d._id}-${index}-${Math.random() * 1000000}`}
                         {...d}
+                        onClick={() => {
+                            handleSelectStyle(d);
+                        }}
                     />
                 ))}
-                <ReactSVG
+                {/* <ReactSVG
                     src={ArrowIcon}
                     className={styles.nextIcon}
                     style={{
@@ -207,7 +232,7 @@ const App = ({
                         width: '18px',
                         height: '18px',
                     }}
-                />
+                /> */}
             </div>
         </div>
     );
@@ -219,4 +244,6 @@ export default connect(({ diy }) => ({
     selectColorList: diy.selectColorList,
     collocationBg: diy.collocationBg,
     collocationPattern: diy.collocationPattern,
+    currentGood: diy.currentGood,
+    currentGoodCategory: diy.currentGoodCategory,
 }))(App);

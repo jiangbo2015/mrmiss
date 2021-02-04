@@ -18,6 +18,7 @@ export default props => {
         curStylesEditGroupIndex,
         onSetEditSvgGroupIndex,
         styleSize = 27,
+        onClick,
     } = props;
 
     return (
@@ -27,6 +28,7 @@ export default props => {
                 width: width,
                 ...style,
             }}
+            onClick={onClick}
         >
             <img
                 src={`${filterImageUrl(shadowUrl)}`}
@@ -50,10 +52,7 @@ export default props => {
                     }
                     let j = 0;
                     for (let i = 0; i < svg.children.length; i++) {
-                        if (
-                            svg.children[i].tagName === 'g' ||
-                            svg.children[i].tagName === 'path'
-                        ) {
+                        if (svg.children[i].tagName === 'g' || svg.children[i].tagName === 'path') {
                             let block = svg.children[i];
                             for (let i = 0; i < block.children.length; i++) {
                                 let cblock = block.children[i];
@@ -70,25 +69,15 @@ export default props => {
                                     onSetEditSvgGroupIndex(jj);
                                 };
 
-                                if (
-                                    curStylesEditGroupIndex === j &&
-                                    showGroupStroke
-                                ) {
+                                if (curStylesEditGroupIndex === j && showGroupStroke) {
                                     block.style.stroke = 'khaki';
                                     block.style.strokeWidth = '8px';
                                 }
                             }
                             // svg.children[i].setAttribute('index', j);
-                            if (
-                                colors &&
-                                colors.length > 0 &&
-                                j < colors.length &&
-                                colors[j]
-                            ) {
+                            if (colors && colors.length > 0 && j < colors.length && colors[j]) {
                                 let block = svg.children[i];
-                                block.style.fill = colors[j].type
-                                    ? `url("#${styleId}-${colors[j]._id}-${j}")`
-                                    : colors[j].value;
+                                block.style.fill = colors[j].type ? `url("#${styleId}-${colors[j]._id}-${j}")` : colors[j].value;
                             }
                             j++;
                         }
@@ -101,52 +90,29 @@ export default props => {
                 beforeInjection={svg => {
                     // console.log("curStylesEditGroupIndex", curStylesEditGroupIndex)
                     svg.setAttribute('id', svgId || key);
-                    let svgDefs = document.createElementNS(
-                        'http://www.w3.org/2000/svg',
-                        'defs',
-                    );
+                    let svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                     svg.appendChild(svgDefs);
                     svg.setAttribute('style', `width: ${width}; height: 100%`);
 
                     for (let i = 0; i < colors.length; i++) {
                         let color = colors[i];
                         if (color && color.type) {
-                            let imgVals = imgValsAttrs.find(
-                                x => x.colorId === color._id,
-                            ) || {
+                            let imgVals = imgValsAttrs.find(x => x.colorId === color._id) || {
                                 scale: 1,
                                 x: 0,
                                 y: 0,
                             };
                             // console.log("imgVals", imgVals)
-                            let svgPattern = document.createElementNS(
-                                'http://www.w3.org/2000/svg',
-                                'pattern',
-                            );
+                            let svgPattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
 
-                            svgPattern.setAttribute(
-                                'id',
-                                `${styleId}-${color._id}-${i}`,
-                            );
+                            svgPattern.setAttribute('id', `${styleId}-${color._id}-${i}`);
                             // editPatterns[color._id] = svgPattern
-                            svgPattern.setAttribute(
-                                'patternUnits',
-                                'userSpaceOnUse',
-                            );
-                            svgPattern.setAttribute(
-                                'patternContentUnits',
-                                'userSpaceOnUse',
-                            );
+                            svgPattern.setAttribute('patternUnits', 'userSpaceOnUse');
+                            svgPattern.setAttribute('patternContentUnits', 'userSpaceOnUse');
                             if (svg.width.baseVal.unitType === 2) {
-                                svg.setAttribute(
-                                    'width',
-                                    `${svg.viewBox.baseVal.width}px`,
-                                );
+                                svg.setAttribute('width', `${svg.viewBox.baseVal.width}px`);
                             }
-                            let W =
-                                ((color.size * svg.width.baseVal.value) /
-                                    styleSize) *
-                                imgVals.scale;
+                            let W = ((color.size * svg.width.baseVal.value) / styleSize) * imgVals.scale;
                             let H = (W * color.height) / color.width;
 
                             svgPattern.setAttribute('width', `${W}px`);
@@ -154,16 +120,11 @@ export default props => {
                             svgPattern.x.baseVal.value = imgVals.x;
                             svgPattern.y.baseVal.value = imgVals.y;
 
-                            let svgPatternImage = document.createElementNS(
-                                'http://www.w3.org/2000/svg',
-                                'image',
-                            );
+                            let svgPatternImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 
                             svgPatternImage.setAttribute('width', `${W}px`);
                             svgPatternImage.setAttribute('height', `${H}px`);
-                            svgPatternImage.href.baseVal = `${filterImageUrl(
-                                color.value,
-                            )}`;
+                            svgPatternImage.href.baseVal = `${filterImageUrl(color.value)}`;
 
                             // editSvgs.svgDefs.appendChild(svgPattern)
                             svgPattern.appendChild(svgPatternImage);

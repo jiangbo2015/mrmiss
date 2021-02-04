@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 
 import { filterImageUrl } from '@/utils/helper';
@@ -22,17 +22,20 @@ const ColotItem = ({ color, isSelected, ...props }) => (
                 boxSizing: 'content-box',
                 backgroundClip: 'content-box',
                 padding: '5px',
-                border: isSelected
-                    ? '1px solid #fff'
-                    : '1px solid rgba(0,0,0,0)',
+                border: isSelected ? '1px solid #fff' : '1px solid rgba(0,0,0,0)',
             }}
         />
     </div>
 );
 
-const App = ({ colorList = { docs: [] }, dispatch }) => {
+const App = ({ colorList = { docs: [] }, dispatch, currentGood = {} }) => {
     let { docs } = colorList;
-
+    useEffect(() => {
+        dispatch({
+            type: 'diy/fetchColorList',
+            payload: { goodsId: currentGood._id, limit: 10000, type: 0 },
+        });
+    }, [currentGood]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -48,7 +51,7 @@ const App = ({ colorList = { docs: [] }, dispatch }) => {
             }}
         >
             <div style={{ marginBottom: '60px' }}>
-                <SearchInput />
+                <SearchInput placeholder="SEARCH COLOR" />
             </div>
             <div
                 style={{
@@ -62,8 +65,9 @@ const App = ({ colorList = { docs: [] }, dispatch }) => {
                     overflowY: 'scroll',
                 }}
             >
-                {docs.map((d, index) => (
+                {colorList.docs.map((d, index) => (
                     <ColotItem
+                        key={d._id}
                         isSelected={d.isSelected}
                         color={d.value}
                         onClick={() => {
@@ -80,4 +84,5 @@ export default connect(({ diy }) => ({
     colorList: diy.colorList,
     flowerList: diy.flowerList,
     selectColorList: diy.selectColorList,
+    currentGood: diy.currentGood,
 }))(App);

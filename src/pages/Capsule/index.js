@@ -52,7 +52,7 @@ export default () => {
                         subtitle="This season's capsule is launched by mrmiss 2021 limited capsule
             series-parent-child family series. I hope you can find your favorite
             products here.."
-                    ></Title>
+                    />
                 </Box>
                 <Box css={{ position: 'relative' }}>
                     <SidebarStyles></SidebarStyles>

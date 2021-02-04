@@ -2,6 +2,7 @@ import React from 'react';
 import { Box } from 'rebass/styled-components';
 import { Tabs } from 'antd';
 import UserInfo from './components/UserInfo';
+// import UserInfo from '@/components/UserInfoFrom';
 import DIYOrder from './components/DIYOrder';
 import CapsuleOrder from './components/CapsuleOrder';
 import ShopOrder from './components/ShopOrder';
@@ -11,6 +12,11 @@ const { TabPane } = Tabs;
 export default class Business extends React.Component {
     callback(key) {
         console.log(key);
+    }
+    static getDerivedStateFromError(error) {
+        // Update state so the next render will show the fallback UI.
+        console.log('getDerivedStateFromError', error);
+        return { hasError: true };
     }
     render() {
         return (

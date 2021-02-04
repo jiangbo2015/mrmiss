@@ -5,21 +5,12 @@ import { ReactSVG } from 'react-svg';
 import { Flex } from 'rebass/styled-components';
 
 const { Option } = Select;
-export default ({
-    onSearch,
-    options,
-    width,
-    mode = 'default',
-    style = {},
-    ...props
-}) => {
+export default ({ onSearch, options, width, mode = 'default', style = {}, ...props }) => {
     return (
         <div style={{ display: 'flex', ...style }}>
             <Select
                 style={{ width }}
-                className={
-                    mode === 'white' ? 'mrmissSelectWhite' : 'mrmissSelect'
-                }
+                className={mode === 'white' ? 'mrmissSelectWhite' : 'mrmissSelect'}
                 options={options}
                 {...props}
             />

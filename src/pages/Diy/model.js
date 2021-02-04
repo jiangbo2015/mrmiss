@@ -1,23 +1,44 @@
-import defaultData from './defaultData';
+import { message } from 'antd';
 import lodash from 'lodash';
+import * as api from '@/apis/diy';
 
 export default {
     namespace: 'diy',
     state: {
-        currentStyle: defaultData.styleList.docs[0],
-        colorList: defaultData.colorList,
-        flowerList: defaultData.flowerList,
-        styleList: defaultData.styleList,
+        editOrderSaveId: '',
+        currentStyle: {},
+        colorList: { docs: [] },
+        flowerList: { docs: [] },
+        styleList: {},
         collocationPattern: 'single', //搭配模式 single:单一模式；multiple:多个模式；paintPrew:花布大图模式
         collocationBg: false, //搭配背景 false:black|true:white
         selectColorList: [],
         selectStyleList: [],
-        favoriteArr: defaultData.favoriteArr,
+        favoriteArr: [],
         favoritePattern: 'middle', //  large, middle, small
         selectFavoriteList: [],
         favoriteToOrderGroupList: [],
+        goodsList: [],
     },
     reducers: {
+        setEditOrderSaveId(state, action) {
+            return {
+                ...state,
+                editOrderSaveId: action.payload,
+            };
+        },
+        setCurrentStyle(state, action) {
+            return {
+                ...state,
+                currentStyle: action.payload,
+            };
+        },
+        setGoodsList(state, action) {
+            return {
+                ...state,
+                goodsList: action.payload,
+            };
+        },
         setFavoriteToOrderGroupList(state, action) {
             console.log('setFavoriteToOrderGroupList', action);
             return {
@@ -48,8 +69,19 @@ export default {
             return {
                 ...state,
                 colorList: action.payload.colorList,
-
                 flowerList: action.payload.flowerList,
+            };
+        },
+        setColorList(state, action) {
+            return {
+                ...state,
+                colorList: action.payload,
+            };
+        },
+        setFlowerList(state, action) {
+            return {
+                ...state,
+                flowerList: action.payload,
             };
         },
         setSelectColorList(state, action) {
@@ -88,36 +120,131 @@ export default {
                 collocationBg: action.payload,
             };
         },
+        setCurrentGood(state, action) {
+            return {
+                ...state,
+                currentGood: action.payload,
+            };
+        },
+        setCurrentGoodCategory(state, action) {
+            return {
+                ...state,
+                currentGoodCategory: action.payload,
+            };
+        },
     },
     effects: {
         *fetchStyleList({ payload }, { call, put, select }) {
-            const { styleList = { docs: [] } } = yield select(
-                state => state.diy,
-            );
+            // const { styleList = { docs: [] } } = yield select(state => state.diy);
             // console.log('originData', originData);
             // if (!originData) return;
-
-            yield put({
-                type: 'setStyleList',
-                payload: {
-                    ...defaultData.styleList,
-                    docs: [...styleList.docs, ...defaultData.styleList.docs],
-                },
-            });
+            const res = yield call(api.getUserStyleList, payload);
+            if (res.data && Array.isArray(res.data.category)) {
+                let categoryStyles = {};
+                res.data.category.map(c => {
+                    categoryStyles[c._id] = c.styles;
+                });
+                yield put({
+                    type: 'setStyleList',
+                    payload: categoryStyles,
+                });
+            }
+            // getUserStyleList
+        },
+        *fetchGoodsList({ payload }, { call, put, select }) {
+            const res = yield call(api.getVisibleList);
+            // console.log('originData', originData);
+            // if (!originData) return;
+            // goods/getVisibleList
+            if (res && res.data) {
+                yield put({
+                    type: 'setGoodsList',
+                    payload: res.data,
+                });
+            }
+        },
+        *fetchColorList({ payload }, { call, put, select }) {
+            const res = yield call(api.getColorList, payload);
+            if (res && res.data) {
+                if (payload.type === 0) {
+                    yield put({
+                        type: 'setColorList',
+                        payload: res.data,
+                    });
+                } else {
+                    yield put({
+                        type: 'setFlowerList',
+                        payload: res.data,
+                    });
+                }
+            }
+        },
+        *fetchFavoriteList({ payload }, { call, put, select }) {
+            const res = yield call(api.getFavoriteList, payload);
+            if (res && res.data) {
+                yield put({
+                    type: 'setFavoriteArr',
+                    payload: res.data,
+                });
+            }
+        },
+        *addFavorite({ payload }, { call, put, select }) {
+            const res = yield call(api.addFavorite, payload);
+            if (res && res.data) {
+                yield put({
+                    type: 'fetchFavoriteList',
+                    payload: {
+                        goodsId: payload.goodId,
+                    },
+                });
+            }
+            // { styleAndColor: params, goodId: goodId }
+        },
+        *updateFavorite({ payload }, { call, put, select }) {
+            const res = yield call(api.updateFavorite, payload);
+            if (res && res.data) {
+                yield put({
+                    type: 'fetchFavoriteList',
+                    payload: {
+                        goodsId: payload.goodId,
+                    },
+                });
+            }
+            // { styleAndColor: params, goodId: goodId }
+        },
+        *deleteFavorite({ payload }, { call, put, select }) {
+            const res = yield call(api.deleteFavorite, payload);
+            if (res && res.data) {
+                yield put({
+                    type: 'fetchFavoriteList',
+                    payload: {
+                        goodsId: payload.goodId,
+                    },
+                });
+            }
+            // { styleAndColor: params, goodId: goodId }
+        },
+        *addOrder({ payload }, { call, put, select }) {
+            const { editOrderSaveId } = yield select(state => state.diy);
+            let apiFun = api.addOrder;
+            let data = payload;
+            if (editOrderSaveId) {
+                apiFun = api.updateOrder;
+                data._id = editOrderSaveId;
+            }
+            const res = yield call(apiFun, payload);
+            if (res && res.data) {
+                message.info('保存成功');
+            }
+            // { styleAndColor: params, goodId: goodId }
         },
         *toogleSelectColor({ payload }, { call, put, select }) {
-            const {
-                colorList = { docs: [] },
-                flowerList = { docs: [] },
-                selectColorList,
-            } = yield select(state => state.diy);
+            const { colorList = { docs: [] }, flowerList = { docs: [] }, selectColorList } = yield select(state => state.diy);
             const { item, index } = payload;
             let newValue = [];
 
             console.log('selectColorList', item);
-            const findSelectIndex = selectColorList.findIndex(
-                x => x._id == item._id,
-            );
+            const findSelectIndex = selectColorList.findIndex(x => x._id == item._id);
 
             console.log('findSelectIndex', findSelectIndex);
             if (findSelectIndex >= 0) {
@@ -149,25 +276,22 @@ export default {
                 },
             });
         },
+
         *toogleSelectStyle({ payload }, { call, put, select }) {
-            const { styleList, selectStyleList } = yield select(
-                state => state.diy,
-            );
+            const { styleList, selectStyleList, currentGoodCategory } = yield select(state => state.diy);
             const { item, index } = payload;
             let newValue = [];
 
-            const findSelectIndex = selectStyleList.findIndex(
-                x => x._id == item._id,
-            );
+            const findSelectIndex = selectStyleList.findIndex(x => x._id == item._id);
 
             console.log('findSelectIndex', findSelectIndex);
             if (findSelectIndex >= 0) {
                 newValue = [...selectStyleList];
                 newValue.splice(findSelectIndex, 1);
-                styleList.docs[index].isSelected = false;
+                styleList[currentGoodCategory][index].isSelected = false;
             } else {
                 newValue = [...selectStyleList, item];
-                styleList.docs[index].isSelected = true;
+                styleList[currentGoodCategory][index].isSelected = true;
             }
 
             yield put({
@@ -182,15 +306,11 @@ export default {
             });
         },
         *toogleSelectFavorite({ payload }, { call, put, select }) {
-            const { favoriteArr, selectFavoriteList } = yield select(
-                state => state.diy,
-            );
+            const { favoriteArr, selectFavoriteList } = yield select(state => state.diy);
             const { item, index } = payload;
             let newValue = [];
 
-            const findSelectIndex = selectFavoriteList.findIndex(
-                x => x._id == item._id,
-            );
+            const findSelectIndex = selectFavoriteList.findIndex(x => x._id == item._id);
 
             console.log('findSelectIndex', findSelectIndex);
             if (findSelectIndex >= 0) {
@@ -212,23 +332,87 @@ export default {
             });
         },
         *toDoOrder({ payload }, { call, put, select }) {
-            const { selectFavoriteList } = yield select(state => state.diy);
-            const gourpByStyle = lodash.groupBy(selectFavoriteList, f =>
-                f.styleAndColor.map(sc => sc.style._id).join('-'),
-            );
+            const { selectFavoriteList, currentGood } = yield select(state => state.diy);
+            const res = yield call(api.getMyOrderList, { isSend: 0, goodsId: currentGood._id });
+            let saveOrder = [];
+            if (res && Array.isArray(res.data) && res.data.length > 0) {
+                console.log('data', res.data);
+                yield put({
+                    type: 'setEditOrderSaveId',
+                    payload: res.data[0]._id,
+                });
+                saveOrder = res.data[0].orderData;
+            } else {
+                yield put({
+                    type: 'setEditOrderSaveId',
+                    payload: '',
+                });
+            }
 
+            const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
+            console.log('gourpByStyle', gourpByStyle);
             for (var key in gourpByStyle) {
                 gourpByStyle[key] = {
                     list: gourpByStyle[key],
                     key,
-                    sizes: ['XS', 'S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+                    sizes: gourpByStyle[key][0].styleAndColor[0].style.size.split('/'),
                 };
             }
-            console.log('gourpByStyle', gourpByStyle);
+            const saveItems = saveOrder.map(o => {
+                let item = o.items[0];
+                let key = item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-');
+                return {
+                    list: o.items.map(i => ({
+                        ...i.favorite,
+                        parte: i.parte,
+                        sizeInfoObject: i.sizeInfoObject,
+                        styleAndColor: i.favorite.styleAndColor.map(sc => ({
+                            colorIds: sc.colorIds,
+                            styleId: sc.styleId._id,
+                            style: sc.styleId,
+                        })),
+                    })),
+                    key,
+                    pickType: o.pickType,
+                    rowRemarks: o.rowRemarks,
+                    sizes: Object.keys(item.sizeInfoObject),
+                };
+            });
             yield put({
                 type: 'setFavoriteToOrderGroupList',
-                payload: Object.values(gourpByStyle),
+                payload: Object.values(gourpByStyle).concat(saveItems),
             });
+        },
+        *createCapsule({ payload }, { call, put, select }) {
+            const { info = {} } = yield select(state => state.user);
+            const { selectFavoriteList } = yield select(state => state.diy);
+            const res = yield call(api.addCapsule, { namecn: payload, nameen: payload, author: info._id, status: 0 });
+            if (res && res.data) {
+                let capsuleId = res.data._id;
+                let colorWithStyleImgs = [];
+                const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('/'));
+                let styleNosArr = Object.keys(gourpByStyle);
+                for (let i = 0; i < styleNosArr.length; i++) {
+                    let group = gourpByStyle[styleNosArr[i]];
+                    const code = group[0].styleAndColor.map(sc => sc.style.styleNo).join('/');
+                    colorWithStyleImgs = group.map(favorite => ({
+                        favorite: favorite._id,
+                        color: favorite.styleAndColor[0].colorIds[0]._id,
+                        type: 1,
+                    }));
+
+                    const capsuleStyleData = {
+                        capsule: capsuleId,
+                        code,
+                        colorWithStyleImgs,
+                        size: group[0].styleAndColor[0].style.size,
+                        price: _.sum(group[0].styleAndColor.map(sc => sc.style.price)),
+                    };
+                    const capsuleStyleRes = yield call(api.addCapsuleStyle, capsuleStyleData);
+                }
+                message.info('创建胶囊成功，等待管理员发布');
+            }
+            // { styleAndColor: params, goodId: goodId }
         },
     },
 };

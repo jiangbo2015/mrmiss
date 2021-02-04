@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'dva';
 
 import { filterImageUrl } from '@/utils/helper';
@@ -24,16 +24,20 @@ const ImgItem = ({ img, isSelected, ...props }) => (
                 boxSizing: 'content-box',
                 backgroundClip: 'content-box',
                 padding: '5px',
-                border: isSelected
-                    ? '1px solid #fff'
-                    : '1px solid rgba(0,0,0,0)',
+                border: isSelected ? '1px solid #fff' : '1px solid rgba(0,0,0,0)',
             }}
         />
     </div>
 );
 
-const App = ({ flowerList = { docs: [] }, dispatch }) => {
+const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {} }) => {
     const { docs } = flowerList;
+    useEffect(() => {
+        dispatch({
+            type: 'diy/fetchColorList',
+            payload: { goodsId: currentGood._id, limit: 10000, type: 1 },
+        });
+    }, [currentGood]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -49,7 +53,7 @@ const App = ({ flowerList = { docs: [] }, dispatch }) => {
             }}
         >
             <div style={{ marginBottom: '60px' }}>
-                <SearchInput />
+                <SearchInput placeholder="SEARCH PAINT" />
             </div>
             <div
                 style={{
@@ -66,6 +70,7 @@ const App = ({ flowerList = { docs: [] }, dispatch }) => {
             >
                 {docs.map((d, index) => (
                     <ImgItem
+                        key={d._id}
                         img={d.value}
                         isSelected={d.isSelected}
                         onClick={() => {
@@ -78,4 +83,4 @@ const App = ({ flowerList = { docs: [] }, dispatch }) => {
     );
 };
 
-export default connect(({ diy }) => ({ flowerList: diy.flowerList }))(App);
+export default connect(({ diy }) => ({ flowerList: diy.flowerList, currentGood: diy.currentGood }))(App);
