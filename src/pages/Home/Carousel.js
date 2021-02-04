@@ -1,6 +1,8 @@
 import cat1 from '@/public/3.png';
 import { Box, Flex } from 'rebass/styled-components';
 import { Carousel } from 'antd';
+import { filterImageUrl } from '@/utils/helper';
+
 const settings = {
     dots: false,
     infinite: true,
@@ -11,22 +13,30 @@ const settings = {
     autoplaySpeed: 2000,
     cssEase: 'linear',
 };
-export default () => (
-    <Box py="60px">
-        <Carousel {...settings}>
-            {new Array(6).fill(0).map((x, i) => (
-                <Box width={0.18} p="5px">
-                    <Box
-                        width={1}
-                        height="300px"
-                        key={i}
-                        css={{
-                            background: `url(${cat1}) no-repeat`,
-                            backgroundSize: 'cover',
-                        }}
-                    ></Box>
-                </Box>
-            ))}
-        </Carousel>
-    </Box>
-);
+export default ({ carousels = [] }) => {
+    let carouselUrls = [];
+    if (carousels.length > 0 && carousels.length < 6) {
+        while (carouselUrls.length < 6) {
+            carouselUrls = [...carouselUrls, ...carousels];
+        }
+    }
+    return (
+        <Box py="60px">
+            <Carousel {...settings}>
+                {carouselUrls.map((x, i) => (
+                    <Box width={0.18} p="5px">
+                        <Box
+                            width={1}
+                            height="300px"
+                            key={i}
+                            css={{
+                                background: `url(${filterImageUrl(x)}) no-repeat`,
+                                backgroundSize: 'cover',
+                            }}
+                        />
+                    </Box>
+                ))}
+            </Carousel>
+        </Box>
+    );
+};

@@ -11,15 +11,13 @@ const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
             <div
                 style={{
                     flex: 1,
-                    display:
-                        collocationPattern === 'paintPrew' ? 'initial' : 'none',
+                    display: collocationPattern === 'paintPrew' ? 'initial' : 'none',
                 }}
             ></div>
             <div
                 style={{
                     width: 'calc(100% - 656px)',
-                    display:
-                        collocationPattern === 'expand' ? 'initial' : 'none',
+                    display: collocationPattern === 'expand' ? 'initial' : 'none',
                 }}
             >
                 <ExpandMode />
@@ -27,8 +25,7 @@ const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
             <div
                 style={{
                     width: 'calc(100% - 656px)',
-                    display:
-                        collocationPattern === 'single' ? 'initial' : 'none',
+                    display: collocationPattern === 'single' ? 'initial' : 'none',
                 }}
             >
                 <SingleMode />
@@ -36,8 +33,7 @@ const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
             <div
                 style={{
                     flex: 1,
-                    display:
-                        collocationPattern === 'multiple' ? 'initial' : 'none',
+                    display: collocationPattern === 'multiple' ? 'initial' : 'none',
                 }}
             >
                 <MultipleMode />

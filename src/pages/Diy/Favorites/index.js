@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { message } from 'antd';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
 import Propmt from '@/components/Propmt';
@@ -19,18 +20,27 @@ const favoriteBox = {
     large: { h: '370px', w: '360px', size: '140px' },
 };
 
-const App = ({ favoriteArr, dispatch, favoritePattern }) => {
+const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     console.log('favoritePattern', favoritePattern);
     const [orderVisible, setOrderVisible] = useState(false);
     const [capsuleInputVisible, setCapsuleInputVisible] = useState(false);
     const handleFetchMore = async () => {
-        console.log('fetchStyleList');
-        // await waitTime(1000);
-        console.log('go go');
-        // dispatch({
-        //     type: 'diy/fetchStyleList',
-        // });
+        // if (currentGood._id) {
+        //     dispatch({
+        //         type: 'diy/fetchFavoriteList',
+        //         payload: { goodsId: currentGood._id },
+        //     });
+        // }
     };
+    useEffect(() => {
+        if (currentGood._id) {
+            dispatch({
+                type: 'diy/fetchFavoriteList',
+                payload: { goodsId: currentGood._id },
+            });
+        }
+    }, [currentGood]);
+
     const handleChangeFavoritePattern = pattern => {
         dispatch({
             type: 'diy/setFavoritePattern',
@@ -61,8 +71,18 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
             <Propmt
                 visible={capsuleInputVisible}
                 placeholder="请输入胶囊名称："
-                onOk={input => {
-                    console.log(input);
+                onOk={async input => {
+                    if (!input) {
+                        message.info('胶囊名称不能为空');
+                        return;
+                    }
+
+                    console.log('input', input);
+                    await dispatch({
+                        type: 'diy/createCapsule',
+                        payload: input,
+                    });
+                    setCapsuleInputVisible(false);
                 }}
                 onCancel={() => {
                     setCapsuleInputVisible(false);
@@ -135,7 +155,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
             <InfiniteScroll
                 dataLength={favoriteArr.length}
                 next={handleFetchMore}
-                hasMore={true}
+                hasMore={false}
                 height={600}
                 // inverse={true}
                 style={{
@@ -151,16 +171,10 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                     gridTemplateRows: 'repeat(3, 1fr)',
                 }}
                 loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
-                endMessage={
-                    <p style={{ textAlign: 'center', color: '#fff' }}>
-                        <b>Yay! You have seen it all</b>
-                    </p>
-                }
             >
                 {favoriteArr.map((favorite, index) => (
                     <div
-                        key={`${favorite._id}-favorite-${Math.random() *
-                            1000000}`}
+                        key={`${favorite._id}-favorite-${Math.random() * 1000000}`}
                         style={{
                             position: 'relative',
                             justifySelf: 'stretch',
@@ -202,9 +216,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                                     width={favoriteBox[favoritePattern].size}
                                     styleId={`${favorite._id}-${d._id}-item`}
                                     colors={d.colorIds}
-                                    key={`${favorite._id}-${
-                                        d._id
-                                    }-${Math.random() * 1000000}`}
+                                    key={`${favorite._id}-${d._id}-${Math.random() * 1000000}`}
                                     {...d.style}
                                     style={{
                                         cursor: 'pointer',
@@ -212,10 +224,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
                                 />
                             ))}
                         </div>
-                        <div
-                            className="toolBar"
-                            style={{ display: 'flex', marginBottom: '10px' }}
-                        >
+                        <div className="toolBar" style={{ display: 'flex', marginBottom: '10px' }}>
                             <ReactSVG
                                 style={{
                                     width: '14px',
@@ -249,4 +258,5 @@ const App = ({ favoriteArr, dispatch, favoritePattern }) => {
 export default connect(({ diy }) => ({
     favoriteArr: diy.favoriteArr,
     favoritePattern: diy.favoritePattern,
+    currentGood: diy.currentGood,
 }))(App);

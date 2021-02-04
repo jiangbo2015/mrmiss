@@ -11,6 +11,8 @@ import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import InputNumber from '@/components/InputNumber';
+import { InputBottomWhiteBorder } from '@/components/Input';
+
 import StyleItem from '@/components/StyleItem';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
@@ -29,7 +31,7 @@ const reorder = (list, startIndex, endIndex) => {
 /**
  * Moves an item from one list to another list.
  */
-const move = (source, destination, droppableSource, droppableDestination) => {
+const move = (source, destination, droppableSource, droppableDestination, currentUser, currentGood) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -67,34 +69,78 @@ const getListStyle = isDraggingOver => ({
     border: '1px solid #161616',
 });
 
-const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
+const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGood = {}, currentUser }) => {
     const [sourceData, setSourceData] = useState([]);
-    const [countInfos, setCountInfos] = useState({});
-    const [singleTotalInfos, setSingleTotalInfos] = useState({});
-    const [parteInfos, setParteInfos] = useState({});
+    const [countInfos, setCountInfos] = useState({}); // 所有尺码 数量信息
+    const [singleTotalInfos, setSingleTotalInfos] = useState({}); //每行总数
+    const [rowPickTypes, setRowPickTypes] = useState({}); //每行总数
+    const [rowRemarks, setRowRemarks] = useState({}); //每行总数
+    const [singleTotalPriceInfos, setSingleTotalPriceInfos] = useState({}); //每行总金额
+    const [parteInfos, setParteInfos] = useState({}); // 所有 分数 信息
     useEffect(() => {
+        let initCountInfos = {};
+        let initParteInfos = {};
+        let initRowPickTypes = {};
+        let initRowRemarks = {};
+        favoriteToOrderGroupList.map((g, ri) => {
+            initCountInfos[ri] = {};
+            initParteInfos[ri] = {};
+            initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
+            initRowPickTypes[ri] = g.pickType ? g.pickType : { val: 0, pieceCount: 0 };
+            g.list.map(favorite => {
+                const favoriteKey = `${favorite._id}-${ri}`;
+                initCountInfos[ri][favoriteKey] = {};
+                if (favorite.sizeInfoObject) {
+                    Object.keys(favorite.sizeInfoObject).map(s => {
+                        const sizeKey = `${ri}-${favorite._id}-${s}`;
+                        initCountInfos[ri][favoriteKey][sizeKey] = favorite.sizeInfoObject[s];
+                    });
+                }
+
+                if (favorite.parte) {
+                    initParteInfos[ri][favoriteKey] = favorite.parte;
+                }
+            });
+        });
         setSourceData(favoriteToOrderGroupList);
+        setCountInfos(initCountInfos);
+        setParteInfos(initParteInfos);
+        setRowPickTypes(initRowPickTypes);
+        setRowRemarks(initRowRemarks);
     }, [favoriteToOrderGroupList]);
     // useEffect(() => {
     //     console.log('----sourceData----', sourceData);
     // }, [sourceData]);
     useEffect(() => {
-        Object.keys(parteInfos).map(row => {
+        Object.keys(countInfos).map(row => {
             let rowParte = parteInfos[row];
             if (!countInfos[row]) return;
+            let rowUnitPrice = 0;
+            rowUnitPrice += lodash.sum(sourceData[row].list[0].styleAndColor.map(sc => sc.style.price));
+
             let sum = 0;
-            for (var key in rowParte) {
-                if (!countInfos[row][key]) return;
-                let parte = rowParte[key];
-                sum += lodash.sum(Object.values(countInfos[row][key])) * parte;
+            // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
+            if (rowPickTypes[row].val == 1) {
+                if (rowPickTypes[row].pieceCount) {
+                    sum = lodash.sum(Object.values(countInfos[row]).map(ci => lodash.sum(Object.values(ci))));
+                    sum = sum * rowPickTypes[row].pieceCount;
+                }
+            } else {
+                for (var key in rowParte) {
+                    if (!countInfos[row][key]) return;
+                    let parte = rowParte[key];
+                    sum += lodash.sum(Object.values(countInfos[row][key])) * parte;
+                }
             }
 
             singleTotalInfos[row] = sum;
-            setSingleTotalInfos({ ...singleTotalInfos });
+            singleTotalPriceInfos[row] = sum * rowUnitPrice;
         });
-    }, [countInfos, parteInfos]);
+        setSingleTotalInfos({ ...singleTotalInfos });
+        setSingleTotalPriceInfos({ ...singleTotalPriceInfos });
+    }, [countInfos, parteInfos, rowPickTypes]);
 
-    function onDragEnd(result) {
+    const onDragEnd = result => {
         const { source, destination } = result;
         const sInd = +source.droppableId;
 
@@ -104,47 +150,82 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
             const [removed] = sourceClone.splice(source.index, 1);
             sourceData[sInd].list = sourceClone;
 
-            const newKey = removed.styleAndColor
-                .map(sc => sc.styleId)
-                .join('-');
-            console.log('removed', removed);
+            const newKey = removed.styleAndColor.map(sc => sc.styleId).join('-');
+            // console.log('removed', removed);
             setSourceData([
                 ...sourceData,
                 {
                     key: newKey,
                     list: [removed],
-                    sizes: ['S', 'M', 'L'],
+                    sizes: removed.styleAndColor[0].style.size.split('/'),
                 },
             ]);
             return;
         }
         const dInd = +destination.droppableId;
         if (sInd === dInd) {
-            console.log('sInd', sInd);
-            console.log('sourceData', sourceData);
-            const items = reorder(
-                sourceData[sInd].list,
-                source.index,
-                destination.index,
-            );
+            // console.log('sInd', sInd);
+            // console.log('sourceData', sourceData);
+            const items = reorder(sourceData[sInd].list, source.index, destination.index);
             const newState = [...sourceData];
             newState[sInd] = { ...sourceData[sInd], list: items };
             setSourceData(newState);
         } else if (sourceData[sInd].key === sourceData[dInd].key) {
-            const result = move(
-                sourceData[sInd].list,
-                sourceData[dInd].list,
-                source,
-                destination,
-            );
+            const result = move(sourceData[sInd].list, sourceData[dInd].list, source, destination);
             const newState = [...sourceData];
             newState[sInd].list = result[sInd];
             newState[dInd].list = result[dInd];
 
             setSourceData(newState.filter(group => group.list.length));
         }
-    }
+    };
+    const handleSave = () => {
+        const orderData = parseOrderData();
+        dispatch({
+            type: 'diy/addOrder',
+            payload: {
+                orderData,
+                goodsId: currentGood._id,
+            },
+        });
+    };
+    const parseOrderData = () => {
+        const orderData = sourceData.map((row, ri) => {
+            const { list, sizes, key } = row;
+            let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
+            let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
+            const items = list.map(favorite => {
+                const favoriteKey = `${favorite._id}-${ri}`;
+                let currentCountInfo = currentRowCountInfo[favoriteKey] ? currentRowCountInfo[favoriteKey] : {};
 
+                let currentParteInfo = currentRowParteInfo[favoriteKey] ? currentRowParteInfo[favoriteKey] : 0;
+
+                let sizeInfoObject = {};
+                let total = 0;
+                Object.keys(currentCountInfo).map(k => {
+                    sizeInfoObject[k.split('-')[2]] = currentCountInfo[k];
+                    total += currentCountInfo[k];
+                });
+                total *= currentParteInfo;
+                let unitPrice = lodash.sum(favorite.styleAndColor.map(sc => sc.style.price));
+                return {
+                    favoriteId: favorite._id,
+                    sizeInfoObject,
+                    parte: currentParteInfo,
+                    total,
+                    totalPrice: unitPrice * total,
+                };
+            });
+            return {
+                pickType: rowPickTypes[ri],
+                rowTotal: singleTotalInfos[ri],
+                rowTotalPrice: singleTotalPriceInfos[ri],
+                rowRemarks: rowRemarks[ri],
+                items,
+            };
+        });
+        return orderData;
+    };
     return (
         <Modal
             visible={visible}
@@ -157,28 +238,26 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
         >
             <DragDropContext onDragEnd={onDragEnd}>
                 {sourceData.map((el, ind) => {
-                    let currentRowCountInfo = countInfos[ind]
-                        ? countInfos[ind]
-                        : {};
-                    let currentRowParteInfo = parteInfos[ind]
-                        ? parteInfos[ind]
-                        : {};
+                    let currentRowCountInfo = countInfos[ind] ? countInfos[ind] : {};
+                    let currentRowParteInfo = parteInfos[ind] ? parteInfos[ind] : {};
                     // console.log('currentCountInfo', currentCountInfo);
                     return (
                         <Flex alignItems="center" m="0px 24px">
-                            <ReactSVG
-                                src={SelectedIcon}
-                                style={{ width: '20px', height: '20px' }}
-                            />
-                            <Box
-                                m="10px"
-                                width="100%"
-                                sx={{ position: 'relative' }}
-                            >
+                            <ReactSVG src={SelectedIcon} style={{ width: '20px', height: '20px' }} />
+                            <Box m="10px" width="100%" sx={{ position: 'relative' }}>
                                 <Popover
                                     content={
-                                        <Box>
-                                            <Input />
+                                        <Box width="160px">
+                                            <Input.TextArea
+                                                rows={3}
+                                                value={rowRemarks[ind]}
+                                                onChange={e => {
+                                                    rowRemarks[ind] = e.target.value;
+                                                    setRowRemarks({
+                                                        ...rowRemarks,
+                                                    });
+                                                }}
+                                            />
                                         </Box>
                                     }
                                 >
@@ -194,59 +273,32 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
                                     />
                                 </Popover>
 
-                                <Droppable
-                                    key={ind}
-                                    droppableId={`${ind}`}
-                                    direction="horizontal"
-                                >
+                                <Droppable key={ind} droppableId={`${ind}`} direction="horizontal">
                                     {(provided, snapshot) => (
                                         <div
                                             ref={provided.innerRef}
-                                            style={getListStyle(
-                                                snapshot.isDraggingOver,
-                                            )}
+                                            style={getListStyle(snapshot.isDraggingOver)}
                                             {...provided.droppableProps}
                                         >
                                             {el.list.map((favorite, index) => {
                                                 const favoriteKey = `${favorite._id}-${ind}`;
-                                                let currentCountInfo = currentRowCountInfo[
-                                                    favoriteKey
-                                                ]
-                                                    ? currentRowCountInfo[
-                                                          favoriteKey
-                                                      ]
+                                                let currentCountInfo = currentRowCountInfo[favoriteKey]
+                                                    ? currentRowCountInfo[favoriteKey]
                                                     : {};
-                                                let currentParteInfo = currentRowParteInfo[
-                                                    favoriteKey
-                                                ]
-                                                    ? currentRowParteInfo[
-                                                          favoriteKey
-                                                      ]
+                                                let currentParteInfo = currentRowParteInfo[favoriteKey]
+                                                    ? currentRowParteInfo[favoriteKey]
                                                     : 0;
 
                                                 return (
-                                                    <Draggable
-                                                        key={favorite._id}
-                                                        draggableId={
-                                                            favorite._id
-                                                        }
-                                                        index={index}
-                                                    >
-                                                        {(
-                                                            provided,
-                                                            snapshot,
-                                                        ) => (
+                                                    <Draggable key={favorite._id} draggableId={favorite._id} index={index}>
+                                                        {(provided, snapshot) => (
                                                             <div
-                                                                ref={
-                                                                    provided.innerRef
-                                                                }
+                                                                ref={provided.innerRef}
                                                                 {...provided.draggableProps}
                                                                 {...provided.dragHandleProps}
                                                                 style={getItemStyle(
                                                                     snapshot.isDragging,
-                                                                    provided
-                                                                        .draggableProps
-                                                                        .style,
+                                                                    provided.draggableProps.style,
                                                                 )}
                                                             >
                                                                 <Flex justifyContent="space-around">
@@ -256,116 +308,72 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
                                                                         alignItems="center"
                                                                         justifyContent="space-around"
                                                                     >
-                                                                        {favorite.styleAndColor.map(
-                                                                            d => (
-                                                                                <StyleItem
-                                                                                    styleId={`${favorite._id}-${d._id}-item`}
-                                                                                    colors={
-                                                                                        d.colorIds
-                                                                                    }
-                                                                                    key={`${
-                                                                                        favorite._id
-                                                                                    }-${
-                                                                                        d._id
-                                                                                    }-${Math.random() *
-                                                                                        1000000}`}
-                                                                                    {...d.style}
-                                                                                    style={{
-                                                                                        cursor:
-                                                                                            'pointer',
-                                                                                    }}
-                                                                                />
-                                                                            ),
-                                                                        )}
+                                                                        {favorite.styleAndColor.map(d => (
+                                                                            <StyleItem
+                                                                                styleId={`${favorite._id}-${d._id}-item`}
+                                                                                colors={d.colorIds}
+                                                                                key={`${favorite._id}-${d._id}-${Math.random() *
+                                                                                    1000000}`}
+                                                                                {...d.style}
+                                                                                style={{
+                                                                                    cursor: 'pointer',
+                                                                                }}
+                                                                            />
+                                                                        ))}
                                                                     </Flex>
                                                                     <Box pl="8px">
-                                                                        {favorite.styleAndColor.map(
-                                                                            sc => (
-                                                                                <Box p="8px 0">
-                                                                                    <Info
-                                                                                        label="编号"
-                                                                                        value={
-                                                                                            sc
-                                                                                                .style
-                                                                                                .styleNo
-                                                                                        }
-                                                                                    />
-                                                                                    <Info
-                                                                                        label="颜色"
-                                                                                        value={lodash
-                                                                                            .union(
-                                                                                                sc.colorIds.map(
-                                                                                                    c =>
-                                                                                                        c.code,
-                                                                                                ),
-                                                                                            )
-                                                                                            .join(
-                                                                                                ',',
-                                                                                            )}
-                                                                                    />
-                                                                                </Box>
-                                                                            ),
-                                                                        )}
+                                                                        {favorite.styleAndColor.map(sc => (
+                                                                            <Box p="8px 0">
+                                                                                <Info label="编号" value={sc.style.styleNo} />
+                                                                                <Info
+                                                                                    label="颜色"
+                                                                                    value={lodash
+                                                                                        .union(sc.colorIds.map(c => c.code))
+                                                                                        .join(',')}
+                                                                                />
+                                                                            </Box>
+                                                                        ))}
                                                                         <Flex mb="30px">
-                                                                            {el.sizes.map(
-                                                                                s => {
-                                                                                    const sizeKey = `${ind}-${favorite._id}-${s}`;
+                                                                            {el.sizes.map(s => {
+                                                                                const sizeKey = `${ind}-${favorite._id}-${s}`;
 
-                                                                                    return (
-                                                                                        <Flex
-                                                                                            flexDirection="column"
-                                                                                            alignItems="center"
-                                                                                            key={
-                                                                                                sizeKey
+                                                                                return (
+                                                                                    <Flex
+                                                                                        flexDirection="column"
+                                                                                        alignItems="center"
+                                                                                        key={sizeKey}
+                                                                                    >
+                                                                                        {s}
+                                                                                        <InputNumber
+                                                                                            value={
+                                                                                                currentCountInfo[sizeKey]
+                                                                                                    ? currentCountInfo[sizeKey]
+                                                                                                    : 0
                                                                                             }
-                                                                                        >
-                                                                                            {
-                                                                                                s
-                                                                                            }
-                                                                                            <InputNumber
-                                                                                                value={
-                                                                                                    currentCountInfo[
-                                                                                                        sizeKey
-                                                                                                    ]
-                                                                                                        ? currentCountInfo[
-                                                                                                              sizeKey
-                                                                                                          ]
-                                                                                                        : 0
-                                                                                                }
-                                                                                                onChange={val => {
-                                                                                                    currentCountInfo[
-                                                                                                        sizeKey
-                                                                                                    ] = val;
-                                                                                                    currentRowCountInfo[
-                                                                                                        favoriteKey
-                                                                                                    ] = {
-                                                                                                        ...currentCountInfo,
-                                                                                                    };
+                                                                                            onChange={val => {
+                                                                                                currentCountInfo[sizeKey] = val;
+                                                                                                currentRowCountInfo[
+                                                                                                    favoriteKey
+                                                                                                ] = {
+                                                                                                    ...currentCountInfo,
+                                                                                                };
 
-                                                                                                    countInfos[
-                                                                                                        ind
-                                                                                                    ] = currentRowCountInfo;
-                                                                                                    setCountInfos(
-                                                                                                        {
-                                                                                                            ...countInfos,
-                                                                                                        },
-                                                                                                    );
-                                                                                                }}
-                                                                                            />
-                                                                                        </Flex>
-                                                                                    );
-                                                                                },
-                                                                            )}
+                                                                                                countInfos[
+                                                                                                    ind
+                                                                                                ] = currentRowCountInfo;
+                                                                                                setCountInfos({
+                                                                                                    ...countInfos,
+                                                                                                });
+                                                                                            }}
+                                                                                        />
+                                                                                    </Flex>
+                                                                                );
+                                                                            })}
                                                                         </Flex>
                                                                         <Info
                                                                             label="单价"
                                                                             value={lodash.sum(
-                                                                                favorite.styleAndColor.map(
-                                                                                    sc =>
-                                                                                        sc
-                                                                                            .style
-                                                                                            .price,
-                                                                                ),
+                                                                                favorite.styleAndColor.map(sc => sc.style.price),
                                                                             )}
                                                                         />
                                                                         <Flex
@@ -377,50 +385,38 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
                                                                             <Info
                                                                                 label="每份数量"
                                                                                 value={lodash.sum(
-                                                                                    Object.values(
-                                                                                        currentCountInfo,
-                                                                                    ),
+                                                                                    Object.values(currentCountInfo),
                                                                                 )}
                                                                             />
-                                                                            <Box>
-                                                                                <InputNumber
-                                                                                    value={
-                                                                                        currentParteInfo
-                                                                                            ? currentParteInfo
-                                                                                            : 0
-                                                                                    }
-                                                                                    onChange={val => {
-                                                                                        if (
-                                                                                            !parteInfos[
-                                                                                                ind
-                                                                                            ]
-                                                                                        ) {
-                                                                                            parteInfos[
-                                                                                                ind
-                                                                                            ] = {};
+                                                                            {rowPickTypes[ind].val === 1 ? null : (
+                                                                                <Box>
+                                                                                    <InputNumber
+                                                                                        value={
+                                                                                            currentParteInfo
+                                                                                                ? currentParteInfo
+                                                                                                : 0
                                                                                         }
-                                                                                        parteInfos[
-                                                                                            ind
-                                                                                        ][
-                                                                                            favoriteKey
-                                                                                        ] = val;
-                                                                                        setParteInfos(
-                                                                                            {
+                                                                                        onChange={val => {
+                                                                                            if (!parteInfos[ind]) {
+                                                                                                parteInfos[ind] = {};
+                                                                                            }
+                                                                                            parteInfos[ind][favoriteKey] = val;
+                                                                                            setParteInfos({
                                                                                                 ...parteInfos,
-                                                                                            },
-                                                                                        );
-                                                                                    }}
-                                                                                />
+                                                                                            });
+                                                                                        }}
+                                                                                    />
+                                                                                    份
+                                                                                </Box>
+                                                                            )}
 
-                                                                                份
-                                                                            </Box>
-                                                                            总数：
-                                                                            {lodash.sum(
-                                                                                Object.values(
-                                                                                    currentCountInfo,
-                                                                                ),
-                                                                            ) *
-                                                                                currentParteInfo}
+                                                                            {rowPickTypes[ind].val === 1 ? null : (
+                                                                                <>
+                                                                                    总数：
+                                                                                    {lodash.sum(Object.values(currentCountInfo)) *
+                                                                                        currentParteInfo}
+                                                                                </>
+                                                                            )}
                                                                         </Flex>
                                                                     </Box>
                                                                 </Flex>
@@ -433,29 +429,74 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
                                         </div>
                                     )}
                                 </Droppable>
-                                <Flex
-                                    height="36px"
-                                    bg="#000000"
-                                    p="0 22px"
-                                    alignItems="center"
-                                    justifyContent="space-between"
-                                >
-                                    <Select
-                                        width="120px"
-                                        mode="white"
-                                        defaultValue={1}
-                                        options={[
-                                            { label: '单色单码', value: 1 },
-                                            { label: '混色混码', value: 2 },
-                                            { label: '单色混码混箱', value: 3 },
-                                            { label: '单色混码单箱', value: 4 },
-                                        ]}
-                                    />
+                                <Flex height="36px" bg="#000000" p="0 22px" alignItems="center" justifyContent="space-between">
+                                    <Flex alignItems="center">
+                                        <Select
+                                            width="120px"
+                                            mode="white"
+                                            value={rowPickTypes[ind].val}
+                                            options={[
+                                                { label: '单色单码', value: 0 },
+                                                { label: '混色混码', value: 1 },
+                                                { label: '单色混码混箱', value: 2 },
+                                                { label: '单色混码单箱', value: 3 },
+                                            ]}
+                                            onSelect={val => {
+                                                console.log(val);
+                                                rowPickTypes[ind] = { ...rowPickTypes[ind], val };
+                                                setRowPickTypes({
+                                                    ...rowPickTypes,
+                                                });
+                                            }}
+                                        />
+                                        {rowPickTypes[ind].val === 1 ? (
+                                            <Flex color="#ffffff" fontSize="12px" alignItems="center">
+                                                <Flex alignItems="center" p="0 10px">
+                                                    每份
+                                                    <InputBottomWhiteBorder
+                                                        value={lodash.sum(
+                                                            Object.values(currentRowCountInfo).map(ci =>
+                                                                lodash.sum(Object.values(ci)),
+                                                            ),
+                                                        )}
+                                                    />
+                                                    件
+                                                </Flex>
+                                                <Flex
+                                                    alignItems="center"
+                                                    sx={{
+                                                        '.ant-input-number-handler-wrap': {
+                                                            display: 'none !important',
+                                                        },
+                                                    }}
+                                                >
+                                                    共
+                                                    <InputNumber
+                                                        value={rowPickTypes[ind].pieceCount}
+                                                        type="number"
+                                                        onChange={val => {
+                                                            rowPickTypes[ind] = { ...rowPickTypes[ind], pieceCount: val };
+                                                            setRowPickTypes({
+                                                                ...rowPickTypes,
+                                                            });
+                                                        }}
+                                                    />
+                                                    件
+                                                </Flex>
+                                            </Flex>
+                                        ) : null}
+                                    </Flex>
+
                                     <Flex color="#ffffff">
-                                        总数量：
-                                        {singleTotalInfos[ind]
-                                            ? singleTotalInfos[ind]
-                                            : 0}
+                                        <Box>
+                                            总金额:
+                                            {singleTotalPriceInfos[ind] ? singleTotalPriceInfos[ind] : 0}
+                                        </Box>
+                                        <Box p="0 16px">
+                                            总数量:
+                                            {singleTotalInfos[ind] ? singleTotalInfos[ind] : 0}
+                                        </Box>
+                                        <Box>大约?箱</Box>
                                     </Flex>
                                 </Flex>
                             </Box>
@@ -464,15 +505,23 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel }) => {
                 })}
             </DragDropContext>
             <Flex mt="60px" height="56px" bg="#C0B3B6" justifyContent="center">
-                <Box>保存</Box>
+                <Box
+                    onClick={() => {
+                        handleSave();
+                    }}
+                >
+                    保存
+                </Box>
                 <Box>发送</Box>
             </Flex>
         </Modal>
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy, user }) => ({
     colorList: diy.colorList,
     flowerList: diy.flowerList,
+    currentGood: diy.currentGood,
+    currentUser: user.info,
     favoriteToOrderGroupList: diy.favoriteToOrderGroupList,
 }))(App);

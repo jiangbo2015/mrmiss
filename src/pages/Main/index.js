@@ -1,6 +1,7 @@
 import { connect } from 'dva';
 import Select from '@/components/Select';
 import Select2 from '@/components/Select/Select2';
+import SelectGrayRaduis from '@/components/Select/SelectGrayRaduis';
 import InputNumber from '@/components/InputNumber';
 import Input, { InputBlackRaduis, InputGray, InputGrayRaduis } from '@/components/Input';
 import Switch from '@/components/Switch';
@@ -45,6 +46,9 @@ const App = props => {
             </p>
             <p>
                 <Input />
+            </p>
+            <p>
+                <SelectGrayRaduis />
             </p>
         </div>
     );

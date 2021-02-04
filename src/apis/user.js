@@ -5,6 +5,11 @@ export const login = data =>
         method: 'post',
         data,
     });
+export const feedback = data =>
+    request('/api/user/feedback', {
+        method: 'post',
+        data,
+    });
 
 export const getCurrentUser = data =>
     request('/api/user/getCurrentUser', {
@@ -12,6 +17,11 @@ export const getCurrentUser = data =>
     });
 
 export const saveSetting = data =>
+    request('/api/user/update', {
+        method: 'post',
+        data,
+    });
+export const update = data =>
     request('/api/user/update', {
         method: 'post',
         data,

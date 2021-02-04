@@ -1,16 +1,14 @@
 import Login from '@/pages/User/Login';
-import gif1 from '@/public/imgs/1.gif';
-import gif2 from '@/public/imgs/2.gif';
-import gif3 from '@/public/imgs/3.gif';
+import { filterImageUrl } from '@/utils/helper';
 import './index.less';
 
-const Banner = ({ isLogin }) => {
+const Banner = ({ isLogin, imgsInfo = {} }) => {
     return (
         <div className="wrapper">
-            <img className="banner" src={gif3} />
-            <img className="banner" src={gif2} />
-            <img className="banner" src={gif1} />
-            <img className="banner-vir" src={gif1} />
+            <img className="banner" src={filterImageUrl(imgsInfo.img3)} />
+            <img className="banner" src={filterImageUrl(imgsInfo.img2)} />
+            <img className="banner" src={filterImageUrl(imgsInfo.img1)} />
+            <img className="banner-vir" src={filterImageUrl(imgsInfo.img1)} />
             {isLogin ? null : <Login />}
         </div>
     );
