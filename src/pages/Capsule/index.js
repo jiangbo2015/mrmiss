@@ -4,6 +4,7 @@ import More from '@/components/Capsule/More';
 import Search from '@/components/Capsule/Search';
 import SidebarStyles from '@/components/Capsule/SidebarStyles';
 import Switcher from '@/components/Capsule/Switcher';
+import Cart from '@/components/Cart';
 import Container from '@/components/Container';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
@@ -71,6 +72,7 @@ export default () => {
                 </Box>
             </section>
             {visible && <ModalSimple visible={visible} onClose={() => setVisible(false)}></ModalSimple>}
+            <Cart />
         </Layout>
     );
 };

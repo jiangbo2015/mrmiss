@@ -37,7 +37,7 @@ const StyleSwitcher = ({ bg, ...props }) => (
     </Flex>
 );
 
-const data = [
+export const data = [
     {
         channel: 'A',
         children: [
@@ -124,7 +124,7 @@ const data = [
     },
 ];
 
-const SizeBox = ({ width, bg, children }) => (
+export const SizeBox = ({ width, bg, children }) => (
     <Flex
         justifyContent="center"
         alignItems="center"
