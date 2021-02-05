@@ -215,10 +215,11 @@ export default {
         *deleteFavorite({ payload }, { call, put, select }) {
             const res = yield call(api.deleteFavorite, payload);
             if (res && res.data) {
+                const { currentGood } = yield select(state => state.diy);
                 yield put({
                     type: 'fetchFavoriteList',
                     payload: {
-                        goodsId: payload.goodId,
+                        goodsId: currentGood._id,
                     },
                 });
             }

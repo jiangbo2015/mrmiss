@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import lodash from 'lodash';
 
-import { Popover, Input } from 'antd';
+import { Popover, Input, Badge } from 'antd';
 import { ReactSVG } from 'react-svg';
 import { Flex, Box } from 'rebass/styled-components';
 
@@ -19,6 +19,8 @@ import Select from '@/components/Select';
 import Info from '../components/Info';
 
 import IconBackageInfo from '@/public/icons/backage-info.svg';
+import IconSave from '@/public/icons/icon-save.svg';
+import IconSend from '@/public/icons/icon-send.svg';
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -70,6 +72,7 @@ const getListStyle = isDraggingOver => ({
 });
 
 const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGood = {}, currentUser }) => {
+    const [showChange, setShowChange] = useState(false);
     const [sourceData, setSourceData] = useState([]);
     const [countInfos, setCountInfos] = useState({}); // 所有尺码 数量信息
     const [singleTotalInfos, setSingleTotalInfos] = useState({}); //每行总数
@@ -179,16 +182,18 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
             setSourceData(newState.filter(group => group.list.length));
         }
     };
-    const handleSave = () => {
+    const handleSave = async () => {
         const orderData = parseOrderData();
-        dispatch({
+        await dispatch({
             type: 'diy/addOrder',
             payload: {
                 orderData,
                 goodsId: currentGood._id,
             },
         });
+        setShowChange(false);
     };
+
     const parseOrderData = () => {
         const orderData = sourceData.map((row, ri) => {
             const { list, sizes, key } = row;
@@ -226,6 +231,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
         });
         return orderData;
     };
+
     return (
         <Modal
             visible={visible}
@@ -256,6 +262,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                     setRowRemarks({
                                                         ...rowRemarks,
                                                     });
+                                                    setShowChange(true);
                                                 }}
                                             />
                                         </Box>
@@ -364,6 +371,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                                                                 setCountInfos({
                                                                                                     ...countInfos,
                                                                                                 });
+                                                                                                setShowChange(true);
                                                                                             }}
                                                                                         />
                                                                                     </Flex>
@@ -404,6 +412,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                                                             setParteInfos({
                                                                                                 ...parteInfos,
                                                                                             });
+                                                                                            setShowChange(true);
                                                                                         }}
                                                                                     />
                                                                                     份
@@ -447,6 +456,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                 setRowPickTypes({
                                                     ...rowPickTypes,
                                                 });
+                                                setShowChange(true);
                                             }}
                                         />
                                         {rowPickTypes[ind].val === 1 ? (
@@ -479,6 +489,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                             setRowPickTypes({
                                                                 ...rowPickTypes,
                                                             });
+                                                            setShowChange(true);
                                                         }}
                                                     />
                                                     件
@@ -504,15 +515,28 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                     );
                 })}
             </DragDropContext>
-            <Flex mt="60px" height="56px" bg="#C0B3B6" justifyContent="center">
-                <Box
-                    onClick={() => {
-                        handleSave();
+            <Flex mt="60px" height="56px" bg="#C0B3B6" justifyContent="center" alignItems="center">
+                <Badge dot={showChange}>
+                    <ReactSVG
+                        src={IconSave}
+                        style={{
+                            width: '20px',
+                            height: '20px',
+                            marginRight: '40px',
+                        }}
+                        onClick={() => {
+                            handleSave();
+                        }}
+                    />
+                </Badge>
+                <ReactSVG
+                    src={IconSend}
+                    style={{
+                        width: '18px',
+                        height: '18px',
+                        marginBottom: '4px',
                     }}
-                >
-                    保存
-                </Box>
-                <Box>发送</Box>
+                />
             </Flex>
         </Modal>
     );

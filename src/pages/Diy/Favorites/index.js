@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { message } from 'antd';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
+import { Flex, Box } from 'rebass/styled-components';
 import Propmt from '@/components/Propmt';
+import Modal from '@/components/Modal';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -10,6 +12,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import OrderIcon from '@/public/icons/icon-order.svg';
 import CapsuleIcon from '@/public/icons/icon-capsule.svg';
+import EditIcon from '@/public/icons/icon-edit.svg';
+import DelIcon from '@/public/icons/icon-del.svg';
+import BigIcon from '@/public/icons/icon-big+.svg';
 
 import styles from './index.less';
 import OrderModal from './order/OrderModal';
@@ -23,6 +28,7 @@ const favoriteBox = {
 const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     console.log('favoritePattern', favoritePattern);
     const [orderVisible, setOrderVisible] = useState(false);
+    const [bigerVisible, setBigerVisible] = useState(false);
     const [capsuleInputVisible, setCapsuleInputVisible] = useState(false);
     const handleFetchMore = async () => {
         // if (currentGood._id) {
@@ -53,6 +59,21 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
             payload: style,
         });
     };
+    const handleEdit = favorite => {
+        dispatch({
+            type: 'diy/editFavorite',
+            payload: favorite,
+        });
+    };
+    const handleBig = favorite => {
+        setBigerVisible(favorite);
+    };
+    const handleDel = favorite => {
+        dispatch({
+            type: 'diy/deleteFavorite',
+            payload: { _id: favorite._id },
+        });
+    };
     return (
         <div
             style={{
@@ -60,6 +81,50 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                 background: '#4A4949',
             }}
         >
+            <Modal
+                width="800px"
+                visible={bigerVisible}
+                onCancel={() => {
+                    setBigerVisible(false);
+                }}
+                footer={false}
+            >
+                {bigerVisible ? (
+                    <Flex m="60px" justifyContent="space-around">
+                        <Box>
+                            {bigerVisible.styleAndColor.map(d => (
+                                <StyleItem
+                                    width={`${(300 * d.style.styleSize) / 27}px`}
+                                    styleId={`${bigerVisible._id}-${d._id}-item`}
+                                    colors={d.colorIds}
+                                    key={`${bigerVisible._id}-${d._id}-${Math.random() * 1000000}`}
+                                    {...d.style}
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                            ))}
+                        </Box>
+                        <Box>
+                            {bigerVisible.styleAndColor.map(d => (
+                                <StyleItem
+                                    width={`${(300 * d.style.styleBackSize) / 27}px`}
+                                    styleId={`${bigerVisible._id}-${d._id}-item`}
+                                    colors={d.colorIds}
+                                    key={`${bigerVisible._id}-${d._id}-${Math.random() * 1000000}`}
+                                    {...d.style}
+                                    svgUrl={d.style.svgUrlBack}
+                                    shadowUrl={d.style.shadowUrlBack}
+                                    styleSize={d.style.styleBackSize}
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                            ))}
+                        </Box>
+                    </Flex>
+                ) : null}
+            </Modal>
             <OrderModal
                 visible={orderVisible}
                 onCancel={() => {
@@ -121,7 +186,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                         ]}
                     />
                 </div>
-                <div style={{ display: 'flex' }}>
+                <Flex alignItems="baseline">
                     <ReactSVG
                         style={{
                             padding: '8px',
@@ -150,7 +215,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                             dispatch({ type: 'diy/toDoOrder' });
                         }}
                     />
-                </div>
+                </Flex>
             </div>
             <InfiniteScroll
                 dataLength={favoriteArr.length}
@@ -230,7 +295,11 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                                     width: '14px',
                                     height: '14px',
                                 }}
-                                src={SelectedIcon}
+                                src={EditIcon}
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    handleEdit(favorite);
+                                }}
                             />
                             <ReactSVG
                                 style={{
@@ -238,14 +307,22 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                                     height: '14px',
                                     margin: '0 30px',
                                 }}
-                                src={SelectedIcon}
+                                src={BigIcon}
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    handleBig(favorite);
+                                }}
                             />
                             <ReactSVG
                                 style={{
                                     width: '14px',
                                     height: '14px',
                                 }}
-                                src={SelectedIcon}
+                                src={DelIcon}
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    handleDel(favorite);
+                                }}
                             />
                         </div>
                     </div>

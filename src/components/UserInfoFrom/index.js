@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Flex, Box } from 'rebass/styled-components';
 
-import { Form, Col, Row, Radio, Tabs, Button, message } from 'antd';
+import { Form, Col, Row, Radio, Tabs, Button, message, Badge } from 'antd';
 import Input, { InputBlackRaduis, InputGray, InputGrayRaduis } from '@/components/Input';
 import SelectGrayRaduis from '@/components/Select/SelectGrayRaduis';
 
@@ -9,6 +9,7 @@ const { TabPane } = Tabs;
 
 const UserInfoForm = ({ data, onSumbit }) => {
     const [form] = Form.useForm();
+    const [showChange, setShowChange] = useState(false);
     useEffect(() => {
         console.log('data', data);
         if (data) {
@@ -25,12 +26,19 @@ const UserInfoForm = ({ data, onSumbit }) => {
                 await onSumbit({ ...values, _id: data._id });
             }
 
-            message.info('发送成功');
+            message.info('提及成功');
             // form.resetFields();
         });
     };
     return (
-        <Form form={form} layout="vertical" onFinish={onFinish}>
+        <Form
+            form={form}
+            layout="vertical"
+            onFinish={onFinish}
+            onChange={() => {
+                setShowChange(true);
+            }}
+        >
             <Row gutter={24}>
                 <Col span={7}>
                     <Form.Item label="账号" name="account">
@@ -167,11 +175,13 @@ const UserInfoForm = ({ data, onSumbit }) => {
                     </Form.Item>
                 </Col>
             </Row>
-            <Row>
+            <Row justify="center">
                 <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                        保存设置
-                    </Button>
+                    <Badge dot={showChange}>
+                        <Button type="primary" htmlType="submit">
+                            保存设置
+                        </Button>
+                    </Badge>
                 </Form.Item>
             </Row>
         </Form>

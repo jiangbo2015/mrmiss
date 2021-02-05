@@ -1,0 +1,16 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28.5 28.5">
+    <defs>
+        <style>
+            .icon-send-1 {
+                fill: none;
+                stroke: #000;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-width: 1.5px;
+            }
+        </style>
+    </defs>
+    <circle class="icon-send-1" cx="14.25" cy="14.25" r="13.5" />
+    <polygon class="icon-send-1" points="7.25 21.65 23.55 14.25 7.25 6.75 11.05 14.25 7.25 21.65" />
+    <line class="icon-send-1" x1="11.05" y1="14.25" x2="15.45" y2="14.25" />
+</svg>
