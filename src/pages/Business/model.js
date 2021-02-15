@@ -1,4 +1,5 @@
 import * as api from '@/apis/business';
+import { message } from 'antd';
 import defaultData from './defaultData';
 
 export default {
@@ -22,13 +23,36 @@ export default {
             // console.log('登录成功，将token写入本地，并跳转到主体');
             // const { data } = yield call(api.login, payload);
             // 登录成功，将token写入本地，并跳转到主体
-            const data = {};
+            const { data } = yield call(api.getCustomerUser, payload);
             if (data) {
                 yield put({
                     type: 'setCustomerList',
-                    payload: defaultData.customerList,
+                    payload: data,
                 });
                 // history.push('/main');
+            }
+        },
+        *addUser({ payload }, { call, put }) {
+            const { success, message: msg } = yield call(api.addUser, payload);
+            if (success) {
+                yield put({
+                    type: 'getMyCustomer',
+                    // payload: defaultData.customerList,
+                });
+                return true;
+            } else {
+                message.error(msg);
+            }
+        },
+        *delMyCustomer({ payload }, { call, put }) {
+            const { success, message: msg } = yield call(api.delOwnUser, payload);
+            if (success) {
+                yield put({
+                    type: 'getMyCustomer',
+                });
+                return true;
+            } else {
+                message.error(msg);
             }
         },
     },

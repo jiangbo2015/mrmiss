@@ -1,25 +1,23 @@
-import 'normalize.css';
-import './index.less';
-import { useEffect, useState } from 'react';
-import { useIntl, setLocale, history } from 'umi';
+import Input from '@/components/Input';
+import Modal from '@/components/Modal';
+import UserCenter from '@/pages/UserCenter';
+import WhiteChartIcon from '@/public/icons/icon-chart-white.svg';
+import ChartIcon from '@/public/icons/icon-chart.svg';
+import IconBack from '@/public/icons/icon-menuback.svg';
+import IconCapOrder from '@/public/icons/icon-menucaporder.svg';
+import IconDIYOrder from '@/public/icons/icon-menudiyorder.svg';
+import IconManage from '@/public/icons/icon-menumanage.svg';
+import IconUser from '@/public/icons/icon-menuuser.svg';
+import IconShopOrder from '@/public/icons/icon-shop.svg';
+import IconUserSign from '@/public/icons/icon-usersign.svg';
+import { Button, Dropdown, Form, Menu, message } from 'antd';
 import { connect } from 'dva';
-import { Menu, Dropdown, Form, Button } from 'antd';
+import 'normalize.css';
+import { useEffect, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 import { Flex } from 'rebass/styled-components';
-import ChartIcon from '@/public/icons/icon-chart.svg';
-import WhiteChartIcon from '@/public/icons/icon-chart-white.svg';
-
-import IconUser from '@/public/icons/icon-menuuser.svg';
-import IconUserSign from '@/public/icons/icon-usersign.svg';
-import IconDIYOrder from '@/public/icons/icon-menudiyorder.svg';
-import IconCapOrder from '@/public/icons/icon-menucaporder.svg';
-import IconManage from '@/public/icons/icon-menumanage.svg';
-import IconShopOrder from '@/public/icons/icon-shop.svg';
-import IconBack from '@/public/icons/icon-menuback.svg';
-
-import UserCenter from '@/pages/UserCenter';
-import Modal from '@/components/Modal';
-import Input from '@/components/Input';
+import { history, setLocale, useIntl } from 'umi';
+import './index.less';
 
 const MyMenu = ({ onOpenMyCenter, onChangePassword }) => (
     <Menu>
@@ -81,7 +79,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword }) => (
     </Menu>
 );
 
-const Header = ({ currentUser, headerBgColor = '#fff' }) => {
+const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
     const intl = useIntl();
     const [headBg, setHeadBg] = useState(false);
     const [myCenter, setMyCenter] = useState(false);
@@ -96,6 +94,30 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
             }
         };
     }, []);
+
+    const [form] = Form.useForm();
+
+    const onFinish = () => {
+        form.validateFields().then(async (values, error) => {
+            if (error) {
+                return;
+            }
+            if (values.newPwd !== values.confirmPwd) {
+                message.error('两次密码不一致');
+                return;
+            }
+            await dispatch({
+                type: 'user/changePwd',
+                payload: values,
+            });
+            message.success('修改成功，请重新登录');
+            setTimeout(() => {
+                history.push('/');
+                location.reload();
+            }, 500);
+        });
+    };
+
     return (
         <header
             className="header"
@@ -133,14 +155,41 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
                 }}
                 width="400px"
             >
-                <Form>
-                    <Form.Item label="旧密码">
+                <Form onFinish={onFinish} form={form}>
+                    <Form.Item
+                        label="旧密码"
+                        name="password"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your password',
+                            },
+                        ]}
+                    >
                         <Input type="password" />
                     </Form.Item>
-                    <Form.Item label="新密码">
+                    <Form.Item
+                        label="新密码"
+                        name="newPwd"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input your new password',
+                            },
+                        ]}
+                    >
                         <Input type="password" />
                     </Form.Item>
-                    <Form.Item label="确认新密码">
+                    <Form.Item
+                        label="确认新密码"
+                        name="confirmPwd"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input confirm new password',
+                            },
+                        ]}
+                    >
                         <Input type="password" />
                     </Form.Item>
                     <Form.Item>

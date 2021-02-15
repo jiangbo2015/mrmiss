@@ -1,7 +1,7 @@
 import { connect } from 'dva';
-import { useIntl } from 'umi';
 import { useState } from 'react';
-import { Box, Button } from 'rebass/styled-components';
+import { Button } from 'rebass/styled-components';
+import { useIntl } from 'umi';
 import './index.less';
 
 const Login = ({ dispatch }) => {
@@ -9,6 +9,7 @@ const Login = ({ dispatch }) => {
     const [pwd, setPwd] = useState('123456');
     const intl = useIntl();
     const handleLogin = async () => {
+        console.log('click');
         dispatch({
             type: 'user/login',
             payload: {
@@ -32,18 +33,10 @@ const Login = ({ dispatch }) => {
                 })}
             </div>
             <p>
-                <input
-                    type="text"
-                    value={account}
-                    onChange={e => setAccount(e.target.value)}
-                />
+                <input type="text" value={account} onChange={e => setAccount(e.target.value)} />
             </p>
             <p>
-                <input
-                    type="text"
-                    value={pwd}
-                    onChange={e => setPwd(e.target.value)}
-                />
+                <input type="text" value={pwd} onChange={e => setPwd(e.target.value)} />
             </p>
 
             <Button variant="primary" onClick={handleLogin}>

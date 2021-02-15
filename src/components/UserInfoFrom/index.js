@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Flex, Box } from 'rebass/styled-components';
-
-import { Form, Col, Row, Radio, Tabs, Button, message, Badge } from 'antd';
 import Input, { InputBlackRaduis, InputGray, InputGrayRaduis } from '@/components/Input';
 import SelectGrayRaduis from '@/components/Select/SelectGrayRaduis';
+import { Badge, Button, Col, Form, Radio, Row, Tabs } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Box } from 'rebass/styled-components';
 
 const { TabPane } = Tabs;
 
-const UserInfoForm = ({ data, onSumbit }) => {
+const UserInfoForm = ({ data, onSumbit, isAdd }) => {
     const [form] = Form.useForm();
     const [showChange, setShowChange] = useState(false);
     useEffect(() => {
@@ -23,14 +22,14 @@ const UserInfoForm = ({ data, onSumbit }) => {
             console.log(values);
 
             if (onSumbit) {
-                if (data._id) {
+                if (data?._id) {
                     await onSumbit({ ...values, _id: data._id });
                 } else {
                     await onSumbit({ ...values });
                 }
             }
 
-            message.info('提及成功');
+            // message.info('提及成功');
             // form.resetFields();
         });
     };
@@ -46,7 +45,7 @@ const UserInfoForm = ({ data, onSumbit }) => {
             <Row gutter={24}>
                 <Col span={7}>
                     <Form.Item label="账号" name="account">
-                        <InputBlackRaduis disabled />
+                        <InputBlackRaduis disabled={!isAdd} />
                     </Form.Item>
                     <Form.Item label="名称" name="name">
                         <InputBlackRaduis />

@@ -1,25 +1,70 @@
-import React from 'react';
-import { Flex, Box } from 'rebass/styled-components';
-import { Tabs, Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
-import UserInfo from './components/UserInfo';
-import Modal from '@/components/Modal';
 import Layout from '@/components/Layout';
+import Modal from '@/components/Modal';
 import SearchInput from '@/components/SearchInput';
-import UserListTable from './components/UserListTable';
 import UserInfoFrom from '@/components/UserInfoFrom';
+import { DeleteOutlined } from '@ant-design/icons';
+import { Button, Popconfirm } from 'antd';
+import { connect } from 'dva';
+import React from 'react';
+import { Box, Flex } from 'rebass/styled-components';
+import UserListTable from './components/UserListTable';
 import UserOrder from './components/UserOrder';
-import ChannelEmpower from './components/ChannelEmpower';
 
-export default class Business extends React.Component {
+class Business extends React.Component {
     state = {
         channelEmpowerModal: false,
         userOrderModal: false,
         userAddModal: false,
+        selectedRowKeys: [],
     };
     callback(key) {
         console.log(key);
     }
+
+    updateSelectedRowKeys = selectedRowKeys => {
+        this.setState({
+            selectedRowKeys,
+        });
+    };
+
+    handleSubmit = async payload => {
+        const { dispatch } = this.props;
+        const res = await dispatch({
+            type: 'business/addUser',
+            payload,
+        });
+        if (res) {
+            this.setState({
+                userAddModal: false,
+            });
+        }
+    };
+
+    handleDelete = () => {
+        console.log(this.state);
+        const { dispatch } = this.props;
+        const { selectedRowKeys } = this.state;
+        if (selectedRowKeys.length < 1) {
+            return;
+        }
+        dispatch({
+            type: 'business/delMyCustomer',
+            payload: {
+                ids: selectedRowKeys,
+            },
+        });
+    };
+
+    handleSearch = e => {
+        const { dispatch } = this.props;
+        dispatch({
+            type: 'business/getMyCustomer',
+            payload: {
+                search: e.target.value,
+            },
+        });
+    };
+
     render() {
         return (
             <Layout>
@@ -35,7 +80,7 @@ export default class Business extends React.Component {
                         });
                     }}
                 >
-                    <UserInfoFrom />
+                    <UserInfoFrom onSumbit={this.handleSubmit} isAdd />
                 </Modal>
                 {/* <Modal
                     visible={this.state.channelEmpowerModal}
@@ -123,12 +168,26 @@ export default class Business extends React.Component {
                 </Flex>
                 <Box p="20px">
                     <Flex p="30px 0" alignItems="center">
-                        <Button shape="circle" size="large" icon={<DeleteOutlined />} style={{ backgroundColor: '#D2D2D2' }} />
-                        <SearchInput mode="white" placeholder="SEARCH" style={{ width: '200px', marginLeft: '30px' }} />
+                        <Popconfirm title="确认删除吗？" onConfirm={this.handleDelete}>
+                            <Button
+                                shape="circle"
+                                size="large"
+                                icon={<DeleteOutlined />}
+                                style={{ backgroundColor: '#D2D2D2' }}
+                            />
+                        </Popconfirm>
+                        <SearchInput
+                            mode="white"
+                            placeholder="SEARCH"
+                            style={{ width: '200px', marginLeft: '30px' }}
+                            onSearch={this.handleSearch}
+                        />
                     </Flex>
-                    <UserListTable />
+                    <UserListTable updateSelectedRowKeys={this.updateSelectedRowKeys} />
                 </Box>
             </Layout>
         );
     }
 }
+
+export default connect()(Business);

@@ -21,3 +21,21 @@ export const getCurrentUserOrder = data =>
     request('/api/user/getCurrentUserOrder', {
         method: 'get',
     });
+
+export const addUser = data =>
+    request('/api/user/add', {
+        method: 'post',
+        data,
+    });
+
+export const getCustomerUser = data =>
+    request('/api/user/getOwnList', {
+        method: 'get',
+        params: data,
+    });
+
+export const delOwnUser = data =>
+    request('/api/user/delOwnUser', {
+        method: 'post',
+        data,
+    });

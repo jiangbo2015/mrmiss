@@ -42,3 +42,8 @@ export const delOrder = data =>
         method: 'post',
         data,
     });
+export const changePwd = data =>
+    request('/api/user/changePwd', {
+        method: 'post',
+        data,
+    });

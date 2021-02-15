@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import Modal from '@/components/Modal';
 // import { Flex } from 'rebass/styled-components';
 // import { ReactSVG } from 'react-svg';
 import Table from '@/components/Table';
-import Modal from '@/components/Modal';
+// import IconDelete from '@/public/icons/icon-delete.svg';
+import { connect } from 'dva';
+import React, { useEffect, useState } from 'react';
 import UserEmpower from './UserEmpower';
 import UserOrder from './UserOrder';
 
-// import IconDelete from '@/public/icons/icon-delete.svg';
-import { connect } from 'dva';
-
-const UserListTable = ({ customerList = [], currentCustomer, ...props }) => {
+const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSelectedRowKeys, ...props }) => {
     const [empowerSingleCustomer, setEmpowerSingleCustomer] = useState(false);
     const [userOrderModal, setUserOrderModal] = useState(false);
+
+    useEffect(() => {
+        dispatch({
+            type: 'business/getMyCustomer',
+        });
+    }, []);
 
     const columns = [
         {
@@ -21,8 +26,8 @@ const UserListTable = ({ customerList = [], currentCustomer, ...props }) => {
         },
         {
             title: '客户税号',
-            dataIndex: 'date',
-            key: 'date',
+            dataIndex: 'VATNo',
+            key: 'VATNo',
         },
         {
             title: '客户权限',
@@ -80,6 +85,7 @@ const UserListTable = ({ customerList = [], currentCustomer, ...props }) => {
                 rowSelection={{
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
+                        updateSelectedRowKeys(selectedRowKeys);
                         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
