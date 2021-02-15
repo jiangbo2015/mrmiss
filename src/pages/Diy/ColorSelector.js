@@ -80,7 +80,7 @@ const App = ({ colorList = { docs: [] }, dispatch, currentGood = {} }) => {
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy = {} }) => ({
     colorList: diy.colorList,
     flowerList: diy.flowerList,
     selectColorList: diy.selectColorList,

@@ -124,10 +124,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
                         ]}
                     />
                 </div>
-                <SearchInput
-                    style={{ width: '180px' }}
-                    placeholder="SEARCH STYLE"
-                />
+                <SearchInput style={{ width: '180px' }} placeholder="SEARCH STYLE" />
                 <div style={{ display: 'flex' }}>
                     <ReactSVG
                         src={ExpandIcon}
@@ -202,7 +199,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy = {} }) => ({
     styleList: diy.styleList,
     currentStyle: diy.currentStyle,
     collocationBg: diy.collocationBg,

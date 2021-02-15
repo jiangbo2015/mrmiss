@@ -3,9 +3,9 @@ import './index.less';
 import { useEffect, useState } from 'react';
 import { useIntl, setLocale, history } from 'umi';
 import { connect } from 'dva';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Form, Button } from 'antd';
 import { ReactSVG } from 'react-svg';
-
+import { Flex } from 'rebass/styled-components';
 import ChartIcon from '@/public/icons/icon-chart.svg';
 import WhiteChartIcon from '@/public/icons/icon-chart-white.svg';
 
@@ -19,8 +19,9 @@ import IconBack from '@/public/icons/icon-menuback.svg';
 
 import UserCenter from '@/pages/UserCenter';
 import Modal from '@/components/Modal';
+import Input from '@/components/Input';
 
-const MyMenu = ({ onOpenMyCenter }) => (
+const MyMenu = ({ onOpenMyCenter, onChangePassword }) => (
     <Menu>
         <Menu.Item
             onClick={() => {
@@ -67,6 +68,16 @@ const MyMenu = ({ onOpenMyCenter }) => (
                 退出登录
             </a>
         </Menu.Item>
+        <Menu.Item
+            className="menuItemH"
+            onClick={() => {
+                onChangePassword();
+            }}
+        >
+            <a target="_blank" rel="noopener noreferrer">
+                修改密码
+            </a>
+        </Menu.Item>
     </Menu>
 );
 
@@ -74,6 +85,7 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
     const intl = useIntl();
     const [headBg, setHeadBg] = useState(false);
     const [myCenter, setMyCenter] = useState(false);
+    const [changePassword, setChangePassword] = useState(false);
     useEffect(() => {
         window.onscroll = () => {
             let scrollTopPx = window.scrollY;
@@ -104,6 +116,40 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
             >
                 <UserCenter />
             </Modal>
+            <Modal
+                className="mm-yellow-modal"
+                footer={false}
+                visible={changePassword}
+                onCancel={() => {
+                    setChangePassword(false);
+                }}
+                title={
+                    <Flex bg="#FDDB3A" width={1} justifyContent="center">
+                        修改密码
+                    </Flex>
+                }
+                bodyStyle={{
+                    backgroundColor: '#F0F0F0',
+                }}
+                width="400px"
+            >
+                <Form>
+                    <Form.Item label="旧密码">
+                        <Input type="password" />
+                    </Form.Item>
+                    <Form.Item label="新密码">
+                        <Input type="password" />
+                    </Form.Item>
+                    <Form.Item label="确认新密码">
+                        <Input type="password" />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="default" htmlType="submit">
+                            确认
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Modal>
             <div style={{ display: 'flex' }}>
                 <div className="menuItem">
                     <span onClick={() => setLocale('zh-CN', false)}>CN</span>/
@@ -133,7 +179,13 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
                 </div>
             </div>
             <div>
-                <ReactSVG src={headerBgColor !== '#fff' ? WhiteChartIcon : ChartIcon} style={{ width: '32px' }} />
+                <ReactSVG
+                    src={headerBgColor !== '#fff' ? WhiteChartIcon : ChartIcon}
+                    style={{ width: '32px' }}
+                    onClick={() => {
+                        history.push('/chart');
+                    }}
+                />
             </div>
             <div style={{ display: 'flex' }}>
                 <div
@@ -181,6 +233,9 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
                                 onOpenMyCenter={() => {
                                     setMyCenter(true);
                                 }}
+                                onChangePassword={() => {
+                                    setChangePassword(true);
+                                }}
                             />
                         }
                         trigger={['click']}
@@ -194,4 +249,4 @@ const Header = ({ currentUser, headerBgColor = '#fff' }) => {
     );
 };
 
-export default connect(({ user }) => ({ currentUser: user.info }))(Header);
+export default connect(({ user = { info: {} } }) => ({ currentUser: user.info }))(Header);

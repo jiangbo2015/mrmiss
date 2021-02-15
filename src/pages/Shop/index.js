@@ -1,5 +1,11 @@
-import CapsItem from '@/components/Capsule/CapsItem';
-import ModalComplex from '@/components/Capsule/ModalComplex';
+import React, { useRef, useState, useEffect } from 'react';
+import { Box, Flex } from 'rebass/styled-components';
+import { Button } from 'antd';
+import { ReactSVG } from 'react-svg';
+import { connect } from 'dva';
+
+import CapsItem from '@/components/Capsule/ShopItem';
+import ModalComplex from '@/components/Capsule/ModalShopSimple';
 import More from '@/components/Capsule/More';
 import Search from '@/components/Capsule/Search';
 import SidebarStyles from '@/components/Capsule/SidebarStyles';
@@ -7,14 +13,43 @@ import Switcher from '@/components/Capsule/Switcher';
 import Container from '@/components/Container';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
-import banner from '@/public/banner.jpeg';
-import React, { useRef, useState } from 'react';
-import { Box, Flex } from 'rebass/styled-components';
+import banner from '@/public/shop.jpeg';
 
-export default () => {
+import Cart from '@/components/Cart';
+import IconShopCar from '@/public/icons/icon-shop.svg';
+
+const Shop = ({ branchList, dispatch, currentBranch, shopStyleList }) => {
+    useEffect(() => {
+        dispatch({
+            type: 'shop/fetchBranchList',
+        });
+    }, []);
+    useEffect(() => {
+        if (currentBranch._id) {
+            dispatch({
+                type: 'shop/fetchShopStyleList',
+                payload: { branch: currentBranch._id },
+            });
+        }
+    }, [currentBranch]);
     // swiper 实例
     const ref = useRef(null);
     const [visible, setVisible] = useState(false);
+
+    const handleSelectBranch = branch => {
+        dispatch({
+            type: 'shop/setCurrentBranch',
+            payload: branch,
+        });
+    };
+
+    const handleOpenDetail = capsule => {
+        dispatch({
+            type: 'shop/setCurrentShopStyle',
+            payload: capsule,
+        });
+        setVisible(true);
+    };
     return (
         <Layout pt="74px">
             <Flex
@@ -39,22 +74,60 @@ export default () => {
                     ></Title>
                 </Box>
                 <Box css={{ position: 'relative' }}>
-                    <SidebarStyles></SidebarStyles>
+                    <SidebarStyles data={branchList} selectedItem={currentBranch} onSelect={handleSelectBranch} />
                     <Container>
                         <Flex py="30px" justifyContent="space-between">
                             <Search></Search>
                             <Switcher ref={ref}></Switcher>
+                            <Cart
+                                triggleStyle={{
+                                    position: 'absolute',
+                                    right: '20px',
+                                }}
+                                triggle={
+                                    <Button
+                                        shape="circle"
+                                        size="large"
+                                        icon={
+                                            <ReactSVG
+                                                style={{ width: '20px', height: '20px', margin: 'auto' }}
+                                                src={IconShopCar}
+                                            />
+                                        }
+                                        style={{ backgroundColor: '#D2D2D2' }}
+                                    />
+                                }
+                            />
                         </Flex>
-                        <Flex justifyContent="space-between" flexDirection="row" flexWrap="wrap">
-                            {new Array(12).fill(0).map((item, index) => (
-                                <CapsItem key={index} handleOpen={() => setVisible(true)}></CapsItem>
+                        <Box
+                            sx={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fill, 380px)',
+                                placeItems: 'center',
+                                gap: '20px',
+                            }}
+                        >
+                            {shopStyleList.map((item, index) => (
+                                <CapsItem
+                                    item={item}
+                                    key={index}
+                                    handleOpen={() => {
+                                        handleOpenDetail(item);
+                                    }}
+                                />
                             ))}
-                        </Flex>
+                        </Box>
                         <More></More>
                     </Container>
                 </Box>
             </section>
-            {visible && <ModalComplex visible={visible} onClose={() => setVisible(false)}></ModalComplex>}
+            {visible && <ModalComplex visible={visible} onClose={() => setVisible(false)} />}
         </Layout>
     );
 };
+
+export default connect(({ shop }) => ({
+    branchList: shop.branchList,
+    currentBranch: shop.currentBranch,
+    shopStyleList: shop.shopStyleList,
+}))(Shop);

@@ -83,4 +83,4 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {} }) => {
     );
 };
 
-export default connect(({ diy }) => ({ flowerList: diy.flowerList, currentGood: diy.currentGood }))(App);
+export default connect(({ diy = {} }) => ({ flowerList: diy.flowerList, currentGood: diy.currentGood }))(App);

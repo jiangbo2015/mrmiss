@@ -42,7 +42,7 @@ const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy = {} }) => ({
     styleList: diy.styleList,
     collocationPattern: diy.collocationPattern,
 }))(App);

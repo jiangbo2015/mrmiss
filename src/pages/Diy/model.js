@@ -229,7 +229,7 @@ export default {
             const { editOrderSaveId } = yield select(state => state.diy);
             let apiFun = api.addOrder;
             let data = payload;
-            if (editOrderSaveId) {
+            if (editOrderSaveId && !payload.isSend) {
                 apiFun = api.updateOrder;
                 data._id = editOrderSaveId;
             }
@@ -359,14 +359,21 @@ export default {
                     sizes: gourpByStyle[key][0].styleAndColor[0].style.size.split('/'),
                 };
             }
-            const saveItems = saveOrder.map(o => {
+            const saveItems = saveOrder.map((o, k) => {
                 let item = o.items[0];
-                let key = item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-');
+                let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-')}`;
+                let sizeArr = item.favorite.styleAndColor[0].styleId.size.split('/');
+                let sizeObjInit = {};
+                sizeArr.map(s => {
+                    sizeObjInit[s] = 0;
+                });
+                console.log('sizeObjInit', sizeObjInit);
                 return {
                     list: o.items.map(i => ({
                         ...i.favorite,
                         parte: i.parte,
-                        sizeInfoObject: i.sizeInfoObject,
+                        price: _.sum(i.favorite.styleAndColor.map(sc => sc.styleId.price)),
+                        sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
                         styleAndColor: i.favorite.styleAndColor.map(sc => ({
                             colorIds: sc.colorIds,
                             styleId: sc.styleId._id,
@@ -376,7 +383,8 @@ export default {
                     key,
                     pickType: o.pickType,
                     rowRemarks: o.rowRemarks,
-                    sizes: Object.keys(item.sizeInfoObject),
+                    isSelect: false,
+                    sizes: sizeArr,
                 };
             });
             yield put({

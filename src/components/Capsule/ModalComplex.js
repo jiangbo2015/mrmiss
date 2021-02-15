@@ -4,9 +4,9 @@ import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
 import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
-import { CloseBtn } from './ModalSimple';
+import CloseBtn from '@/components/CloseBtn';
 
-const StyleSwitcher = ({ bg, ...props }) => (
+export const StyleSwitcher = ({ bg, ...props }) => (
     <Flex
         flexDirection="column"
         alignItems="center"
@@ -211,7 +211,7 @@ export default ({ visible, onClose }) => {
                             ))}
                         </Flex>
                         <Text fontSize="16px" mt="90px">
-                            Size / Qu antity
+                            Size / Quantity
                         </Text>
                         <Box mt="15px">
                             <Flex>

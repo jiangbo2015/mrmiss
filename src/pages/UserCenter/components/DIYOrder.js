@@ -1,12 +1,24 @@
-import React from 'react';
-import { Flex } from 'rebass/styled-components';
+import React, { useEffect } from 'react';
+import { Flex, Box } from 'rebass/styled-components';
 import { ReactSVG } from 'react-svg';
 import OrderTableComponent from './OrderTableComponent';
 import IconDownload from '@/public/icons/icon-download.svg';
 import IconDelete from '@/public/icons/icon-delete.svg';
 import { connect } from 'dva';
 
-const OrderTable = ({ orderList = [] }) => {
+import lodash from 'lodash';
+const OrderTable = ({ orderList = [], dispatch }) => {
+    useEffect(() => {
+        dispatch({
+            type: 'usercenter/fetchMyDiyOrder',
+        });
+    }, []);
+    const handleDel = _id => {
+        dispatch({
+            type: 'usercenter/delMyDiyOrder',
+            payload: { _id },
+        });
+    };
     const columns = [
         {
             title: '订单编号',
@@ -22,11 +34,12 @@ const OrderTable = ({ orderList = [] }) => {
             title: '总数量',
             dataIndex: 'totalCount',
             key: 'totalCount',
+            render: (_, record) => <Box>{lodash.sumBy(record.orderData, 'rowTotal')}</Box>,
         },
         {
             title: '总金额',
             dataIndex: 'totalPrice',
-            key: 'totalPrice',
+            render: (_, record) => <Box>{lodash.sumBy(record.orderData, 'rowTotalPrice')}</Box>,
         },
         {
             title: '下载',
@@ -42,9 +55,15 @@ const OrderTable = ({ orderList = [] }) => {
             title: '删除',
             dataIndex: 'delete',
             key: 'delete',
-            render: () => (
+            render: (_, record) => (
                 <Flex p="20px" alignItems="center" justifyContent="center">
-                    <ReactSVG src={IconDelete} style={{ width: '18px' }} />
+                    <ReactSVG
+                        src={IconDelete}
+                        style={{ width: '18px' }}
+                        onClick={() => {
+                            handleDel(record._id);
+                        }}
+                    />
                 </Flex>
             ),
         },
@@ -55,7 +74,7 @@ const OrderTable = ({ orderList = [] }) => {
 export default connect(({ usercenter }) => {
     // console.log('props', props);
     return {
-        orderList: usercenter.userOrder.diy,
+        orderList: usercenter.myDiyOrder,
     };
 })(OrderTable);
 

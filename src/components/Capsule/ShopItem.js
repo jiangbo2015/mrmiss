@@ -31,21 +31,7 @@ export default ({ handleOpen, item }) => {
         >
             <Box p="30px" bg="#F7F7F7" css={{ borderRadius: '10px' }}>
                 <Flex justifyContent="center" mb="40px" height="200px" alignItems="center" flexDirection="column">
-                    {colorWithStyleImgs[current].type ? (
-                        colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
-                            <StyleItem
-                                styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
-                                colors={d.colorIds}
-                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
-                                {...d.styleId}
-                                style={{
-                                    cursor: 'pointer',
-                                }}
-                            />
-                        ))
-                    ) : (
-                        <Image width="100px" src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
-                    )}
+                    <Image width="100px" src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
                 </Flex>
 
                 <Box py="20px" css={{ fontSize: '12px' }}>

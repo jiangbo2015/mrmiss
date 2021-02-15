@@ -2,11 +2,16 @@ import { Box } from 'rebass/styled-components';
 import { ThemeProvider } from 'styled-components';
 import { useIntl } from 'umi';
 import theme from './theme';
-
+import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
-export default ({ pt, headerBgColor, ...props }) => {
+import { connect } from 'dva';
+const Layout = ({ pt, headerBgColor, dispatch, ...props }) => {
+    useEffect(() => {
+        dispatch({
+            type: 'user/getCurrentUser',
+        });
+    }, []);
     const intl = useIntl();
     return (
         <ThemeProvider theme={theme}>
@@ -22,3 +27,5 @@ export default ({ pt, headerBgColor, ...props }) => {
         </ThemeProvider>
     );
 };
+
+export default connect(({ user = {}, home = {} }) => ({ currentUser: user.info, systemDetail: home.systemDetail }))(Layout);

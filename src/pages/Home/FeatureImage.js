@@ -1,6 +1,6 @@
 import bleft from '@/public/b-left.png';
 import bright from '@/public/b-right.png';
-import { Box, Flex } from 'rebass/styled-components';
+import { Box, Flex, Image } from 'rebass/styled-components';
 
 import { filterImageUrl } from '@/utils/helper';
 
@@ -17,10 +17,22 @@ export default ({ imgsInfo = {} }) => (
         <Box
             width={0.6}
             height="500px"
-            css={{
-                background: `url(${filterImageUrl(imgsInfo.exhibition2)}) no-repeat`,
-                backgroundSize: 'cover',
+            sx={{
+                overflow: 'hidden',
             }}
-        ></Box>
+        >
+            <Image
+                src={filterImageUrl(imgsInfo.exhibition2)}
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    transition: 'all 0.6s',
+                    cursor: 'pointer',
+                    ':hover': {
+                        transform: 'scale(1.4)',
+                    },
+                }}
+            />
+        </Box>
     </Flex>
 );

@@ -94,4 +94,4 @@ const App = ({ dispatch, currentUser }) => {
     );
 };
 
-export default connect(({ user }) => ({ currentUser: user.info }))(App);
+export default connect(({ user = {} }) => ({ currentUser: user.info }))(App);

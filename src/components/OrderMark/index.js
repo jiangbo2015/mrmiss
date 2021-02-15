@@ -4,7 +4,7 @@ import lodash from 'lodash';
 
 import { Popover, Input, Badge } from 'antd';
 import { ReactSVG } from 'react-svg';
-import { Flex, Box } from 'rebass/styled-components';
+import { Flex, Box, Image } from 'rebass/styled-components';
 
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 
@@ -16,11 +16,13 @@ import { InputBottomWhiteBorder } from '@/components/Input';
 import StyleItem from '@/components/StyleItem';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
-import Info from '../components/Info';
+import Info from './info';
 
 import IconBackageInfo from '@/public/icons/backage-info.svg';
 import IconSave from '@/public/icons/icon-save.svg';
 import IconSend from '@/public/icons/icon-send.svg';
+
+import { filterImageUrl } from '@/utils/helper';
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -33,7 +35,7 @@ const reorder = (list, startIndex, endIndex) => {
 /**
  * Moves an item from one list to another list.
  */
-const move = (source, destination, droppableSource, droppableDestination, currentUser, currentGood) => {
+const move = (source, destination, droppableSource, droppableDestination) => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
@@ -60,6 +62,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     // styles we need to apply on draggables
     ...draggableStyle,
 });
+
 const getListStyle = isDraggingOver => ({
     background: isDraggingOver ? 'lightblue' : 'lightgrey',
     padding: grid,
@@ -71,7 +74,7 @@ const getListStyle = isDraggingOver => ({
     border: '1px solid #161616',
 });
 
-const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGood = {}, currentUser }) => {
+const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, currentGood = {}, onSave, onSend }) => {
     const [showChange, setShowChange] = useState(false);
     // const [selectRow, setSelectRow] = useState([]);
     const [sourceData, setSourceData] = useState([]);
@@ -86,7 +89,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
         let initParteInfos = {};
         let initRowPickTypes = {};
         let initRowRemarks = {};
-        favoriteToOrderGroupList.map((g, ri) => {
+        commodityToOrderGroupList.map((g, ri) => {
             initCountInfos[ri] = {};
             initParteInfos[ri] = {};
             initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
@@ -106,12 +109,12 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                 }
             });
         });
-        setSourceData(favoriteToOrderGroupList);
+        setSourceData(commodityToOrderGroupList);
         setCountInfos(initCountInfos);
         setParteInfos(initParteInfos);
         setRowPickTypes(initRowPickTypes);
         setRowRemarks(initRowRemarks);
-    }, [favoriteToOrderGroupList]);
+    }, [commodityToOrderGroupList]);
     // useEffect(() => {
     //     console.log('----sourceData----', sourceData);
     // }, [sourceData]);
@@ -120,7 +123,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
             let rowParte = parteInfos[row];
             if (!countInfos[row]) return;
             let rowUnitPrice = 0;
-            rowUnitPrice += lodash.sum(sourceData[row].list[0].styleAndColor.map(sc => sc.style.price));
+            rowUnitPrice += sourceData[row].list[0].price;
 
             let sum = 0;
             // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
@@ -192,7 +195,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
 
     const parseOrderData = () => {
         const orderData = sourceData.map((row, ri) => {
-            const { list, sizes, key } = row;
+            const { list, sizes, key, size, price, styleNos } = row;
             let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
             let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
             const items = list.map(favorite => {
@@ -208,14 +211,24 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                     total += currentCountInfo[k];
                 });
                 total *= currentParteInfo;
-                let unitPrice = lodash.sum(favorite.styleAndColor.map(sc => sc.style.price));
-                return {
-                    favoriteId: favorite._id,
+                let unitPrice = favorite.price;
+
+                let item = {
                     sizeInfoObject,
                     parte: currentParteInfo,
                     total,
                     totalPrice: unitPrice * total,
                 };
+                if (favorite.type === 'img') {
+                    item.imgs = favorite.imgs;
+                    item.type = 0;
+                    item.colorObj = favorite.styleAndColor[0].colorIds[0];
+                } else {
+                    item.type = 1;
+                    item.favoriteId = favorite._id;
+                    item.favorite = favorite.favoriteObj;
+                }
+                return item;
             });
             return {
                 pickType: rowPickTypes[ri],
@@ -224,6 +237,9 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                 rowRemarks: rowRemarks[ri],
                 items,
                 isSelect: !!row.isSelect,
+                size,
+                price,
+                styleNos,
             };
         });
         return orderData;
@@ -231,44 +247,21 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
 
     const handleSend = async () => {
         const orderData = parseOrderData();
-        const res = _.groupBy(orderData, 'isSelect');
-
-        // console.log('res', res);
-        // return;
-        await dispatch({
-            type: 'diy/addOrder',
-            payload: {
-                orderData: res['false'],
-                goodsId: currentGood._id,
-            },
-        });
-
-        await dispatch({
-            type: 'diy/addOrder',
-            payload: {
-                orderData: res['true'],
-                goodsId: currentGood._id,
-                isSend: 1,
-            },
-        });
+        await onSend(orderData);
         setShowChange(false);
     };
 
     const handleSave = async () => {
         const orderData = parseOrderData();
-        await dispatch({
-            type: 'diy/addOrder',
-            payload: {
-                orderData,
-                goodsId: currentGood._id,
-            },
-        });
+        await onSave(orderData);
         setShowChange(false);
     };
     return (
         <Modal
             visible={visible}
+            destroyOnClose
             onCancel={onCancel}
+            getContainer={document.body}
             width={'100%'}
             style={{ padding: 0 }}
             bodyStyle={{ padding: 0, paddingTop: '24px' }}
@@ -355,18 +348,37 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                                         alignItems="center"
                                                                         justifyContent="space-around"
                                                                     >
-                                                                        {favorite.styleAndColor.map(d => (
-                                                                            <StyleItem
-                                                                                styleId={`${favorite._id}-${d._id}-item`}
-                                                                                colors={d.colorIds}
-                                                                                key={`${favorite._id}-${d._id}-${Math.random() *
-                                                                                    1000000}`}
-                                                                                {...d.style}
-                                                                                style={{
-                                                                                    cursor: 'pointer',
-                                                                                }}
-                                                                            />
-                                                                        ))}
+                                                                        {favorite.type === 'img' ? (
+                                                                            <Box width="100px">
+                                                                                {/* <Swiper> */}
+                                                                                {/* {colorWithStyleImgs[current].imgs.map((item, i) => ( */}
+                                                                                <Flex
+                                                                                    justifyContent="center"
+                                                                                    alignItems="center"
+                                                                                    height="100%"
+                                                                                >
+                                                                                    <Image
+                                                                                        src={filterImageUrl(favorite.imgs[0])}
+                                                                                    />
+                                                                                </Flex>
+                                                                                {/* ))} */}
+                                                                                {/* </Swiper> */}
+                                                                            </Box>
+                                                                        ) : (
+                                                                            favorite.styleAndColor.map(d => (
+                                                                                <StyleItem
+                                                                                    styleId={`${favorite._id}-${d._id}-item`}
+                                                                                    colors={d.colorIds}
+                                                                                    key={`${favorite._id}-${
+                                                                                        d._id
+                                                                                    }-${Math.random() * 1000000}`}
+                                                                                    {...d.style}
+                                                                                    style={{
+                                                                                        cursor: 'pointer',
+                                                                                    }}
+                                                                                />
+                                                                            ))
+                                                                        )}
                                                                     </Flex>
                                                                     <Box pl="8px">
                                                                         {favorite.styleAndColor.map(sc => (
@@ -418,12 +430,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                                                 );
                                                                             })}
                                                                         </Flex>
-                                                                        <Info
-                                                                            label="单价"
-                                                                            value={lodash.sum(
-                                                                                favorite.styleAndColor.map(sc => sc.style.price),
-                                                                            )}
-                                                                        />
+                                                                        <Info label="单价" value={favorite.price} />
                                                                         <Flex
                                                                             justifyContent="space-between"
                                                                             alignItems="center"
@@ -591,10 +598,4 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
     );
 };
 
-export default connect(({ diy = {}, user = {} }) => ({
-    colorList: diy.colorList,
-    flowerList: diy.flowerList,
-    currentGood: diy.currentGood,
-    currentUser: user.info,
-    favoriteToOrderGroupList: diy.favoriteToOrderGroupList,
-}))(App);
+export default OrderMark;

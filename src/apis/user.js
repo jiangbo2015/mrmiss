@@ -31,3 +31,14 @@ export const getCurrentUserOrder = data =>
     request('/api/user/getCurrentUserOrder', {
         method: 'get',
     });
+export const getMyOrderList = data =>
+    request('/api/order/getMyList', {
+        method: 'get',
+        params: data,
+    });
+
+export const delOrder = data =>
+    request('/api/order/delete', {
+        method: 'post',
+        data,
+    });

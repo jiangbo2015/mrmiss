@@ -95,7 +95,7 @@ const UserListTable = ({ customerList = [], currentCustomer, ...props }) => {
     );
 };
 
-export default connect(({ business }) => {
+export default connect(({ business = {} }) => {
     // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,

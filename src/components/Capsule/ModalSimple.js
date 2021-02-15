@@ -1,12 +1,14 @@
 import InputNumber from '@/components/InputNumber';
+import StyleItem from '@/components/StyleItem';
+import { filterImageUrl } from '@/utils/helper';
 import temp from '@/public/temp.jpg';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
 import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import { Arrow } from './Switcher';
-
+import { connect } from 'dva';
 export const CloseBtn = props => (
     <Flex py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
@@ -35,7 +37,7 @@ export const ArrowBtn = props => (
     ></Arrow>
 );
 
-export const StyleSwitcher = ({ bg, ...props }) => (
+export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
     <Flex
         flexDirection="column"
         alignItems="center"
@@ -49,7 +51,7 @@ export const StyleSwitcher = ({ bg, ...props }) => (
             },
         }}
     >
-        <Dot bg={bg} size="30px"></Dot>
+        <Dot bg={type ? false : bg} src={type ? bg : ''} size="26px" isSelect={isSelect} />
         <Flex className="intro" mt="10px" css={{ visibility: 'hidden' }}>
             <Box
                 css={{
@@ -58,18 +60,27 @@ export const StyleSwitcher = ({ bg, ...props }) => (
                     width: 'max-content',
                 }}
             >
-                <Text>1903</Text>
-                <Text>罂粟红</Text>
+                <Text>{code}</Text>
+                <Text>{text}</Text>
             </Box>
         </Flex>
     </Flex>
 );
 
-export default ({ visible, onClose }) => {
+const ModalSimple = ({ visible, onClose, currentCapsuleStyle, dispatch }) => {
+    const { colorWithStyleImgs = [], code, price, size } = currentCapsuleStyle;
+    const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
         Modal.setAppElement('body');
     }, []);
+
+    const handleAddOrder = () => {
+        console.log('handleAddOrder');
+        dispatch({
+            type: 'capsule/addOrderMark',
+        });
+    };
 
     return (
         <Modal
@@ -90,63 +101,179 @@ export default ({ visible, onClose }) => {
             <Box bg="#fff" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
+                    <Box mr="10px" height="675px" css={{ overflowY: 'auto' }}>
+                        <Flex flexDirection="column">
+                            {colorWithStyleImgs.map((item, i) => (
+                                <Box
+                                    mb="8px"
+                                    p="20px 30px"
+                                    bg="#F8F8F8"
+                                    onClick={() => {
+                                        setCurrent(i);
+                                    }}
+                                >
+                                    {item.type ? (
+                                        item.favorite.styleAndColor.map(d => (
+                                            <StyleItem
+                                                styleId={`${item.favorite._id}-${d._id}-item`}
+                                                colors={d.colorIds}
+                                                key={`${item.favorite._id}-${d._id}-${Math.random() * 1000000}`}
+                                                {...d.styleId}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                }}
+                                            />
+                                        ))
+                                    ) : (
+                                        <Image width="100px" src={filterImageUrl(item.imgs[0])} mx="auto" />
+                                    )}
+                                </Box>
+                            ))}
+                        </Flex>
+                    </Box>
                     <Box>
                         <Box
                             width="675px"
                             height="675px"
-                            bg="#eee"
+                            bg="#F8F8F8"
                             css={{
                                 '.swiper-container': {
                                     height: '100%',
                                 },
                             }}
                         >
-                            <Swiper>
-                                {new Array(3).fill(0).map((item, i) => (
-                                    <Flex justifyContent="center" alignItems="center" height="100%">
-                                        <Image src={temp} maxWidth="400px"></Image>
-                                    </Flex>
-                                ))}
-                            </Swiper>
+                            {colorWithStyleImgs[current].type ? (
+                                <Swiper>
+                                    {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
+                                        <Flex justifyContent="center" alignItems="center" height="100%">
+                                            <StyleItem
+                                                width="280px"
+                                                styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                                colors={d.colorIds}
+                                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                    1000000}`}
+                                                {...d.styleId}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                }}
+                                            />
+                                        </Flex>
+                                    ))}
+                                    {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
+                                        <Flex justifyContent="center" alignItems="center" height="100%">
+                                            <StyleItem
+                                                width="280px"
+                                                styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                                colors={d.colorIds}
+                                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                    1000000}`}
+                                                {...d.styleId}
+                                                svgUrl={d.styleId.svgUrlBack}
+                                                shadowUrl={d.styleId.shadowUrlBack}
+                                                styleSize={d.styleId.styleBackSize}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                }}
+                                            />
+                                        </Flex>
+                                    ))}
+                                </Swiper>
+                            ) : null}
+                            {colorWithStyleImgs[current].type ? null : (
+                                <Swiper>
+                                    {colorWithStyleImgs[current].imgs.map((item, i) => (
+                                        <Flex justifyContent="center" alignItems="center" height="100%">
+                                            <Image src={filterImageUrl(item)} maxWidth="400px"></Image>
+                                        </Flex>
+                                    ))}
+                                </Swiper>
+                            )}
                         </Box>
-                        <Flex justifyContent="center" mt="20px">
+
+                        {/* <Flex justifyContent="center" mt="20px">
                             <Box mr="30px">
                                 <ArrowBtn></ArrowBtn>
                                 <ArrowBtn right></ArrowBtn>
                             </Box>
-                        </Flex>
+                        </Flex> */}
                     </Box>
 
                     <Box pl="30px">
                         <Text>2021 swimwear series</Text>
                         <Text color="#313131" fontSize="28px" fontWeight="bold" my="20px">
-                            €98
+                            ¥{price}
                         </Text>
-                        <Text>Ref A W881 </Text>
-                        <Flex mt="30px">
-                            {new Array(3).fill(0).map((item, i) => (
-                                <Image key={i} src={temp} width="60px" height="60px" mr="20px"></Image>
-                            ))}
-                        </Flex>
+                        <Text>Ref {code} </Text>
+                        {currentCapsuleStyle.type ? (
+                            <Flex mt="30px">
+                                {colorWithStyleImgs[0].favorite.styleAndColor.map(d => (
+                                    <Flex justifyContent="center" alignItems="center" height="100%">
+                                        <StyleItem
+                                            width="70px"
+                                            styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                            colors={[{ value: '#000' }, { value: '#000' }, { value: '#000' }]}
+                                            key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                1000000}`}
+                                            {...d.styleId}
+                                            style={{
+                                                marginRight: '10px',
+                                            }}
+                                        />
+                                    </Flex>
+                                ))}
+                                {colorWithStyleImgs[0].favorite.styleAndColor.map(d => (
+                                    <Flex justifyContent="center" alignItems="center" height="100%">
+                                        <StyleItem
+                                            width="70px"
+                                            styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                            colors={[{ value: '#000' }, { value: '#000' }, { value: '#000' }]}
+                                            key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                1000000}`}
+                                            {...d.styleId}
+                                            svgUrl={d.styleId.svgUrlBack}
+                                            shadowUrl={d.styleId.shadowUrlBack}
+                                            styleSize={d.styleId.styleBackSize}
+                                        />
+                                    </Flex>
+                                ))}
+                            </Flex>
+                        ) : null}
+
                         <Flex mt="60px">
-                            {['yellow', 'red', 'green'].map((item, i) => (
-                                <StyleSwitcher key={i} bg={item}></StyleSwitcher>
+                            {colorWithStyleImgs.map((item, i) => (
+                                <StyleSwitcher
+                                    key={i}
+                                    type={item.colorObj.type}
+                                    bg={item.colorObj.type ? filterImageUrl(item.colorObj.value) : item.colorObj.value}
+                                    code={item.colorObj.code}
+                                    text={item.colorObj.namecn}
+                                    isSelect={i === current}
+                                />
                             ))}
                         </Flex>
                         <Text fontSize="16px" mt="90px">
                             尺码/中包
                         </Text>
                         <Flex mt="20px">
-                            {['XS', 'S', 'M'].map((item, i) => (
+                            {size.split('/').map((item, i) => (
                                 <Box key={i} mr="15px">
                                     <Text textAlign="center">{item}</Text>
                                     <InputNumber></InputNumber>
                                 </Box>
                             ))}
                         </Flex>
-                        <Box bg="#000" width="100%" py="16px" mt="80px" css={{ cursor: 'pointer' }}>
+                        <Box
+                            bg="#000"
+                            width="100%"
+                            py="16px"
+                            mt="80px"
+                            css={{ cursor: 'pointer' }}
+                            onClick={() => {
+                                handleAddOrder();
+                            }}
+                        >
                             <Text color="#fff" textAlign="center">
-                                进入订单编辑器
+                                加入订单编辑器
                             </Text>
                         </Box>
                     </Box>
@@ -157,3 +284,9 @@ export default ({ visible, onClose }) => {
         </Modal>
     );
 };
+
+export default connect(({ capsule = {} }) => ({
+    capsuleList: capsule.capsuleList,
+    currentCapsule: capsule.currentCapsule,
+    currentCapsuleStyle: capsule.currentCapsuleStyle,
+}))(ModalSimple);

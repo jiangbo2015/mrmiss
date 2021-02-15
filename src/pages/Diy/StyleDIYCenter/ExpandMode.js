@@ -21,12 +21,7 @@ const waitTime = time => {
     return p;
 };
 
-const App = ({
-    styleList = { docs: [] },
-    dispatch,
-    currentStyle = {},
-    selectColorList = [],
-}) => {
+const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {}, selectColorList = [] }) => {
     const params = {
         scrollbar: {
             el: '.swiper-scrollbar',
@@ -89,11 +84,7 @@ const App = ({
                             justifyContent: 'center',
                         }}
                     >
-                        <StyleItem
-                            width="300px"
-                            colors={selectColorList}
-                            {...currentStyle}
-                        />
+                        <StyleItem width="300px" colors={selectColorList} {...currentStyle} />
                     </div>
                     <div
                         style={{
@@ -116,7 +107,7 @@ const App = ({
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy = {} }) => ({
     styleList: diy.styleList,
     currentStyle: diy.currentStyle,
     collocationBg: diy.collocationBg,

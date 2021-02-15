@@ -1,7 +1,7 @@
 import { Box } from 'rebass/styled-components';
 
 // 背景色或者图片
-export default ({ bg, size, src, ...props }) => {
+export default ({ bg, size, src, isSelect, onClick = () => {}, ...props }) => {
     const bgProps = bg
         ? {
               background: bg,
@@ -12,6 +12,7 @@ export default ({ bg, size, src, ...props }) => {
           };
     return (
         <Box
+            onClick={onClick}
             css={{
                 '&:hover': {
                     '.line': {
@@ -28,13 +29,21 @@ export default ({ bg, size, src, ...props }) => {
                     position: 'relative',
                     cursor: 'pointer',
                     borderRadius: '50%',
-                    border: '1px solid #888',
+                    // border: '1px solid #888',
 
                     ...bgProps,
                 }}
                 {...props}
             ></Box>
-            <Box height="1px" width="20px" bg="#000" mx="auto" mt="5px" css={{ visibility: 'hidden' }} className="line"></Box>
+            <Box
+                height="1px"
+                width="20px"
+                bg="#000"
+                mx="auto"
+                mt="5px"
+                css={{ visibility: isSelect ? 'visible' : 'hidden' }}
+                className="line"
+            ></Box>
         </Box>
     );
 };

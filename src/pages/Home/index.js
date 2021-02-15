@@ -14,9 +14,6 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
     console.log('location', location);
     useEffect(() => {
         dispatch({
-            type: 'user/getCurrentUser',
-        });
-        dispatch({
             type: 'home/init',
         });
     }, []);

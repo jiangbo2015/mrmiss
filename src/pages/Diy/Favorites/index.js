@@ -17,7 +17,7 @@ import DelIcon from '@/public/icons/icon-del.svg';
 import BigIcon from '@/public/icons/icon-big+.svg';
 
 import styles from './index.less';
-import OrderModal from './order/OrderModal';
+import OrderModal from './order/index';
 
 const favoriteBox = {
     small: { h: '210px', w: '200px', size: '70px' },
@@ -131,7 +131,6 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     setOrderVisible(false);
                     console.log('setOrderVisible');
                 }}
-                getContainer={document.body}
             />
             <Propmt
                 visible={capsuleInputVisible}
@@ -332,7 +331,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy = {} }) => ({
     favoriteArr: diy.favoriteArr,
     favoritePattern: diy.favoritePattern,
     currentGood: diy.currentGood,

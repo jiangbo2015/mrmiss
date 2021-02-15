@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.4.0",
+    "bizcharts": "^4.1.6",
     "normalize.css": "^8.0.1",
     "react": "^16.12.0",
     "react-beautiful-dnd": "^13.0.0",

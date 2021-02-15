@@ -75,7 +75,7 @@ const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColor
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy = {} }) => ({
     collocationPattern: diy.collocationPattern,
     currentGood: diy.currentGood,
     currentStyle: diy.currentStyle,

@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from 'antd';
 import { ReactSVG } from 'react-svg';
-import {
-    LockOutlined,
-    UnlockOutlined,
-    SaveOutlined,
-    CopyOutlined,
-} from '@ant-design/icons';
+import { LockOutlined, UnlockOutlined, SaveOutlined, CopyOutlined } from '@ant-design/icons';
 import { Flex, Box } from 'rebass/styled-components';
 import { connect } from 'dva';
 
@@ -19,11 +14,7 @@ import IconUserSign from '@/public/icons/icon-usersign.svg';
 
 import UserListMinTable from './UserListMinTable';
 // <LockOutlined />  <UnlockOutlined />
-const UserListTable = ({
-    channelEmpowerInfo = [],
-    currentCustomer,
-    ...props
-}) => {
+const UserListTable = ({ channelEmpowerInfo = [], currentCustomer, ...props }) => {
     const [copiedUserModal, setCopiedUserModal] = useState(false);
     const [selectCopiedUser, setSelectCopiedUser] = useState([]);
     const columns = [
@@ -98,9 +89,7 @@ const UserListTable = ({
                 key: 'channelEmpowereds',
                 width: 200,
                 render: (val, recrod) => {
-                    return val === undefined ? null : (
-                        <Switch checked={val[recrod.channel] === 1} />
-                    );
+                    return val === undefined ? null : <Switch checked={val[recrod.channel] === 1} />;
                 },
             },
             {
@@ -109,9 +98,7 @@ const UserListTable = ({
                 key: 'channelEmpowereds',
                 width: 200,
                 render: (val, recrod) => {
-                    return val === undefined ? null : (
-                        <Switch checked={val[recrod.channel] === 2} />
-                    );
+                    return val === undefined ? null : <Switch checked={val[recrod.channel] === 2} />;
                 },
             },
             {
@@ -120,20 +107,13 @@ const UserListTable = ({
                 key: 'channelEmpowereds',
                 width: 200,
                 render: (val, recrod) => {
-                    return val === undefined ? null : (
-                        <Switch checked={val[recrod.channel] === 3} />
-                    );
+                    return val === undefined ? null : <Switch checked={val[recrod.channel] === 3} />;
                 },
             },
         ];
         // if (!rowData.goodsInfo) return null;
         return (
-            <Table
-                showHeader={false}
-                columns={expandedColumns}
-                dataSource={rowData.goodsInfo}
-                rowKey={record => record._id}
-            />
+            <Table showHeader={false} columns={expandedColumns} dataSource={rowData.goodsInfo} rowKey={record => record._id} />
         );
     };
     return (
@@ -144,10 +124,7 @@ const UserListTable = ({
                 visible={copiedUserModal}
                 title={
                     <Flex bg="#FDDB3A" width={1} justifyContent="center">
-                        <ReactSVG
-                            src={IconUserSign}
-                            style={{ width: '24px', paddingRight: '4px' }}
-                        />
+                        <ReactSVG src={IconUserSign} style={{ width: '24px', paddingRight: '4px' }} />
                     </Flex>
                 }
                 bodyStyle={{
@@ -161,19 +138,11 @@ const UserListTable = ({
                 <UserListMinTable />
             </Modal>
             <Flex p="16px" justifyContent="center" alignItems="center">
-                <ReactSVG
-                    style={{ width: '40px', height: '40px' }}
-                    src={IconEmpower}
-                />
+                <ReactSVG style={{ width: '40px', height: '40px' }} src={IconEmpower} />
                 <Box p="0 20px">通道授权客户</Box>
             </Flex>
             <Flex p="16px">
-                <Button
-                    shape="circle"
-                    size="large"
-                    icon={<LockOutlined />}
-                    style={{ backgroundColor: '#D2D2D2' }}
-                />
+                <Button shape="circle" size="large" icon={<LockOutlined />} style={{ backgroundColor: '#D2D2D2' }} />
                 <Button
                     shape="circle"
                     size="large"
@@ -200,7 +169,7 @@ const UserListTable = ({
     );
 };
 
-export default connect(({ business }) => {
+export default connect(({ business = {} }) => {
     // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,

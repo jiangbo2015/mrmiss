@@ -113,4 +113,4 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {} }) => {
     );
 };
 
-export default connect(({ diy }) => ({ goodsList: diy.goodsList, currentGood: diy.currentGood }))(DiyHeader);
+export default connect(({ diy = {} }) => ({ goodsList: diy.goodsList, currentGood: diy.currentGood }))(DiyHeader);

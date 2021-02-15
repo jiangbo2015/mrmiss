@@ -13,7 +13,7 @@ const settings = {
     autoplaySpeed: 2000,
     cssEase: 'linear',
 };
-export default ({ carousels = [] }) => {
+export default ({ carousels = [], onSelect = () => {} }) => {
     let carouselUrls = [];
     if (carousels.length > 0 && carousels.length < 6) {
         while (carouselUrls.length < 6) {
@@ -26,6 +26,9 @@ export default ({ carousels = [] }) => {
                 {carouselUrls.map((x, i) => (
                     <Box width={0.18} p="5px">
                         <Box
+                            onClick={() => {
+                                onSelect(i % carousels.length);
+                            }}
                             width={1}
                             height="300px"
                             key={i}

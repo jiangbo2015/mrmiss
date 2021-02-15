@@ -175,7 +175,7 @@ const App = ({
     );
 };
 
-export default connect(({ diy }) => ({
+export default connect(({ diy = {} }) => ({
     styleList: diy.styleList,
     selectColorList: diy.selectColorList,
     currentGood: diy.currentGood,

@@ -25,16 +25,8 @@ const UserListTable = ({ customerList = [], ...props }) => {
     ];
     return (
         <Box>
-            <Flex
-                p="0 0 30px 0"
-                alignItems="center"
-                justifyContent="space-between"
-            >
-                <SearchInput
-                    mode="white"
-                    placeholder="SEARCH"
-                    style={{ width: '200px' }}
-                />
+            <Flex p="0 0 30px 0" alignItems="center" justifyContent="space-between">
+                <SearchInput mode="white" placeholder="SEARCH" style={{ width: '200px' }} />
                 <Button
                     shape="circle"
                     icon={<SaveOutlined />}
@@ -51,11 +43,7 @@ const UserListTable = ({ customerList = [], ...props }) => {
                 rowSelection={{
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
-                        console.log(
-                            `selectedRowKeys: ${selectedRowKeys}`,
-                            'selectedRows:',
-                            selectedRows,
-                        );
+                        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
                         console.log(record);
@@ -70,7 +58,7 @@ const UserListTable = ({ customerList = [], ...props }) => {
     );
 };
 
-export default connect(({ business }) => {
+export default connect(({ business = {} }) => {
     // console.log('props', props);
     return {
         customerList: business.customerList,

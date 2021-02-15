@@ -52,7 +52,7 @@ const OrderTable = ({ orderList = [] }) => {
     return <OrderTableComponent columns={columns} dataSource={orderList} />;
 };
 
-export default connect(({ usercenter }) => {
+export default connect(({ usercenter = {} }) => {
     // console.log('props', props);
     return {
         orderList: usercenter.userOrder.diy,
