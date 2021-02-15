@@ -85,7 +85,7 @@ const Capsule = ({ capsuleList, dispatch, currentCapsule, capsuleStyleList }) =>
                     <Container>
                         <Flex py="30px" justifyContent="space-between">
                             <Search></Search>
-                            <Switcher ref={ref}></Switcher>
+                            <Switcher assigned={currentCapsule} ref={ref}></Switcher>
                             <Button
                                 onClick={() => {
                                     setOrderVisible(true);
