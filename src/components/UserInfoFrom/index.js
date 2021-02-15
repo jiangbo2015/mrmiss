@@ -23,7 +23,11 @@ const UserInfoForm = ({ data, onSumbit }) => {
             console.log(values);
 
             if (onSumbit) {
-                await onSumbit({ ...values, _id: data._id });
+                if (data._id) {
+                    await onSumbit({ ...values, _id: data._id });
+                } else {
+                    await onSumbit({ ...values });
+                }
             }
 
             message.info('提及成功');

@@ -7,6 +7,7 @@ import Modal from '@/components/Modal';
 import Layout from '@/components/Layout';
 import SearchInput from '@/components/SearchInput';
 import UserListTable from './components/UserListTable';
+import UserInfoFrom from '@/components/UserInfoFrom';
 import UserOrder from './components/UserOrder';
 import ChannelEmpower from './components/ChannelEmpower';
 
@@ -14,6 +15,7 @@ export default class Business extends React.Component {
     state = {
         channelEmpowerModal: false,
         userOrderModal: false,
+        userAddModal: false,
     };
     callback(key) {
         console.log(key);
@@ -22,6 +24,20 @@ export default class Business extends React.Component {
         return (
             <Layout>
                 <Modal
+                    title="新增客户"
+                    visible={this.state.userAddModal}
+                    footer={false}
+                    width="1200px"
+                    onCancel={() => {
+                        this.setState({
+                            ...this.state,
+                            userAddModal: false,
+                        });
+                    }}
+                >
+                    <UserInfoFrom />
+                </Modal>
+                {/* <Modal
                     visible={this.state.channelEmpowerModal}
                     footer={false}
                     width="1200px"
@@ -33,7 +49,7 @@ export default class Business extends React.Component {
                     }}
                 >
                     <ChannelEmpower />
-                </Modal>
+                </Modal> */}
                 <Modal
                     title="客户订单管理"
                     visible={this.state.userOrderModal}
@@ -66,10 +82,20 @@ export default class Business extends React.Component {
                         },
                     }}
                 >
-                    <Button type="primary" shape="round">
+                    <Button
+                        type="primary"
+                        shape="round"
+                        onClick={() => {
+                            this.setState({
+                                ...this.state,
+                                userAddModal: true,
+                            });
+                        }}
+                        style={{ margin: '0 50px' }}
+                    >
                         新增客户
                     </Button>
-                    <Button
+                    {/* <Button
                         type="primary"
                         shape="round"
                         style={{ margin: '0 50px' }}
@@ -81,7 +107,7 @@ export default class Business extends React.Component {
                         }}
                     >
                         通道权限管理
-                    </Button>
+                    </Button> */}
                     <Button
                         type="primary"
                         shape="round"
