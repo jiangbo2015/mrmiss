@@ -28,7 +28,12 @@ export default {
             console.log(' channel update');
             const { data } = yield call(api.update, payload);
             if (data) {
+                message.info('更新成功');
                 // console.log('发送成功');
+                // fetchMyAdminChannelList
+                yield put({
+                    type: 'fetchMyAdminChannelList',
+                });
             }
         },
         *fetchMyAdminChannelList({ payload }, { call, put }) {

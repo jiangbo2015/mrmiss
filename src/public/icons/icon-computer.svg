@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 23.0.3, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+    y="0px" viewBox="0 0 47 38" style="enable-background:new 0 0 47 38;" xml:space="preserve">
+    <style type="text/css">
+        .icon-computer0 {
+            fill: none;
+            stroke: #000000;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-miterlimit: 10;
+        }
+
+        .icon-computer1 {
+            fill: #FFFFFF;
+        }
+
+        .icon-computer2 {
+            fill: #F4EFEF;
+        }
+
+        .icon-computer3 {
+            clip-path: url(#SVGID_2_);
+            fill: #FFFFFF;
+        }
+    </style>
+    <g>
+        <path
+            d="M46,29H1c-0.6,0-1-0.4-1-1V1c0-0.6,0.4-1,1-1h45c0.6,0,1,0.4,1,1v27C47,28.6,46.6,29,46,29z M2,27h43V2H2V27z" />
+        <path d="M23.5,37.4c-0.6,0-1-0.4-1-1V28c0-0.6,0.4-1,1-1s1,0.4,1,1v8.4C24.5,37,24.1,37.4,23.5,37.4z" />
+        <path d="M32.5,38H14.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h17.7c0.6,0,1,0.4,1,1S33.1,38,32.5,38z" />
+    </g>
+</svg>

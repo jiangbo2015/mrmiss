@@ -6,10 +6,29 @@ import { ReactSVG } from 'react-svg';
 import { message } from 'antd';
 import IconHeart from '@/public/icons/icon-heart.svg';
 import IconUnHeart from '@/public/icons/icon-unheart.svg';
+import IconConfirm from '@/public/icons/icon-confirm.svg';
 import { connect } from 'dva';
 const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColorList, collocationPattern }) => {
     const handleAddFavorite = async () => {
         if (collocationPattern === 'single') {
+            await dispatch({
+                type: 'diy/addFavorite',
+                payload: {
+                    goodId: currentGood._id,
+                    styleAndColor: [
+                        {
+                            styleId: currentStyle._id,
+                            colorIds: selectColorList.map(x => x._id),
+                        },
+                    ],
+                },
+            });
+            message.info('收藏成功');
+        }
+    };
+
+    const handleAssigned = async () => {
+        if (collocationPattern === 'assign') {
             await dispatch({
                 type: 'diy/addFavorite',
                 payload: {
@@ -58,27 +77,42 @@ const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColor
                         justifyContent: 'center',
                     }}
                 >
-                    <ReactSVG
-                        src={IconUnHeart}
-                        onClick={() => {
-                            handleAddFavorite();
-                        }}
-                        style={{
-                            width: '18px',
-                            height: '18px',
-                            cursor: 'pointer',
-                        }}
-                    />
+                    {collocationPattern === 'assign' ? (
+                        <ReactSVG
+                            src={IconUnHeart}
+                            onClick={() => {
+                                handleAddFavorite();
+                            }}
+                            style={{
+                                width: '18px',
+                                height: '18px',
+                                cursor: 'pointer',
+                            }}
+                        />
+                    ) : (
+                        <ReactSVG
+                            src={IconConfirm}
+                            onClick={() => {
+                                handleAssigned();
+                            }}
+                            style={{
+                                width: '18px',
+                                height: '18px',
+                                cursor: 'pointer',
+                            }}
+                        />
+                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-export default connect(({ diy = {} }) => ({
+export default connect(({ diy = {}, channel }) => ({
     collocationPattern: diy.collocationPattern,
     currentGood: diy.currentGood,
     currentStyle: diy.currentStyle,
     selectColorList: diy.selectColorList,
     selectStyleList: diy.selectStyleList,
+    currentAdminChannel: channel.currentAdminChannel,
 }))(App);

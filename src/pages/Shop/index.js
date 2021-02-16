@@ -33,25 +33,17 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
         });
     }, []);
     useEffect(() => {
+        handleLoadMore(1);
+    }, [queryKey, currentSelectedBar]);
+
+    const handleLoadMore = page => {
         if (currentBranch._id) {
-            let payload = {
-                branch: currentBranch._id,
-            };
+            let payload = { branch: currentBranch._id, page: page ? page : shopStyleList.page + 1 };
             if (queryKey) {
                 payload.code = queryKey;
             }
-            dispatch({
-                type: 'shop/fetchShopStyleList',
-                payload,
-            });
-        }
-    }, [currentBranch, queryKey]);
-
-    const handleLoadMore = () => {
-        if (currentBranch._id) {
-            let payload = { branch: currentBranch._id, page: shopStyleList.page + 1 };
-            if (queryKey) {
-                payload.code = queryKey;
+            if (currentBranch._id !== currentSelectedBar._id) {
+                payload.branchKind = currentSelectedBar._id;
             }
             dispatch({
                 type: 'shop/fetchShopStyleList',
@@ -79,6 +71,7 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
     useEffect(() => {
         const { shopStyles = [] } = currentAdminChannel;
         setSelectAssignedStyleList(shopStyles);
+        console.log('currentAdminChannel', shopStyles);
     }, [currentAdminChannel]);
 
     const handleOpenDetail = capsule => {
@@ -238,7 +231,12 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
                                 );
                             })}
                         </Box>
-                        <More onLoadMore={handleLoadMore} hasMore={shopStyleList.page < shopStyleList.pages} />
+                        <More
+                            onLoadMore={() => {
+                                handleLoadMore();
+                            }}
+                            hasMore={shopStyleList.page < shopStyleList.pages}
+                        />
                     </Container>
                 </Box>
             </section>
@@ -252,5 +250,5 @@ export default connect(({ shop, channel }) => ({
     currentBranch: shop.currentBranch,
     shopStyleList: shop.shopStyleList,
     currentAdminChannel: channel.currentAdminChannel,
-    currentSelectedBar: channel.currentSelectedBar,
+    currentSelectedBar: shop.currentSelectedBar,
 }))(Shop);

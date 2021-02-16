@@ -58,6 +58,7 @@ const SwitcherComponent = ({
         let codename = curABC;
 
         const temp = myAdminChannelList.find(x => x.codename === codename);
+        console.log('temp', temp);
         dispatch({
             type: 'channel/setCurrentChannel',
             payload: temp ? temp : { codename, assignedId: assigned._id, remark: '' },

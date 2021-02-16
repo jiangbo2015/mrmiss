@@ -1,10 +1,10 @@
 import CapsItem from '@/components/Capsule/CapsItem';
 import ModalSimple from '@/components/Capsule/ModalSimple';
 import More from '@/components/Capsule/More';
-import Search from '@/components/SearchInput';
+
 import SidebarStyles from '@/components/Capsule/SidebarStyles';
 import Switcher from '@/components/Capsule/Switcher';
-import Cart from '@/components/Cart';
+
 import Container from '@/components/Container';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
@@ -18,26 +18,50 @@ import OrderMarkModal from './OrderMarkModal';
 import { connect } from 'dva';
 import { Button } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-//  <EditOutlined />
+import Search from '@/components/SearchInput';
+import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 
 import { ReactSVG } from 'react-svg';
 import IconCapsuleCar from '@/public/icons/icon-capsule-car.svg';
-import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 
-const Capsule = ({ capsuleList, dispatch, currentCapsule, currentAdminChannel = { capsuleStyles: [] }, capsuleStyleList }) => {
+const Capsule = ({
+    capsuleList,
+    dispatch,
+    currentCapsule,
+    currentAdminChannel = { capsuleStyles: [] },
+    capsuleStyleList = { docs: [] },
+}) => {
+    // swiper 实例
+    const ref = useRef(null);
+    const [visible, setVisible] = useState(false);
+    const [queryKey, setQueryKey] = useState('');
+    const [selectedAll, setSelectedAll] = useState(false);
+    const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
+
+    const [orderVisible, setOrderVisible] = useState(false);
+
     useEffect(() => {
         dispatch({
             type: 'capsule/fetchCapsuleList',
         });
     }, []);
     useEffect(() => {
+        handleLoadMore(1);
+    }, [currentCapsule, queryKey]);
+
+    const handleLoadMore = page => {
         if (currentCapsule._id) {
+            let payload = { capsule: currentCapsule._id, page: page ? page : capsuleStyleList.page + 1 };
+            if (queryKey) {
+                payload.code = queryKey;
+            }
+
             dispatch({
                 type: 'capsule/fetchCapsuleStyleList',
-                payload: { capsule: currentCapsule._id },
+                payload,
             });
         }
-    }, [currentCapsule]);
+    };
 
     useEffect(() => {
         const { capsuleStyles = [] } = currentAdminChannel;
@@ -100,7 +124,7 @@ const Capsule = ({ capsuleList, dispatch, currentCapsule, currentAdminChannel = 
             setSelectedAll(true);
             setSelectAssignedStyleList(
                 selectAssignedStyleList.concat(
-                    capsuleStyleList
+                    capsuleStyleList.docs
                         .filter(x => selectAssignedStyleList.findIndex(s => s.style === x._id) < 0)
                         .map(c => ({ style: c._id, price: c.price })),
                 ),
@@ -110,13 +134,11 @@ const Capsule = ({ capsuleList, dispatch, currentCapsule, currentAdminChannel = 
             setSelectAssignedStyleList([]);
         }
     };
-    // swiper 实例
-    const ref = useRef(null);
-    const [visible, setVisible] = useState(false);
-    const [selectedAll, setSelectedAll] = useState(false);
-    const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
 
-    const [orderVisible, setOrderVisible] = useState(false);
+    const handleOnSearch = e => {
+        setQueryKey(e.target.value);
+    };
+
     return (
         <Layout pt="74px">
             <Flex
@@ -146,7 +168,12 @@ const Capsule = ({ capsuleList, dispatch, currentCapsule, currentAdminChannel = 
                     <SidebarStyles data={capsuleList} selectedItem={currentCapsule} onSelect={handleSelectCapsule} />
                     <Container>
                         <Flex pt="30px" pb="79px" justifyContent="space-between">
-                            <Search mode="white" style={{ width: '200px' }} placeholder="SEARCH STYLE" />
+                            <Search
+                                onSearch={handleOnSearch}
+                                mode="white"
+                                style={{ width: '200px' }}
+                                placeholder="SEARCH STYLE"
+                            />
                             {currentAdminChannel.codename === 'A' ? null : (
                                 <Flex alignItems="center">
                                     <Box bg="#DFDFDF" p="4px" mr="30px" width="24px" height="24px" sx={{ borderRadius: '4px' }}>
@@ -195,7 +222,7 @@ const Capsule = ({ capsuleList, dispatch, currentCapsule, currentAdminChannel = 
                                 gap: '20px',
                             }}
                         >
-                            {capsuleStyleList.map((item, index) => {
+                            {capsuleStyleList.docs.map((item, index) => {
                                 const selected = selectAssignedStyleList.find(x => x.style === item._id);
                                 return (
                                     <CapsItem
@@ -209,14 +236,17 @@ const Capsule = ({ capsuleList, dispatch, currentCapsule, currentAdminChannel = 
                                 );
                             })}
                         </Box>
-                        <More />
+                        <More
+                            onLoadMore={() => {
+                                handleLoadMore();
+                            }}
+                            hasMore={capsuleStyleList.page < capsuleStyleList.pages}
+                        />
                     </Container>
                 </Box>
             </section>
             {visible && <ModalSimple visible={visible} onClose={() => setVisible(false)} />}
             {orderVisible && <OrderMarkModal visible={orderVisible} onCancel={() => setOrderVisible(false)} />}
-
-            <Cart />
         </Layout>
     );
 };

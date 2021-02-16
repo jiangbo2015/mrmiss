@@ -7,7 +7,7 @@ export default {
     state: {
         info: {},
         capsuleList: [],
-        capsuleStyleList: [],
+        capsuleStyleList: { docs: [] },
         currentCapsule: {},
         currentSelectedBar: {},
         currentCapsuleStyle: {},
@@ -74,14 +74,19 @@ export default {
                 // history.push('/main');
             }
         },
-        *fetchCapsuleStyleList({ payload }, { call, put }) {
+        *fetchCapsuleStyleList({ payload }, { call, put, select }) {
             const { data } = yield call(api.getCapsuleStyleList, payload);
+            const { capsuleStyleList } = yield select(state => state.capsule);
             // 登录成功，将token写入本地，并跳转到主体
             if (data) {
                 // localStorage.token = data.token;
                 yield put({
                     type: 'setCapsuleStyleList',
-                    payload: data.docs,
+                    payload: {
+                        ...data,
+                        page: parseInt(data.page),
+                        docs: data.page == 1 ? data.docs : capsuleStyleList.docs.concat(data.docs),
+                    },
                 });
                 // history.push('/main');
             }

@@ -74,12 +74,17 @@ export default {
         },
         *fetchShopStyleList({ payload }, { call, put }) {
             const { data } = yield call(api.getShopStyleList, payload);
+            const { shopStyleList } = yield select(state => state.shop);
             // 登录成功，将token写入本地，并跳转到主体
             if (data) {
                 // localStorage.token = data.token;
                 yield put({
                     type: 'setShopStyleList',
-                    payload: data,
+                    payload: {
+                        ...data,
+                        page: parseInt(data.page),
+                        docs: data.page == 1 ? data.docs : shopStyleList.docs.concat(data.docs),
+                    },
                 });
                 // history.push('/main');
             }

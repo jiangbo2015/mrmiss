@@ -1,22 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 
-import Swiper from 'react-id-swiper';
+import { Flex, Box } from 'rebass/styled-components';
 import { ReactSVG } from 'react-svg';
 import CirCleArrow from '@/public/icons/circle_arrow.svg';
 import styles from './index.less';
-import { connect } from 'dva';
 
-const settings = {
-    slidesPerView: 3,
-    spaceBetween: 30,
-    loop: true,
-    navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-    },
-    renderPrevButton: props => <div {...props} class="swiper-button-next"></div>,
-    renderNextButton: props => <div {...props} class="swiper-button-prev"></div>,
-};
+import Switcher from '@/components/Capsule/Switcher';
+
+import { connect } from 'dva';
 
 const ClassifyItem = ({ children, isSelected, ...props }) => (
     <div
@@ -33,6 +24,7 @@ const ClassifyItem = ({ children, isSelected, ...props }) => (
 );
 
 const DiyHeader = ({ dispatch, goodsList = [], currentGood = {} }) => {
+    const ref = useRef(null);
     useEffect(() => {
         dispatch({
             type: 'diy/fetchGoodsList',
@@ -64,52 +56,59 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {} }) => {
 
     // console.log(swiperRef);
     return (
-        <div
-            style={{
+        <Flex
+            justifyContent="space-between"
+            sx={{
                 marginTop: '74px',
                 background: '#323232',
                 // display: 'flex',
                 width: '100%',
-                height: '110px',
+                height: '140px',
             }}
+            px="35px"
         >
-            <div className="diy-switch" style={{ display: 'flex', alignItems: 'center', paddingTop: '20px' }}>
-                <ReactSVG
-                    src={CirCleArrow}
-                    className={styles.nextIcon}
-                    style={{
-                        width: '18px',
-                        height: '18px',
-                    }}
-                    onClick={() => {
-                        handleChangeStep(-1);
-                    }}
-                />
-
-                {goodsList.map(g => (
-                    <ClassifyItem
-                        isSelected={g._id === currentGood._id}
-                        onClick={() => {
-                            handleSelectGood(g);
+            <Box />
+            <Flex pt="20px" flexDirection="column" alignItems="center">
+                <Flex width="50px" justifyContent="space-between">
+                    <ReactSVG
+                        src={CirCleArrow}
+                        style={{
+                            width: '18px',
+                            height: '18px',
                         }}
-                    >
-                        {g.name}
-                    </ClassifyItem>
-                ))}
-                <ReactSVG
-                    src={CirCleArrow}
-                    className={styles.nextIcon}
-                    style={{
-                        width: '18px',
-                        height: '18px',
-                        transform: 'rotateZ(180deg)',
-                    }}
-                    onClick={() => {
-                        handleChangeStep(1);
-                    }}
-                />
-            </div>
-        </div>
+                        onClick={() => {
+                            handleChangeStep(-1);
+                        }}
+                    />
+                    <ReactSVG
+                        src={CirCleArrow}
+                        style={{
+                            width: '18px',
+                            height: '18px',
+                            transform: 'rotateZ(180deg)',
+                        }}
+                        onClick={() => {
+                            handleChangeStep(1);
+                        }}
+                    />
+                </Flex>
+                <Flex alignItems="center" pt="8px">
+                    {goodsList.map(g => (
+                        <ClassifyItem
+                            isSelected={g._id === currentGood._id}
+                            onClick={() => {
+                                handleSelectGood(g);
+                            }}
+                        >
+                            {g.name}
+                        </ClassifyItem>
+                    ))}
+                </Flex>
+            </Flex>
+            <Box pt="44px">
+                <Switcher ref={ref} assigned={currentGood} />
+            </Box>
+        </Flex>
     );
 };
 
