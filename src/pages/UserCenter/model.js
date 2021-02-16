@@ -26,7 +26,10 @@ export default {
         setUserOrder(state, action) {
             return {
                 ...state,
-                userOrder: action.payload,
+                userOrder: {
+                    ...state.userOrder,
+                    ...action.payload,
+                },
             };
         },
     },
@@ -65,6 +68,47 @@ export default {
                 yield put({
                     type: 'setUserOrder',
                     payload: data,
+                });
+            }
+        },
+        *getUserShopOrder(_, { call, put }) {
+            const { data } = yield call(api.getUserShopOrderList);
+            if (data) {
+                yield put({
+                    type: 'setUserOrder',
+                    payload: {
+                        shop: data,
+                    },
+                });
+            }
+        },
+        *getUserCapsuleOrder({ payload }, { call, put }) {
+            const { data } = yield call(api.getUserCapsuleOrderList, payload);
+            if (data) {
+                yield put({
+                    type: 'setUserOrder',
+                    payload: {
+                        capsule: data,
+                    },
+                });
+            }
+        },
+        *delCapsuleOrder({ payload }, { call, put }) {
+            const { data } = yield call(api.delCapsuleOrder, payload);
+            if (data) {
+                yield put({
+                    type: 'getUserCapsuleOrder',
+                    payload: {
+                        isSend: 1,
+                    },
+                });
+            }
+        },
+        *delShopOrder({ payload }, { call, put }) {
+            const { data } = yield call(api.delShopOrder, payload);
+            if (data) {
+                yield put({
+                    type: 'getUserShopOrder',
                 });
             }
         },
