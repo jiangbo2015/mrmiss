@@ -1,11 +1,11 @@
-import React from 'react';
-import { Box } from 'rebass/styled-components';
-import { Tabs } from 'antd';
 // import UserInfo from './components/UserInfo';
 import Layout from '@/components/Layout';
-import Chart from './Chart';
-import Chart2 from './Chart2';
-import Chart3 from './Chart3';
+import { Tabs } from 'antd';
+import React from 'react';
+import { Box } from 'rebass/styled-components';
+import ChartCapsule from './ChartCapsule';
+import ChartDiy from './ChartDiy';
+import ChartShop from './ChartShop';
 // import CapsuleOrder from './components/CapsuleOrder';
 // import ShopOrder from './components/ShopOrder';
 
@@ -47,13 +47,13 @@ export default class Business extends React.Component {
                         tabBarStyle={{ background: '#FDDB3A', justifyContent: 'space-around' }}
                     >
                         <TabPane tab="网店销售数据" key="1" style={{ padding: '40px' }}>
-                            <Chart />
+                            <ChartShop />
                         </TabPane>
                         <TabPane tab="胶囊销售数据" key="2">
-                            <Chart2 />
+                            <ChartCapsule />
                         </TabPane>
                         <TabPane tab="定制销售数据" key="3">
-                            <Chart3 />
+                            <ChartDiy />
                         </TabPane>
                     </Tabs>
                 </Box>
