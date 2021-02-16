@@ -47,3 +47,22 @@ export const changePwd = data =>
         method: 'post',
         data,
     });
+export const getUserShopOrderList = data =>
+    request('/api/shopOrder/getMyList', {
+        method: 'get',
+    });
+export const getUserCapsuleOrderList = data =>
+    request('/api/capsuleOrder/getMyList', {
+        method: 'get',
+        params: data,
+    });
+export const delCapsuleOrder = data =>
+    request('/api/capsuleOrder/delete', {
+        method: 'post',
+        data,
+    });
+export const delShopOrder = data =>
+    request('/api/shopOrder/delete', {
+        method: 'post',
+        data,
+    });
