@@ -5,6 +5,7 @@ export const login = data =>
         method: 'post',
         data,
     });
+
 export const feedback = data =>
     request('/api/user/feedback', {
         method: 'post',

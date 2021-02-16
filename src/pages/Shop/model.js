@@ -7,8 +7,9 @@ export default {
     state: {
         info: {},
         branchList: [],
-        shopStyleList: [],
+        shopStyleList: { docs: [] },
         currentBranch: {},
+        currentSelectedBar: {},
         currentShopStyle: {},
         myShopCartList: [],
     },
@@ -17,6 +18,12 @@ export default {
             return {
                 ...state,
                 branchList: action.payload,
+            };
+        },
+        setCurrentSelectedBar(state, action) {
+            return {
+                ...state,
+                currentSelectedBar: action.payload,
             };
         },
         setCurrentBranch(state, action) {
@@ -58,6 +65,10 @@ export default {
                     type: 'setCurrentBranch',
                     payload: data[0],
                 });
+                yield put({
+                    type: 'setCurrentSelectedBar',
+                    payload: data[0],
+                });
                 // history.push('/main');
             }
         },
@@ -68,7 +79,7 @@ export default {
                 // localStorage.token = data.token;
                 yield put({
                     type: 'setShopStyleList',
-                    payload: data.docs,
+                    payload: data,
                 });
                 // history.push('/main');
             }

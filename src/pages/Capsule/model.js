@@ -9,6 +9,7 @@ export default {
         capsuleList: [],
         capsuleStyleList: [],
         currentCapsule: {},
+        currentSelectedBar: {},
         currentCapsuleStyle: {},
         editOrderSaveId: '',
     },
@@ -35,6 +36,12 @@ export default {
             return {
                 ...state,
                 currentCapsule: action.payload,
+            };
+        },
+        setCurrentSelectedBar(state, action) {
+            return {
+                ...state,
+                currentSelectedBar: action.payload,
             };
         },
         setCurrentCapsuleStyle(state, action) {

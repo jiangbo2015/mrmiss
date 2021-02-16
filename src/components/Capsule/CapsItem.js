@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Box, Flex, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import StyleItem from '@/components/StyleItem';
+import { InputNumber } from 'antd';
 
 import { filterImageUrl } from '@/utils/helper';
 
 // 胶囊组件
-export default ({ handleOpen, item }) => {
+export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) => {
     const { colorWithStyleImgs = [], code, price } = item;
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -24,6 +25,7 @@ export default ({ handleOpen, item }) => {
                 border: '1px solid transparent',
                 borderRadius: '10px',
                 cursor: 'pointer',
+                borderColor: isSelect ? '#4B4B4B' : 'transparent',
                 '&:hover': {
                     borderColor: '#4B4B4B',
                 },
@@ -48,19 +50,39 @@ export default ({ handleOpen, item }) => {
                     )}
                 </Flex>
 
-                <Box py="20px" css={{ fontSize: '12px' }}>
+                <Box
+                    py="20px"
+                    css={{ fontSize: '12px' }}
+                    onClick={e => {
+                        e.stopPropagation();
+                    }}
+                >
                     <Text>Ref.{item.code}</Text>
                     <Text mt="5px">Size.{item.size}</Text>
                     <Flex css={{ position: 'relative' }} mt="14px" justifyContent="center" alignItems="center">
-                        <Text
-                            css={{
-                                position: 'absolute',
-                                left: 0,
-                            }}
-                            fontSize="22px"
-                        >
-                            ¥{item.price}
-                        </Text>
+                        {onEditPrice ? (
+                            <InputNumber
+                                formatter={value => `¥${value}`}
+                                style={{
+                                    position: 'absolute',
+                                    left: 0,
+                                }}
+                                value={curChannelPrice}
+                                onChange={value => {
+                                    onEditPrice({ style: item._id, price: value });
+                                }}
+                            />
+                        ) : (
+                            <Text
+                                css={{
+                                    position: 'absolute',
+                                    left: 0,
+                                }}
+                                fontSize="22px"
+                            >
+                                ¥{curChannelPrice}
+                            </Text>
+                        )}
 
                         {/* 底部小圆点，可以传图片或者背景，具体看组件用法 */}
                         {colorWithStyleImgs.map((c = {}, i) => {

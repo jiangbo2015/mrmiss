@@ -31,8 +31,8 @@ const SwitcherComponent = ({
     onChange = () => {},
     dispatch,
     myAdminChannelList = [],
-    currentAdminChannel,
-    assigned,
+    currentAdminChannel = {},
+    assigned = {},
     refInstance,
 }) => {
     const ref = refInstance;
