@@ -5,6 +5,9 @@ export default defineConfig({
         type: 'none',
     },
     dynamicImport: {},
+    history: {
+        type: 'hash',
+    },
     define: {
         'process.env.API_URL': 'http://localhost:3001',
     },
