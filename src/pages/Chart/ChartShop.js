@@ -1,5 +1,12 @@
 import { Card } from 'antd';
-import { Axis, Chart, Coordinate, Interval, Line, Point, Tooltip } from 'bizcharts';
+import Axis from 'bizcharts/lib/components/Axis';
+import Chart from 'bizcharts/lib/components/Chart';
+import Coordinate from 'bizcharts/lib/components/Coordinate';
+import Tooltip from 'bizcharts/lib/components/Tooltip';
+import Line from 'bizcharts/lib/geometry/Line';
+import Interval from 'bizcharts/lib/geometry/Interval';
+import Point from 'bizcharts/lib/geometry/Point';
+// import {   Interval, Point } from 'bizcharts';
 import { connect } from 'dva';
 import { useEffect } from 'react';
 import { Box, Flex } from 'rebass/styled-components';
