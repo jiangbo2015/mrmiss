@@ -100,6 +100,7 @@ class Business extends React.Component {
                     visible={this.state.userOrderModal}
                     footer={false}
                     width="1200px"
+                    destroyOnClose
                     onCancel={() => {
                         this.setState({
                             ...this.state,

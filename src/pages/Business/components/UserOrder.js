@@ -7,12 +7,15 @@ import { ReactSVG } from 'react-svg';
 import { Flex } from 'rebass/styled-components';
 import OrderTableComponent from './OrderTableComponent';
 
-const OrderTable = ({ ownOrderList = {}, dispatch }) => {
+const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     useEffect(() => {
         dispatch({
             type: 'business/getOwnOrderList',
+            payload: {
+                userId,
+            },
         });
-    }, []);
+    }, [dispatch, userId]);
     const { order = [], capsuleOrder = [], shopOrder = [] } = ownOrderList;
 
     const data = [
