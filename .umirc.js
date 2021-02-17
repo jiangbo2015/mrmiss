@@ -6,14 +6,14 @@ export default defineConfig({
     },
     dynamicImport: {},
     define: {
-        'process.env.API_URL': 'http://localhost:3001/api',
+        'process.env.API_URL': 'http://localhost:3001',
     },
-    proxy: {
-        '/api': {
-            target: 'http://localhost:3001',
-            changeOrigin: true,
-        },
-    },
+    // proxy: {
+    //     '/api': {
+    //         target: 'http://localhost:3001',
+    //         changeOrigin: true,
+    //     },
+    // },
     theme: {
         'primary-color': '#191b1d',
         'table-selected-row-bg': '#F3F3D3',

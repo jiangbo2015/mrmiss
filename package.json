@@ -1,44 +1,43 @@
 {
-  "private": true,
-  "proxy": "http://localhost:3001",
-  "scripts": {
-    "dev": "umi dev",
-    "build-test": "UMI_ENV=test umi build",
-    "build-prod": "UMI_ENV=prod umi build",
-    "postinstall": "umi generate tmp",
-    "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
-  },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,jsx,less,md,json}": [
-      "prettier --write"
-    ]
-  },
-  "devDependencies": {
-    "@umijs/preset-react": "1.x",
-    "lint-staged": "^10.0.7",
-    "prettier": "^1.19.1",
-    "yorkie": "^2.0.0"
-  },
-  "dependencies": {
-    "@ant-design/icons": "^4.4.0",
-    "bizcharts": "^4.1.6",
-    "normalize.css": "^8.0.1",
-    "react": "^16.12.0",
-    "react-beautiful-dnd": "^13.0.0",
-    "react-dom": "^16.12.0",
-    "react-id-swiper": "^4.0.0",
-    "react-infinite-scroll-component": "^5.1.0",
-    "react-modal": "^3.12.1",
-    "react-responsive-carousel": "^3.2.11",
-    "react-slick": "^0.27.13",
-    "react-svg": "^11.2.1",
-    "rebass": "^4.0.7",
-    "slick-carousel": "^1.8.1",
-    "styled-components": "^5.2.1",
-    "swiper": "^5.4.5",
-    "umi": "^3.2.28"
-  }
+    "private": true,
+    "scripts": {
+        "dev": "umi dev",
+        "build-test": "UMI_ENV=test umi build",
+        "build-prod": "UMI_ENV=prod umi build",
+        "postinstall": "umi generate tmp",
+        "prettier": "prettier --write '**/*.{js,jsx,tsx,ts,less,md,json}'"
+    },
+    "gitHooks": {
+        "pre-commit": "lint-staged"
+    },
+    "lint-staged": {
+        "*.{js,jsx,less,md,json}": [
+            "prettier --write"
+        ]
+    },
+    "devDependencies": {
+        "@umijs/preset-react": "1.x",
+        "lint-staged": "^10.0.7",
+        "prettier": "^1.19.1",
+        "yorkie": "^2.0.0"
+    },
+    "dependencies": {
+        "@ant-design/icons": "^4.4.0",
+        "bizcharts": "^4.1.6",
+        "normalize.css": "^8.0.1",
+        "react": "^16.12.0",
+        "react-beautiful-dnd": "^13.0.0",
+        "react-dom": "^16.12.0",
+        "react-id-swiper": "^4.0.0",
+        "react-infinite-scroll-component": "^5.1.0",
+        "react-modal": "^3.12.1",
+        "react-responsive-carousel": "^3.2.11",
+        "react-slick": "^0.27.13",
+        "react-svg": "^11.2.1",
+        "rebass": "^4.0.7",
+        "slick-carousel": "^1.8.1",
+        "styled-components": "^5.2.1",
+        "swiper": "^5.4.5",
+        "umi": "^3.2.28"
+    }
 }
