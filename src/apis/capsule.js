@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export const getCapsuleList = data =>
-    request('/api/capsule/getList', {
+    request('/api/capsule/getVisibleList', {
         method: 'get',
         params: data,
     });

@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export const getBranchList = data =>
-    request('/api/branch/getList', {
+    request('/api/branch/getVisibleList', {
         method: 'get',
         params: data,
     });

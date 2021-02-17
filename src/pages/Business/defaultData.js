@@ -5,11 +5,7 @@ export default {
             selectFavorites: ['5f452e737d7bc77ebf3defd1'],
             channels: [
                 {
-                    categories: [
-                        '5ecc2f749bcdc97f0c028743',
-                        '5ecc2f749bcdc97f0c028742',
-                        '5f2052fa537bdb617a558856',
-                    ],
+                    categories: ['5ecc2f749bcdc97f0c028743', '5ecc2f749bcdc97f0c028742', '5f2052fa537bdb617a558856'],
                     _id: '5f452fa67d7bc77ebf3defd4',
                     code: '3',
                     name: '意大利1',
@@ -33,10 +29,7 @@ export default {
             selectFavorites: [],
             channels: [
                 {
-                    categories: [
-                        '5f2820a757ca0e7bac09cfce',
-                        '5f2820a757ca0e7bac09cfcd',
-                    ],
+                    categories: ['5f2820a757ca0e7bac09cfce', '5f2820a757ca0e7bac09cfcd'],
                     _id: '5f968c7f646d3d4670cb32e4',
                     code: '5',
                     name: 'California',
@@ -259,7 +252,7 @@ export default {
                     aliasName: '加州泳装',
                     channel: 'B',
                     channelInfo: '专供南部',
-                    channelEmpowereds: { B: 3, C: 1 },
+                    channelEmpowereds: { B: 1, C: 1 },
                 },
             ],
         },

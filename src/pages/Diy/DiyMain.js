@@ -4,7 +4,7 @@ import FlowerSelector from './FlowerSelector';
 import StyleDIYCenter from './StyleDIYCenter/index';
 import { ReactSVG } from 'react-svg';
 import { message } from 'antd';
-import IconHeart from '@/public/icons/icon-heart.svg';
+
 import IconUnHeart from '@/public/icons/icon-unheart.svg';
 import IconConfirm from '@/public/icons/icon-confirm.svg';
 import { connect } from 'dva';
@@ -30,15 +30,11 @@ const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColor
     const handleAssigned = async () => {
         if (collocationPattern === 'assign') {
             await dispatch({
-                type: 'diy/addFavorite',
+                type: 'channel/update',
                 payload: {
-                    goodId: currentGood._id,
-                    styleAndColor: [
-                        {
-                            styleId: currentStyle._id,
-                            colorIds: selectColorList.map(x => x._id),
-                        },
-                    ],
+                    assignedId: currentGood._id,
+                    codename: currentAdminChannel.codename,
+                    styles: selectStyleList.map(x => {}),
                 },
             });
             message.info('收藏成功');

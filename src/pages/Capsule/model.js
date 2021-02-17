@@ -65,11 +65,11 @@ export default {
                 // localStorage.token = data.token;
                 yield put({
                     type: 'setCapsuleList',
-                    payload: data.docs,
+                    payload: data,
                 });
                 yield put({
                     type: 'setCurrentCapsule',
-                    payload: data.docs[0],
+                    payload: data[0],
                 });
                 // history.push('/main');
             }

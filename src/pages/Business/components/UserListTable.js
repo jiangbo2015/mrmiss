@@ -18,6 +18,15 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
         });
     }, []);
 
+    const handleAssign = item => {
+        console.log('setEmpowerSingleCustomer(true)', item);
+        dispatch({
+            type: 'business/setCurrentCustomer',
+            payload: item,
+        });
+        setEmpowerSingleCustomer(true);
+    };
+
     const columns = [
         {
             title: '客户名称',
@@ -33,8 +42,13 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
             title: '客户权限',
             dataIndex: 'totalCount',
             key: 'totalCount',
-            render: () => (
-                <a style={{ textDecoration: 'underline' }} onClick={() => setEmpowerSingleCustomer(true)}>
+            render: (value, record) => (
+                <a
+                    style={{ textDecoration: 'underline' }}
+                    onClick={() => {
+                        handleAssign(record);
+                    }}
+                >
                     授权
                 </a>
             ),
