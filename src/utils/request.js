@@ -10,7 +10,7 @@ import { extend } from 'umi-request';
 
 const request = extend({
     // errorHandler,
-    // prefix: process.env.API_URL,
+    prefix: process.env.API_URL,
     // 默认错误处理
     // credentials: 'include', // 默认请求是否带上cookie
 });

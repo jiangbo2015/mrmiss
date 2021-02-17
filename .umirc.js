@@ -6,7 +6,7 @@ export default defineConfig({
     },
     dynamicImport: {},
     define: {
-        'process.env.API_URL': 'http://localhost:3000/api',
+        'process.env.API_URL': 'http://localhost:3001/api',
     },
     proxy: {
         '/api': {
