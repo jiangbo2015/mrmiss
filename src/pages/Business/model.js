@@ -54,6 +54,7 @@ export default {
                 });
             }
         },
+
         *addUser({ payload }, { call, put }) {
             const { success, message: msg } = yield call(api.addUser, payload);
             if (success) {

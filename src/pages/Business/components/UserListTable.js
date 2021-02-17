@@ -57,11 +57,15 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
             title: '客户订单',
             dataIndex: 'totalPrice',
             key: 'totalPrice',
-            render: () => (
+            render: (_, record) => (
                 <a
                     style={{ textDecoration: 'underline' }}
                     onClick={() => {
                         setUserOrderModal(true);
+                        dispatch({
+                            type: 'business/setCurrentCustomer',
+                            payload: record,
+                        });
                     }}
                 >
                     查看
@@ -90,7 +94,7 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
                     setUserOrderModal(false);
                 }}
             >
-                <UserOrder />
+                <UserOrder userId={currentCustomer._id} />
             </Modal>
             <Table
                 columns={columns}
