@@ -1,23 +1,25 @@
+import { Tabs } from 'antd';
 import React from 'react';
 import { Box } from 'rebass/styled-components';
-import { Tabs } from 'antd';
-import UserInfo from './components/UserInfo';
+import CapsuleOrder from './components/CapsuleOrder';
 // import UserInfo from '@/components/UserInfoFrom';
 import DIYOrder from './components/DIYOrder';
-import CapsuleOrder from './components/CapsuleOrder';
 import ShopOrder from './components/ShopOrder';
+import UserInfo from './components/UserInfo';
 
 const { TabPane } = Tabs;
 
 export default class Business extends React.Component {
-    callback(key) {
-        console.log(key);
-    }
+    callback = key => {
+        this.props.changeActiveKey(key);
+    };
+
     static getDerivedStateFromError(error) {
         // Update state so the next render will show the fallback UI.
         console.log('getDerivedStateFromError', error);
         return { hasError: true };
     }
+
     render() {
         return (
             <Box
@@ -39,8 +41,9 @@ export default class Business extends React.Component {
                 }}
             >
                 <Tabs
-                    defaultActiveKey="1"
-                    onChange={this.callback}
+                    // defaultActiveKey={String(activeKey) || '1'}
+                    activeKey={String(this.props.activeKey)}
+                    onTabClick={this.callback}
                     tabBarStyle={{ background: '#FDDB3A', justifyContent: 'space-around' }}
                 >
                     <TabPane

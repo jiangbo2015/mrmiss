@@ -1,4 +1,5 @@
 import * as api from '@/apis/user';
+import { history } from 'umi';
 
 export default {
     namespace: 'user',
@@ -63,13 +64,15 @@ export default {
                 console.log(e);
             }
         },
-        *logout() {
+        *logout(_, { call, put }) {
             yield put({
                 type: 'setInfo',
                 payload: {},
             });
             // 删除token
             localStorage.clear();
+            history.push('/');
+            window.location.reload();
         },
     },
 };

@@ -39,3 +39,15 @@ export const delOwnUser = data =>
         method: 'post',
         data,
     });
+
+export const getOwnOrderList = data =>
+    request('/api/user/getOwnOrderList', {
+        method: 'get',
+        params: data,
+    });
+
+export const delOwnOrder = data =>
+    request('/api/user/delOwnOrder', {
+        method: 'post',
+        data,
+    });

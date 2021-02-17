@@ -9,12 +9,19 @@ export default {
         currentCustomer: defaultData.currentCustomer,
         channelEmpowerInfo: defaultData.channelEmpowerInfo,
         currentCustomerEmpowerInfo: defaultData.currentCustomerEmpowerInfo,
+        ownOrderList: {},
     },
     reducers: {
         setCustomerList(state, action) {
             return {
                 ...state,
                 customerList: action.payload,
+            };
+        },
+        setOwnOrderList(state, action) {
+            return {
+                ...state,
+                ownOrderList: action.payload,
             };
         },
     },
@@ -36,6 +43,15 @@ export default {
                 // history.push('/main');
             }
         },
+        *getOwnOrderList({ payload }, { call, put }) {
+            const { data } = yield call(api.getOwnOrderList, payload);
+            if (data) {
+                yield put({
+                    type: 'setOwnOrderList',
+                    payload: data,
+                });
+            }
+        },
         *addUser({ payload }, { call, put }) {
             const { success, message: msg } = yield call(api.addUser, payload);
             if (success) {
@@ -53,6 +69,17 @@ export default {
             if (success) {
                 yield put({
                     type: 'getMyCustomer',
+                });
+                return true;
+            } else {
+                message.error(msg);
+            }
+        },
+        *delOwnOrder({ payload }, { call, put }) {
+            const { success, message: msg } = yield call(api.delOwnOrder, payload);
+            if (success) {
+                yield put({
+                    type: 'getOwnOrderList',
                 });
                 return true;
             } else {

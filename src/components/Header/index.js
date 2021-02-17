@@ -19,7 +19,7 @@ import { Flex } from 'rebass/styled-components';
 import { history, setLocale, useIntl } from 'umi';
 import './index.less';
 
-const MyMenu = ({ onOpenMyCenter, onChangePassword }) => (
+const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout }) => (
     <Menu>
         <Menu.Item
             onClick={() => {
@@ -33,6 +33,9 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword }) => (
             </a>
         </Menu.Item>
         <Menu.Item
+            onClick={() => {
+                onOpenMyCenter(2);
+            }}
             className="menuItemH"
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconDIYOrder} />}
         >
@@ -41,18 +44,24 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword }) => (
             </a>
         </Menu.Item>
         <Menu.Item
+            onClick={() => {
+                onOpenMyCenter(3);
+            }}
             className="menuItemH"
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconCapOrder} />}
         >
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+            <a target="_blank" rel="noopener noreferrer">
                 我的胶囊订单
             </a>
         </Menu.Item>
         <Menu.Item
+            onClick={() => {
+                onOpenMyCenter(4);
+            }}
             className="menuItemH"
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconShopOrder} />}
         >
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+            <a target="_blank" rel="noopener noreferrer">
                 我的网店订单
             </a>
         </Menu.Item>
@@ -61,8 +70,12 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword }) => (
                 业务管理
             </a>
         </Menu.Item>
-        <Menu.Item className="menuItemH" icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconBack} />}>
-            <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+        <Menu.Item
+            onClick={handleLogout}
+            className="menuItemH"
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconBack} />}
+        >
+            <a target="_blank" rel="noopener noreferrer">
                 退出登录
             </a>
         </Menu.Item>
@@ -83,6 +96,7 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
     const intl = useIntl();
     const [headBg, setHeadBg] = useState(false);
     const [myCenter, setMyCenter] = useState(false);
+    const [activeKey, setActiveKey] = useState(1);
     const [changePassword, setChangePassword] = useState(false);
     useEffect(() => {
         window.onscroll = () => {
@@ -118,6 +132,12 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
         });
     };
 
+    const handleLogout = () => {
+        dispatch({
+            type: 'user/logout',
+        });
+    };
+
     return (
         <header
             className="header"
@@ -136,7 +156,7 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                 }}
                 footer={null}
             >
-                <UserCenter />
+                <UserCenter activeKey={activeKey} changeActiveKey={key => setActiveKey(key)} />
             </Modal>
             <Modal
                 className="mm-yellow-modal"
@@ -279,12 +299,14 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                     <Dropdown
                         overlay={
                             <MyMenu
-                                onOpenMyCenter={() => {
+                                onOpenMyCenter={key => {
                                     setMyCenter(true);
+                                    setActiveKey(key);
                                 }}
                                 onChangePassword={() => {
                                     setChangePassword(true);
                                 }}
+                                handleLogout={handleLogout}
                             />
                         }
                         trigger={['click']}

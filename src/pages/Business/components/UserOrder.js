@@ -1,12 +1,36 @@
-import React from 'react';
-import { Flex } from 'rebass/styled-components';
-import { ReactSVG } from 'react-svg';
-import OrderTableComponent from './OrderTableComponent';
-import IconDownload from '@/public/icons/icon-download.svg';
 import IconDelete from '@/public/icons/icon-delete.svg';
+import IconDownload from '@/public/icons/icon-download.svg';
+import { Popconfirm } from 'antd';
 import { connect } from 'dva';
+import React, { useEffect } from 'react';
+import { ReactSVG } from 'react-svg';
+import { Flex } from 'rebass/styled-components';
+import OrderTableComponent from './OrderTableComponent';
 
-const OrderTable = ({ orderList = [] }) => {
+const OrderTable = ({ ownOrderList = {}, dispatch }) => {
+    useEffect(() => {
+        dispatch({
+            type: 'business/getOwnOrderList',
+        });
+    }, []);
+    const { order = [], capsuleOrder = [], shopOrder = [] } = ownOrderList;
+
+    const data = [
+        ...order.map(x => ({ ...x, orderType: 'order' })),
+        ...capsuleOrder.map(x => ({ ...x, orderType: 'capsule' })),
+        ...shopOrder.map(x => ({ ...x, orderType: 'shop' })),
+    ];
+
+    const handleDelete = record => () => {
+        dispatch({
+            type: 'business/delOwnOrder',
+            payload: {
+                orderType: record.orderType,
+                _id: record._id,
+            },
+        });
+    };
+
     const columns = [
         {
             title: '订单编号',
@@ -20,13 +44,17 @@ const OrderTable = ({ orderList = [] }) => {
         },
         {
             title: '总数量',
-            dataIndex: 'totalCount',
+            dataIndex: 'orderData',
             key: 'totalCount',
+            render: (text, record) =>
+                record.orderType === 'shop' ? record.sumCount : text?.reduce((left, right) => left + right.rowTotal, 0),
         },
         {
             title: '总金额',
-            dataIndex: 'totalPrice',
+            dataIndex: 'orderData',
             key: 'totalPrice',
+            render: (text, record) =>
+                record.orderType === 'shop' ? record.sumPrice : text?.reduce((left, right) => left + right.rowTotalPrice, 0),
         },
         {
             title: '下载',
@@ -42,23 +70,21 @@ const OrderTable = ({ orderList = [] }) => {
             title: '删除',
             dataIndex: 'delete',
             key: 'delete',
-            render: () => (
-                <Flex p="20px" alignItems="center" justifyContent="center">
-                    <ReactSVG src={IconDelete} style={{ width: '18px' }} />
-                </Flex>
+            render: (_, record) => (
+                <Popconfirm title="确认要删除吗" onConfirm={handleDelete(record)}>
+                    <Flex p="20px" alignItems="center" justifyContent="center">
+                        <ReactSVG src={IconDelete} style={{ width: '18px' }} />
+                    </Flex>
+                </Popconfirm>
             ),
         },
     ];
-    return <OrderTableComponent columns={columns} dataSource={orderList} />;
+    return <OrderTableComponent columns={columns} dataSource={data} />;
 };
 
-export default connect(({ usercenter = {} }) => {
+export default connect(state => {
     // console.log('props', props);
     return {
-        orderList: usercenter.userOrder.diy,
+        ownOrderList: state.business.ownOrderList,
     };
 })(OrderTable);
-
-// export default connect(({ usercenter }) => ({
-//     orderList: usercenter.userOrder.diy,
-// }))(OrderTable);
