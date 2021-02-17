@@ -183,7 +183,10 @@ class Business extends React.Component {
                             onSearch={this.handleSearch}
                         />
                     </Flex>
-                    <UserListTable updateSelectedRowKeys={this.updateSelectedRowKeys} />
+                    <UserListTable
+                        updateSelectedRowKeys={this.updateSelectedRowKeys}
+                        selectedRowKeys={this.state.selectedRowKeys}
+                    />
                 </Box>
             </Layout>
         );

@@ -88,5 +88,16 @@ export default {
                 message.error(msg);
             }
         },
+        *updateUsers({ payload }, { call, put }) {
+            const { success, message: msg } = yield call(api.updateUsers, payload);
+            if (success) {
+                yield put({
+                    type: 'getMyCustomer',
+                });
+                return true;
+            } else {
+                message.error(msg);
+            }
+        },
     },
 };

@@ -28,6 +28,12 @@ export const addUser = data =>
         data,
     });
 
+export const updateUsers = data =>
+    request('/api/user/updateUsers', {
+        method: 'post',
+        data,
+    });
+
 export const getCustomerUser = data =>
     request('/api/user/getOwnList', {
         method: 'get',
