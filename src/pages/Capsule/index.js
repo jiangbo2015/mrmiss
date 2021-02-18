@@ -27,7 +27,7 @@ import IconCapsuleCar from '@/public/icons/icon-capsule-car.svg';
 const Capsule = ({
     capsuleList,
     dispatch,
-    currentCapsule,
+    currentCapsule = {},
     currentAdminChannel = { capsuleStyles: [] },
     capsuleStyleList = { docs: [] },
 }) => {

@@ -19,7 +19,7 @@ import { Flex } from 'rebass/styled-components';
 import { history, setLocale, useIntl } from 'umi';
 import './index.less';
 
-const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout }) => (
+const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd }) => (
     <Menu>
         <Menu.Item
             onClick={() => {
@@ -65,11 +65,17 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout }) => (
                 我的网店订单
             </a>
         </Menu.Item>
-        <Menu.Item className="menuItemH" icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconManage} />}>
-            <a target="_blank" rel="noopener noreferrer" href="/business">
-                业务管理
-            </a>
-        </Menu.Item>
+        {businessUserd ? (
+            <Menu.Item
+                className="menuItemH"
+                icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconManage} />}
+            >
+                <a target="_blank" rel="noopener noreferrer" href="/business">
+                    业务管理
+                </a>
+            </Menu.Item>
+        ) : null}
+
         <Menu.Item
             onClick={handleLogout}
             className="menuItemH"
@@ -248,42 +254,54 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                 </div>
             </div>
             <div>
-                <ReactSVG
-                    src={headerBgColor !== '#fff' ? WhiteChartIcon : ChartIcon}
-                    style={{ width: '32px' }}
-                    onClick={() => {
-                        history.push('/chart');
-                    }}
-                />
+                {currentUser._id && currentUser.innerDataUserd ? (
+                    <ReactSVG
+                        src={headerBgColor !== '#fff' ? WhiteChartIcon : ChartIcon}
+                        style={{ width: '32px' }}
+                        onClick={() => {
+                            history.push('/chart');
+                        }}
+                    />
+                ) : null}
             </div>
             <div style={{ display: 'flex' }}>
-                <div
-                    className="menuItem"
-                    onClick={() => {
-                        history.push('/diy');
-                    }}
-                >
-                    {intl.formatMessage({ id: 'diy', defaultMessage: '定制' })}
-                </div>
-                <div
-                    className="menuItem"
-                    onClick={() => {
-                        history.push('/capsule');
-                    }}
-                >
-                    {intl.formatMessage({
-                        id: 'capsule',
-                        defaultMessage: '胶囊系列',
-                    })}
-                </div>
-                <div
-                    className="menuItem"
-                    onClick={() => {
-                        history.push('/shop');
-                    }}
-                >
-                    {intl.formatMessage({ id: 'shop', defaultMessage: '网店' })}
-                </div>
+                {currentUser._id ? (
+                    <>
+                        {currentUser.goods.length ? (
+                            <div
+                                className="menuItem"
+                                onClick={() => {
+                                    history.push('/diy');
+                                }}
+                            >
+                                {intl.formatMessage({ id: 'diy', defaultMessage: '定制' })}
+                            </div>
+                        ) : null}
+                        {currentUser.capsules.length ? (
+                            <div
+                                className="menuItem"
+                                onClick={() => {
+                                    history.push('/capsule');
+                                }}
+                            >
+                                {intl.formatMessage({
+                                    id: 'capsule',
+                                    defaultMessage: '胶囊系列',
+                                })}
+                            </div>
+                        ) : null}
+                        {currentUser.branchs.length ? (
+                            <div
+                                className="menuItem"
+                                onClick={() => {
+                                    history.push('/shop');
+                                }}
+                            >
+                                {intl.formatMessage({ id: 'shop', defaultMessage: '网店' })}
+                            </div>
+                        ) : null}
+                    </>
+                ) : null}
                 {!currentUser._id ? (
                     <div className="menuItem" style={{ display: 'flex', alignItems: 'flex-end' }}>
                         <ReactSVG src={IconUserSign} style={{ width: '24px', height: '24px', paddingRight: '4px' }} />
@@ -307,6 +325,7 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                                     setChangePassword(true);
                                 }}
                                 handleLogout={handleLogout}
+                                businessUserd={currentUser.businessUserd}
                             />
                         }
                         trigger={['click']}

@@ -9,6 +9,7 @@ import React from 'react';
 import { Box, Flex } from 'rebass/styled-components';
 import UserListTable from './components/UserListTable';
 import UserOrder from './components/UserOrder';
+import UserEmpower from './components/UserEmpower';
 
 class Business extends React.Component {
     state = {
@@ -16,14 +17,16 @@ class Business extends React.Component {
         userOrderModal: false,
         userAddModal: false,
         selectedRowKeys: [],
+        selectedRows: [],
     };
     callback(key) {
         console.log(key);
     }
 
-    updateSelectedRowKeys = selectedRowKeys => {
+    updateSelectedRowKeys = (selectedRowKeys, selectedRows) => {
         this.setState({
             selectedRowKeys,
+            selectedRows,
         });
     };
 
@@ -66,10 +69,12 @@ class Business extends React.Component {
     };
 
     render() {
+        const { currentUser = {} } = this.props;
+        const { lastLevel } = currentUser;
         return (
             <Layout>
                 <Modal
-                    title="新增客户"
+                    title={`新增${lastLevel}`}
                     visible={this.state.userAddModal}
                     footer={false}
                     width="1200px"
@@ -82,7 +87,7 @@ class Business extends React.Component {
                 >
                     <UserInfoFrom onSumbit={this.handleSubmit} isAdd />
                 </Modal>
-                {/* <Modal
+                <Modal
                     visible={this.state.channelEmpowerModal}
                     footer={false}
                     width="1200px"
@@ -93,10 +98,10 @@ class Business extends React.Component {
                         });
                     }}
                 >
-                    <ChannelEmpower />
-                </Modal> */}
+                    <UserEmpower batch selectedRows={this.state.selectedRows} />
+                </Modal>
                 <Modal
-                    title="客户订单管理"
+                    title={`${lastLevel}订单管理`}
                     visible={this.state.userOrderModal}
                     footer={false}
                     width="1200px"
@@ -139,7 +144,7 @@ class Business extends React.Component {
                         }}
                         style={{ margin: '0 50px' }}
                     >
-                        新增客户
+                        {`新增${lastLevel}`}
                     </Button>
                     {/* <Button
                         type="primary"
@@ -164,26 +169,54 @@ class Business extends React.Component {
                             });
                         }}
                     >
-                        客户订单管理
+                        {`${lastLevel}订单管理`}
                     </Button>
                 </Flex>
                 <Box p="20px">
-                    <Flex p="30px 0" alignItems="center">
-                        <Popconfirm title="确认删除吗？" onConfirm={this.handleDelete}>
-                            <Button
-                                shape="circle"
-                                size="large"
-                                icon={<DeleteOutlined />}
-                                style={{ backgroundColor: '#D2D2D2' }}
+                    <Flex justifyContent="space-between" p="30px 0">
+                        <Flex alignItems="center">
+                            <Popconfirm title="确认删除吗？" onConfirm={this.handleDelete}>
+                                <Button
+                                    disabled={this.state.selectedRowKeys.length < 1}
+                                    shape="circle"
+                                    size="large"
+                                    icon={<DeleteOutlined />}
+                                    style={{ backgroundColor: '#D2D2D2' }}
+                                />
+                            </Popconfirm>
+                            <SearchInput
+                                mode="white"
+                                placeholder="SEARCH"
+                                style={{ width: '200px', marginLeft: '30px' }}
+                                onSearch={this.handleSearch}
                             />
-                        </Popconfirm>
-                        <SearchInput
-                            mode="white"
-                            placeholder="SEARCH"
-                            style={{ width: '200px', marginLeft: '30px' }}
-                            onSearch={this.handleSearch}
-                        />
+                        </Flex>
+                        <Button
+                            disabled={this.state.selectedRowKeys.length < 1}
+                            type="primary"
+                            onClick={() => {
+                                this.props.dispatch({
+                                    type: 'business/setCurrentCustomer',
+                                    payload: {
+                                        channels: [],
+                                        goods: [],
+                                        capsules: [],
+                                        branchs: [],
+                                        businessUserd: false,
+                                        channelEmpowerUserd: false,
+                                        innerDataUserd: false,
+                                    },
+                                });
+                                this.setState({
+                                    ...this.state,
+                                    channelEmpowerModal: true,
+                                });
+                            }}
+                        >
+                            批量授权
+                        </Button>
                     </Flex>
+
                     <UserListTable
                         updateSelectedRowKeys={this.updateSelectedRowKeys}
                         selectedRowKeys={this.state.selectedRowKeys}
@@ -194,4 +227,4 @@ class Business extends React.Component {
     }
 }
 
-export default connect()(Business);
+export default connect(({ user }) => ({ currentUser: user.info }))(Business);

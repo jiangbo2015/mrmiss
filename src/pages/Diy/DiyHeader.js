@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import { Flex, Box } from 'rebass/styled-components';
 import { ReactSVG } from 'react-svg';
 import CirCleArrow from '@/public/icons/circle_arrow.svg';
-import styles from './index.less';
+// import styles from './index.less';
 
 import Switcher from '@/components/Capsule/Switcher';
 
@@ -23,7 +23,7 @@ const ClassifyItem = ({ children, isSelected, ...props }) => (
     </div>
 );
 
-const DiyHeader = ({ dispatch, goodsList = [], currentGood = {} }) => {
+const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminChannel }) => {
     const ref = useRef(null);
     useEffect(() => {
         dispatch({
@@ -32,12 +32,45 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {} }) => {
     }, []);
 
     useEffect(() => {
+        const { codename, styles = [], flowerColors = [], plainColors = [] } = currentAdminChannel;
+        if (codename !== 'A') {
+            console.log(currentAdminChannel);
+            dispatch({
+                type: 'diy/setCollocationPattern',
+                payload: 'assign',
+            });
+            dispatch({
+                type: 'diy/batchSetSelectStyleList',
+                payload: styles,
+            });
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors, flowerColors },
+            });
+        } else {
+            dispatch({
+                type: 'diy/setCollocationPattern',
+                payload: 'multiple',
+            });
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors: [], flowerColors: [] },
+            });
+            dispatch({
+                type: 'diy/batchSetSelectStyleList',
+                payload: [],
+            });
+        }
+    }, [currentAdminChannel]);
+
+    useEffect(() => {
         if (goodsList.length > 0) {
-            handleSelectGood(goodsList[Math.floor(goodsList.length / 2)]);
+            handleSelectGood(goodsList[0]);
         }
     }, [goodsList]);
 
     const handleSelectGood = good => {
+        console.log('setCurrentGood');
         dispatch({
             type: 'diy/setCurrentGood',
             payload: good,
@@ -67,7 +100,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {} }) => {
             }}
             px="35px"
         >
-            <Box />
+            <Box width="256px" />
             <Flex pt="20px" flexDirection="column" alignItems="center">
                 <Flex width="50px" justifyContent="space-between">
                     <ReactSVG
@@ -112,4 +145,8 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {} }) => {
     );
 };
 
-export default connect(({ diy = {} }) => ({ goodsList: diy.goodsList, currentGood: diy.currentGood }))(DiyHeader);
+export default connect(({ diy = {}, channel = {} }) => ({
+    goodsList: diy.goodsList,
+    currentGood: diy.currentGood,
+    currentAdminChannel: channel.currentAdminChannel,
+}))(DiyHeader);

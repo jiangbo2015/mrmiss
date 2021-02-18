@@ -6,7 +6,7 @@ import Swiper from 'react-id-swiper';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
-// import InfiniteScroll from 'react-infinite-scroll-component';
+import SingleStyleSelector from './SingleStyleSelector';
 
 import ArrowIcon from '@/public/icons/icon-arrow.svg';
 import ExpandIcon from '@/public/icons/icon-expand.svg';
@@ -30,15 +30,39 @@ const App = ({
     styleList = { '': [] },
     dispatch,
     currentStyle = {},
+    currentStyle1 = {},
     selectColorList = [],
     collocationBg,
     currentGood = { category: [] },
     currentGoodCategory = '',
+    currentStyleRegion,
+    selectStyleList = [],
+    styleQueryChangeKey,
 }) => {
     let docs = [];
+    let docs1 = [];
+    let categoryObj = currentGood.category.find(x => x._id === currentGoodCategory);
     if (styleList[currentGoodCategory]) {
-        docs = styleList[currentGoodCategory];
+        //选择的放在前面
+        docs =
+            selectStyleList.length > 0
+                ? [
+                      ...styleList[currentGoodCategory].filter(x => x.isSelected),
+                      ...styleList[currentGoodCategory].filter(x => !x.isSelected),
+                  ]
+                : styleList[currentGoodCategory];
+
         // console.log('docs', docs);
+    }
+    if (categoryObj && categoryObj.name === '分体') {
+        const top = currentGood.category.find(x => x.name === '单衣');
+        if (top) {
+            docs = styleList[top._id];
+        }
+        const bottom = currentGood.category.find(x => x.name === '单裤');
+        if (bottom) {
+            docs1 = styleList[bottom._id];
+        }
     }
     const params = {
         scrollbar: {
@@ -62,12 +86,39 @@ const App = ({
             type: 'diy/setCollocationPattern',
             payload: pattern,
         });
+        dispatch({
+            type: 'diy/batchSetSelectColorList',
+            payload: { plainColors: [], flowerColors: [] },
+        });
+        dispatch({
+            type: 'diy/batchSetSelectStyleList',
+            payload: [],
+        });
     };
     useEffect(() => {
-        if (styleList[currentGoodCategory] && styleList[currentGoodCategory].length > 0) {
+        if (docs && docs.length > 0) {
             dispatch({
                 type: 'diy/setCurrentStyle',
-                payload: styleList[currentGoodCategory][0],
+                payload: docs[0],
+            });
+        } else {
+            {
+                dispatch({
+                    type: 'diy/setCurrentStyle',
+                    payload: {},
+                });
+            }
+        }
+
+        if (docs1 && docs1.length > 0) {
+            dispatch({
+                type: 'diy/setCurrentStyle1',
+                payload: docs1[0],
+            });
+        } else {
+            dispatch({
+                type: 'diy/setCurrentStyle1',
+                payload: {},
             });
         }
     }, [styleList, currentGoodCategory]);
@@ -82,6 +133,21 @@ const App = ({
         dispatch({
             type: 'diy/setCurrentStyle',
             payload: style,
+        });
+    };
+
+    const handleSelectStyle1 = style => {
+        dispatch({
+            type: 'diy/setCurrentStyle1',
+            payload: style,
+        });
+    };
+
+    const handleSetCurrentStyleRegion = val => {
+        console.log('handleSetCurrentStyleRegion', val);
+        dispatch({
+            type: 'diy/setCurrentStyleRegion',
+            payload: val + 1,
         });
     };
 
@@ -124,7 +190,24 @@ const App = ({
                         }}
                     />
                 </div>
-                <SearchInput style={{ width: '180px' }} placeholder="SEARCH STYLE" />
+                <SearchInput
+                    style={{ width: '180px' }}
+                    placeholder="SEARCH STYLE"
+                    value={styleQueryChangeKey}
+                    onSearch={e => {
+                        dispatch({
+                            type: 'diy/setStyleQueryKey',
+                            payload: e.target.value,
+                        });
+                    }}
+                    onChange={e => {
+                        // styleQueryChangeKey
+                        dispatch({
+                            type: 'diy/setStyleQueryChangeKey',
+                            payload: e.target.value,
+                        });
+                    }}
+                />
                 <div style={{ display: 'flex' }}>
                     <ReactSVG
                         src={ExpandIcon}
@@ -150,90 +233,35 @@ const App = ({
                     />
                 </div>
             </div>
-
-            <div style={{ width: '300px' }}>
-                <Swiper
-                    {...params}
-                    style={{
-                        margin: '0 auto',
-                    }}
-                >
-                    <div
-                        style={{
-                            width: '300px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <StyleItem
-                            // width="170px"
-                            width={`${(currentStyle.styleSize / 27) * 170}px`}
-                            styleId={`single-${currentStyle._id}`}
-                            colors={selectColorList}
-                            {...currentStyle}
-                            styleId={currentStyle._id}
-                        />
-                    </div>
-                    <div
-                        style={{
-                            width: '300px',
-                            display: 'flex',
-                            justifyContent: 'center',
-                        }}
-                    >
-                        <StyleItem
-                            width={`${(currentStyle.styleBackSize / 27) * 170}px`}
-                            colors={selectColorList}
-                            {...currentStyle}
-                            styleId={`single-${currentStyle._id}`}
-                            svgUrl={currentStyle.svgUrlBack}
-                            shadowUrl={currentStyle.shadowUrlBack}
-                        />
-                    </div>
-                </Swiper>
-            </div>
-
-            <div
-                style={{
-                    display: 'flex',
-                    overflowX: 'scroll',
-                    alignItems: 'center',
-                    width: '100%',
-                    backgroundColor: '#1C1C1C',
-                    paddingTop: '12px',
-                }}
-            >
-                {docs.map((d, index) => (
-                    <StyleItem
-                        style={{
-                            margin: '0 100px 0 10px',
-                        }}
-                        width={`${(d.styleSize / 27) * 100}px`}
-                        key={`${d._id}-${index}-${Math.random() * 1000000}`}
-                        {...d}
-                        onClick={() => {
-                            handleSelectStyle(d);
-                        }}
+            {categoryObj && categoryObj.name === '分体' ? (
+                <>
+                    <SingleStyleSelector
+                        currentStyle={currentStyle}
+                        selectColorList={selectColorList}
+                        currentStyleRegion={currentStyleRegion}
+                        docs={docs}
+                        handleSelectStyle={handleSelectStyle}
+                        handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
                     />
-                ))}
-                {/* <ReactSVG
-                    src={ArrowIcon}
-                    className={styles.nextIcon}
-                    style={{
-                        width: '18px',
-                        height: '18px',
-                        transform: 'rotateZ(180deg)',
-                    }}
+                    <SingleStyleSelector
+                        currentStyle={currentStyle1}
+                        selectColorList={selectColorList}
+                        currentStyleRegion={currentStyleRegion}
+                        docs={docs1}
+                        handleSelectStyle={handleSelectStyle1}
+                        handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
+                    />
+                </>
+            ) : (
+                <SingleStyleSelector
+                    currentStyle={currentStyle}
+                    selectColorList={selectColorList}
+                    currentStyleRegion={currentStyleRegion}
+                    docs={docs}
+                    handleSelectStyle={handleSelectStyle}
+                    handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
                 />
-                <ReactSVG
-                    src={ArrowIcon}
-                    className={styles.nextIcon}
-                    style={{
-                        width: '18px',
-                        height: '18px',
-                    }}
-                /> */}
-            </div>
+            )}
         </div>
     );
 };
@@ -241,9 +269,14 @@ const App = ({
 export default connect(({ diy }) => ({
     styleList: diy.styleList,
     currentStyle: diy.currentStyle,
+    currentStyle1: diy.currentStyle1,
     selectColorList: diy.selectColorList,
+    selectStyleList: diy.selectStyleList,
     collocationBg: diy.collocationBg,
     collocationPattern: diy.collocationPattern,
     currentGood: diy.currentGood,
     currentGoodCategory: diy.currentGoodCategory,
+    currentStyleRegion: diy.currentStyleRegion,
+    styleQueryKey: diy.styleQueryKey,
+    styleQueryChangeKey: diy.styleQueryChangeKey,
 }))(App);

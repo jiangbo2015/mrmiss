@@ -8,10 +8,10 @@ import React, { useEffect, useState } from 'react';
 import UserEmpower from './UserEmpower';
 import UserOrder from './UserOrder';
 
-const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSelectedRowKeys, ...props }) => {
+const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispatch, updateSelectedRowKeys, ...props }) => {
     const [empowerSingleCustomer, setEmpowerSingleCustomer] = useState(false);
     const [userOrderModal, setUserOrderModal] = useState(false);
-
+    const { lastLevel } = currentUser;
     useEffect(() => {
         dispatch({
             type: 'business/getMyCustomer',
@@ -29,17 +29,17 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
 
     const columns = [
         {
-            title: '客户名称',
+            title: `${lastLevel}名称`,
             dataIndex: 'name',
             key: 'name',
         },
         {
-            title: '客户税号',
+            title: `${lastLevel}税号`,
             dataIndex: 'VATNo',
             key: 'VATNo',
         },
         {
-            title: '客户权限',
+            title: `${lastLevel}权限`,
             dataIndex: 'totalCount',
             key: 'totalCount',
             render: (value, record) => (
@@ -54,7 +54,7 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
             ),
         },
         {
-            title: '客户订单',
+            title: `${lastLevel}订单`,
             dataIndex: 'totalPrice',
             key: 'totalPrice',
             render: (_, record) => (
@@ -103,11 +103,10 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
                 rowSelection={{
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
-                        updateSelectedRowKeys(selectedRowKeys);
-                        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
+                        updateSelectedRowKeys(selectedRowKeys, selectedRows);
+                        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
-                        console.log(record);
                         return {
                             disabled: record.name === 'Disabled User',
                             orderNo: record.orderNo,
@@ -119,11 +118,12 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, updateSel
     );
 };
 
-export default connect(({ business = {} }) => {
+export default connect(({ business = {}, user }) => {
     // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,
         customerList: business.customerList,
+        currentUser: user.info,
     };
 })(UserListTable);
 

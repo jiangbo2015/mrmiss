@@ -62,16 +62,14 @@ export default props => {
 
                             if (onSetEditSvgGroupIndex) {
                                 let jj = j;
-
                                 block.onclick = e => {
                                     e.stopPropagation();
 
                                     onSetEditSvgGroupIndex(jj);
                                 };
-
                                 if (curStylesEditGroupIndex === j && showGroupStroke) {
                                     block.style.stroke = 'khaki';
-                                    block.style.strokeWidth = '8px';
+                                    block.style.strokeWidth = '16px';
                                 }
                             }
                             // svg.children[i].setAttribute('index', j);

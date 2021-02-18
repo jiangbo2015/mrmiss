@@ -37,6 +37,7 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
     }, [queryKey, currentSelectedBar]);
 
     const handleLoadMore = page => {
+        console.log('handleLoadMore', page);
         if (currentBranch._id) {
             let payload = { branch: currentBranch._id, page: page ? page : shopStyleList.page + 1 };
             if (queryKey) {

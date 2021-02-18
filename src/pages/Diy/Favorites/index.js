@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { message } from 'antd';
+import { message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
 import { Flex, Box } from 'rebass/styled-components';
@@ -72,6 +72,20 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
         dispatch({
             type: 'diy/deleteFavorite',
             payload: { _id: favorite._id },
+        });
+    };
+    const handleToggleTime = async () => {
+        window.timeOrder = !window.timeOrder;
+        console.log('window.timeOrder', window.timeOrder);
+
+        const nfavoriteArr = favoriteArr.sort((a, b) => {
+            return window.timeOrder
+                ? new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
+                : new Date(a.updateTime).getTime() - new Date(b.updateTime).getTime();
+        });
+        dispatch({
+            type: 'diy/setFavoriteArr',
+            payload: [...nfavoriteArr],
         });
     };
     return (
@@ -166,12 +180,13 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     }}
                 >
                     <Select
-                        style={{ marginRight: '28px' }}
-                        options={[
-                            { label: 'Time', value: 'time' },
-                            { label: 'Color', value: 'color' },
-                        ]}
+                        style={{ marginRight: '20px' }}
+                        onClick={handleToggleTime}
+                        value="Time"
+                        disabled
+                        options={[{ label: 'Time', value: 'time' }]}
                     />
+
                     <Select
                         value={favoritePattern}
                         onChange={val => {
@@ -312,17 +327,23 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                                     handleBig(favorite);
                                 }}
                             />
-                            <ReactSVG
-                                style={{
-                                    width: '14px',
-                                    height: '14px',
-                                }}
-                                src={DelIcon}
-                                onClick={e => {
-                                    e.stopPropagation();
+                            <Popconfirm
+                                title="确认删除吗？"
+                                onConfirm={() => {
                                     handleDel(favorite);
                                 }}
-                            />
+                            >
+                                <ReactSVG
+                                    style={{
+                                        width: '14px',
+                                        height: '14px',
+                                    }}
+                                    src={DelIcon}
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                    }}
+                                />
+                            </Popconfirm>
                         </div>
                     </div>
                 ))}

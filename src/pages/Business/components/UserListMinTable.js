@@ -9,10 +9,11 @@ import { connect } from 'dva';
 import SearchInput from '@/components/SearchInput';
 import { SaveOutlined } from '@ant-design/icons';
 
-const UserListTable = ({ customerList = [], currentCustomer, dispatch }) => {
+const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUser }) => {
     const [queryKey, setQueryKey] = useState('');
     const [selectRowKeys, setSelectRowKeys] = useState([]);
     const [findCustomerList, setFindCustomerList] = useState([]);
+    const { lastLevel } = currentUser;
     useEffect(() => {
         if (queryKey) {
             setFindCustomerList(customerList.filter(x => x.name.indexOf(queryKey) >= 0 && x._id !== currentCustomer._id));
@@ -42,12 +43,12 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch }) => {
     };
     const columns = [
         {
-            title: '客户名称',
+            title: `${lastLevel}名称`,
             dataIndex: 'name',
             key: 'name',
         },
         {
-            title: '客户税号',
+            title: `${lastLevel}税号`,
             dataIndex: 'VATNo',
             key: 'VATNo',
         },
@@ -88,11 +89,12 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch }) => {
     );
 };
 
-export default connect(({ business = {} }) => {
+export default connect(({ business = {}, user }) => {
     // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,
         customerList: business.customerList,
+        currentUser: user.info,
     };
 })(UserListTable);
 

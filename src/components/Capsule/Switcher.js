@@ -33,6 +33,7 @@ const SwitcherComponent = ({
     myAdminChannelList = [],
     currentAdminChannel = {},
     assigned = {},
+    currentUser,
     refInstance,
 }) => {
     const ref = refInstance;
@@ -48,21 +49,21 @@ const SwitcherComponent = ({
         },
         on: {
             slideChange: () => {
-                console.log('ABC[(ref.current.swiper.realIndex + 1) % 10]', ABC[(ref.current.swiper.realIndex + 1) % 10]);
+                // console.log('ABC[(ref.current.swiper.realIndex + 1) % 10]', ABC[(ref.current.swiper.realIndex + 1) % 10]);
                 setCurABC(ABC[(ref.current.swiper.realIndex + 1) % 10]);
             },
         },
     };
     const [editChannelMark, setEditChannelMark] = useState(false);
     useEffect(() => {
-        let codename = curABC;
-
-        const temp = myAdminChannelList.find(x => x.codename === codename);
-        console.log('temp', temp);
-        dispatch({
-            type: 'channel/setCurrentChannel',
-            payload: temp ? temp : { codename, assignedId: assigned._id, remark: '' },
-        });
+        if (assigned && assigned._id) {
+            let codename = curABC;
+            const temp = myAdminChannelList.find(x => x.codename === codename);
+            dispatch({
+                type: 'channel/setCurrentChannel',
+                payload: temp ? temp : { codename, assignedId: assigned._id, remark: '' },
+            });
+        }
     }, [myAdminChannelList, curABC]);
     useEffect(() => {
         console.log('useEffect assigned');
@@ -70,12 +71,14 @@ const SwitcherComponent = ({
             console.log('useEffect assigned');
             ref.current.swiper.slideTo(3);
         }
-        dispatch({
-            type: 'channel/fetchMyAdminChannelList',
-            payload: {
-                assignedId: assigned._id,
-            },
-        });
+        if (assigned && assigned._id) {
+            dispatch({
+                type: 'channel/fetchMyAdminChannelList',
+                payload: {
+                    assignedId: assigned._id,
+                },
+            });
+        }
     }, [assigned]);
     const goNext = () => {
         if (ref.current !== null && ref.current.swiper !== null) {
@@ -96,6 +99,7 @@ const SwitcherComponent = ({
         });
     };
 
+    // if (!currentUser.channelEmpowerUserd) return <Flex width="256px" />;
     return (
         <Flex className="switcher">
             <Arrow onClick={goPrev} />
@@ -147,8 +151,9 @@ const SwitcherComponent = ({
         </Flex>
     );
 };
-const Switcher = connect(({ channel }) => ({
+const Switcher = connect(({ channel, user }) => ({
     myAdminChannelList: channel.myAdminChannelList,
     currentAdminChannel: channel.currentAdminChannel,
+    currentUser: user.info,
 }))(SwitcherComponent);
 export default forwardRef((props, ref) => <Switcher {...props} refInstance={ref} />); //connect(() => ({}))(Switcher);

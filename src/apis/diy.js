@@ -46,7 +46,11 @@ export const addFavorite = data =>
         method: 'post',
         data,
     });
-
+export const addFavorites = data =>
+    request('/api/user/addFavorites', {
+        method: 'post',
+        data,
+    });
 export const updateFavorite = data =>
     request('/api/user/updateFavorite', {
         method: 'post',

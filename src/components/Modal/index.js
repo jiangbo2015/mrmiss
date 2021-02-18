@@ -5,7 +5,6 @@ import { Modal } from 'antd';
 
 export default ({ style = {}, ...props }) => {
     return (
-        // <div style={{ background: '#fff' }}>
         <Modal
             style={{
                 background: '#fff',
@@ -14,7 +13,7 @@ export default ({ style = {}, ...props }) => {
                 ...style,
             }}
             {...props}
+            destroyOnClose
         />
-        // </div>
     );
 };

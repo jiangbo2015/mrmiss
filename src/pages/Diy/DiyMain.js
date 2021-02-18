@@ -8,22 +8,61 @@ import { message } from 'antd';
 import IconUnHeart from '@/public/icons/icon-unheart.svg';
 import IconConfirm from '@/public/icons/icon-confirm.svg';
 import { connect } from 'dva';
-const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColorList, collocationPattern }) => {
+const App = ({
+    dispatch,
+    currentGood,
+    currentStyle,
+    currentStyle1,
+    selectStyleList,
+    selectColorList,
+    collocationPattern,
+    currentAdminChannel,
+    currentUser,
+}) => {
     const handleAddFavorite = async () => {
-        if (collocationPattern === 'single') {
+        if (collocationPattern === 'single' || collocationPattern === 'expand') {
+            let payload = {
+                goodId: currentGood._id,
+                styleAndColor: [],
+            };
+            if (currentStyle._id) {
+                payload.styleAndColor.push({
+                    styleId: currentStyle._id,
+                    colorIds: selectColorList.map(x => x._id),
+                });
+            }
+            if (currentStyle1._id) {
+                payload.styleAndColor.push({
+                    styleId: currentStyle1._id,
+                    colorIds: selectColorList.map(x => x._id),
+                });
+            }
             await dispatch({
                 type: 'diy/addFavorite',
-                payload: {
-                    goodId: currentGood._id,
-                    styleAndColor: [
-                        {
-                            styleId: currentStyle._id,
-                            colorIds: selectColorList.map(x => x._id),
-                        },
-                    ],
-                },
+                payload,
             });
             message.info('收藏成功');
+        } else if (collocationPattern === 'multiple') {
+            if (selectStyleList.length === 0) {
+                message.info('请选择');
+                return;
+            }
+
+            const colorIds = selectColorList.map(x => x._id);
+            const favorites = selectStyleList.map(x => ({
+                user: currentUser._id,
+                goodId: currentGood._id,
+                styleAndColor: [
+                    {
+                        styleId: x._id,
+                        colorIds: [colorIds[0], colorIds[0], colorIds[0]],
+                    },
+                ],
+            }));
+            await dispatch({
+                type: 'diy/addFavorites',
+                payload: favorites,
+            });
         }
     };
 
@@ -34,10 +73,11 @@ const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColor
                 payload: {
                     assignedId: currentGood._id,
                     codename: currentAdminChannel.codename,
-                    styles: selectStyleList.map(x => {}),
+                    styles: selectStyleList.map(x => ({ style: x._id, price: x.price })),
+                    plainColors: selectColorList.filter(x => x.type === 0).map(x => x._id),
+                    flowerColors: selectColorList.filter(x => x.type === 1).map(x => x._id),
                 },
             });
-            message.info('收藏成功');
         }
     };
     return (
@@ -75,9 +115,9 @@ const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColor
                 >
                     {collocationPattern === 'assign' ? (
                         <ReactSVG
-                            src={IconUnHeart}
+                            src={IconConfirm}
                             onClick={() => {
-                                handleAddFavorite();
+                                handleAssigned();
                             }}
                             style={{
                                 width: '18px',
@@ -85,11 +125,11 @@ const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColor
                                 cursor: 'pointer',
                             }}
                         />
-                    ) : (
+                    ) : collocationPattern === 'bigPicColor' ? null : (
                         <ReactSVG
-                            src={IconConfirm}
+                            src={IconUnHeart}
                             onClick={() => {
-                                handleAssigned();
+                                handleAddFavorite();
                             }}
                             style={{
                                 width: '18px',
@@ -104,11 +144,13 @@ const App = ({ dispatch, currentGood, currentStyle, selectStyleList, selectColor
     );
 };
 
-export default connect(({ diy = {}, channel }) => ({
+export default connect(({ diy = {}, channel, user }) => ({
     collocationPattern: diy.collocationPattern,
     currentGood: diy.currentGood,
     currentStyle: diy.currentStyle,
+    currentStyle1: diy.currentStyle1,
     selectColorList: diy.selectColorList,
     selectStyleList: diy.selectStyleList,
     currentAdminChannel: channel.currentAdminChannel,
+    currentUser: user.info,
 }))(App);

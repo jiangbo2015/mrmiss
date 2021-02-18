@@ -4,8 +4,8 @@ import { connect } from 'dva';
 import MultipleMode from './MultipleMode';
 import SingleMode from './SingleMode';
 import ExpandMode from './ExpandMode';
-
-const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
+import BigPicColor from './BigPicColor';
+const App = ({ dispatch, collocationPattern }) => {
     return (
         <>
             <div
@@ -33,10 +33,18 @@ const App = ({ styleList = { docs: [] }, dispatch, collocationPattern }) => {
             <div
                 style={{
                     flex: 1,
-                    display: collocationPattern === 'multiple' ? 'initial' : 'none',
+                    display: collocationPattern === 'multiple' || collocationPattern === 'assign' ? 'initial' : 'none',
                 }}
             >
-                <MultipleMode />
+                <MultipleMode assign={collocationPattern === 'assign'} />
+            </div>
+            <div
+                style={{
+                    flex: 1,
+                    display: collocationPattern === 'bigPicColor' ? 'initial' : 'none',
+                }}
+            >
+                <BigPicColor />
             </div>
         </>
     );

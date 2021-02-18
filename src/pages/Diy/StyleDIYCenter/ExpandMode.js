@@ -70,7 +70,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {}, selectColo
                     }}
                 />
             </div>
-            <div style={{ width: '560px' }}>
+            <div style={{ width: '560px', display: 'flex', alignItems: 'center', flex: 1 }}>
                 <Swiper
                     {...params}
                     style={{

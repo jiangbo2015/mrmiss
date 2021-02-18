@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
 import SearchInput from '@/components/SearchInput';
@@ -8,7 +8,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import SelectedIcon from '@/public/icons/icon-selected.svg';
 import SingleIcon from '@/public/icons/icon-single.svg';
-import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
+import AllIcon from '@/public/icons/icon-all.svg';
 
 const waitTime = time => {
     let p = new Promise(resovle => {
@@ -18,13 +18,17 @@ const waitTime = time => {
     });
     return p;
 };
-
+window.timeOrder = false;
 const App = ({
     styleList = { docs: [] },
+    selectStyleList,
     dispatch,
     selectColorList,
     currentGood = { category: [] },
     currentGoodCategory = '',
+    styleQueryKey,
+    styleQueryChangeKey,
+    assign,
 }) => {
     let docs = [];
     if (styleList[currentGoodCategory]) {
@@ -33,18 +37,42 @@ const App = ({
     }
     const handleFetchMore = async () => {
         if (currentGood._id) {
+            const payload = {
+                _id: currentGood._id,
+            };
+            if (styleQueryKey) {
+                payload.styleNo = styleQueryKey;
+            }
             dispatch({
                 type: 'diy/fetchStyleList',
-                payload: {
-                    _id: currentGood._id,
-                },
+                payload,
             });
         }
+    };
+    const handleToggleTime = async () => {
+        window.timeOrder = !window.timeOrder;
+        console.log('window.timeOrder', window.timeOrder);
+
+        styleList[currentGoodCategory] = styleList[currentGoodCategory].sort((a, b) => {
+            return window.timeOrder
+                ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        });
+        dispatch({
+            type: 'diy/setStyleList',
+            payload: {
+                ...styleList,
+            },
+        });
     };
     const handleChangeCollocationPattern = pattern => {
         dispatch({
             type: 'diy/setCollocationPattern',
             payload: pattern,
+        });
+        dispatch({
+            type: 'diy/batchSetSelectColorList',
+            payload: { plainColors: [], flowerColors: [] },
         });
     };
     const handleSelectStyle = style => {
@@ -53,13 +81,35 @@ const App = ({
             payload: style,
         });
     };
-
+    const handleSelectAll = () => {
+        if (docs.length > selectStyleList.length) {
+            dispatch({
+                type: 'diy/batchSetSelectStyleList',
+                payload: [...selectStyleList, ...docs.filter(x => selectStyleList.findIndex(s => s._id === x._id) < 0)],
+            });
+        } else {
+            dispatch({
+                type: 'diy/batchSetSelectStyleList',
+                payload: [],
+            });
+        }
+    };
     useEffect(() => {
         if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
             handleSetCurrentGoodCategory(currentGood.category[0]._id);
             handleFetchMore();
         }
-    }, [currentGood]);
+    }, [currentGood, styleQueryKey]);
+    useEffect(() => {
+        dispatch({
+            type: 'diy/setStyleQueryChangeKey',
+            payload: '',
+        });
+        dispatch({
+            type: 'diy/setStyleQueryKey',
+            payload: '',
+        });
+    }, [currentGood, currentGoodCategory]);
     const handleSetCurrentGoodCategory = category => {
         dispatch({
             type: 'diy/setCurrentGoodCategory',
@@ -84,21 +134,57 @@ const App = ({
                 <div
                     style={{
                         display: 'flex',
+                        alignItems: 'center',
                     }}
                 >
                     <Select
                         value={currentGoodCategory}
-                        style={{ marginRight: '28px' }}
-                        options={currentGood.category.map(c => ({ label: c.name, value: c._id }))}
+                        style={{ marginRight: '20px' }}
+                        options={currentGood.category.filter(x => x.name !== '分体').map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
-                    <Select value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />
+                    <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />
+                    <ReactSVG
+                        src={AllIcon}
+                        style={{
+                            width: '20px',
+                            height: '20px',
+                            padding: '4px',
+                            marginLeft: '12px',
+                            marginBottom: '8px',
+                            opacity: assign ? (selectStyleList.length < docs.length ? 0.3 : 1) : 0,
+                            pointerEvents: assign ? 'painted' : 'none',
+                        }}
+                        onClick={() => {
+                            handleSelectAll();
+                        }}
+                    />
                 </div>
-                <SearchInput style={{ width: '180px' }} placeholder="SEARCH STYLE" />
+                <SearchInput
+                    style={{ width: '180px' }}
+                    placeholder="SEARCH STYLE"
+                    value={styleQueryChangeKey}
+                    onSearch={e => {
+                        dispatch({
+                            type: 'diy/setStyleQueryKey',
+                            payload: e.target.value,
+                        });
+                    }}
+                    onChange={e => {
+                        dispatch({
+                            type: 'diy/setStyleQueryChangeKey',
+                            payload: e.target.value,
+                        });
+                    }}
+                />
                 <div style={{ display: 'flex' }}>
                     <ReactSVG
                         src={SingleIcon}
                         className="mode-icon"
+                        style={{
+                            opacity: assign ? 0 : 1,
+                            pointerEvents: assign ? 'none' : 'painted',
+                        }}
                         onClick={() => {
                             handleChangeCollocationPattern('single');
                         }}
@@ -160,7 +246,7 @@ const App = ({
                             <StyleItem
                                 width={`${(d.styleSize / 27) * 100}px`}
                                 styleId={`${d._id}-item`}
-                                colors={selectColorList}
+                                colors={assign ? [] : [selectColorList[0], selectColorList[0], selectColorList[0]]}
                                 key={`${d._id}-${index}-${Math.random() * 1000000}`}
                                 {...d}
                                 style={{
@@ -178,6 +264,9 @@ const App = ({
 export default connect(({ diy = {} }) => ({
     styleList: diy.styleList,
     selectColorList: diy.selectColorList,
+    selectStyleList: diy.selectStyleList,
     currentGood: diy.currentGood,
     currentGoodCategory: diy.currentGoodCategory,
+    styleQueryKey: diy.styleQueryKey,
+    styleQueryChangeKey: diy.styleQueryChangeKey,
 }))(App);

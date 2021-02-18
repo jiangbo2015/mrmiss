@@ -26,17 +26,19 @@ const keyRows = {
 
 const UserListTable = ({
     dispatch,
-    currentCustomerEmpowerInfo = [],
+    selectedRows = [],
     currentCustomer,
     branchList,
     myAdminChannelList,
     goodsList,
     capsuleList,
-    ...props
+    batch,
+    currentUser,
 }) => {
     const [copiedUserModal, setCopiedUserModal] = useState(false);
-    const [selectCopiedUser, setSelectCopiedUser] = useState([]);
+    const [clocked, setClocked] = useState(true);
     const [tableData, setTableData] = useState([]);
+    const { lastLevel } = currentUser;
     useEffect(() => {
         dispatch({
             type: 'channel/fetchMyAdminChannelList',
@@ -78,8 +80,8 @@ const UserListTable = ({
             { key: 'businessUserd', name: '业务管理的使用权限', empowered: currentCustomer.businessUserd },
         ];
         baseData[0].goodsInfo = goodsList.map((g, i) => {
-            const findChannel = currentCustomer.channels.find(x => x.assignedId === g._id);
-            const findGood = currentCustomer.goods.find(x => x === g._id);
+            let findChannel = currentCustomer.channels.find(x => x.assignedId === g._id);
+            let findGood = currentCustomer.goods.find(x => x === g._id);
             return {
                 _id: g._id,
                 row: i,
@@ -181,16 +183,28 @@ const UserListTable = ({
         });
         return infos;
     };
-    const handleSave = async (key, row, val) => {
+
+    const handleSave = async () => {
         // console.log(row);
         const infos = getAssignedData();
-        await dispatch({
-            type: 'user/update',
-            payload: {
-                _id: currentCustomer._id,
-                ...infos,
-            },
-        });
+        if (batch) {
+            await dispatch({
+                type: 'business/updateUsers',
+                payload: {
+                    ids: selectedRows.map(x => x._id),
+                    ...infos,
+                },
+            });
+        } else {
+            await dispatch({
+                type: 'user/update',
+                payload: {
+                    _id: currentCustomer._id,
+                    ...infos,
+                },
+            });
+        }
+
         message.info('保存成功');
     };
 
@@ -215,6 +229,7 @@ const UserListTable = ({
             render: (val, record) => {
                 return val === undefined ? null : (
                     <Switch
+                        disabled={clocked}
                         checked={val}
                         onClick={() => {
                             handleChangeUserEmpower(record.key);
@@ -245,6 +260,7 @@ const UserListTable = ({
                 width: 200,
                 render: (val, record) => (
                     <Select2
+                        disabled={clocked}
                         options={[
                             { label: 'A', value: 'A' },
                             { label: 'B', value: 'B' },
@@ -272,6 +288,7 @@ const UserListTable = ({
                 render: (val, record) => {
                     return val === undefined ? null : (
                         <Switch
+                            disabled={clocked}
                             checked={val}
                             onClick={() => {
                                 handleChangeUserGoodsEmpower(rowData.key, record.row, !val);
@@ -313,16 +330,33 @@ const UserListTable = ({
             >
                 <UserListMinTable />
             </Modal>
-            <Flex p="16px" justifyContent="center" alignItems="center">
+            <Flex p="16px" justifyContent="center" alignItems="center" flexDirection={batch ? 'column' : 'row'}>
                 <ReactSVG style={{ width: '40px', height: '40px' }} src={IconEmpower} />
-                <Box p="0 20px">客户名称：{currentCustomer.name}</Box>
-                <Box>客户税号：{currentCustomer.pick}</Box>
+
+                <Box p="0 20px">
+                    {lastLevel}名称：
+                    {batch ? selectedRows.map(x => x.name).join('、') : currentCustomer.name}
+                </Box>
+                {batch ? null : (
+                    <Box>
+                        {lastLevel}税号：{currentCustomer.VATNo}
+                    </Box>
+                )}
             </Flex>
             <Flex p="16px">
-                <Button shape="circle" size="large" icon={<LockOutlined />} style={{ backgroundColor: '#D2D2D2' }} />
                 <Button
                     shape="circle"
                     size="large"
+                    icon={clocked ? <LockOutlined /> : <UnlockOutlined />}
+                    style={{ backgroundColor: '#D2D2D2' }}
+                    onClick={() => {
+                        setClocked(!clocked);
+                    }}
+                />
+                <Button
+                    shape="circle"
+                    size="large"
+                    disabled={clocked}
                     icon={<SaveOutlined />}
                     style={{
                         backgroundColor: '#D2D2D2',
@@ -330,15 +364,18 @@ const UserListTable = ({
                     }}
                     onClick={handleSave}
                 />
-                <Button
-                    shape="circle"
-                    size="large"
-                    icon={<CopyOutlined />}
-                    style={{ backgroundColor: '#D2D2D2' }}
-                    onClick={() => {
-                        setCopiedUserModal(true);
-                    }}
-                />
+                {batch ? null : (
+                    <Button
+                        shape="circle"
+                        size="large"
+                        disabled={clocked}
+                        icon={<CopyOutlined />}
+                        style={{ backgroundColor: '#D2D2D2' }}
+                        onClick={() => {
+                            setCopiedUserModal(true);
+                        }}
+                    />
+                )}
             </Flex>
 
             <Table
@@ -356,7 +393,7 @@ const UserListTable = ({
     );
 };
 
-export default connect(({ business = {}, shop, capsule, diy, channel }) => {
+export default connect(({ business = {}, shop, capsule, diy, channel, user }) => {
     // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,
@@ -365,5 +402,6 @@ export default connect(({ business = {}, shop, capsule, diy, channel }) => {
         capsuleList: capsule.capsuleList,
         goodsList: diy.goodsList,
         myAdminChannelList: channel.myAdminChannelList,
+        currentUser: user.info,
     };
 })(UserListTable);

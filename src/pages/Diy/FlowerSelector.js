@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 
 import { filterImageUrl } from '@/utils/helper';
 import SearchInput from '@/components/SearchInput';
+import { Tooltip } from 'antd';
+import { ReactSVG } from 'react-svg';
+import AllIcon from '@/public/icons/icon-all.svg';
 
 const ImgItem = ({ img, isSelected, ...props }) => (
     <div
@@ -30,19 +33,46 @@ const ImgItem = ({ img, isSelected, ...props }) => (
     </div>
 );
 
-const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {} }) => {
-    const { docs } = flowerList;
+const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColorList, assign }) => {
+    const { docs = [] } = flowerList;
+    const selectAll = docs.length === docs.filter(x => x.isSelected).length;
+    const [queryKey, setQueryKey] = useState('');
     useEffect(() => {
-        dispatch({
-            type: 'diy/fetchColorList',
-            payload: { goodsId: currentGood._id, limit: 10000, type: 1 },
-        });
-    }, [currentGood]);
+        if (currentGood._id) {
+            let payload = { goodsId: currentGood._id, limit: 10000, type: 1 };
+            if (queryKey) {
+                payload.code = queryKey;
+            }
+            dispatch({
+                type: 'diy/fetchColorList',
+                payload,
+            });
+        }
+    }, [currentGood, queryKey]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
             payload: color,
         });
+    };
+    const handleShowBigPic = color => {
+        dispatch({
+            type: 'diy/showBigPic',
+            payload: color,
+        });
+    };
+    const handleSelectAll = () => {
+        if (selectAll) {
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors: selectColorList.map(x => x._id), flowerColors: [] },
+            });
+        } else {
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors: selectColorList.map(x => x._id), flowerColors: docs.map(x => x._id) },
+            });
+        }
     };
     return (
         <div
@@ -52,8 +82,28 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {} }) => {
                 background: '#222222',
             }}
         >
-            <div style={{ marginBottom: '60px' }}>
-                <SearchInput placeholder="SEARCH PAINT" />
+            <div style={{ marginBottom: '60px', display: 'flex' }}>
+                <SearchInput
+                    placeholder="SEARCH PAINT"
+                    onSearch={e => {
+                        setQueryKey(e.target.value);
+                    }}
+                />
+                <ReactSVG
+                    src={AllIcon}
+                    style={{
+                        width: '20px',
+                        height: '20px',
+                        padding: '4px',
+                        marginLeft: '12px',
+                        marginBottom: '8px',
+                        opacity: assign ? (selectAll ? 1 : 0.3) : 0,
+                        pointerEvents: assign ? 'painted' : 'none',
+                    }}
+                    onClick={() => {
+                        handleSelectAll();
+                    }}
+                />
             </div>
             <div
                 style={{
@@ -69,18 +119,31 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {} }) => {
                 }}
             >
                 {docs.map((d, index) => (
-                    <ImgItem
-                        key={d._id}
-                        img={d.value}
-                        isSelected={d.isSelected}
-                        onClick={() => {
-                            handleSelectColor({ item: d, index });
-                        }}
-                    />
+                    <Tooltip title={d.code} key={`${d._id}-tooltip`}>
+                        <ImgItem
+                            key={d._id}
+                            img={d.value}
+                            isSelected={d.isSelected}
+                            onClick={() => {
+                                window.flowerTimeId = setTimeout(() => {
+                                    handleSelectColor({ item: d, index });
+                                }, 200);
+                            }}
+                            onDoubleClick={() => {
+                                clearInterval(window.flowerTimeId);
+                                handleShowBigPic(d);
+                            }}
+                        />
+                    </Tooltip>
                 ))}
             </div>
         </div>
     );
 };
 
-export default connect(({ diy = {} }) => ({ flowerList: diy.flowerList, currentGood: diy.currentGood }))(App);
+export default connect(({ diy = {} }) => ({
+    flowerList: diy.flowerList,
+    currentGood: diy.currentGood,
+    assign: diy.collocationPattern === 'assign',
+    selectColorList: diy.selectColorList,
+}))(App);

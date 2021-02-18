@@ -53,9 +53,10 @@ export default {
                 // 登录成功，将token写入本地，并跳转到主体
                 if (data) {
                     // localStorage.token = data.token;
+                    let lastLevel = data.role === 1 ? '产品代理' : '客户';
                     yield put({
                         type: 'setInfo',
-                        payload: data,
+                        payload: { ...data, lastLevel },
                     });
 
                     // history.push('/main');

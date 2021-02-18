@@ -5,7 +5,13 @@ import { message } from 'antd';
 export default {
     namespace: 'channel',
     state: {
-        currentAdminChannel: {},
+        currentAdminChannel: {
+            styles: [],
+            capsuleStyles: [],
+            shopStyles: [],
+            plainColors: [],
+            flowerColors: [],
+        },
         myAdminChannelList: [], //我管理的通道列表
         myChannelList: [], //我被分配的通道列表
     },
