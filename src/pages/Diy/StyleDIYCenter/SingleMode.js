@@ -86,14 +86,16 @@ const App = ({
             type: 'diy/setCollocationPattern',
             payload: pattern,
         });
-        dispatch({
-            type: 'diy/batchSetSelectColorList',
-            payload: { plainColors: [], flowerColors: [] },
-        });
-        dispatch({
-            type: 'diy/batchSetSelectStyleList',
-            payload: [],
-        });
+        if (pattern !== 'expand') {
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors: [], flowerColors: [] },
+            });
+            dispatch({
+                type: 'diy/batchSetSelectStyleList',
+                payload: [],
+            });
+        }
     };
     useEffect(() => {
         if (docs && docs.length > 0) {
