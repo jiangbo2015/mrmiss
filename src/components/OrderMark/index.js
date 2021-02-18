@@ -1,28 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'dva';
-import lodash from 'lodash';
-
-import { Popover, Input, Badge } from 'antd';
-import { ReactSVG } from 'react-svg';
-import { Flex, Box, Image } from 'rebass/styled-components';
-
-import SelectedIcon from '@/public/icons/icon-selected-black.svg';
-
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-import InputNumber from '@/components/InputNumber';
 import { InputBottomWhiteBorder } from '@/components/Input';
-
-import StyleItem from '@/components/StyleItem';
+import InputNumber from '@/components/InputNumber';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
-import Info from './info';
-
+import StyleItem from '@/components/StyleItem';
 import IconBackageInfo from '@/public/icons/backage-info.svg';
 import IconSave from '@/public/icons/icon-save.svg';
+import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import IconSend from '@/public/icons/icon-send.svg';
-
 import { filterImageUrl } from '@/utils/helper';
+import { Badge, Input, Popover } from 'antd';
+import lodash from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
+import { ReactSVG } from 'react-svg';
+import { Box, Flex, Image } from 'rebass/styled-components';
+import Info from './Info';
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
