@@ -68,12 +68,14 @@ const App = ({
 
     const handleAssigned = async () => {
         if (collocationPattern === 'assign') {
+            const styles = selectStyleList.map(x => ({ style: x._id, price: x.price }));
+            console.log('styles', styles);
             await dispatch({
                 type: 'channel/update',
                 payload: {
                     assignedId: currentGood._id,
                     codename: currentAdminChannel.codename,
-                    styles: selectStyleList.map(x => ({ style: x._id, price: x.price })),
+                    styles,
                     plainColors: selectColorList.filter(x => x.type === 0).map(x => x._id),
                     flowerColors: selectColorList.filter(x => x.type === 1).map(x => x._id),
                 },

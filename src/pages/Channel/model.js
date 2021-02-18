@@ -39,6 +39,7 @@ export default {
                 // fetchMyAdminChannelList
                 yield put({
                     type: 'fetchMyAdminChannelList',
+                    payload: { assignedId: payload.assignedId },
                 });
             }
         },

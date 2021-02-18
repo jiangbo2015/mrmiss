@@ -1,5 +1,5 @@
 // import { parse } from "querystring";
-export const baseUrl = 'http://8.209.64.159:3001/';
+export const baseUrl = process.env.API_URL + '/';
 // export const baseUrl = 'http://we-idesign.com/';
 
 export const imgUrl = 'https://ik.imagekit.io/';
