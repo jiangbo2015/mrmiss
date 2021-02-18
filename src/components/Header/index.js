@@ -69,10 +69,11 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd 
             <Menu.Item
                 className="menuItemH"
                 icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconManage} />}
+                onClick={() => {
+                    history.push('/business');
+                }}
             >
-                <a target="_blank" rel="noopener noreferrer" href="/business">
-                    业务管理
-                </a>
+                <a>业务管理</a>
             </Menu.Item>
         ) : null}
 
