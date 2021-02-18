@@ -5,8 +5,8 @@ import { useIntl } from 'umi';
 import './index.less';
 
 const Login = ({ dispatch }) => {
-    const [account, setAccount] = useState('paige');
-    const [pwd, setPwd] = useState('123456');
+    const [account, setAccount] = useState('');
+    const [pwd, setPwd] = useState('');
     const intl = useIntl();
     const handleLogin = async () => {
         console.log('click');

@@ -26,10 +26,10 @@ export default ({ imgsInfo = {} }) => (
                 sx={{
                     width: '100%',
                     height: '100%',
-                    transition: 'all 0.6s',
+                    transition: 'all 1s',
                     cursor: 'pointer',
                     ':hover': {
-                        transform: 'scale(1.4)',
+                        transform: 'scale(1.3)',
                     },
                 }}
             />
