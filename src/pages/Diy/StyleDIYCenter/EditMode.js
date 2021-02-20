@@ -21,7 +21,7 @@ const waitTime = time => {
     return p;
 };
 
-const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {}, selectColorList = [] }) => {
+const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorList = [] }) => {
     const params = {
         scrollbar: {
             el: '.swiper-scrollbar',
@@ -84,7 +84,18 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {}, selectColo
                             justifyContent: 'center',
                         }}
                     >
-                        <StyleItem width="300px" colors={selectColorList} {...currentStyle} />
+                        {favoriteEditObj.styleAndColor.map(d => (
+                            <StyleItem
+                                width={`${(300 * d.style.styleSize) / 27}px`}
+                                styleId={`${favoriteEditObj._id}-${d._id}-item`}
+                                colors={d.colorIds}
+                                key={`${favoriteEditObj._id}-${d._id}-${Math.random() * 1000000}`}
+                                {...d.style}
+                                style={{
+                                    cursor: 'pointer',
+                                }}
+                            />
+                        ))}
                     </div>
                     <div
                         style={{
@@ -93,13 +104,21 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {}, selectColo
                             justifyContent: 'center',
                         }}
                     >
-                        <StyleItem
-                            width="300px"
-                            colors={selectColorList}
-                            {...currentStyle}
-                            svgUrl={currentStyle.svgUrlBack}
-                            shadowUrl={currentStyle.shadowUrlBack}
-                        />
+                        {favoriteEditObj.styleAndColor.map(d => (
+                            <StyleItem
+                                width={`${(300 * d.style.styleBackSize) / 27}px`}
+                                styleId={`${favoriteEditObj._id}-${d._id}-item`}
+                                colors={d.colorIds}
+                                key={`${favoriteEditObj._id}-${d._id}-${Math.random() * 1000000}`}
+                                {...d.style}
+                                svgUrl={d.style.svgUrlBack}
+                                shadowUrl={d.style.shadowUrlBack}
+                                styleSize={d.style.styleBackSize}
+                                style={{
+                                    cursor: 'pointer',
+                                }}
+                            />
+                        ))}
                     </div>
                 </Swiper>
             </div>
@@ -108,9 +127,7 @@ const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {}, selectColo
 };
 
 export default connect(({ diy = {} }) => ({
-    styleList: diy.styleList,
-    currentStyle: diy.currentStyle,
-    collocationBg: diy.collocationBg,
+    favoriteEditObj: diy.favoriteEditObj,
     collocationPattern: diy.collocationPattern,
     selectColorList: diy.selectColorList,
 }))(App);

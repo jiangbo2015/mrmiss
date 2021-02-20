@@ -17,7 +17,7 @@ export default {
         styleColorings: [], // 款式着色
         selectStyleList: [],
         favoriteArr: [],
-        favoriteEditObj: {},
+        favoriteEditObj: { styleAndColor: [] },
         favoritePattern: 'middle', //  large, middle, small
         selectFavoriteList: [],
         favoriteToOrderGroupList: [],
@@ -50,10 +50,11 @@ export default {
             return {
                 ...state,
                 favoriteEditObj: action.payload,
+                // collocationPattern: 'edit',
             };
         },
         setStyleQueryChangeKey(state, action) {
-            console.log('styleQueryChangeKey', action.payload);
+            // console.log('styleQueryChangeKey', action.payload);
             return {
                 ...state,
                 styleQueryChangeKey: action.payload,

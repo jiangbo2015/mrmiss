@@ -61,7 +61,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     };
     const handleEdit = favorite => {
         dispatch({
-            type: 'diy/editFavorite',
+            type: 'diy/setFavoriteEditObj',
             payload: favorite,
         });
     };

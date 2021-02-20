@@ -5,6 +5,8 @@ import MultipleMode from './MultipleMode';
 import SingleMode from './SingleMode';
 import ExpandMode from './ExpandMode';
 import BigPicColor from './BigPicColor';
+import EditMode from './EditMode';
+
 const App = ({ dispatch, collocationPattern }) => {
     return (
         <>
@@ -45,6 +47,14 @@ const App = ({ dispatch, collocationPattern }) => {
                 }}
             >
                 <BigPicColor />
+            </div>
+            <div
+                style={{
+                    flex: 1,
+                    display: collocationPattern === 'edit' ? 'initial' : 'none',
+                }}
+            >
+                <EditMode />
             </div>
         </>
     );
