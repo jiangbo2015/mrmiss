@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { Box, Flex } from 'rebass/styled-components';
 import Search from './Search';
 
-const data = [
+const data2 = [
     {
         date: '2021-02',
         type: 'number',
@@ -41,15 +41,9 @@ const data = [
     //     value: 100,
     // },
 ];
-const d = [
-    {
-        number: 1,
-        amount: 10,
-        date: '2020-02',
-    },
-];
+
 export const OrderRank = ({ data: originData = [] }) => {
-    const data2 = originData.reduce(
+    const data = originData.reduce(
         (left, right) =>
             left.concat([
                 {
