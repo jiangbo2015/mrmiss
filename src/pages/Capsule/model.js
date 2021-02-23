@@ -164,13 +164,15 @@ export default {
                 let key = `${now.getTime()}-${o.styleNos}`;
                 let sizeArr = [];
                 if (item.type) {
-                    sizeArr = item.favorite.styleAndColor[0].styleId.size.split('/');
+                    sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
+                        ? item.favorite.styleAndColor[0].styleId.size?.split('/')
+                        : [];
                 } else {
-                    sizeArr = o.size ? o.size.split('/') : [];
+                    sizeArr = o.size ? o.size?.split('/') : [];
                 }
 
                 let sizeObjInit = {};
-                sizeArr.map(s => {
+                sizeArr?.map(s => {
                     sizeObjInit[s] = 0;
                 });
                 return {

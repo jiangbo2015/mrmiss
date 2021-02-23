@@ -160,7 +160,7 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                 {
                     key: newKey,
                     list: [removed],
-                    sizes: removed.styleAndColor[0].style.size.split('/'),
+                    sizes: removed.styleAndColor[0].style.size ? removed.styleAndColor[0].style.size?.split('/') : '',
                 },
             ]);
 
@@ -385,7 +385,7 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                                                                             </Box>
                                                                         ))}
                                                                         <Flex mb="30px">
-                                                                            {el.sizes.map(s => {
+                                                                            {el.sizes?.map(s => {
                                                                                 const sizeKey = `${ind}-${favorite._id}-${s}`;
 
                                                                                 return (

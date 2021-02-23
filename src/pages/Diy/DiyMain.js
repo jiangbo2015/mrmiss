@@ -55,7 +55,7 @@ const App = ({
                 styleAndColor: [
                     {
                         styleId: x._id,
-                        colorIds: [colorIds[0], colorIds[0], colorIds[0]],
+                        colorIds: [colorIds[0], colorIds[0], colorIds[0], colorIds[0], colorIds[0], colorIds[0]],
                     },
                 ],
             }));

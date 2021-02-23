@@ -6,7 +6,7 @@ import { Popover, Input, Badge } from 'antd';
 import { ReactSVG } from 'react-svg';
 import { Flex, Box } from 'rebass/styled-components';
 
-import SelectedIcon from '@/public/icons/icon-selected-black.svg';
+import SelectedIcon from '@/components/OrderMark/node_modules/@/public/icons/icon-selected-black.svg';
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -18,9 +18,9 @@ import Modal from '@/components/Modal';
 import Select from '@/components/Select';
 import Info from '../components/Info';
 
-import IconBackageInfo from '@/public/icons/backage-info.svg';
-import IconSave from '@/public/icons/icon-save.svg';
-import IconSend from '@/public/icons/icon-send.svg';
+import IconBackageInfo from '@/components/OrderMark/node_modules/@/public/icons/backage-info.svg';
+import IconSave from '@/components/OrderMark/node_modules/@/public/icons/icon-save.svg';
+import IconSend from '@/components/OrderMark/node_modules/@/public/icons/icon-send.svg';
 
 const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -106,6 +106,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                 }
             });
         });
+        console.log('favoriteToOrderGroupList', favoriteToOrderGroupList);
         setSourceData(favoriteToOrderGroupList);
         setCountInfos(initCountInfos);
         setParteInfos(initParteInfos);
@@ -165,7 +166,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                 {
                     key: newKey,
                     list: [removed],
-                    sizes: removed.styleAndColor[0].style.size.split('/'),
+                    sizes: removed.styleAndColor[0].style.size?.split('/'),
                 },
             ]);
 
@@ -381,9 +382,9 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                                             </Box>
                                                                         ))}
                                                                         <Flex mb="30px">
-                                                                            {el.sizes.map(s => {
+                                                                            {console.log('el.sizes', el.sizes)}
+                                                                            {el.sizes?.map(s => {
                                                                                 const sizeKey = `${ind}-${favorite._id}-${s}`;
-
                                                                                 return (
                                                                                     <Flex
                                                                                         flexDirection="column"

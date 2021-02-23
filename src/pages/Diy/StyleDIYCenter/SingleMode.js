@@ -5,7 +5,7 @@ import Swiper from 'react-id-swiper';
 
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
-import StyleItem from '@/components/StyleItem';
+import MultipleStyleSelector from './MultipleStyleSelector';
 import SingleStyleSelector from './SingleStyleSelector';
 
 import ArrowIcon from '@/public/icons/icon-arrow.svg';
@@ -15,16 +15,6 @@ import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
 
 // import Swiper from 'react-id-swiper';
 import styles from './index.less';
-// import { Flex } from 'rebass';
-
-const waitTime = time => {
-    let p = new Promise(resovle => {
-        setTimeout(() => {
-            resovle('go');
-        }, time);
-    });
-    return p;
-};
 
 const App = ({
     styleList = { '': [] },
@@ -236,24 +226,20 @@ const App = ({
                 </div>
             </div>
             {categoryObj && categoryObj.name === '分体' ? (
-                <>
-                    <SingleStyleSelector
-                        currentStyle={currentStyle}
-                        selectColorList={selectColorList}
-                        currentStyleRegion={currentStyleRegion}
-                        docs={docs}
-                        handleSelectStyle={handleSelectStyle}
-                        handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
-                    />
-                    <SingleStyleSelector
-                        currentStyle={currentStyle1}
-                        selectColorList={selectColorList}
-                        currentStyleRegion={currentStyleRegion}
-                        docs={docs1}
-                        handleSelectStyle={handleSelectStyle1}
-                        handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
-                    />
-                </>
+                <MultipleStyleSelector
+                    currentStyle={currentStyle}
+                    selectColorList={selectColorList}
+                    currentStyleRegion={currentStyleRegion}
+                    docs={docs}
+                    handleSelectStyle={handleSelectStyle}
+                    handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
+                    currentStyle2={currentStyle1}
+                    selectColorList2={selectColorList}
+                    currentStyleRegion2={currentStyleRegion}
+                    docs2={docs1}
+                    handleSelectStyle2={handleSelectStyle1}
+                    handleSetCurrentStyleRegion2={handleSetCurrentStyleRegion}
+                />
             ) : (
                 <SingleStyleSelector
                     currentStyle={currentStyle}

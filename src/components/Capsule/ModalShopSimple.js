@@ -34,7 +34,7 @@ export const ArrowBtn = props => (
             },
         }}
         {...props}
-    ></Arrow>
+    />
 );
 export const SizeBox = ({ width, bg, children }) => (
     <Flex
@@ -203,7 +203,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, dispatch }) => {
                         <Box mt="15px">
                             <Flex>
                                 <SizeBox>S / Q</SizeBox>
-                                {size.split('/').map((item, i) => (
+                                {size?.split('/').map((item, i) => (
                                     <SizeBox key={i} width="41px" bg="#EEEDED">
                                         {item}
                                     </SizeBox>
@@ -214,7 +214,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, dispatch }) => {
                                     <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
                                         {item.colorObj.code}
                                     </SizeBox>
-                                    {size.split('/').map((s, i) => (
+                                    {size?.split('/').map((s, i) => (
                                         <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
                                             {item.sizeWithQuantity[s]}
                                         </SizeBox>

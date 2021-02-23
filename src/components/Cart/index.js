@@ -77,7 +77,7 @@ const LineItem = ({ data, onUpdate }) => {
                     <Box mt="15px">
                         <Flex>
                             <SizeBox>S / Q</SizeBox>
-                            {size.split('/').map((item, i) => (
+                            {size?.split('/').map((item, i) => (
                                 <SizeBox key={`cart-size-${item._id}`} width="41px" bg="#EEEDED">
                                     {item}
                                 </SizeBox>
@@ -88,7 +88,7 @@ const LineItem = ({ data, onUpdate }) => {
                                 <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
                                     {item.colorObj.code}
                                 </SizeBox>
-                                {size.split('/').map((s, i) => (
+                                {size?.split('/').map((s, i) => (
                                     <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
                                         {item.sizeWithQuantity[s]}
                                     </SizeBox>

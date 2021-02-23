@@ -60,9 +60,19 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
         });
     };
     const handleEdit = favorite => {
+        window.scrollTo(0, 0);
         dispatch({
             type: 'diy/setFavoriteEditObj',
             payload: favorite,
+        });
+
+        // favorite.styleAndColor[0].colorIds;
+        dispatch({
+            type: 'diy/batchSetSelectColorList',
+            payload: {
+                plainColors: favorite.styleAndColor[0].colorIds.map(x => x._id),
+                flowerColors: favorite.styleAndColor[0].colorIds.map(x => x._id),
+            },
         });
     };
     const handleBig = favorite => {

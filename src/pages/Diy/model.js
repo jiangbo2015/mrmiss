@@ -50,7 +50,7 @@ export default {
             return {
                 ...state,
                 favoriteEditObj: action.payload,
-                // collocationPattern: 'edit',
+                collocationPattern: 'edit',
             };
         },
         setStyleQueryChangeKey(state, action) {
@@ -99,7 +99,6 @@ export default {
             };
         },
         setStyleList(state, action) {
-            console.log('setStyleList');
             return {
                 ...state,
                 styleList: action.payload,
@@ -369,6 +368,52 @@ export default {
                             }
                         }
                         break;
+                    case 'edit':
+                        {
+                            if (currentStyleRegion) {
+                                // 自主选择区域
+                                newValue = [...selectColorList];
+                                if (newValue[currentStyleRegion - 1]) {
+                                    if (newValue[currentStyleRegion - 1].type === 0) {
+                                        const findIndex = colorList.docs.findIndex(
+                                            x => x._id === newValue[currentStyleRegion - 1]._id,
+                                        );
+                                        findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
+                                    } else {
+                                        const findIndex = flowerList.docs.findIndex(
+                                            x => x._id === newValue[currentStyleRegion - 1]._id,
+                                        );
+                                        findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
+                                    }
+                                }
+                                newValue[currentStyleRegion - 1] = item;
+                                if (item.type) {
+                                    flowerList.docs[index].isSelected = true;
+                                } else {
+                                    colorList.docs[index].isSelected = true;
+                                }
+                            } else {
+                                //能选中3个颜色
+                                if (selectColorList.length > 2) {
+                                    if (selectColorList[2].type === 0) {
+                                        const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[2]._id);
+                                        findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
+                                    } else {
+                                        const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[2]._id);
+                                        findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
+                                    }
+                                    newValue = [selectColorList[0], selectColorList[1], item];
+                                } else {
+                                    newValue = [...selectColorList, item];
+                                }
+                                if (item.type) {
+                                    flowerList.docs[index].isSelected = true;
+                                } else {
+                                    colorList.docs[index].isSelected = true;
+                                }
+                            }
+                        }
+                        break;
                     case 'multiple':
                         {
                             newValue = [item]; //只能选中一个颜色
@@ -491,18 +536,18 @@ export default {
                 gourpByStyle[key] = {
                     list: gourpByStyle[key],
                     key,
-                    sizes: gourpByStyle[key][0].styleAndColor[0].style.size.split('/'),
+                    sizes: gourpByStyle[key][0].styleAndColor[0].style.size?.split('/'),
                 };
             }
-            const saveItems = saveOrder.map((o, k) => {
+            const saveItems = saveOrder?.map((o, k) => {
                 let item = o.items[0];
                 let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-')}`;
-                let sizeArr = item.favorite.styleAndColor[0].styleId.size.split('/');
+                let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
                 let sizeObjInit = {};
-                sizeArr.map(s => {
+                sizeArr?.map(s => {
                     sizeObjInit[s] = 0;
                 });
-                console.log('sizeObjInit', sizeObjInit);
+                // console.log('sizeObjInit', sizeObjInit);
                 return {
                     list: o.items.map(i => ({
                         ...i.favorite,

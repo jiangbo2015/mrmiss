@@ -88,7 +88,7 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             <StyleItem
                                 width={`${(300 * d.style.styleSize) / 27}px`}
                                 styleId={`${favoriteEditObj._id}-${d._id}-item`}
-                                colors={d.colorIds}
+                                colors={selectColorList}
                                 key={`${favoriteEditObj._id}-${d._id}-${Math.random() * 1000000}`}
                                 {...d.style}
                                 style={{
@@ -108,7 +108,7 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             <StyleItem
                                 width={`${(300 * d.style.styleBackSize) / 27}px`}
                                 styleId={`${favoriteEditObj._id}-${d._id}-item`}
-                                colors={d.colorIds}
+                                colors={selectColorList}
                                 key={`${favoriteEditObj._id}-${d._id}-${Math.random() * 1000000}`}
                                 {...d.style}
                                 svgUrl={d.style.svgUrlBack}

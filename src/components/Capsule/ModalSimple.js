@@ -255,7 +255,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, dispatch }) => {
                             尺码/中包
                         </Text>
                         <Flex mt="20px">
-                            {size.split('/').map((item, i) => (
+                            {size?.split('/').map((item, i) => (
                                 <Box key={i} mr="15px">
                                     <Text textAlign="center">{item}</Text>
                                     <InputNumber></InputNumber>

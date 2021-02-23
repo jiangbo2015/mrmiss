@@ -35,6 +35,7 @@ const App = ({
         docs = styleList[currentGoodCategory];
         // console.log('docs', docs);
     }
+
     const handleFetchMore = async () => {
         if (currentGood._id) {
             const payload = {
@@ -49,14 +50,17 @@ const App = ({
             });
         }
     };
+
     const handleToggleTime = async () => {
         window.timeOrder = !window.timeOrder;
         console.log('window.timeOrder', window.timeOrder);
 
         styleList[currentGoodCategory] = styleList[currentGoodCategory].sort((a, b) => {
             return window.timeOrder
-                ? new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-                : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+                ? new Date(b.createdAt ? b.createdAt : b.createTime).getTime() -
+                      new Date(a.createdAt ? a.createdAt : a.createTime).getTime()
+                : new Date(a.createdAt ? a.createdAt : a.createTime).getTime() -
+                      new Date(b.createdAt ? b.createdAt : b.createTime).getTime();
         });
         dispatch({
             type: 'diy/setStyleList',
@@ -246,7 +250,18 @@ const App = ({
                             <StyleItem
                                 width={`${(d.styleSize / 27) * 100}px`}
                                 styleId={`${d._id}-item`}
-                                colors={assign ? [] : [selectColorList[0], selectColorList[0], selectColorList[0]]}
+                                colors={
+                                    assign
+                                        ? []
+                                        : [
+                                              selectColorList[0],
+                                              selectColorList[0],
+                                              selectColorList[0],
+                                              selectColorList[0],
+                                              selectColorList[0],
+                                              selectColorList[0],
+                                          ]
+                                }
                                 key={`${d._id}-${index}-${Math.random() * 1000000}`}
                                 {...d}
                                 style={{
