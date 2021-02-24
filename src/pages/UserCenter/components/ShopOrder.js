@@ -1,5 +1,6 @@
 import IconDelete from '@/public/icons/icon-delete.svg';
 import IconDownload from '@/public/icons/icon-download.svg';
+import request from '@/utils/request';
 import { Popconfirm } from 'antd';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
@@ -23,6 +24,16 @@ const OrderTable = ({ orderList = [], dispatch }) => {
         });
     };
 
+    const handleDownload = async id => {
+        const req = await request('/api/order/download', {
+            _id: id,
+        });
+        if (req) {
+            // console.log(req)
+            window.open(`${process.env.DOWNLOAD_URL}/${req.url}`);
+        }
+    };
+
     const columns = [
         {
             title: '订单编号',
@@ -36,23 +47,27 @@ const OrderTable = ({ orderList = [], dispatch }) => {
         },
         {
             title: '总数量',
-            dataIndex: 'orderData',
-            key: 'totalCount',
-            render: (text, record) => text?.reduce((left, right) => left + right.rowTotal, 0),
+            dataIndex: 'sumCount',
+            key: 'sumPrice',
         },
         {
             title: '总金额',
-            dataIndex: 'orderData',
-            key: 'totalPrice',
-            render: (text, record) => text?.reduce((left, right) => left + right.rowTotalPrice, 0),
+            dataIndex: 'sumCount',
+            key: 'sumPrice',
         },
         {
             title: '下载',
-            dataIndex: 'download',
-            key: 'download',
-            render: () => (
+            dataIndex: '_id',
+            key: '_id',
+            render: id => (
                 <Flex p="20px" alignItems="center" justifyContent="center">
-                    <ReactSVG src={IconDownload} style={{ width: '24px' }} />
+                    <ReactSVG
+                        src={IconDownload}
+                        style={{ width: '24px' }}
+                        onClick={() => {
+                            handleDownload(id);
+                        }}
+                    />
                 </Flex>
             ),
         },
@@ -72,8 +87,9 @@ const OrderTable = ({ orderList = [], dispatch }) => {
     return <OrderTableComponent columns={columns} dataSource={orderList} />;
 };
 
-export default connect(({ usercenter }) => {
+export default connect(({ usercenter, user }) => {
     return {
         orderList: usercenter.userOrder.shop,
+        currentUser: user.info,
     };
 })(OrderTable);
