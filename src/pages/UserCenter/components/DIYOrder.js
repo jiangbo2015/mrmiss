@@ -7,7 +7,7 @@ import IconDelete from '@/public/icons/icon-delete.svg';
 import { connect } from 'dva';
 
 import lodash from 'lodash';
-const OrderTable = ({ orderList = [], dispatch }) => {
+const OrderTable = ({ orderList = [], dispatch, onDownloadOrder }) => {
     useEffect(() => {
         dispatch({
             type: 'usercenter/fetchMyDiyOrder',
@@ -45,9 +45,15 @@ const OrderTable = ({ orderList = [], dispatch }) => {
             title: '下载',
             dataIndex: 'download',
             key: 'download',
-            render: () => (
+            render: (_, record) => (
                 <Flex p="20px" alignItems="center" justifyContent="center">
-                    <ReactSVG src={IconDownload} style={{ width: '24px' }} />
+                    <ReactSVG
+                        src={IconDownload}
+                        style={{ width: '24px' }}
+                        onClick={() => {
+                            onDownloadOrder(record);
+                        }}
+                    />
                 </Flex>
             ),
         },

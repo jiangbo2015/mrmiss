@@ -5,7 +5,8 @@ import { ReactSVG } from 'react-svg';
 import { connect } from 'dva';
 
 import CapsItem from '@/components/Capsule/ShopItem';
-import ModalComplex from '@/components/Capsule/ModalShopSimple';
+import ModalShopSimple from '@/components/Capsule/ModalShopSimple';
+import ModalComplex from '@/components/Capsule/ModalShopComplex';
 import More from '@/components/Capsule/More';
 import SidebarStyles from '@/components/Capsule/SidebarStyles';
 import Switcher from '@/components/Capsule/Switcher';
@@ -20,9 +21,20 @@ import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import Cart from '@/components/Cart';
 import IconShopCar from '@/public/icons/icon-shop.svg';
 
-const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopStyleList, currentAdminChannel = {} }) => {
+const Shop = ({
+    branchList,
+    dispatch,
+    currentBranch,
+    currentShopStyle = {},
+    currentSelectedBar,
+    shopStyleList,
+    currentAdminChannel = {},
+    shopStyleTopAndBottomList,
+}) => {
     const ref = useRef(null);
     const [visible, setVisible] = useState(false);
+    const [visibleComplex, setVisibleComplex] = useState(false);
+    const [haveTopAndBottom, setHaveTopAndBottom] = useState(false);
     const [queryKey, setQueryKey] = useState('');
 
     const [selectedAll, setSelectedAll] = useState(false);
@@ -33,8 +45,49 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
         });
     }, []);
     useEffect(() => {
+        console.log('currentSelectedBar', currentSelectedBar);
         handleLoadMore(1);
     }, [queryKey, currentSelectedBar]);
+
+    useEffect(() => {
+        if (currentAdminChannel.codename === 'A') {
+            let haveTop = false;
+            let haveBottom = false;
+            currentBranch.children.map(x => {
+                if (x.nameen.toUpperCase() === 'TOP') {
+                    haveTop = x;
+                } else if (x.nameen.toUpperCase() === 'BOTTOM') {
+                    haveBottom = x;
+                }
+            });
+
+            if (haveTop && haveBottom) {
+                setHaveTopAndBottom({ top: haveTop, bottom: haveBottom });
+            }
+        } else {
+            setHaveTopAndBottom(false);
+        }
+    }, [currentBranch, currentAdminChannel]);
+
+    useEffect(() => {
+        if (haveTopAndBottom) {
+            dispatch({
+                type: 'shop/fetchShopStyleTopAndList',
+                payload: haveTopAndBottom,
+            });
+        }
+    }, [haveTopAndBottom]);
+
+    useEffect(() => {
+        if (currentShopStyle._id) {
+            let payload = { branch: currentBranch._id, branchKind: currentShopStyle.branchKind, limit: 4 };
+
+            dispatch({
+                type: 'shop/fetchShopStyleAboutList',
+                payload,
+            });
+        }
+    }, [currentShopStyle]);
 
     const handleLoadMore = page => {
         console.log('handleLoadMore', page);
@@ -77,6 +130,29 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
 
     const handleOpenDetail = capsule => {
         if (currentAdminChannel.codename === 'A') {
+            if (haveTopAndBottom) {
+                let index = 0;
+                if (capsule.branchKind === haveTopAndBottom.top._id) {
+                    console.log('--top--');
+                    index = shopStyleTopAndBottomList.top.findIndex(x => x._id === capsule._id);
+                    dispatch({
+                        type: 'shop/setCurrentShopTopStyleIndex',
+                        payload: index > 0 ? index : 0,
+                    });
+                    setVisibleComplex(true);
+                    return;
+                } else if (capsule.branchKind === haveTopAndBottom.bottom._id) {
+                    console.log('--bottom--');
+                    index = shopStyleTopAndBottomList.bottom.findIndex(x => x._id === capsule._id);
+                    dispatch({
+                        type: 'shop/setCurrentShopBottomStyleIndex',
+                        payload: index > 0 ? index : 0,
+                    });
+                    setVisibleComplex(true);
+                    return;
+                }
+            }
+
             dispatch({
                 type: 'shop/setCurrentShopStyle',
                 payload: capsule,
@@ -85,10 +161,7 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
         } else {
             // 分配
             const findIndex = selectAssignedStyleList.findIndex(x => x.style === capsule._id);
-            // console.log('selectAssignedStyleList', selectAssignedStyleList);
             if (findIndex < 0) {
-                // console.log({ style: capsule._id, price: capsule.price });x
-                console.log('selectAssignedStyleList', selectAssignedStyleList);
                 setSelectAssignedStyleList([...selectAssignedStyleList, { style: capsule._id, price: capsule.price }]);
             } else {
                 selectAssignedStyleList.splice(findIndex, 1);
@@ -241,7 +314,8 @@ const Shop = ({ branchList, dispatch, currentBranch, currentSelectedBar, shopSty
                     </Container>
                 </Box>
             </section>
-            {visible && <ModalComplex visible={visible} onClose={() => setVisible(false)} />}
+            {visible && <ModalShopSimple visible={visible} onClose={() => setVisible(false)} />}
+            {visibleComplex && <ModalComplex visible={visibleComplex} onClose={() => setVisibleComplex(false)} />}
         </Layout>
     );
 };
@@ -250,6 +324,8 @@ export default connect(({ shop, channel }) => ({
     branchList: shop.branchList,
     currentBranch: shop.currentBranch,
     shopStyleList: shop.shopStyleList,
+    shopStyleTopAndBottomList: shop.shopStyleTopAndBottomList,
     currentAdminChannel: channel.currentAdminChannel,
     currentSelectedBar: shop.currentSelectedBar,
+    currentShopStyle: shop.currentShopStyle,
 }))(Shop);

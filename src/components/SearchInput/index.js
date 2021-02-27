@@ -1,7 +1,7 @@
 import searchIcon from '@/public/icons/icon-search.svg';
 import { Input } from 'antd';
 import { ReactSVG } from 'react-svg';
-import styles from './index.less';
+import './index.less';
 
 export default ({ onSearch, placeholder = 'Search color', style = {}, mode = 'black', ...props }) => {
     return (

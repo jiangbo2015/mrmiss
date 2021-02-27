@@ -11,6 +11,8 @@ export default {
         currentBranch: {},
         currentSelectedBar: {},
         currentShopStyle: {},
+        currentShopTopStyleIndex: 0,
+        currentShopBottomStyleIndex: 0,
         myShopCartList: [],
     },
     reducers: {
@@ -44,10 +46,34 @@ export default {
                 shopStyleList: action.payload,
             };
         },
+        setShopStyleAboutList(state, action) {
+            return {
+                ...state,
+                shopStyleAboutList: action.payload,
+            };
+        },
+        setShopStyleTopAndBottomList(state, action) {
+            return {
+                ...state,
+                shopStyleTopAndBottomList: action.payload,
+            };
+        },
         setMyShopCartList(state, action) {
             return {
                 ...state,
                 myShopCartList: action.payload,
+            };
+        },
+        setCurrentShopTopStyleIndex(state, action) {
+            return {
+                ...state,
+                currentShopTopStyleIndex: action.payload,
+            };
+        },
+        setCurrentShopBottomStyleIndex(state, action) {
+            return {
+                ...state,
+                currentShopBottomStyleIndex: action.payload,
             };
         },
     },
@@ -88,6 +114,31 @@ export default {
                 // history.push('/main');
             }
         },
+        *fetchShopStyleAboutList({ payload }, { call, put, select }) {
+            const { currentShopStyle } = yield select(state => state.shop);
+            const { data } = yield call(api.getShopStyleList, payload);
+            if (data) {
+                yield put({
+                    type: 'setShopStyleAboutList',
+                    payload: data.docs.filter(x => x._id !== currentShopStyle._id),
+                });
+                // history.push('/main');
+            }
+        },
+        *fetchShopStyleTopAndList({ payload }, { call, put, select }) {
+            const { top, bottom } = payload;
+            const resTop = yield call(api.getShopStyleList, { branch: top.branch, branchKind: top._id, limit: 1000 });
+            const resBottom = yield call(api.getShopStyleList, { branch: bottom.branch, branchKind: bottom._id, limit: 1000 });
+            if (resTop.data && resBottom.data) {
+                yield put({
+                    type: 'setShopStyleTopAndBottomList',
+                    payload: {
+                        top: resTop.data.docs,
+                        bottom: resBottom.data.docs,
+                    },
+                });
+            }
+        },
         *fetchMyShopCart({ payload }, { call, put }) {
             console.log('******fetchMyShopCart');
             const res = yield call(api.getMyShopCart, payload);
@@ -113,7 +164,6 @@ export default {
             }
             // { styleAndColor: params, goodId: goodId }
         },
-
         *updateShopCart({ payload }, { call, put, select }) {
             if (payload.count <= 0) {
                 message.info('不能更少了～');

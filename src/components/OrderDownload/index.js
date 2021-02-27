@@ -59,25 +59,19 @@ export default ({ orderData = [], _id, onClose }) => {
         // }, 1500);
     }, []);
     return (
-        <Spin spinning={isDownloading} tip="订单文件生成中，请稍等....">
-            <Flex
-                flexDirection="column"
-                justifyContent="space-between"
-                sx={{
-                    cursor: 'pointer',
-                    height: '100%',
-                    width: '100%',
-                }}
-            >
-                <Box
-                    sx={{
-                        padding: '0 18px 18px 18px',
-                        height: 'max-content',
-                        width: '800px',
-                        display: 'table',
-                    }}
-                ></Box>
-            </Flex>
-        </Spin>
+        <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            sx={{
+                height: '100%',
+                width: '100%',
+                position: 'absolute',
+                zIndex: 999,
+                background: 'rgba(255,255,255,0.5)',
+            }}
+        >
+            <Spin spinning={isDownloading} tip="订单文件生成中，请稍等...."></Spin>
+        </Flex>
     );
 };

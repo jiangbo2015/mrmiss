@@ -1,10 +1,39 @@
+import InputNumber from '@/components/InputNumber';
 import temp from '@/public/temp.jpg';
 import { useEffect } from 'react';
 import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
 import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
-import CloseBtn from '@/components/CloseBtn';
+import { Arrow } from './Switcher';
+
+export const CloseBtn = props => (
+    <Flex py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
+        <Box height="5px" width="30px" bg="#000"></Box>
+    </Flex>
+);
+
+export const ArrowBtn = props => (
+    <Arrow
+        width="30px"
+        height="30px"
+        mx="20px"
+        sx={{
+            borderRadius: '50%',
+            div: {
+                width: '30px',
+                height: '30px',
+                ':hover': {
+                    g: {
+                        fill: '#aaa !important',
+                        stroke: '#aaa !important',
+                    },
+                },
+            },
+        }}
+        {...props}
+    ></Arrow>
+);
 
 export const StyleSwitcher = ({ bg, ...props }) => (
     <Flex
@@ -20,9 +49,8 @@ export const StyleSwitcher = ({ bg, ...props }) => (
             },
         }}
     >
-        <Text mb="6px">A</Text>
         <Dot bg={bg} size="30px"></Dot>
-        <Flex className="intro" css={{ visibility: 'hidden' }}>
+        <Flex className="intro" mt="10px" css={{ visibility: 'hidden' }}>
             <Box
                 css={{
                     position: 'absolute',
@@ -34,110 +62,6 @@ export const StyleSwitcher = ({ bg, ...props }) => (
                 <Text>罂粟红</Text>
             </Box>
         </Flex>
-    </Flex>
-);
-
-export const data = [
-    {
-        channel: 'A',
-        children: [
-            {
-                size: 42,
-                num: 2,
-            },
-            {
-                size: 44,
-                num: 1,
-            },
-            {
-                size: 46,
-                num: 2,
-            },
-            {
-                size: 48,
-                num: 3,
-            },
-        ],
-    },
-    {
-        channel: 'B',
-        children: [
-            {
-                size: 42,
-                num: 2,
-            },
-            {
-                size: 44,
-                num: 1,
-            },
-            {
-                size: 46,
-                num: 2,
-            },
-            {
-                size: 48,
-                num: 3,
-            },
-        ],
-    },
-    {
-        channel: 'C',
-        children: [
-            {
-                size: 42,
-                num: 2,
-            },
-            {
-                size: 44,
-                num: 1,
-            },
-            {
-                size: 46,
-                num: 2,
-            },
-            {
-                size: 48,
-                num: 3,
-            },
-        ],
-    },
-    {
-        channel: 'D',
-        children: [
-            {
-                size: 42,
-                num: 2,
-            },
-            {
-                size: 44,
-                num: 1,
-            },
-            {
-                size: 46,
-                num: 2,
-            },
-            {
-                size: 48,
-                num: 3,
-            },
-        ],
-    },
-];
-
-export const SizeBox = ({ width, bg, children }) => (
-    <Flex
-        justifyContent="center"
-        alignItems="center"
-        width={width || '52px'}
-        height="21px"
-        bg={bg || '#D0C5C5'}
-        mr="5px"
-        mb="5px"
-        css={{
-            borderRadius: '3px',
-        }}
-    >
-        {children}
     </Flex>
 );
 
@@ -185,13 +109,12 @@ export default ({ visible, onClose }) => {
                                 ))}
                             </Swiper>
                         </Box>
-                        <Box width="675px" mt="30px" css={{ overflowX: 'auto' }}>
-                            <Flex>
-                                {new Array(4).fill(0).map((item, i) => (
-                                    <Image src={temp} mr="10px" flex="none"></Image>
-                                ))}
-                            </Flex>
-                        </Box>
+                        <Flex justifyContent="center" mt="20px">
+                            <Box mr="30px">
+                                <ArrowBtn></ArrowBtn>
+                                <ArrowBtn right></ArrowBtn>
+                            </Box>
+                        </Flex>
                     </Box>
 
                     <Box pl="30px">
@@ -211,35 +134,15 @@ export default ({ visible, onClose }) => {
                             ))}
                         </Flex>
                         <Text fontSize="16px" mt="90px">
-                            Size / Quantity
+                            尺码/中包
                         </Text>
-                        <Box mt="15px">
-                            <Flex>
-                                <SizeBox>S / Q</SizeBox>
-                                {[42, 44, 46, 48].map((item, i) => (
-                                    <SizeBox key={i} width="41px" bg="#EEEDED">
-                                        {item}
-                                    </SizeBox>
-                                ))}
-                            </Flex>
-                            {data.map((item, index) => (
-                                <Flex>
-                                    <SizeBox key={index} bg="#F7F7F7">
-                                        {item.channel}
-                                    </SizeBox>
-                                    {item.children.map((child, i) => (
-                                        <SizeBox key={i} width="41px" bg="#F7F7F7">
-                                            {child.num}
-                                        </SizeBox>
-                                    ))}
-                                </Flex>
+                        <Flex mt="20px">
+                            {['XS', 'S', 'M'].map((item, i) => (
+                                <Box key={i} mr="15px">
+                                    <Text textAlign="center">{item}</Text>
+                                    <InputNumber></InputNumber>
+                                </Box>
                             ))}
-                        </Box>
-                        <Flex mt="40px">
-                            <strong>中包:</strong>
-                            <Text mr="30px">12pcs</Text>
-                            <strong>装箱:</strong>
-                            <Text>192pcs</Text>
                         </Flex>
                         <Box bg="#000" width="100%" py="16px" mt="80px" css={{ cursor: 'pointer' }}>
                             <Text color="#fff" textAlign="center">

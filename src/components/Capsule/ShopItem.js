@@ -31,18 +31,18 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
             }}
         >
             <Box p="30px" bg="#F7F7F7" css={{ borderRadius: '10px' }}>
-                <Flex justifyContent="center" mb="40px" height="200px" alignItems="center" flexDirection="column">
+                <Flex justifyContent="center" height="200px" alignItems="center" flexDirection="column">
                     <Image width="100px" src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
                 </Flex>
 
                 <Box
-                    py="20px"
                     css={{ fontSize: '12px' }}
                     onClick={e => {
                         e.stopPropagation();
                     }}
                 >
-                    <Text>Ref.{item.code}</Text>
+                    <Text fontSize="16px">{item.caseNum} PCS</Text>
+                    <Text mt="5px">Ref.{item.code}</Text>
                     <Text mt="5px">Size.{item.size}</Text>
                     <Flex css={{ position: 'relative' }} mt="14px" justifyContent="center" alignItems="center">
                         {onEditPrice ? (

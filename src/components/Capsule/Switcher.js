@@ -1,4 +1,5 @@
 import CirCleArrow from '@/public/icons/circle_arrow.svg';
+import CirCleArrowFill from '@/public/icons/circle_arrow_fill.svg';
 import React, { forwardRef, useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import { ReactSVG } from 'react-svg';
@@ -8,7 +9,7 @@ import { connect } from 'dva';
 import ABC from './ABC';
 import styles from './switcher.less';
 
-export const Arrow = ({ right, ...props }) => (
+export const Arrow = ({ right, fill, ...props }) => (
     <Box
         css={{
             display: 'inline-block',
@@ -16,7 +17,7 @@ export const Arrow = ({ right, ...props }) => (
         {...props}
     >
         <ReactSVG
-            src={CirCleArrow}
+            src={fill ? CirCleArrowFill : CirCleArrow}
             className={styles.nextIcon}
             style={
                 right && {

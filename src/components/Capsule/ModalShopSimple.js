@@ -1,5 +1,6 @@
 import InputNumber from '@/components/InputNumber';
 import StyleItem from '@/components/StyleItem';
+import ShopItem from './ShopItem';
 import { filterImageUrl } from '@/utils/helper';
 import temp from '@/public/temp.jpg';
 import { useEffect, useState } from 'react';
@@ -10,7 +11,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex alignSelf="flex-end" py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -82,7 +83,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
     </Flex>
 );
 
-const ModalSimple = ({ visible, onClose, currentShopStyle, dispatch }) => {
+const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = [], dispatch }) => {
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
     // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
@@ -114,10 +115,11 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, dispatch }) => {
                     left: 0,
                     right: 0,
                     top: 0,
+                    bottom: 0,
                 },
             }}
         >
-            <Box bg="#fff" pb="50px">
+            <Flex alignItems="center" flexDirection="column" bg="#fff" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
                     <Box mr="10px" height="675px" css={{ overflowY: 'auto' }}>
@@ -177,7 +179,6 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, dispatch }) => {
                             </Box>
                         </Flex> */}
                     </Box>
-
                     <Box pl="30px">
                         <Text>2021 swimwear series</Text>
                         <Text color="#313131" fontSize="28px" fontWeight="bold" my="20px">
@@ -235,9 +236,37 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, dispatch }) => {
                         </Box>
                     </Box>
                 </Flex>
-                <Image></Image>
-                <Heading></Heading>
-            </Box>
+                <Box width="1060px" bg="#fff" pt="100px">
+                    <Text pb="38px" fontSize="24px">
+                        Related Products 类似产品
+                    </Text>
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, 340px)',
+                            placeItems: 'center',
+                            gap: '20px',
+                        }}
+                    >
+                        {shopStyleAboutList.map((item, index) => {
+                            return (
+                                <ShopItem
+                                    item={item}
+                                    key={item._id}
+                                    handleOpen={() => {
+                                        dispatch({
+                                            type: 'shop/setCurrentShopStyle',
+                                            payload: item,
+                                        });
+                                    }}
+                                    curChannelPrice={item.price}
+                                    onEditPrice={false}
+                                />
+                            );
+                        })}
+                    </Box>
+                </Box>
+            </Flex>
         </Modal>
     );
 };
@@ -246,4 +275,5 @@ export default connect(({ shop = {} }) => ({
     shopList: shop.shopList,
     currentShop: shop.currentShop,
     currentShopStyle: shop.currentShopStyle,
+    shopStyleAboutList: shop.shopStyleAboutList,
 }))(ModalSimple);
