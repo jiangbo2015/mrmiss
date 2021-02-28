@@ -11,6 +11,7 @@ import { connect } from 'dva';
 const App = ({
     dispatch,
     currentGood,
+    currentGoodCategory,
     currentStyle,
     currentStyle1,
     selectStyleList,
@@ -20,9 +21,11 @@ const App = ({
     currentUser,
 }) => {
     const handleAddFavorite = async () => {
+        let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
         if (collocationPattern === 'single' || collocationPattern === 'expand') {
             let payload = {
                 goodId: currentGood._id,
+                goodCategory,
                 styleAndColor: [],
             };
             if (currentStyle._id) {
@@ -52,6 +55,7 @@ const App = ({
             const favorites = selectStyleList.map(x => ({
                 user: currentUser._id,
                 goodId: currentGood._id,
+                goodCategory,
                 styleAndColor: [
                     {
                         styleId: x._id,
@@ -148,6 +152,7 @@ const App = ({
 
 export default connect(({ diy = {}, channel, user }) => ({
     collocationPattern: diy.collocationPattern,
+    currentGoodCategory: diy.currentGoodCategory,
     currentGood: diy.currentGood,
     currentStyle: diy.currentStyle,
     currentStyle1: diy.currentStyle1,

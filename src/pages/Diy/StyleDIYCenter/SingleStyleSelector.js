@@ -1,30 +1,6 @@
-import React, { useEffect } from 'react';
-import { connect } from 'dva';
-import { ReactSVG } from 'react-svg';
+import React from 'react';
 import Swiper from 'react-id-swiper';
-
-import SearchInput from '@/components/SearchInput';
-import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
-// import InfiniteScroll from 'react-infinite-scroll-component';
-
-import ArrowIcon from '@/public/icons/icon-arrow.svg';
-import ExpandIcon from '@/public/icons/icon-expand.svg';
-import MultipleIcon from '@/public/icons/icon-multiple.svg';
-import SwitchBgIcon from '@/public/icons/icon-switch-bg.svg';
-
-// import Swiper from 'react-id-swiper';
-import styles from './index.less';
-// import { Flex } from 'rebass';
-
-const waitTime = time => {
-    let p = new Promise(resovle => {
-        setTimeout(() => {
-            resovle('go');
-        }, time);
-    });
-    return p;
-};
 
 const App = ({
     currentStyle = {},
@@ -55,7 +31,7 @@ const App = ({
                     handleSetCurrentStyleRegion(-1);
                 }}
             >
-                <div style={{ width: '300px' }}>
+                <div style={{ width: '320px' }}>
                     <Swiper
                         {...params}
                         style={{
@@ -64,9 +40,10 @@ const App = ({
                     >
                         <div
                             style={{
-                                width: '300px',
+                                width: '320px',
                                 display: 'flex',
                                 justifyContent: 'center',
+                                padding: '28px 0',
                             }}
                             onClick={e => {
                                 e.stopPropagation();
@@ -74,7 +51,7 @@ const App = ({
                         >
                             <StyleItem
                                 // width="170px"
-                                width={`${(currentStyle.styleSize / 27) * 170}px`}
+                                width={`${(currentStyle.styleSize / 27) * 180}px`}
                                 styleId={`single-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
@@ -86,13 +63,13 @@ const App = ({
                         </div>
                         <div
                             style={{
-                                width: '300px',
+                                width: '320px',
                                 display: 'flex',
                                 justifyContent: 'center',
                             }}
                         >
                             <StyleItem
-                                width={`${(currentStyle.styleBackSize / 27) * 170}px`}
+                                width={`${(currentStyle.styleBackSize / 27) * 180}px`}
                                 colors={selectColorList}
                                 {...currentStyle}
                                 styleId={`single-${currentStyle._id}`}
@@ -119,7 +96,7 @@ const App = ({
                 {docs.map((d, index) => (
                     <StyleItem
                         style={{
-                            margin: '0 100px 0 10px',
+                            margin: '0 60px 0 10px',
                         }}
                         width={`${(d.styleSize / 27) * 100}px`}
                         key={`${d._id}-${index}-${Math.random() * 1000000}`}
@@ -129,23 +106,6 @@ const App = ({
                         }}
                     />
                 ))}
-                {/* <ReactSVG
-                    src={ArrowIcon}
-                    className={styles.nextIcon}
-                    style={{
-                        width: '18px',
-                        height: '18px',
-                        transform: 'rotateZ(180deg)',
-                    }}
-                />
-                <ReactSVG
-                    src={ArrowIcon}
-                    className={styles.nextIcon}
-                    style={{
-                        width: '18px',
-                        height: '18px',
-                    }}
-                /> */}
             </div>
         </>
     );

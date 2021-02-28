@@ -258,7 +258,13 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                 {currentUser._id && currentUser.innerDataUserd ? (
                     <ReactSVG
                         src={headerBgColor !== '#fff' ? WhiteChartIcon : ChartIcon}
-                        style={{ width: '32px' }}
+                        style={{
+                            width: '32px',
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)',
+                        }}
                         onClick={() => {
                             history.push('/chart');
                         }}

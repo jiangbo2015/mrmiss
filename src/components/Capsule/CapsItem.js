@@ -51,7 +51,6 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
                 </Flex>
 
                 <Box
-                    py="20px"
                     css={{ fontSize: '12px' }}
                     onClick={e => {
                         e.stopPropagation();

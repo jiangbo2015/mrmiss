@@ -1,8 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 
-import { Flex, Box } from 'rebass/styled-components';
+import { Flex, Box, Image } from 'rebass/styled-components';
 import { ReactSVG } from 'react-svg';
 import CirCleArrow from '@/public/icons/circle_arrow.svg';
+import IconPng from '@/public/icon.png';
 // import styles from './index.less';
 
 import Switcher from '@/components/Capsule/Switcher';
@@ -16,7 +17,8 @@ const ClassifyItem = ({ children, isSelected, ...props }) => (
             padding: '0 11px',
             cursor: 'pointer',
             color: isSelected ? '#ffffff' : '#7B7B7B',
-            fontSize: isSelected ? '16px' : '12px',
+            // fontSize: isSelected ? '16px' : '12px',
+            fontSize: '12px',
         }}
     >
         {children}
@@ -50,7 +52,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
         } else {
             dispatch({
                 type: 'diy/setCollocationPattern',
-                payload: 'multiple',
+                payload: 'single',
             });
             dispatch({
                 type: 'diy/batchSetSelectColorList',
@@ -100,7 +102,9 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
             }}
             px="35px"
         >
-            <Box width="256px" />
+            <Flex alignItems="center" width="256px">
+                <Image width="240px" src={IconPng} />
+            </Flex>
             <Flex pt="20px" flexDirection="column" alignItems="center">
                 <Flex width="50px" justifyContent="space-between">
                     <ReactSVG

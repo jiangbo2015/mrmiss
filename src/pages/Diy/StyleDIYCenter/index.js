@@ -8,6 +8,7 @@ import BigPicColor from './BigPicColor';
 import EditMode from './EditMode';
 
 const App = ({ dispatch, collocationPattern }) => {
+    console.log('collocationPattern', collocationPattern);
     return (
         <>
             <div

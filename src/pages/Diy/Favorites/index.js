@@ -15,6 +15,7 @@ import CapsuleIcon from '@/public/icons/icon-capsule.svg';
 import EditIcon from '@/public/icons/icon-edit.svg';
 import DelIcon from '@/public/icons/icon-del.svg';
 import BigIcon from '@/public/icons/icon-big+.svg';
+import ComputerIcon from '@/public/icons/icon-computer.svg';
 
 import styles from './index.less';
 import OrderModal from './order/index';
@@ -196,7 +197,14 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                         disabled
                         options={[{ label: 'Time', value: 'time' }]}
                     />
-
+                    <ReactSVG
+                        style={{
+                            width: '14px',
+                            height: '14px',
+                            marginRight: '6px',
+                        }}
+                        src={ComputerIcon}
+                    />
                     <Select
                         value={favoritePattern}
                         onChange={val => {
