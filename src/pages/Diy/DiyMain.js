@@ -87,7 +87,7 @@ const App = ({
         }
     };
     return (
-        <div style={{ padding: '0 35px', width: '100%', background: '#323232' }}>
+        <div style={{ padding: '0 30px', width: '100%', background: '#323232' }}>
             <div
                 style={{
                     width: 'cacl(100% - 70px)',

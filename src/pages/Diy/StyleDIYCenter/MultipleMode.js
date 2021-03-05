@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
+import { InputNumber, Tooltip } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
@@ -28,8 +29,11 @@ const App = ({
     currentGoodCategory = '',
     styleQueryKey,
     styleQueryChangeKey,
+    currentAdminChannel,
     assign,
+    curChannslPrice,
 }) => {
+    const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     let docs = [];
     if (styleList[currentGoodCategory]) {
         docs = styleList[currentGoodCategory];
@@ -114,6 +118,25 @@ const App = ({
             payload: '',
         });
     }, [currentGood, currentGoodCategory]);
+
+    useEffect(() => {
+        const { shopStyles = [] } = currentAdminChannel;
+        setSelectAssignedStyleList(shopStyles);
+        console.log('currentAdminChannel', shopStyles);
+    }, [currentAdminChannel]);
+
+    const handleEditPrice = ({ price, style }) => {
+        console.log(selectStyleList);
+        const findIndex = selectStyleList.findIndex(x => x._id === style);
+        if (findIndex >= 0) {
+            selectStyleList[findIndex].price = price;
+            dispatch({
+                type: 'diy/setSelectStyleList',
+                payload: [...selectStyleList],
+            });
+        }
+    };
+
     const handleSetCurrentGoodCategory = category => {
         dispatch({
             type: 'diy/setCurrentGoodCategory',
@@ -133,6 +156,7 @@ const App = ({
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    position: 'relative',
                 }}
             >
                 <div
@@ -155,7 +179,7 @@ const App = ({
                             height: '20px',
                             padding: '4px',
                             marginLeft: '12px',
-                            marginBottom: '8px',
+                            marginBottom: '4px',
                             opacity: assign ? (selectStyleList.length < docs.length ? 0.3 : 1) : 0,
                             pointerEvents: assign ? 'painted' : 'none',
                         }}
@@ -165,7 +189,7 @@ const App = ({
                     />
                 </div>
                 <SearchInput
-                    style={{ width: '180px' }}
+                    style={{ width: '180px', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
                     placeholder="SEARCH STYLE"
                     value={styleQueryChangeKey}
                     onSearch={e => {
@@ -195,14 +219,16 @@ const App = ({
                     />
                 </div>
             </div>
-            <InfiniteScroll
-                dataLength={docs.length}
-                next={handleFetchMore}
-                hasMore={false}
-                height={600}
+            {/* InfiniteScroll */}
+            <div
+                // dataLength={docs.length}
+                // next={handleFetchMore}
+                // hasMore={false}
+                // height={600}
                 // inverse={true}
                 style={{
                     width: '100%',
+                    height: '600px',
                     display: 'grid',
                     gridTemplateColumns: 'repeat(auto-fill, 160px)',
                     justifyItems: 'center',
@@ -216,67 +242,97 @@ const App = ({
                 }}
                 loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
             >
-                {docs.map((d, index) => (
-                    <div
-                        style={{
-                            position: 'relative',
-                            justifySelf: 'stretch',
-                            alignSelf: 'stretch',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                        }}
-                    >
-                        <ReactSVG
-                            style={{
-                                width: '10px',
-                                height: '10px',
-                                opacity: d.isSelected ? 1 : 0,
-                            }}
-                            src={SelectedIcon}
-                        />
+                {docs.map((d, index) => {
+                    let selected = null;
+                    if (d.isSelected) {
+                        selected = selectStyleList.find(x => x.style === d._id);
+                    }
+                    return (
                         <div
                             style={{
-                                flex: 1,
+                                position: 'relative',
+                                justifySelf: 'stretch',
+                                alignSelf: 'stretch',
                                 display: 'flex',
-                                justifyContent: 'center',
+                                flexDirection: 'column',
                                 alignItems: 'center',
-                            }}
-                            onClick={() => {
-                                handleSelectStyle({ item: d, index });
+                                justifyContent: 'space-between',
+                                color: '#ffffff',
                             }}
                         >
-                            <StyleItem
-                                width={`${(d.styleSize / 27) * 100}px`}
-                                styleId={`${d._id}-item`}
-                                colors={
-                                    assign
-                                        ? []
-                                        : [
-                                              selectColorList[0],
-                                              selectColorList[0],
-                                              selectColorList[0],
-                                              selectColorList[0],
-                                              selectColorList[0],
-                                              selectColorList[0],
-                                          ]
-                                }
-                                key={`${d._id}-${index}-${Math.random() * 1000000}`}
-                                {...d}
+                            <ReactSVG
                                 style={{
-                                    cursor: 'pointer',
+                                    width: '10px',
+                                    height: '10px',
+                                    opacity: d.isSelected ? 1 : 0,
                                 }}
+                                src={SelectedIcon}
                             />
+                            <Tooltip title={d.styleNo} key={`${d._id}-tooltip`}>
+                                <div
+                                    style={{
+                                        flex: 1,
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                    }}
+                                    onClick={() => {
+                                        handleSelectStyle({ item: d, index });
+                                    }}
+                                >
+                                    <StyleItem
+                                        width={`${(d.styleSize / 27) * 100}px`}
+                                        styleId={`${d._id}-item`}
+                                        colors={
+                                            assign
+                                                ? []
+                                                : [
+                                                      selectColorList[0],
+                                                      selectColorList[0],
+                                                      selectColorList[0],
+                                                      selectColorList[0],
+                                                      selectColorList[0],
+                                                      selectColorList[0],
+                                                  ]
+                                        }
+                                        key={`${d._id}-${index}-${Math.random() * 1000000}`}
+                                        {...d}
+                                        style={{
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                </div>
+                            </Tooltip>
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between',
+                                    padding: '0 20px',
+                                    width: '100%',
+                                    opacity: assign && d.isSelected ? 1 : 0,
+                                    pointerEvents: assign && d.isSelected ? '' : 'none',
+                                }}
+                            >
+                                <span>¥.{d.price}</span>
+                                <InputNumber
+                                    formatter={value => `¥${value}`}
+                                    style={{ width: '70px' }}
+                                    value={selected ? selected.price : d.price}
+                                    onChange={value => {
+                                        handleEditPrice({ style: d._id, price: value });
+                                    }}
+                                />
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </InfiniteScroll>
+                    );
+                })}
+            </div>
         </div>
     );
 };
 
-export default connect(({ diy = {} }) => ({
+export default connect(({ diy = {}, channel = {} }) => ({
     styleList: diy.styleList,
     selectColorList: diy.selectColorList,
     selectStyleList: diy.selectStyleList,
@@ -284,4 +340,5 @@ export default connect(({ diy = {} }) => ({
     currentGoodCategory: diy.currentGoodCategory,
     styleQueryKey: diy.styleQueryKey,
     styleQueryChangeKey: diy.styleQueryChangeKey,
+    currentAdminChannel: channel.currentAdminChannel,
 }))(App);

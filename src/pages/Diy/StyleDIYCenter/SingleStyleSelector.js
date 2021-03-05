@@ -26,6 +26,7 @@ const App = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    margin: '28px 0',
                 }}
                 onClick={() => {
                     handleSetCurrentStyleRegion(-1);

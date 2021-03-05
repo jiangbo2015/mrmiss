@@ -161,6 +161,7 @@ const App = ({
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     width: '100%',
+                    position: 'relative',
                 }}
             >
                 <div
@@ -170,7 +171,7 @@ const App = ({
                 >
                     <Select
                         value={currentGoodCategory}
-                        style={{ marginRight: '28px' }}
+                        style={{ marginRight: '20px' }}
                         options={currentGood.category.map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
@@ -183,7 +184,7 @@ const App = ({
                     />
                 </div>
                 <SearchInput
-                    style={{ width: '180px' }}
+                    style={{ width: '180px', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
                     placeholder="SEARCH STYLE"
                     value={styleQueryChangeKey}
                     onSearch={e => {

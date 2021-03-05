@@ -87,8 +87,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     };
     const handleToggleTime = async () => {
         window.timeOrder = !window.timeOrder;
-        console.log('window.timeOrder', window.timeOrder);
-
+        // console.log('window.timeOrder', window.timeOrder);
         const nfavoriteArr = favoriteArr.sort((a, b) => {
             return window.timeOrder
                 ? new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
@@ -102,7 +101,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     return (
         <div
             style={{
-                padding: '28px 20px',
+                padding: '28px 30px',
                 background: '#4A4949',
             }}
         >

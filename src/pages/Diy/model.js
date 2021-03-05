@@ -132,11 +132,9 @@ export default {
             };
         },
         setSelectStyleList(state, action) {
-            console.log('setSelectStyleList');
-            console.log(action.payload);
             return {
                 ...state,
-                selectStyleList: action.payload,
+                selectStyleList: action.payload.filter(x => x._id),
             };
         },
         setSelectFavoriteList(state, action) {
@@ -306,125 +304,68 @@ export default {
             } = yield select(state => state.diy);
             // setStyleColorings
             let newValue = [];
-            console.log('collocationPattern', collocationPattern);
-            console.log('collocationPattern', selectColorList);
-            console.log('payload', payload);
             const { item, index } = payload;
             const findSelectIndex = selectColorList.findIndex(x => x && x._id == item._id);
 
-            if (findSelectIndex >= 0) {
-                newValue = [...selectColorList];
-                newValue.splice(findSelectIndex, 1);
-                if (item.type) {
-                    flowerList.docs[index].isSelected = false;
-                } else {
-                    colorList.docs[index].isSelected = false;
+            switch (collocationPattern) {
+                case 'edit': {
                 }
-            } else {
-                switch (collocationPattern) {
-                    case 'single':
-                        {
-                            if (currentStyleRegion) {
-                                // 自主选择区域
-                                newValue = [...selectColorList];
-                                if (newValue[currentStyleRegion - 1]) {
-                                    if (newValue[currentStyleRegion - 1].type === 0) {
-                                        const findIndex = colorList.docs.findIndex(
-                                            x => x._id === newValue[currentStyleRegion - 1]._id,
-                                        );
+                case 'single':
+                    {
+                        if (currentStyleRegion) {
+                            // 自主选择区域
+
+                            newValue = [...selectColorList];
+                            // 选中区域已有颜色
+                            if (newValue[currentStyleRegion - 1]) {
+                                let tempId = newValue[currentStyleRegion - 1]._id;
+                                let tempType = newValue[currentStyleRegion - 1].type;
+                                let isEixised = false;
+                                // 点击了选中区域的相同颜色 则取消该区域的选中
+                                if (newValue[currentStyleRegion - 1]._id === item._id) {
+                                    newValue[currentStyleRegion - 1] = {};
+                                    isEixised = newValue.find(nv => nv && nv._id === item._id);
+                                } else {
+                                    //否则换一种颜色
+                                    newValue[currentStyleRegion - 1] = item;
+                                    isEixised = newValue.find(nv => nv && nv._id === tempId);
+                                    if (item.type) {
+                                        flowerList.docs[index].isSelected = true;
+                                    } else {
+                                        colorList.docs[index].isSelected = true;
+                                    }
+                                }
+
+                                if (!isEixised) {
+                                    if (tempType === 0) {
+                                        const findIndex = colorList.docs.findIndex(x => x._id === tempId);
                                         findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
                                     } else {
-                                        const findIndex = flowerList.docs.findIndex(
-                                            x => x._id === newValue[currentStyleRegion - 1]._id,
-                                        );
+                                        const findIndex = flowerList.docs.findIndex(x => x._id === tempId);
                                         findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
                                     }
                                 }
+                            } else {
                                 newValue[currentStyleRegion - 1] = item;
                                 if (item.type) {
                                     flowerList.docs[index].isSelected = true;
                                 } else {
                                     colorList.docs[index].isSelected = true;
                                 }
-                            } else {
-                                //能选中3个颜色
-                                if (selectColorList.length > 2) {
-                                    if (selectColorList[2].type === 0) {
-                                        const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[2]._id);
-                                        findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
-                                    } else {
-                                        const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[2]._id);
-                                        findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
-                                    }
-                                    newValue = [selectColorList[0], selectColorList[1], item];
-                                } else {
-                                    newValue = [...selectColorList, item];
-                                }
-                                if (item.type) {
-                                    flowerList.docs[index].isSelected = true;
-                                } else {
-                                    colorList.docs[index].isSelected = true;
-                                }
                             }
-                        }
-                        break;
-                    case 'edit':
-                        {
-                            if (currentStyleRegion) {
-                                // 自主选择区域
-                                newValue = [...selectColorList];
-                                if (newValue[currentStyleRegion - 1]) {
-                                    if (newValue[currentStyleRegion - 1].type === 0) {
-                                        const findIndex = colorList.docs.findIndex(
-                                            x => x._id === newValue[currentStyleRegion - 1]._id,
-                                        );
-                                        findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
-                                    } else {
-                                        const findIndex = flowerList.docs.findIndex(
-                                            x => x._id === newValue[currentStyleRegion - 1]._id,
-                                        );
-                                        findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
-                                    }
-                                }
-                                newValue[currentStyleRegion - 1] = item;
-                                if (item.type) {
-                                    flowerList.docs[index].isSelected = true;
-                                } else {
-                                    colorList.docs[index].isSelected = true;
-                                }
-                            } else {
-                                //能选中3个颜色
-                                if (selectColorList.length > 2) {
-                                    if (selectColorList[2].type === 0) {
-                                        const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[2]._id);
-                                        findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
-                                    } else {
-                                        const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[2]._id);
-                                        findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
-                                    }
-                                    newValue = [selectColorList[0], selectColorList[1], item];
-                                } else {
-                                    newValue = [...selectColorList, item];
-                                }
-                                if (item.type) {
-                                    flowerList.docs[index].isSelected = true;
-                                } else {
-                                    colorList.docs[index].isSelected = true;
-                                }
-                            }
-                        }
-                        break;
-                    case 'multiple':
-                        {
-                            newValue = [item]; //只能选中一个颜色
-                            if (selectColorList.length > 0) {
-                                if (selectColorList[0].type === 0) {
-                                    const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[0]._id);
+                        } else {
+                            //能选中3个颜色
+                            if (selectColorList.length > 2) {
+                                if (selectColorList[2].type === 0) {
+                                    const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[2]._id);
                                     findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
                                 } else {
-                                    const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[0]._id);
+                                    const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[2]._id);
                                     findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
                                 }
+                                newValue = [selectColorList[0], selectColorList[1], item];
+                            } else {
+                                newValue = [...selectColorList, item];
                             }
                             if (item.type) {
                                 flowerList.docs[index].isSelected = true;
@@ -432,18 +373,59 @@ export default {
                                 colorList.docs[index].isSelected = true;
                             }
                         }
-                        break;
-                    case 'assign':
-                        {
-                            newValue = [...selectColorList, item];
+                    }
+                    break;
+                case 'multiple':
+                    {
+                        //已选中，就取消
+                        if (findSelectIndex >= 0) {
+                            newValue = [...selectColorList];
+                            newValue.splice(findSelectIndex, 1);
                             if (item.type) {
-                                flowerList.docs[index].isSelected = true;
+                                flowerList.docs[index].isSelected = false;
                             } else {
-                                colorList.docs[index].isSelected = true;
+                                colorList.docs[index].isSelected = false;
                             }
                         }
-                        break;
-                }
+
+                        newValue = [item]; //只能选中一个颜色
+                        if (selectColorList.length > 0) {
+                            if (selectColorList[0].type === 0) {
+                                const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[0]._id);
+                                findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
+                            } else {
+                                const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[0]._id);
+                                findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
+                            }
+                        }
+                        if (item.type) {
+                            flowerList.docs[index].isSelected = true;
+                        } else {
+                            colorList.docs[index].isSelected = true;
+                        }
+                    }
+                    break;
+                case 'assign':
+                    {
+                        //已选中，就取消
+                        if (findSelectIndex >= 0) {
+                            newValue = [...selectColorList];
+                            newValue.splice(findSelectIndex, 1);
+                            if (item.type) {
+                                flowerList.docs[index].isSelected = false;
+                            } else {
+                                colorList.docs[index].isSelected = false;
+                            }
+                        }
+
+                        newValue = [...selectColorList, item];
+                        if (item.type) {
+                            flowerList.docs[index].isSelected = true;
+                        } else {
+                            colorList.docs[index].isSelected = true;
+                        }
+                    }
+                    break;
             }
 
             yield put({
