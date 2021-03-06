@@ -8,7 +8,7 @@ export default {
         info: {},
         branchList: [],
         shopStyleList: { docs: [] },
-        currentBranch: {},
+        currentBranch: { children: [] },
         currentSelectedBar: {},
         currentShopStyle: {},
         currentShopTopStyleIndex: 0,

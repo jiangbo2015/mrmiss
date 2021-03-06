@@ -252,6 +252,7 @@ export default {
                         goodsId: payload[0].goodId,
                     },
                 });
+                message.info('收藏成功');
             }
             // { styleAndColor: params, goodId: goodId }
         },
@@ -311,6 +312,7 @@ export default {
                 case 'edit': {
                 }
                 case 'single':
+                    console.log('single');
                     {
                         if (currentStyleRegion) {
                             // 自主选择区域
@@ -408,21 +410,26 @@ export default {
                 case 'assign':
                     {
                         //已选中，就取消
+                        console.log('findSelectIndex', findSelectIndex);
                         if (findSelectIndex >= 0) {
                             newValue = [...selectColorList];
                             newValue.splice(findSelectIndex, 1);
                             if (item.type) {
-                                flowerList.docs[index].isSelected = false;
+                                let curIndex = flowerList.docs.findIndex(x => x && x._id == item._id);
+                                flowerList.docs[curIndex].isSelected = false;
                             } else {
-                                colorList.docs[index].isSelected = false;
+                                let curIndex = colorList.docs.findIndex(x => x && x._id == item._id);
+                                colorList.docs[curIndex].isSelected = false;
                             }
-                        }
-
-                        newValue = [...selectColorList, item];
-                        if (item.type) {
-                            flowerList.docs[index].isSelected = true;
                         } else {
-                            colorList.docs[index].isSelected = true;
+                            newValue = [...selectColorList, item];
+                            if (item.type) {
+                                let curIndex = flowerList.docs.findIndex(x => x && x._id == item._id);
+                                flowerList.docs[curIndex].isSelected = true;
+                            } else {
+                                let curIndex = colorList.docs.findIndex(x => x && x._id == item._id);
+                                colorList.docs[curIndex].isSelected = true;
+                            }
                         }
                     }
                     break;
@@ -446,8 +453,6 @@ export default {
             let newValue = [];
 
             const findSelectIndex = selectStyleList.findIndex(x => x._id == item._id);
-
-            console.log('findSelectIndex', findSelectIndex);
             if (findSelectIndex >= 0) {
                 newValue = [...selectStyleList];
                 newValue.splice(findSelectIndex, 1);

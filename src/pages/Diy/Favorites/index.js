@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
+import lodash from 'lodash';
 import { Flex, Box } from 'rebass/styled-components';
 import Propmt from '@/components/Propmt';
 import Modal from '@/components/Modal';
@@ -98,6 +99,16 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
             payload: [...nfavoriteArr],
         });
     };
+
+    const renderCountsInfo = () => {
+        let infos = lodash.groupBy(favoriteArr, x => x.goodCategory.name);
+        return Object.keys(infos).map(k => (
+            <Flex flexDirection="column" alignItems="center" pl="10px">
+                <div>{k}</div>
+                <div>{infos[k].length}</div>
+            </Flex>
+        ));
+    };
     return (
         <div
             style={{
@@ -164,8 +175,6 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                         message.info('胶囊名称不能为空');
                         return;
                     }
-
-                    console.log('input', input);
                     await dispatch({
                         type: 'diy/createCapsule',
                         payload: input,
@@ -217,7 +226,14 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                         ]}
                     />
                 </div>
-                <Flex alignItems="baseline">
+                <Flex alignItems="center">
+                    <Flex>
+                        {renderCountsInfo()}
+                        <Flex flexDirection="column" alignItems="center" pl="10px" pr="40px">
+                            <div>ALL</div>
+                            <div>{favoriteArr.length}</div>
+                        </Flex>
+                    </Flex>
                     <ReactSVG
                         style={{
                             padding: '8px',
