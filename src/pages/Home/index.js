@@ -26,7 +26,7 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
         <Layout>
             {/* <Login /> */}
             <Banner isLogin={currentUser.id ? true : false} imgsInfo={systemDetail} />
-            <Box bg="#fbf8fa" px="40px" py="40px">
+            <Box p="40px" maxWidth="1400px" m="auto">
                 <Box mb="40px">
                     <Title
                         title="我们的胶囊"
@@ -37,19 +37,21 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
                 <Carousel carousels={systemDetail.carousels}></Carousel>
             </Box>
             <Box bg="#fff" px="40px" py="40px">
-                {/* <div id="aboutas">aboutas</div> */}
-                <Title
-                    title="关于我们"
-                    subtitle=" 我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。"
-                />
-                <Box
-                    mt="40px"
-                    height="500px"
-                    css={{
-                        background: `url(${map}) no-repeat`,
-                        backgroundSize: 'cover',
-                    }}
-                />
+                <Box bg="#fff" maxWidth="1400px" m="auto">
+                    {/* <div id="aboutas">aboutas</div> */}
+                    <Title
+                        title="关于我们"
+                        subtitle=" 我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。"
+                    />
+                    <Box
+                        mt="40px"
+                        height="500px"
+                        css={{
+                            background: `url(${map}) no-repeat`,
+                            backgroundSize: 'cover',
+                        }}
+                    />
+                </Box>
             </Box>
         </Layout>
     );

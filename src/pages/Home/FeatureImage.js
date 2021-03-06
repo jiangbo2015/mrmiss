@@ -8,15 +8,21 @@ export default ({ imgsInfo = {} }) => (
     <Flex flexWrap="wrap">
         <Box
             width={0.4}
-            height="500px"
-            css={{
-                background: `url(${filterImageUrl(imgsInfo.exhibition1)}) no-repeat`,
-                backgroundSize: 'cover',
+            sx={{
+                overflow: 'hidden',
             }}
-        ></Box>
+        >
+            <Image
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                }}
+                src={filterImageUrl(imgsInfo.exhibition1)}
+            />
+        </Box>
+
         <Box
             width={0.6}
-            height="500px"
             sx={{
                 overflow: 'hidden',
             }}
@@ -24,8 +30,8 @@ export default ({ imgsInfo = {} }) => (
             <Image
                 src={filterImageUrl(imgsInfo.exhibition2)}
                 sx={{
+                    height: 'auto',
                     width: '100%',
-                    height: '100%',
                     transition: 'all 1s',
                     cursor: 'pointer',
                     ':hover': {

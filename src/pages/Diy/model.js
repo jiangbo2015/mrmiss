@@ -499,6 +499,18 @@ export default {
                 payload: [...favoriteArr],
             });
         },
+        *toogleSelectAllFavorite({ payload }, { call, put, select }) {
+            const { favoriteArr } = yield select(state => state.diy);
+
+            yield put({
+                type: 'setSelectFavoriteList',
+                payload: payload ? favoriteArr.map(x => x) : [],
+            });
+            yield put({
+                type: 'setFavoriteArr',
+                payload: favoriteArr.map(x => ({ ...x, isSelected: payload })),
+            });
+        },
         *toDoOrder({ payload }, { call, put, select }) {
             const { selectFavoriteList, currentGood } = yield select(state => state.diy);
             const res = yield call(api.getMyOrderList, { isSend: 0, goodsId: currentGood._id });
@@ -562,7 +574,8 @@ export default {
         *createCapsule({ payload }, { call, put, select }) {
             const { info = {} } = yield select(state => state.user);
             const { selectFavoriteList } = yield select(state => state.diy);
-            const res = yield call(api.addCapsule, { namecn: payload, nameen: payload, author: info._id, status: 0 });
+            const { input, covermap } = payload;
+            const res = yield call(api.addCapsule, { namecn: input, nameen: input, covermap, author: info._id, status: 0 });
             if (res && res.data) {
                 let capsuleId = res.data._id;
                 let colorWithStyleImgs = [];

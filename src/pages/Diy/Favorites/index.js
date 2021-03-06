@@ -7,9 +7,11 @@ import { Flex, Box } from 'rebass/styled-components';
 import Propmt from '@/components/Propmt';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
+import SelectAll from '@/components/SelectAll';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import AllIcon from '@/public/icons/icon-all.svg';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import OrderIcon from '@/public/icons/icon-order.svg';
 import CapsuleIcon from '@/public/icons/icon-capsule.svg';
@@ -28,6 +30,7 @@ const favoriteBox = {
 };
 
 const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
+    const selectAll = favoriteArr.length === favoriteArr.filter(x => x.isSelected).length;
     console.log('favoritePattern', favoritePattern);
     const [orderVisible, setOrderVisible] = useState(false);
     const [bigerVisible, setBigerVisible] = useState(false);
@@ -97,6 +100,14 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
         dispatch({
             type: 'diy/setFavoriteArr',
             payload: [...nfavoriteArr],
+        });
+    };
+
+    const handleSelectAll = () => {
+        console.log('handleSelectAll');
+        dispatch({
+            type: 'diy/toogleSelectAllFavorite',
+            payload: !selectAll,
         });
     };
 
@@ -170,14 +181,15 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
             <Propmt
                 visible={capsuleInputVisible}
                 placeholder="请输入胶囊名称："
-                onOk={async input => {
+                onOk={async (input, covermap) => {
+                    console.log('covermap', covermap);
                     if (!input) {
                         message.info('胶囊名称不能为空');
                         return;
                     }
                     await dispatch({
                         type: 'diy/createCapsule',
-                        payload: input,
+                        payload: { input, covermap },
                     });
                     setCapsuleInputVisible(false);
                 }}
@@ -226,10 +238,16 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                         ]}
                     />
                 </div>
+                <SelectAll
+                    selectAll={selectAll}
+                    onSelectAll={() => {
+                        handleSelectAll();
+                    }}
+                />
                 <Flex alignItems="center">
                     <Flex>
                         {renderCountsInfo()}
-                        <Flex flexDirection="column" alignItems="center" pl="10px" pr="40px">
+                        <Flex flexDirection="column" alignItems="center" pl="20px" pr="40px">
                             <div>ALL</div>
                             <div>{favoriteArr.length}</div>
                         </Flex>

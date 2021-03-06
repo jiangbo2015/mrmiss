@@ -1,6 +1,7 @@
 import React from 'react';
 import { filterImageUrl } from '@/utils/helper';
-import { Upload, Icon } from 'antd';
+import { Upload } from 'antd';
+import { PlusOutlined, LoadingOutlined } from '@ant-design/icons';
 
 export const Avatar = ({ src, onLoad }) => (
     <img src={`${filterImageUrl(src)}`} alt="avatar" style={{ width: '100%' }} onLoad={onLoad} />
@@ -10,12 +11,12 @@ export const uploadProps = {
     name: 'file',
     listType: 'picture-card',
     showUploadList: false,
-    action: `/api/common/uploadkit`,
+    action: `${process.env.API_URL}/api/common/uploadkit`,
 };
 
 export const UploadBtn = ({ type }) => (
     <div>
-        <Icon type={type} />
+        <div>{type === 'loading' ? <LoadingOutlined /> : <PlusOutlined />}</div>
         <div className="ant-upload-text">Upload</div>
     </div>
 );
@@ -26,6 +27,7 @@ const UploadCom = ({ type, isPlain, handleChange, selectedPlainColor, selectedFl
     return (
         <Upload
             {...uploadProps}
+            style={{ display: 'flex', justifyContent: 'center' }}
             onChange={info => {
                 handleChange(info, type, isPlain);
             }}

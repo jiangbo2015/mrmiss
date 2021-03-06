@@ -21,16 +21,16 @@ export default ({ carousels = [], onSelect = () => {} }) => {
         }
     }
     return (
-        <Box py="60px">
+        <Box py="30px">
             <Carousel {...settings}>
                 {carouselUrls.map((x, i) => (
-                    <Box width={0.18} p="5px">
+                    <Box width="264px" p="7px">
                         <Box
                             onClick={() => {
                                 onSelect(i % carousels.length);
                             }}
                             width={1}
-                            height="300px"
+                            height="280px"
                             key={i}
                             css={{
                                 background: `url(${filterImageUrl(x)}) no-repeat`,

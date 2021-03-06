@@ -2,6 +2,7 @@ import { InputBottomWhiteBorder } from '@/components/Input';
 import InputNumber from '@/components/InputNumber';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
+import SelectAll from '@/components/SelectAll';
 import StyleItem from '@/components/StyleItem';
 import IconBackageInfo from '@/public/icons/backage-info.svg';
 import IconSave from '@/public/icons/icon-save.svg';
@@ -248,6 +249,26 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
         await onSave(orderData);
         setShowChange(false);
     };
+
+    const handleSelectAll = bool => {
+        setSourceData(sourceData.map(x => ({ ...x, isSelect: bool })));
+    };
+
+    const renderCountsInfo = () => {
+        let infosList = [];
+        for (let i = 0; i < sourceData.length; i++) {
+            infosList.push(...sourceData[i].list.filter(x => x.goodCategory));
+        }
+
+        let infos = lodash.groupBy(infosList, x => x.goodCategory.name);
+        return Object.keys(infos).map(k => (
+            <Flex flexDirection="column" alignItems="center" pl="10px">
+                <div>{k}</div>
+                <div>{infos[k].length}</div>
+            </Flex>
+        ));
+    };
+
     return (
         <Modal
             visible={visible}
@@ -260,6 +281,21 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
             footer={null}
             title="订单制作器"
         >
+            <Flex justifyContent="space-between" alignItems="center" ml="54px" mr="34px">
+                <SelectAll
+                    selectAll={sourceData.length === sourceData.filter(x => x.isSelect).length}
+                    onSelectAll={bool => {
+                        handleSelectAll(bool);
+                    }}
+                />
+                <Flex>
+                    {renderCountsInfo()}
+                    <Flex flexDirection="column" alignItems="center" pl="20px">
+                        <div>ALL</div>
+                        <div>{lodash.sumBy(sourceData, x => x.list.length)}</div>
+                    </Flex>
+                </Flex>
+            </Flex>
             <DragDropContext onDragEnd={onDragEnd}>
                 {sourceData.map((el, ind) => {
                     let currentRowCountInfo = countInfos[ind] ? countInfos[ind] : {};
