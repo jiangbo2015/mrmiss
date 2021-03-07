@@ -23,7 +23,7 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
         }
     }, [location.hash]);
     return (
-        <Layout>
+        <Layout bg="#fbf8fa">
             {/* <Login /> */}
             <Banner isLogin={currentUser.id ? true : false} imgsInfo={systemDetail} />
             <Box p="40px" maxWidth="1440px" m="auto">

@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { connect } from 'dva';
-const Layout = ({ pt, headerBgColor, dispatch, bg = '#fbf8fa', ...props }) => {
+const Layout = ({ pt, headerBgColor, dispatch, bg = '#ffffff', ...props }) => {
     useEffect(() => {
         dispatch({
             type: 'user/getCurrentUser',

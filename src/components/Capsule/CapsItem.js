@@ -17,9 +17,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
     return (
         <Box
             p="8px"
-            width={[1, 0.3]}
-            maxWidth={['380px', '470px']}
-            mb="30px"
+            width={[1, 0.32]}
             onClick={handleOpen}
             css={{
                 border: '1px solid transparent',

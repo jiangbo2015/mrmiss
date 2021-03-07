@@ -280,7 +280,7 @@ const Shop = ({
                                 display: 'grid',
                                 gridTemplateColumns: 'repeat(auto-fill, 32%)',
                                 placeItems: 'center',
-                                gap: '20px 2%',
+                                gap: '20px',
                             }}
                         >
                             {shopStyleList.docs.map((item, index) => {

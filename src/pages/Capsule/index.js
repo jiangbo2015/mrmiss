@@ -209,7 +209,7 @@ const Capsule = ({
                         <Box
                             sx={{
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, 30%)',
+                                gridTemplateColumns: 'repeat(auto-fill, 32%)',
                                 placeItems: 'center',
                                 gap: '20px',
                             }}
