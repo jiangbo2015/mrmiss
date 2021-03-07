@@ -71,6 +71,10 @@ export default {
                     type: 'setCurrentCapsule',
                     payload: data[0],
                 });
+                yield put({
+                    type: 'setCurrentSelectedBar',
+                    payload: data[0],
+                });
                 // history.push('/main');
             }
         },

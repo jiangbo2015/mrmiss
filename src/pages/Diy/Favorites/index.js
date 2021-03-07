@@ -112,7 +112,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     };
 
     const renderCountsInfo = () => {
-        let infos = lodash.groupBy(favoriteArr, x => x.goodCategory.name);
+        let infos = lodash.groupBy(favoriteArr, x => (x.goodCategory ? x.goodCategory.name : ''));
         return Object.keys(infos).map(k => (
             <Flex flexDirection="column" alignItems="center" pl="10px">
                 <div>{k}</div>

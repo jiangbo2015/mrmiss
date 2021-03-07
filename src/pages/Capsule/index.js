@@ -28,6 +28,7 @@ const Capsule = ({
     capsuleList,
     dispatch,
     currentCapsule = {},
+    currentSelectedBar = {},
     currentAdminChannel = { capsuleStyles: [] },
     capsuleStyleList = { docs: [] },
 }) => {
@@ -45,9 +46,10 @@ const Capsule = ({
             type: 'capsule/fetchCapsuleList',
         });
     }, []);
+
     useEffect(() => {
         handleLoadMore(1);
-    }, [currentCapsule, queryKey]);
+    }, [queryKey, currentSelectedBar]);
 
     const handleLoadMore = page => {
         if (currentCapsule._id) {
@@ -55,7 +57,9 @@ const Capsule = ({
             if (queryKey) {
                 payload.code = queryKey;
             }
-
+            if (currentCapsule._id !== currentSelectedBar._id) {
+                payload.goodCategray = currentSelectedBar.namecn;
+            }
             dispatch({
                 type: 'capsule/fetchCapsuleStyleList',
                 payload,
@@ -68,11 +72,15 @@ const Capsule = ({
         setSelectAssignedStyleList(capsuleStyles);
     }, [currentAdminChannel]);
 
-    const handleSelectCapsule = capsule => {
+    const handleSelectCapsule = (capsule, select) => {
         // if (currentAdminChannel.codename === 'A') {
         dispatch({
             type: 'capsule/setCurrentCapsule',
             payload: capsule,
+        });
+        dispatch({
+            type: 'capsule/setCurrentSelectedBar',
+            payload: select,
         });
         // }
     };
@@ -157,7 +165,7 @@ const Capsule = ({
                     <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
                 </Box>
                 <Box css={{ position: 'relative' }} maxWidth="1440px" mx="auto">
-                    <SidebarStyles data={capsuleList} selectedItem={currentCapsule} onSelect={handleSelectCapsule} />
+                    <SidebarStyles data={capsuleList} selectedItem={currentSelectedBar} onSelect={handleSelectCapsule} />
                     <Container>
                         <Flex pt="30px" pb="79px" justifyContent="space-between">
                             <Search
@@ -246,5 +254,6 @@ export default connect(({ capsule = {}, channel = {}, user = {} }) => ({
     capsuleList: capsule.capsuleList,
     currentCapsule: capsule.currentCapsule,
     capsuleStyleList: capsule.capsuleStyleList,
+    currentSelectedBar: capsule.currentSelectedBar,
     currentAdminChannel: channel.currentAdminChannel,
 }))(Capsule);
