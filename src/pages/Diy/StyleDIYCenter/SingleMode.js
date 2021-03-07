@@ -86,6 +86,11 @@ const App = ({
                 payload: [],
             });
         }
+        if (pattern === 'multiple') {
+            if (categoryObj.name === '分体') {
+                handleSetCurrentGoodCategory(currentGood.category[0]._id);
+            }
+        }
     };
     useEffect(() => {
         if (docs && docs.length > 0) {
@@ -136,7 +141,7 @@ const App = ({
     };
 
     const handleSetCurrentStyleRegion = val => {
-        console.log('handleSetCurrentStyleRegion', val);
+        // console.log('handleSetCurrentStyleRegion', val);
         dispatch({
             type: 'diy/setCurrentStyleRegion',
             payload: val + 1,
@@ -194,7 +199,6 @@ const App = ({
                         });
                     }}
                     onChange={e => {
-                        // styleQueryChangeKey
                         dispatch({
                             type: 'diy/setStyleQueryChangeKey',
                             payload: e.target.value,

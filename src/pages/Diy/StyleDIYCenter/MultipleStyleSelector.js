@@ -27,10 +27,9 @@ const App = ({
         <>
             <div
                 style={{
-                    minHeight: '500px',
                     width: '100%',
                     display: 'flex',
-
+                    margin: '2vw 0',
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexDirection: 'column',
@@ -40,7 +39,7 @@ const App = ({
                     handleSetCurrentStyleRegion2(-1);
                 }}
             >
-                <div style={{ width: '300px', marginBottom: '34px' }}>
+                <div style={{ width: '20vw', marginBottom: '3vw' }}>
                     <Swiper
                         {...params}
                         style={{
@@ -49,9 +48,9 @@ const App = ({
                     >
                         <div
                             style={{
-                                width: '300px',
                                 display: 'flex',
                                 justifyContent: 'center',
+                                alignItems: 'center',
                             }}
                             onClick={e => {
                                 e.stopPropagation();
@@ -59,7 +58,7 @@ const App = ({
                         >
                             <StyleItem
                                 // width="170px"
-                                width={`${(currentStyle.styleSize / 27) * 170}px`}
+                                width={`${(currentStyle.styleSize / 27) * 14}vw`}
                                 styleId={`single-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
@@ -71,13 +70,13 @@ const App = ({
                         </div>
                         <div
                             style={{
-                                width: '300px',
                                 display: 'flex',
                                 justifyContent: 'center',
+                                alignItems: 'center',
                             }}
                         >
                             <StyleItem
-                                width={`${(currentStyle.styleBackSize / 27) * 170}px`}
+                                width={`${(currentStyle.styleBackSize / 27) * 14}vw`}
                                 colors={selectColorList}
                                 {...currentStyle}
                                 styleId={`single-${currentStyle._id}`}
@@ -90,7 +89,7 @@ const App = ({
                         </div>
                     </Swiper>
                 </div>
-                <div style={{ width: '300px' }}>
+                <div style={{ width: '20vw' }}>
                     <Swiper
                         {...params}
                         style={{
@@ -99,7 +98,7 @@ const App = ({
                     >
                         <div
                             style={{
-                                width: '300px',
+                                alignItems: 'center',
                                 display: 'flex',
                                 justifyContent: 'center',
                             }}
@@ -109,7 +108,7 @@ const App = ({
                         >
                             <StyleItem
                                 // width="170px"
-                                width={`${(currentStyle2.styleSize / 27) * 170}px`}
+                                width={`${(currentStyle2.styleSize / 27) * 14}vw`}
                                 styleId={`single-${currentStyle2._id}`}
                                 colors={selectColorList}
                                 {...currentStyle2}
@@ -121,13 +120,13 @@ const App = ({
                         </div>
                         <div
                             style={{
-                                width: '300px',
+                                alignItems: 'center',
                                 display: 'flex',
                                 justifyContent: 'center',
                             }}
                         >
                             <StyleItem
-                                width={`${(currentStyle2.styleBackSize / 27) * 170}px`}
+                                width={`${(currentStyle2.styleBackSize / 27) * 14}vw`}
                                 colors={selectColorList}
                                 {...currentStyle2}
                                 styleId={`single-${currentStyle2._id}`}
@@ -155,9 +154,9 @@ const App = ({
                 {docs.map((d, index) => (
                     <StyleItem
                         style={{
-                            margin: '0 100px 0 10px',
+                            margin: '0 1.6vw 0 0.7vw',
                         }}
-                        width={`${(d.styleSize / 27) * 100}px`}
+                        width={`${(d.styleSize / 27) * 7}vw`}
                         key={`${d._id}-${index}-${Math.random() * 1000000}`}
                         {...d}
                         onClick={() => {
@@ -179,9 +178,9 @@ const App = ({
                 {docs2.map((d, index) => (
                     <StyleItem
                         style={{
-                            margin: '0 100px 0 10px',
+                            margin: '0 1.6vw 0 0.7vw',
                         }}
-                        width={`${(d.styleSize / 27) * 100}px`}
+                        width={`${(d.styleSize / 27) * 7}vw`}
                         key={`${d._id}-${index}-${Math.random() * 1000000}`}
                         {...d}
                         onClick={() => {
