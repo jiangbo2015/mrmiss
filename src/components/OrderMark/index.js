@@ -300,7 +300,6 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                 {sourceData.map((el, ind) => {
                     let currentRowCountInfo = countInfos[ind] ? countInfos[ind] : {};
                     let currentRowParteInfo = parteInfos[ind] ? parteInfos[ind] : {};
-                    // console.log('currentCountInfo', currentCountInfo);
                     return (
                         <Flex alignItems="center" m="0px 24px">
                             <ReactSVG
@@ -588,7 +587,13 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                                             总数量:
                                             {singleTotalInfos[ind] ? singleTotalInfos[ind] : 0}
                                         </Box>
-                                        <Box>大约?箱</Box>
+                                        <Box>
+                                            大约
+                                            {singleTotalInfos[ind] && el.weight
+                                                ? Math.ceil((singleTotalInfos[ind] * el.weight) / 35000)
+                                                : 0}
+                                            箱
+                                        </Box>
                                     </Flex>
                                 </Flex>
                             </Box>

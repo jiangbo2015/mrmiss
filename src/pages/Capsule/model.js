@@ -202,6 +202,7 @@ export default {
                     styleNos: o.styleNos,
                     price: o.price,
                     size: o.size,
+                    weight: o.weight ? o.weight : 0,
                     pickType: o.pickType,
                     rowRemarks: o.rowRemarks,
                     isSelect: false,

@@ -536,12 +536,15 @@ export default {
                     list: gourpByStyle[key],
                     key,
                     sizes: gourpByStyle[key][0].styleAndColor[0].style.size?.split('/'),
+                    weight: lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.weight),
                 };
             }
             const saveItems = saveOrder?.map((o, k) => {
                 let item = o.items[0];
                 let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-')}`;
                 let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
+                let weight = lodash.sumBy(item.favorite.styleAndColor, sc => sc.styleId.weight);
+                console.log('weight', weight);
                 let sizeObjInit = {};
                 sizeArr?.map(s => {
                     sizeObjInit[s] = 0;
@@ -563,6 +566,7 @@ export default {
                     pickType: o.pickType,
                     rowRemarks: o.rowRemarks,
                     isSelect: false,
+                    weight: weight ? weight : 0,
                     sizes: sizeArr,
                 };
             });
@@ -598,6 +602,7 @@ export default {
                         colorWithStyleImgs,
                         size: group[0].styleAndColor[0].style.size,
                         price: _.sum(group[0].styleAndColor.map(sc => sc.style.price)),
+                        weight: _.sum(group[0].styleAndColor.map(sc => sc.style.weight)),
                     };
                     const capsuleStyleRes = yield call(api.addCapsuleStyle, capsuleStyleData);
                 }
