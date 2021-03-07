@@ -78,7 +78,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
         <div
             style={{
                 padding: '28px 20px',
-                width: '328px',
+                width: '24.4%',
                 background: '#222222',
             }}
         >

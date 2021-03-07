@@ -230,12 +230,11 @@ const App = ({
                     width: '100%',
                     height: '600px',
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, 160px)',
+                    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
                     justifyItems: 'center',
                     alignItems: 'center',
-                    gridGap: '20px 10px',
+                    gridGap: '20px 0',
                     justifyContent: 'center',
-
                     alignContent: 'start',
                     overflowY: 'scroll',
                     gridTemplateRows: 'repeat(3, 1fr)',
@@ -281,7 +280,7 @@ const App = ({
                                     }}
                                 >
                                     <StyleItem
-                                        width={`${(d.styleSize / 27) * 100}px`}
+                                        width={`${(d.styleSize / 27) * 7}vw`}
                                         styleId={`${d._id}-item`}
                                         colors={
                                             assign
@@ -305,7 +304,7 @@ const App = ({
                             </Tooltip>
                             <div
                                 style={{
-                                    display: 'flex',
+                                    display: assign ? 'flex' : 'none',
                                     alignItems: 'center',
                                     justifyContent: 'space-between',
                                     padding: '0 20px',

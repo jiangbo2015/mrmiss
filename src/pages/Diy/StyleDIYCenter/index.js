@@ -13,13 +13,13 @@ const App = ({ dispatch, collocationPattern }) => {
         <>
             <div
                 style={{
-                    flex: 1,
+                    width: '51.2%',
                     display: collocationPattern === 'paintPrew' ? 'initial' : 'none',
                 }}
             ></div>
             <div
                 style={{
-                    width: 'calc(100% - 656px)',
+                    width: '51.2%',
                     display: collocationPattern === 'expand' ? 'initial' : 'none',
                 }}
             >
@@ -27,7 +27,7 @@ const App = ({ dispatch, collocationPattern }) => {
             </div>
             <div
                 style={{
-                    width: 'calc(100% - 656px)',
+                    width: '51.2%',
                     display: collocationPattern === 'single' ? 'initial' : 'none',
                 }}
             >
@@ -35,7 +35,7 @@ const App = ({ dispatch, collocationPattern }) => {
             </div>
             <div
                 style={{
-                    flex: 1,
+                    width: '51.2%',
                     display: collocationPattern === 'multiple' || collocationPattern === 'assign' ? 'initial' : 'none',
                 }}
             >
@@ -43,7 +43,7 @@ const App = ({ dispatch, collocationPattern }) => {
             </div>
             <div
                 style={{
-                    flex: 1,
+                    width: '51.2%',
                     display: collocationPattern === 'bigPicColor' ? 'initial' : 'none',
                 }}
             >
@@ -51,7 +51,7 @@ const App = ({ dispatch, collocationPattern }) => {
             </div>
             <div
                 style={{
-                    flex: 1,
+                    width: '51.2%',
                     display: collocationPattern === 'edit' ? 'initial' : 'none',
                 }}
             >

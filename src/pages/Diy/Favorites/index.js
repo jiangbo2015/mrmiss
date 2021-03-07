@@ -24,9 +24,9 @@ import styles from './index.less';
 import OrderModal from './order/index';
 
 const favoriteBox = {
-    small: { h: '210px', w: '200px', size: '70px' },
-    middle: { h: '290px', w: '280px', size: '100px' },
-    large: { h: '370px', w: '360px', size: '140px' },
+    small: { h: '15.6vw', w: 'calc(16.52% - 16px)', size: '6vw' },
+    middle: { h: '23.4vw', w: 'calc(25% - 15px)', size: '9vw' },
+    large: { h: '31.2vw', w: 'calc(33.3% - 13px)', size: '12vw' },
 };
 
 const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
@@ -123,7 +123,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     return (
         <div
             style={{
-                padding: '28px 30px',
+                padding: '30px 2.1%',
                 background: '#4A4949',
             }}
         >
@@ -282,7 +282,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     />
                 </Flex>
             </div>
-            <InfiniteScroll
+            {/* <InfiniteScroll
                 dataLength={favoriteArr.length}
                 next={handleFetchMore}
                 hasMore={false}
@@ -299,6 +299,25 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     alignContent: 'start',
                     overflowY: 'scroll',
                     gridTemplateRows: 'repeat(3, 1fr)',
+                }} */}
+
+            <Box
+                // dataLength={favoriteArr.length}
+                // next={handleFetchMore}
+                // hasMore={false}
+                // height={600}
+                // inverse={true}
+                mb="20px"
+                style={{
+                    width: '100%',
+                    display: 'grid',
+                    gridTemplateColumns: `repeat(auto-fill, ${favoriteBox[favoritePattern].w})`,
+                    justifyItems: 'center',
+                    alignItems: 'center',
+                    gridGap: '20px 20px',
+                    justifyContent: 'center',
+                    alignContent: 'start',
+                    overflowY: 'scroll',
                 }}
                 loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
             >
@@ -398,7 +417,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                         </div>
                     </div>
                 ))}
-            </InfiniteScroll>
+            </Box>
         </div>
     );
 };

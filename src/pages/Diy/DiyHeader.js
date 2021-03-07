@@ -93,6 +93,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     return (
         <Flex
             justifyContent="space-between"
+            px="2.1%"
             sx={{
                 marginTop: '74px',
                 background: '#323232',
@@ -100,7 +101,6 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 width: '100%',
                 height: '140px',
             }}
-            px="35px"
         >
             <Flex alignItems="center" width="256px">
                 <Image width="240px" src={IconPng} />

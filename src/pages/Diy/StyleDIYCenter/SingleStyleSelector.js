@@ -32,7 +32,7 @@ const App = ({
                     handleSetCurrentStyleRegion(-1);
                 }}
             >
-                <div style={{ width: '320px' }}>
+                <div style={{ width: '20vw' }}>
                     <Swiper
                         {...params}
                         style={{
@@ -41,10 +41,9 @@ const App = ({
                     >
                         <div
                             style={{
-                                width: '320px',
                                 display: 'flex',
                                 justifyContent: 'center',
-                                padding: '28px 0',
+                                alignItems: 'center',
                             }}
                             onClick={e => {
                                 e.stopPropagation();
@@ -52,7 +51,7 @@ const App = ({
                         >
                             <StyleItem
                                 // width="170px"
-                                width={`${(currentStyle.styleSize / 27) * 180}px`}
+                                width={`${(currentStyle.styleSize / 27) * 14}vw`}
                                 styleId={`single-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
@@ -64,13 +63,12 @@ const App = ({
                         </div>
                         <div
                             style={{
-                                width: '320px',
                                 display: 'flex',
                                 justifyContent: 'center',
                             }}
                         >
                             <StyleItem
-                                width={`${(currentStyle.styleBackSize / 27) * 180}px`}
+                                width={`${(currentStyle.styleBackSize / 27) * 14}vw`}
                                 colors={selectColorList}
                                 {...currentStyle}
                                 styleId={`single-${currentStyle._id}`}
@@ -97,9 +95,9 @@ const App = ({
                 {docs.map((d, index) => (
                     <StyleItem
                         style={{
-                            margin: '0 60px 0 10px',
+                            margin: '0 1.6vw 0 0.7vw',
                         }}
-                        width={`${(d.styleSize / 27) * 100}px`}
+                        width={`${(d.styleSize / 27) * 7}vw`}
                         key={`${d._id}-${index}-${Math.random() * 1000000}`}
                         {...d}
                         onClick={() => {

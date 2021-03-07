@@ -72,7 +72,7 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
             <div
                 style={{
                     padding: '28px 20px',
-                    width: '328px',
+                    width: '24.4%',
                     background: '#222222',
                     position: 'relative',
                 }}

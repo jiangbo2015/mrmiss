@@ -87,10 +87,10 @@ const App = ({
         }
     };
     return (
-        <div style={{ padding: '0 30px', width: '100%', background: '#323232' }}>
+        <div style={{ width: '100%', padding: '0 2.1%', background: '#323232' }}>
             <div
                 style={{
-                    width: 'cacl(100% - 70px)',
+                    width: '100%',
                     background: '#323232',
                     display: 'flex',
                     justifyContent: 'space-between',
