@@ -11,7 +11,7 @@ import Title from '@/components/Title';
 import banner from '@/public/banner.jpeg';
 // import carousel1 from '@/public/carousel1.jpg';
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Flex } from 'rebass/styled-components';
+import { Box, Flex, Image } from 'rebass/styled-components';
 import Carousel from '../Home/Carousel';
 import ExbImage from './ExbImage';
 import OrderMarkModal from './OrderMarkModal';
@@ -140,19 +140,11 @@ const Capsule = ({
     };
 
     return (
-        <Layout pt="74px">
-            <Flex
-                justifyContent="center"
-                height="600px"
-                width="100%"
-                css={{
-                    background: `url(${banner}) no-repeat`,
-                    backgroundSize: 'cover',
-                }}
-            >
-                {/* <Image src={banner} width="80vw" mx="auto"></Image> */}
+        <Layout pt="74px" bg="#fff">
+            <Flex justifyContent="center" width="100%">
+                <Image src={banner} width="100%" height="auto" mx="auto"></Image>
             </Flex>
-            <Box bg="#FDE7E1" py="90px" px="40px">
+            <Box maxWidth="1440px" margin="auto" bg="#FDE7E1" py="90px" px="40px">
                 <Title
                     title="Our capsule"
                     subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
@@ -161,10 +153,10 @@ const Capsule = ({
                 <Carousel carousels={capsuleList.map(c => c.covermap)} />
             </Box>
             <section>
-                <Box bg="#fff" py="90px" maxWidth="1400px" mx="auto">
+                <Box bg="#fff" py="90px" maxWidth="1440px" mx="auto">
                     <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
                 </Box>
-                <Box css={{ position: 'relative' }}>
+                <Box css={{ position: 'relative' }} maxWidth="1440px" mx="auto">
                     <SidebarStyles data={capsuleList} selectedItem={currentCapsule} onSelect={handleSelectCapsule} />
                     <Container>
                         <Flex pt="30px" pb="79px" justifyContent="space-between">
@@ -217,7 +209,7 @@ const Capsule = ({
                         <Box
                             sx={{
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, 380px)',
+                                gridTemplateColumns: 'repeat(auto-fill, 30%)',
                                 placeItems: 'center',
                                 gap: '20px',
                             }}

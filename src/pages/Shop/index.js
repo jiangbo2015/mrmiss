@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Flex } from 'rebass/styled-components';
+import { Box, Flex, Image } from 'rebass/styled-components';
 import { Button } from 'antd';
 import { ReactSVG } from 'react-svg';
 import { connect } from 'dva';
@@ -207,20 +207,12 @@ const Shop = ({
     };
 
     return (
-        <Layout pt="74px">
-            <Flex
-                justifyContent="center"
-                height="600px"
-                width="100%"
-                css={{
-                    background: `url(${banner}) no-repeat`,
-                    backgroundSize: 'cover',
-                }}
-            >
-                {/* <Image src={banner} width="80vw" mx="auto"></Image> */}
+        <Layout pt="74px" bg="#ffffff">
+            <Flex>
+                <Image src={banner} width="100%" height="auto" mx="auto"></Image>
             </Flex>
             <section>
-                <Box bg="#fff" py="90px" maxWidth="1400px" mx="auto">
+                <Box bg="#fff" py="90px" maxWidth="1440px" mx="auto">
                     <Title
                         title="SHOP"
                         subtitle="This season's capsule is launched by mrmiss 2021 limited capsule
@@ -228,7 +220,7 @@ const Shop = ({
             products here.."
                     />
                 </Box>
-                <Box css={{ position: 'relative' }}>
+                <Box css={{ position: 'relative' }} maxWidth="1440px" mx="auto">
                     <SidebarStyles data={branchList} selectedItem={currentSelectedBar} onSelect={handleSelectBranch} />
                     <Container>
                         <Flex pt="30px" pb="79px" justifyContent="space-between">
@@ -286,9 +278,9 @@ const Shop = ({
                         <Box
                             sx={{
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, 380px)',
+                                gridTemplateColumns: 'repeat(auto-fill, 32%)',
                                 placeItems: 'center',
-                                gap: '20px',
+                                gap: '20px 2%',
                             }}
                         >
                             {shopStyleList.docs.map((item, index) => {

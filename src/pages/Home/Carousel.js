@@ -15,9 +15,10 @@ const settings = {
 };
 export default ({ carousels = [], onSelect = () => {} }) => {
     let carouselUrls = [];
-    if (carousels.length > 0 && carousels.length < 6) {
+    let filterUrls = carousels.filter(x => !!x);
+    if (filterUrls.length > 0 && filterUrls.length < 6) {
         while (carouselUrls.length < 6) {
-            carouselUrls = [...carouselUrls, ...carousels];
+            carouselUrls = [...carouselUrls, ...filterUrls];
         }
     }
     return (
@@ -27,7 +28,7 @@ export default ({ carousels = [], onSelect = () => {} }) => {
                     <Box width="264px" p="7px">
                         <Box
                             onClick={() => {
-                                onSelect(i % carousels.length);
+                                onSelect(i % filterUrls.length);
                             }}
                             width={1}
                             height="280px"
