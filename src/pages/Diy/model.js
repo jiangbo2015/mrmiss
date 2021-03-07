@@ -584,6 +584,7 @@ export default {
                 for (let i = 0; i < styleNosArr.length; i++) {
                     let group = gourpByStyle[styleNosArr[i]];
                     const code = group[0].styleAndColor.map(sc => sc.style.styleNo).join('/');
+                    const goodCategory = group[0].goodCategory;
                     colorWithStyleImgs = group.map(favorite => ({
                         favorite: favorite._id,
                         color: favorite.styleAndColor[0].colorIds[0]._id,
@@ -593,6 +594,7 @@ export default {
                     const capsuleStyleData = {
                         capsule: capsuleId,
                         code,
+                        goodCategory,
                         colorWithStyleImgs,
                         size: group[0].styleAndColor[0].style.size,
                         price: _.sum(group[0].styleAndColor.map(sc => sc.style.price)),

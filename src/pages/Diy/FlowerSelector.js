@@ -6,8 +6,9 @@ import SearchInput from '@/components/SearchInput';
 import { Tooltip } from 'antd';
 import { ReactSVG } from 'react-svg';
 import AllIcon from '@/public/icons/icon-all.svg';
+import Select from '@/components/Select';
 
-const ImgItem = ({ img, isSelected, ...props }) => (
+const ImgItem = ({ img, isSelected, size = '44px', ...props }) => (
     <div
         {...props}
         style={{
@@ -20,8 +21,8 @@ const ImgItem = ({ img, isSelected, ...props }) => (
         <div
             style={{
                 background: `url(${filterImageUrl(img)})`,
-                width: '44px',
-                height: '44px',
+                width: size,
+                height: size,
                 borderRadius: '50% 50%',
                 backgroundSize: '100% 100%',
                 boxSizing: 'content-box',
@@ -37,9 +38,10 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
     const { docs = [] } = flowerList;
     const selectAll = docs.length === docs.filter(x => x.isSelected).length;
     const [queryKey, setQueryKey] = useState('');
+    const [sort, setSort] = useState('time');
     useEffect(() => {
         if (currentGood._id) {
-            let payload = { goodsId: currentGood._id, limit: 10000, type: 1 };
+            let payload = { goodsId: currentGood._id, limit: 10000, type: 1, sort };
             if (queryKey) {
                 payload.code = queryKey;
             }
@@ -48,7 +50,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                 payload,
             });
         }
-    }, [currentGood, queryKey]);
+    }, [currentGood, queryKey, sort]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -77,12 +79,13 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
     return (
         <div
             style={{
-                padding: '28px 20px',
+                padding: '24px 20px',
                 width: '24.4%',
                 background: '#222222',
+                position: 'relative',
             }}
         >
-            <div style={{ marginBottom: '60px', display: 'flex' }}>
+            <div style={{ marginBottom: '60px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <SearchInput
                     placeholder="SEARCH PAINT"
                     onSearch={e => {
@@ -103,6 +106,16 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     onClick={() => {
                         handleSelectAll();
                     }}
+                />
+                <Select
+                    onSelect={val => {
+                        setSort(val);
+                    }}
+                    value={sort}
+                    options={[
+                        { label: 'Time', value: 'time' },
+                        { label: 'Color', value: 'color' },
+                    ]}
                 />
             </div>
             <div
@@ -137,6 +150,44 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     </Tooltip>
                 ))}
             </div>
+            {assign && selectColorList.length > 0 ? (
+                <div
+                    style={{
+                        width: 'calc(100% - 40px)',
+                        overflowX: 'scroll',
+                        background: '#2E2E2E',
+                        borderRadius: '6px',
+                        boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.18)',
+                        margin: '0 10px',
+                        position: 'absolute',
+                        left: 0,
+                        bottom: '25px',
+                    }}
+                >
+                    <div
+                        style={{
+                            display: 'flex',
+                            height: '45px',
+                            alignItems: 'center',
+                            padding: '0 10px',
+                        }}
+                    >
+                        {selectColorList
+                            .filter(x => x.type === 1)
+                            .map((d, index) => (
+                                <ImgItem
+                                    size="17px"
+                                    key={`bar-${d._id}`}
+                                    // isSelected={d.isSelected}
+                                    img={d.value}
+                                    onClick={() => {
+                                        handleSelectColor({ item: d, index });
+                                    }}
+                                />
+                            ))}
+                    </div>
+                </div>
+            ) : null}
         </div>
     );
 };

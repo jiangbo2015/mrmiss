@@ -5,6 +5,7 @@ import { ReactSVG } from 'react-svg';
 import AllIcon from '@/public/icons/icon-all.svg';
 import { Tooltip } from 'antd';
 import SearchInput from '@/components/SearchInput';
+import Select from '@/components/Select';
 const ColotItem = ({ color, isSelected, size = '44px', ...props }) => (
     <div
         {...props}
@@ -34,9 +35,11 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
     let { docs = [] } = colorList;
     const selectAll = docs.length === docs.filter(x => x.isSelected).length;
     const [queryKey, setQueryKey] = useState('');
+    const [sort, setSort] = useState('time');
     useEffect(() => {
+        console.log('sort', sort);
         if (currentGood._id) {
-            let payload = { goodsId: currentGood._id, limit: 10000, type: 0 };
+            let payload = { goodsId: currentGood._id, limit: 10000, type: 0, sort };
             if (queryKey) {
                 payload.code = queryKey;
             }
@@ -45,7 +48,7 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
                 payload,
             });
         }
-    }, [currentGood, queryKey]);
+    }, [currentGood, queryKey, sort]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -71,13 +74,13 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
         <>
             <div
                 style={{
-                    padding: '28px 20px',
+                    padding: '24px 20px',
                     width: '24.4%',
                     background: '#222222',
                     position: 'relative',
                 }}
             >
-                <div style={{ marginBottom: '60px', display: 'flex' }}>
+                <div style={{ marginBottom: '60px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <SearchInput
                         placeholder="SEARCH COLOR"
                         onSearch={e => {
@@ -98,6 +101,16 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
                         onClick={() => {
                             handleSelectAll();
                         }}
+                    />
+                    <Select
+                        onSelect={val => {
+                            setSort(val);
+                        }}
+                        value={sort}
+                        options={[
+                            { label: 'Time', value: 'time' },
+                            { label: 'Color', value: 'color' },
+                        ]}
                     />
                 </div>
                 <div

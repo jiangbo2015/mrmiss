@@ -144,7 +144,7 @@ const Capsule = ({
             <Flex justifyContent="center" width="100%">
                 <Image src={banner} width="100%" height="auto" mx="auto"></Image>
             </Flex>
-            <Box maxWidth="1440px" margin="auto" bg="#FDE7E1" py="90px" px="40px">
+            <Box maxWidth="1440px" margin="auto" py="90px" px="40px">
                 <Title
                     title="Our capsule"
                     subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
