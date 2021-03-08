@@ -1,5 +1,7 @@
 import CapsItem from '@/components/Capsule/CapsItem';
 import ModalSimple from '@/components/Capsule/ModalSimple';
+import ModalComplex from '@/components/Capsule/ModalCapsuleComplex';
+
 import More from '@/components/Capsule/More';
 
 import SidebarStyles from '@/components/Capsule/SidebarStyles';
@@ -28,9 +30,11 @@ const Capsule = ({
     capsuleList,
     dispatch,
     currentCapsule = {},
+    currentCapsuleStyle = {},
     currentSelectedBar = {},
     currentAdminChannel = { capsuleStyles: [] },
     capsuleStyleList = { docs: [] },
+    capsuleStyleTopAndBottomList = {},
 }) => {
     // swiper 实例
     const ref = useRef(null);
@@ -38,6 +42,8 @@ const Capsule = ({
     const [queryKey, setQueryKey] = useState('');
     const [selectedAll, setSelectedAll] = useState(false);
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
+    const [haveTopAndBottom, setHaveTopAndBottom] = useState(false);
+    const [visibleComplex, setVisibleComplex] = useState(false);
 
     const [orderVisible, setOrderVisible] = useState(false);
 
@@ -50,6 +56,26 @@ const Capsule = ({
     useEffect(() => {
         handleLoadMore(1);
     }, [queryKey, currentSelectedBar]);
+
+    useEffect(() => {
+        if (haveTopAndBottom) {
+            dispatch({
+                type: 'capsule/fetchCapsuleStyleTopAndList',
+                payload: haveTopAndBottom,
+            });
+        }
+    }, [haveTopAndBottom]);
+
+    useEffect(() => {
+        if (currentCapsuleStyle._id && currentCapsuleStyle.goodCategory) {
+            // console.log('currentCapsuleStyle', currentCapsuleStyle);
+            let payload = { capsule: currentCapsule._id, goodCategray: currentCapsuleStyle.goodCategory.name, limit: 4 };
+            dispatch({
+                type: 'capsule/fetchCapsuleStyleAboutList',
+                payload,
+            });
+        }
+    }, [currentCapsuleStyle]);
 
     const handleLoadMore = page => {
         if (currentCapsule._id) {
@@ -73,7 +99,6 @@ const Capsule = ({
     }, [currentAdminChannel]);
 
     const handleSelectCapsule = (capsule, select) => {
-        // if (currentAdminChannel.codename === 'A') {
         dispatch({
             type: 'capsule/setCurrentCapsule',
             payload: capsule,
@@ -82,11 +107,53 @@ const Capsule = ({
             type: 'capsule/setCurrentSelectedBar',
             payload: select,
         });
-        // }
     };
+
+    useEffect(() => {
+        if (currentAdminChannel.codename === 'A') {
+            let haveTop = false;
+            let haveBottom = false;
+            currentCapsule.children.map(x => {
+                if ((x.nameen && x.nameen.toUpperCase()) === 'TOP' || x.namecn === '单衣') {
+                    haveTop = x;
+                } else if ((x.nameen && x.nameen.toUpperCase()) === 'BOTTOM' || x.namecn === '单裤') {
+                    haveBottom = x;
+                }
+            });
+
+            if (haveTop && haveBottom) {
+                setHaveTopAndBottom({ top: haveTop, bottom: haveBottom });
+            }
+        } else {
+            setHaveTopAndBottom(false);
+        }
+    }, [currentCapsule, currentAdminChannel]);
 
     const handleOpenDetail = capsule => {
         if (currentAdminChannel.codename === 'A') {
+            if (haveTopAndBottom && capsule.goodCategory) {
+                let index = 0;
+                if (capsule.goodCategory.name === haveTopAndBottom.top.namecn) {
+                    console.log('--top--');
+                    index = capsuleStyleTopAndBottomList.top.findIndex(x => x.namecn === capsule.goodCategory.name);
+                    dispatch({
+                        type: 'capsule/setCurrentShopTopStyleIndex',
+                        payload: index > 0 ? index : 0,
+                    });
+                    setVisibleComplex(true);
+                    return;
+                } else if (capsule.goodCategory.name === haveTopAndBottom.bottom.namecn) {
+                    console.log('--bottom--');
+                    index = capsuleStyleTopAndBottomList.bottom.findIndex(x => x.namecn === capsule.goodCategory.name);
+                    dispatch({
+                        type: 'capsule/setCurrentShopBottomStyleIndex',
+                        payload: index > 0 ? index : 0,
+                    });
+                    setVisibleComplex(true);
+                    return;
+                }
+            }
+
             dispatch({
                 type: 'capsule/setCurrentCapsuleStyle',
                 payload: capsule,
@@ -127,7 +194,7 @@ const Capsule = ({
     };
 
     const handleSelectAll = () => {
-        console.log('selectedAll', selectedAll);
+        // console.log('selectedAll', selectedAll);
         if (!selectedAll) {
             setSelectedAll(true);
             setSelectAssignedStyleList(
@@ -246,6 +313,7 @@ const Capsule = ({
                 </Box>
             </section>
             {visible && <ModalSimple visible={visible} onClose={() => setVisible(false)} />}
+            {visibleComplex && <ModalComplex visible={visibleComplex} onClose={() => setVisibleComplex(false)} />}
             {orderVisible && <OrderMarkModal visible={orderVisible} onCancel={() => setOrderVisible(false)} />}
         </Layout>
     );
@@ -253,7 +321,9 @@ const Capsule = ({
 export default connect(({ capsule = {}, channel = {}, user = {} }) => ({
     capsuleList: capsule.capsuleList,
     currentCapsule: capsule.currentCapsule,
+    currentCapsuleStyle: capsule.currentCapsuleStyle,
     capsuleStyleList: capsule.capsuleStyleList,
     currentSelectedBar: capsule.currentSelectedBar,
     currentAdminChannel: channel.currentAdminChannel,
+    capsuleStyleTopAndBottomList: capsule.capsuleStyleTopAndBottomList,
 }))(Capsule);

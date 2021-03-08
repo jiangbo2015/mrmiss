@@ -12,8 +12,22 @@ export default {
         currentSelectedBar: {},
         currentCapsuleStyle: {},
         editOrderSaveId: '',
+        currentCapsuleTopStyleIndex: 0,
+        currentCapsuleBottomStyleIndex: 0,
     },
     reducers: {
+        setCurrentCapsuleTopStyleIndex(state, action) {
+            return {
+                ...state,
+                currentCapsuleTopStyleIndex: action.payload,
+            };
+        },
+        setCurrentCapsuleBottomStyleIndex(state, action) {
+            return {
+                ...state,
+                currentCapsuleBottomStyleIndex: action.payload,
+            };
+        },
         setEditOrderSaveId(state, action) {
             return {
                 ...state,
@@ -56,6 +70,18 @@ export default {
                 capsuleToOrderGroupList: action.payload,
             };
         },
+        setCapsuleStyleTopAndBottomList(state, action) {
+            return {
+                ...state,
+                capsuleStyleTopAndBottomList: action.payload,
+            };
+        },
+        setCapsuleStyleAboutList(state, action) {
+            return {
+                ...state,
+                capsuleStyleAboutList: action.payload,
+            };
+        },
     },
     effects: {
         *fetchCapsuleList(_, { call, put }) {
@@ -95,6 +121,39 @@ export default {
                 // history.push('/main');
             }
         },
+        *fetchCapsuleStyleAboutList({ payload }, { call, put, select }) {
+            const { currentCapsuleStyle } = yield select(state => state.capsule);
+            const { data } = yield call(api.getCapsuleStyleList, payload);
+            if (data) {
+                yield put({
+                    type: 'setCapsuleStyleAboutList',
+                    payload: data.docs.filter(x => x._id !== currentCapsuleStyle._id),
+                });
+                // history.push('/main');
+            }
+        },
+        *fetchCapsuleStyleTopAndList({ payload }, { call, put, select }) {
+            const { top, bottom } = payload;
+            const resTop = yield call(api.getCapsuleStyleList, {
+                capsule: top._id.split('-')[1],
+                goodCategray: top.namecn,
+                limit: 1000,
+            });
+            const resBottom = yield call(api.getCapsuleStyleList, {
+                capsule: bottom._id.split('-')[1],
+                goodCategray: bottom.namecn,
+                limit: 1000,
+            });
+            if (resTop.data && resBottom.data) {
+                yield put({
+                    type: 'setCapsuleStyleTopAndBottomList',
+                    payload: {
+                        top: resTop.data.docs,
+                        bottom: resBottom.data.docs,
+                    },
+                });
+            }
+        },
         *addOrder({ payload }, { call, put, select }) {
             const { editOrderSaveId } = yield select(state => state.capsule);
             let apiFun = api.addOrder;
@@ -109,11 +168,14 @@ export default {
             }
             // { styleAndColor: params, goodId: goodId }
         },
-        *addOrderMark({ payload = {} }, { call, put, select }) {
-            console.log('capsule/addOrder');
-            const { currentCapsule, currentCapsuleStyle } = yield select(state => state.capsule);
+        *addOrderMark({ payload }, { call, put, select }) {
+            // console.log('capsule/addOrder');
+            let { currentCapsule, currentCapsuleStyle } = yield select(state => state.capsule);
+            if (payload) {
+                currentCapsuleStyle = payload;
+            }
             const resOrder = yield call(api.getMyOrderList, { isSend: 0, capsuleId: currentCapsule._id });
-            console.log('currentCapsuleStyle', currentCapsuleStyle);
+            // console.log('currentCapsuleStyle', currentCapsuleStyle);
             let saveOrderData = {
                 capsuleId: currentCapsule._id,
                 orderData: [],

@@ -1,7 +1,7 @@
 import InputNumber from '@/components/InputNumber';
 import StyleItem from '@/components/StyleItem';
 import { filterImageUrl } from '@/utils/helper';
-import temp from '@/public/temp.jpg';
+import ShopItem from './CapsItem';
 import { useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
@@ -67,7 +67,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
     </Flex>
 );
 
-const ModalSimple = ({ visible, onClose, currentCapsuleStyle, dispatch }) => {
+const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutList = [], dispatch }) => {
     const { colorWithStyleImgs = [], code, price, size } = currentCapsuleStyle;
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -95,6 +95,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, dispatch }) => {
                     left: 0,
                     right: 0,
                     top: 0,
+                    bottom: 0,
                 },
             }}
         >
@@ -189,13 +190,6 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, dispatch }) => {
                                 </Swiper>
                             )}
                         </Box>
-
-                        {/* <Flex justifyContent="center" mt="20px">
-                            <Box mr="30px">
-                                <ArrowBtn></ArrowBtn>
-                                <ArrowBtn right></ArrowBtn>
-                            </Box>
-                        </Flex> */}
                     </Box>
 
                     <Box pl="30px">
@@ -278,8 +272,36 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, dispatch }) => {
                         </Box>
                     </Box>
                 </Flex>
-                <Image></Image>
-                <Heading></Heading>
+                <Box width="1060px" bg="#fff" pt="100px">
+                    <Text pb="38px" fontSize="24px">
+                        Related Products 类似产品
+                    </Text>
+                    <Box
+                        sx={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, 340px)',
+                            placeItems: 'center',
+                            gap: '20px',
+                        }}
+                    >
+                        {capsuleStyleAboutList.map((item, index) => {
+                            return (
+                                <ShopItem
+                                    item={item}
+                                    key={item._id}
+                                    handleOpen={() => {
+                                        dispatch({
+                                            type: 'capsule/setCurrentCapsuleStyle',
+                                            payload: item,
+                                        });
+                                    }}
+                                    curChannelPrice={item.price}
+                                    onEditPrice={false}
+                                />
+                            );
+                        })}
+                    </Box>
+                </Box>
             </Box>
         </Modal>
     );
@@ -289,4 +311,5 @@ export default connect(({ capsule = {} }) => ({
     capsuleList: capsule.capsuleList,
     currentCapsule: capsule.currentCapsule,
     currentCapsuleStyle: capsule.currentCapsuleStyle,
+    capsuleStyleAboutList: capsule.capsuleStyleAboutList,
 }))(ModalSimple);
