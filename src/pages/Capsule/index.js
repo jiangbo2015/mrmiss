@@ -216,9 +216,6 @@ const Capsule = ({
 
     return (
         <Layout pt="74px" bg="#fff">
-            <Flex justifyContent="center" width="100%">
-                <Image src={banner} width="100%" height="auto" mx="auto"></Image>
-            </Flex>
             <Box maxWidth="1440px" margin="auto" py="90px" px="40px">
                 <Title
                     title="Our capsule"

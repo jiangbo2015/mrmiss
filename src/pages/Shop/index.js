@@ -208,9 +208,6 @@ const Shop = ({
 
     return (
         <Layout pt="74px" bg="#ffffff">
-            <Flex>
-                <Image src={banner} width="100%" height="auto" mx="auto"></Image>
-            </Flex>
             <section>
                 <Box bg="#fff" py="90px" maxWidth="1440px" mx="auto">
                     <Title
