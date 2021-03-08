@@ -214,7 +214,7 @@ const Shop = ({
                         title="SHOP"
                         subtitle="This season's capsule is launched by mrmiss 2021 limited capsule
             series-parent-child family series. I hope you can find your favorite
-            products here.."
+            products here..."
                     />
                 </Box>
                 <Box css={{ position: 'relative' }} maxWidth="1440px" mx="auto">

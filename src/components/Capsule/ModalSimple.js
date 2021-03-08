@@ -10,7 +10,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex alignSelf="flex-end" py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -39,8 +39,6 @@ export const ArrowBtn = props => (
 
 export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
     <Flex
-        flexDirection="column"
-        alignItems="center"
         mr="15px"
         css={{
             position: 'relative',
@@ -99,7 +97,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                 },
             }}
         >
-            <Box bg="#fff" pb="50px">
+            <Flex flexDirection="column" alignItems="center" alignItems="center" bg="#fff" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
                     <Box mr="10px" height="675px" css={{ overflowY: 'auto' }}>
@@ -302,7 +300,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                         })}
                     </Box>
                 </Box>
-            </Box>
+            </Flex>
         </Modal>
     );
 };
