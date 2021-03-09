@@ -123,9 +123,9 @@ const Capsule = ({
 
             if (haveTop && haveBottom) {
                 setHaveTopAndBottom({ top: haveTop, bottom: haveBottom });
+            } else {
+                setHaveTopAndBottom(false);
             }
-        } else {
-            setHaveTopAndBottom(false);
         }
     }, [currentCapsule, currentAdminChannel]);
 
