@@ -110,7 +110,7 @@ const Capsule = ({
     };
 
     useEffect(() => {
-        if (currentAdminChannel.codename === 'A') {
+        if (currentAdminChannel.codename === 'A' && currentCapsule.children) {
             let haveTop = false;
             let haveBottom = false;
             currentCapsule.children.map(x => {

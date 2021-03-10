@@ -13,9 +13,7 @@ export default class Business extends React.Component {
     state = {
         downloadOrder: {},
     };
-    callback(key) {
-        console.log(key);
-    }
+    callback() {}
     static getDerivedStateFromError(error) {
         // Update state so the next render will show the fallback UI.
         console.log('getDerivedStateFromError', error);
@@ -28,6 +26,7 @@ export default class Business extends React.Component {
         });
     }
     render() {
+        console.log(this.props);
         return (
             <Box
                 width={1}
@@ -56,25 +55,27 @@ export default class Business extends React.Component {
                     />
                 ) : null}
                 <Tabs
-                    defaultActiveKey="1"
-                    onChange={this.callback}
+                    activeKey={`${this.props.activeKey}`}
+                    onChange={key => {
+                        this.props.changeActiveKey(key);
+                    }}
                     tabBarStyle={{ background: '#FDDB3A', justifyContent: 'space-around' }}
                 >
                     <TabPane
                         tab="我的信息
                 "
-                        key="1"
+                        key={1}
                         style={{ padding: '40px' }}
                     >
                         <UserInfo />
                     </TabPane>
-                    <TabPane tab="我的定制订单" key="2">
+                    <TabPane tab="我的定制订单" key={2}>
                         <DIYOrder onDownloadOrder={this.handleDownloadOrder.bind(this)} />
                     </TabPane>
-                    <TabPane tab="我的胶囊订单" key="3">
+                    <TabPane tab="我的胶囊订单" key={3}>
                         <CapsuleOrder onDownloadOrder={this.handleDownloadOrder.bind(this)} />
                     </TabPane>
-                    <TabPane tab="我的网店订单" key="4">
+                    <TabPane tab="我的网店订单" key={4}>
                         <ShopOrder onDownloadOrder={this.handleDownloadOrder.bind(this)} />
                     </TabPane>
                 </Tabs>

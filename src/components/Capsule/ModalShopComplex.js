@@ -84,6 +84,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 );
 
 const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
+    if (!currentShopStyle) return null;
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
     // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
@@ -269,61 +270,69 @@ const ModalSimple = ({
         >
             <Flex flexDirection="column" alignItems="center" bg="#fff" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
-                <ItemBox
-                    onAddtoCart={handleAddtoCart}
-                    currentShopStyle={shopStyleTopAndBottomList.top[currentShopTopStyleIndex]}
-                />
-                <Flex
-                    justifyContent="center"
-                    mt="20px"
-                    mb="40px"
-                    pt="10px"
-                    sx={{
-                        borderTop: '1px #000 solid',
-                    }}
-                    width="1060px"
-                >
-                    <Box>
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeTopIndex(currentShopTopStyleIndex - 1);
+                {shopStyleTopAndBottomList.top.length <= 0 ? null : (
+                    <>
+                        <ItemBox
+                            onAddtoCart={handleAddtoCart}
+                            currentShopStyle={shopStyleTopAndBottomList.top[currentShopTopStyleIndex]}
+                        />
+                        <Flex
+                            justifyContent="center"
+                            mt="20px"
+                            mb="40px"
+                            pt="10px"
+                            sx={{
+                                borderTop: '1px #000 solid',
                             }}
-                        ></ArrowBtn>
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeTopIndex(currentShopTopStyleIndex + 1);
+                            width="1060px"
+                        >
+                            <Box>
+                                <ArrowBtn
+                                    onClick={() => {
+                                        handleChangeTopIndex(currentShopTopStyleIndex - 1);
+                                    }}
+                                ></ArrowBtn>
+                                <ArrowBtn
+                                    onClick={() => {
+                                        handleChangeTopIndex(currentShopTopStyleIndex + 1);
+                                    }}
+                                    right
+                                ></ArrowBtn>
+                            </Box>
+                        </Flex>
+                    </>
+                )}
+                {shopStyleTopAndBottomList.bottom.length <= 0 ? null : (
+                    <>
+                        <ItemBox
+                            onAddtoCart={handleAddtoCart}
+                            currentShopStyle={shopStyleTopAndBottomList.bottom[currentShopBottomStyleIndex]}
+                        />
+                        <Flex
+                            justifyContent="center"
+                            mt="20px"
+                            pt="10px"
+                            sx={{
+                                borderTop: '1px #000 solid',
                             }}
-                            right
-                        ></ArrowBtn>
-                    </Box>
-                </Flex>
-                <ItemBox
-                    onAddtoCart={handleAddtoCart}
-                    currentShopStyle={shopStyleTopAndBottomList.bottom[currentShopBottomStyleIndex]}
-                />
-                <Flex
-                    justifyContent="center"
-                    mt="20px"
-                    pt="10px"
-                    sx={{
-                        borderTop: '1px #000 solid',
-                    }}
-                    width="1060px"
-                >
-                    <Box>
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeBottomIndex(currentShopBottomStyleIndex - 1);
-                            }}
-                        ></ArrowBtn>
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeBottomIndex(currentShopBottomStyleIndex + 1);
-                            }}
-                            right
-                        ></ArrowBtn>
-                    </Box>
-                </Flex>
+                            width="1060px"
+                        >
+                            <Box>
+                                <ArrowBtn
+                                    onClick={() => {
+                                        handleChangeBottomIndex(currentShopBottomStyleIndex - 1);
+                                    }}
+                                ></ArrowBtn>
+                                <ArrowBtn
+                                    onClick={() => {
+                                        handleChangeBottomIndex(currentShopBottomStyleIndex + 1);
+                                    }}
+                                    right
+                                ></ArrowBtn>
+                            </Box>
+                        </Flex>
+                    </>
+                )}
             </Flex>
         </Modal>
     );

@@ -9,23 +9,39 @@ import { connect } from 'dva';
 import SearchInput from '@/components/SearchInput';
 import { SaveOutlined } from '@ant-design/icons';
 
-const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUser }) => {
+const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUser, onOk, selecteds = [] }) => {
     const [queryKey, setQueryKey] = useState('');
     const [selectRowKeys, setSelectRowKeys] = useState([]);
     const [findCustomerList, setFindCustomerList] = useState([]);
     const { lastLevel } = currentUser;
     useEffect(() => {
         if (queryKey) {
-            setFindCustomerList(customerList.filter(x => x.name.indexOf(queryKey) >= 0 && x._id !== currentCustomer._id));
+            if (onOk) {
+                setFindCustomerList(customerList.filter(x => x.name.indexOf(queryKey) >= 0));
+            } else {
+                setFindCustomerList(customerList.filter(x => x.name.indexOf(queryKey) >= 0 && x._id !== currentCustomer._id));
+            }
         } else {
-            setFindCustomerList(customerList.filter(x => x._id !== currentCustomer._id));
+            if (onOk) {
+                setFindCustomerList(customerList);
+            } else {
+                setFindCustomerList(customerList.filter(x => x._id !== currentCustomer._id));
+            }
         }
     }, [customerList, queryKey]);
+
+    useEffect(() => {
+        setSelectRowKeys(selecteds);
+    }, []);
 
     const handleSearch = e => {
         setQueryKey(e.target.value);
     };
-    const handleSave = e => {
+    const handleSave = () => {
+        if (onOk) {
+            onOk(selectRowKeys);
+            return;
+        }
         const { channels, goods, branchs, capsules, businessUserd, channelEmpowerUserd, innerDataUserd } = currentCustomer;
         dispatch({
             type: 'business/updateUsers',
@@ -70,9 +86,10 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUs
                 columns={columns}
                 dataSource={findCustomerList}
                 rowKey={record => record._id}
+                // selectRowKeys={selectRowKeys}
                 rowSelection={{
                     type: 'checkbox',
-                    onChange: (selectedRowKeys, selectedRows) => {
+                    onChange: selectedRowKeys => {
                         setSelectRowKeys(selectedRowKeys);
                         // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
@@ -83,6 +100,7 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUs
                             orderNo: record.orderNo,
                         };
                     },
+                    selectedRowKeys: selectRowKeys,
                 }}
             />
         </Box>
