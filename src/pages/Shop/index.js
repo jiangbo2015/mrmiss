@@ -30,6 +30,7 @@ const Shop = ({
     shopStyleList,
     currentAdminChannel = {},
     shopStyleTopAndBottomList,
+    currentUser,
 }) => {
     const ref = useRef(null);
     const [visible, setVisible] = useState(false);
@@ -286,6 +287,7 @@ const Shop = ({
                                     <CapsItem
                                         item={item}
                                         key={item._id}
+                                        showNum={currentUser.role == 1 ? item.caseNum : item.numInBag}
                                         handleOpen={() => handleOpenDetail(item)}
                                         curChannelPrice={selected ? selected.price : item.price}
                                         isSelect={!!selected}
@@ -309,7 +311,7 @@ const Shop = ({
     );
 };
 
-export default connect(({ shop, channel }) => ({
+export default connect(({ shop, channel, user }) => ({
     branchList: shop.branchList,
     currentBranch: shop.currentBranch,
     shopStyleList: shop.shopStyleList,
@@ -317,4 +319,5 @@ export default connect(({ shop, channel }) => ({
     currentAdminChannel: channel.currentAdminChannel,
     currentSelectedBar: shop.currentSelectedBar,
     currentShopStyle: shop.currentShopStyle,
+    currentUser: user.info,
 }))(Shop);

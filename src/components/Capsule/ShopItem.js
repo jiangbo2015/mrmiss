@@ -7,7 +7,7 @@ import { InputNumber } from 'antd';
 import { filterImageUrl } from '@/utils/helper';
 
 // 胶囊组件
-export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) => {
+export default ({ handleOpen, item, showNum, curChannelPrice, onEditPrice, isSelect }) => {
     const { colorWithStyleImgs = [], code, price } = item;
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -39,7 +39,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
                         e.stopPropagation();
                     }}
                 >
-                    <Text fontSize="16px">{item.caseNum} PCS</Text>
+                    <Text fontSize="16px">{showNum} PCS</Text>
                     <Text mt="5px">Ref.{item.code}</Text>
                     <Text mt="5px">Size.{item.size}</Text>
                     <Flex css={{ position: 'relative' }} mt="14px" justifyContent="center" alignItems="center">

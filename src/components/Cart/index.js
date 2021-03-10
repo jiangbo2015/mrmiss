@@ -28,7 +28,8 @@ const RoundBtn = props => (
     />
 );
 
-const LineItem = ({ data, onUpdate }) => {
+const LineItem = ({ data, showNum, onUpdate }) => {
+    console.log('showNum', showNum);
     const { shopStyle, count, _id } = data;
     const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum } = shopStyle;
     const [current, setCurrent] = useState(0);
@@ -100,7 +101,7 @@ const LineItem = ({ data, onUpdate }) => {
                 <Text>¥.{price}</Text>
                 <Box mx="30px">
                     {/* <Text>12pcs</Text> */}
-                    <Text>{caseNum}pcs</Text>
+                    <Text>{showNum}pcs</Text>
                 </Box>
                 <Flex mx="30px" alignItems="center">
                     <RoundBtn
@@ -120,7 +121,7 @@ const LineItem = ({ data, onUpdate }) => {
                     </RoundBtn>
                 </Flex>
                 <Text justifyContent="flex-end" width="100px" textAlign="end">
-                    ¥{count * price}
+                    ¥{count * showNum * price}
                 </Text>
             </Flex>
         </Box>
@@ -136,23 +137,16 @@ const LineItem = ({ data, onUpdate }) => {
  * handleReduce: 点击-
  * handleRemove: 点击x 删除
  */
-const Cart = ({
-    myShopCartList = [],
-    dispatch,
-    triggle,
-    triggleStyle,
-    onOk,
-    onCancel,
-    handleAdd,
-    handleReduce,
-    handleRemove,
-}) => {
+const Cart = ({ myShopCartList = [], dispatch, triggle, triggleStyle, currentUser }) => {
     const [visible, setVisible] = useState(false);
     let sumCount = 0;
     let sumPrice = 0;
     myShopCartList.map(sc => {
-        sumCount += sc.count * sc.shopStyle.caseNum;
-        sumPrice += sc.count * sc.shopStyle.price;
+        console.log('sc.count', sc.count);
+        let itemCount = currentUser.role == 1 ? sc.shopStyle.caseNum : sc.shopStyle.numInBag;
+        sumCount += sc.count * itemCount;
+        console.log('sumCount', sumCount);
+        sumPrice += sc.count * itemCount * sc.shopStyle.price;
     });
     useEffect(() => {
         // console.log('fetchMyShopCart');
@@ -201,7 +195,12 @@ const Cart = ({
                     <b>购物车</b>
                 </Flex>
                 {myShopCartList.map((item, index) => (
-                    <LineItem key={`shop-cart-${index}-${item._id}`} data={item} onUpdate={handleUpdate} />
+                    <LineItem
+                        key={`shop-cart-${index}-${item._id}`}
+                        showNum={currentUser.role == 1 ? item.shopStyle.caseNum : item.shopStyle.numInBag}
+                        data={item}
+                        onUpdate={handleUpdate}
+                    />
                 ))}
                 <Flex>
                     <Text mr="18px">总数:{sumCount}</Text>
@@ -225,6 +224,7 @@ const Cart = ({
     );
 };
 
-export default connect(({ shop = {} }) => ({
+export default connect(({ shop = {}, user }) => ({
     myShopCartList: shop.myShopCartList,
+    currentUser: user.info,
 }))(Cart);
