@@ -100,7 +100,7 @@ const SwitcherComponent = ({
         });
     };
 
-    // if (!currentUser.channelEmpowerUserd) return <Flex width="256px" />;
+    if (!currentUser.channelEmpowerUserd) return <Flex width="256px" />;
     return (
         <Flex className="switcher">
             <Arrow onClick={goPrev} />
