@@ -42,6 +42,7 @@ export default (svg, shadowUrl) => {
 
         //图片初始化完成后调用
         img.onload = function() {
+            console.log('svg onload');
             // document.body.appendChild(img)
 
             //将canvas的宽高设置为图像的宽高
@@ -54,13 +55,15 @@ export default (svg, shadowUrl) => {
             //将图片添加到body中
             var img2 = new Image();
             img2.setAttribute('crossOrigin', 'anonymous');
+            console.log('filterImageUrl(shadowUrl);', shadowUrl, filterImageUrl(shadowUrl));
             img2.src = filterImageUrl(shadowUrl);
             img2.onload = function() {
+                console.log('showurl onload');
                 c.drawImage(img2, 0, 0, 120, (120 * img.height) / img.width);
                 var dataurl = canvas.toDataURL('image/png');
                 let file = dataURL2File(dataurl);
                 // let imgBlob = dataURL2Blob(dataurl) file
-                resolve({ file, height: canvas.height });
+                resolve({ file });
             };
         };
     });

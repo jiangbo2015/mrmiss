@@ -223,6 +223,7 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                 }
                 return item;
             });
+            let aboutCases = singleTotalInfos[ri] && row.weight ? Math.ceil((singleTotalInfos[ri] * row.weight) / 35000) : 0;
             return {
                 pickType: rowPickTypes[ri],
                 rowTotal: singleTotalInfos[ri],
@@ -233,6 +234,7 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                 size,
                 price,
                 styleNos,
+                aboutCases,
             };
         });
         return orderData;

@@ -25,12 +25,13 @@ const OrderTable = ({ orderList = [], dispatch }) => {
     };
 
     const handleDownload = async id => {
-        const req = await request('/api/order/download', {
-            _id: id,
+        const req = await request('/api/shopOrder/postDownload', {
+            data: { _id: id },
+            method: 'post',
         });
         if (req) {
             // console.log(req)
-            window.open(`${process.env.DOWNLOAD_URL}/${req.url}`);
+            window.open(`${process.env.DOWNLOAD_URL}/${req.data.url}`);
         }
     };
 
@@ -52,7 +53,7 @@ const OrderTable = ({ orderList = [], dispatch }) => {
         },
         {
             title: '总金额',
-            dataIndex: 'sumCount',
+            dataIndex: 'sumPrice',
             key: 'sumPrice',
         },
         {

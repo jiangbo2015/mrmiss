@@ -229,6 +229,7 @@ export default {
                 let now = new Date();
                 let key = `${now.getTime()}-${o.styleNos}`;
                 let sizeArr = [];
+                let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
                 if (item.type) {
                     sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
                         ? item.favorite.styleAndColor[0].styleId.size?.split('/')

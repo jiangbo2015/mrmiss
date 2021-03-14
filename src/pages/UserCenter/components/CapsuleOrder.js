@@ -1,13 +1,16 @@
 import IconDelete from '@/public/icons/icon-delete.svg';
 import IconDownload from '@/public/icons/icon-download.svg';
-import { Popconfirm } from 'antd';
+import { Popconfirm, message } from 'antd';
 import { connect } from 'dva';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 import { Flex } from 'rebass/styled-components';
 import OrderTableComponent from './OrderTableComponent';
+import request from '@/utils/request';
+import OrderDownload from '@/components/OrderDownload';
 
 const OrderTable = ({ orderList = [], dispatch }) => {
+    const [downloadOrder, setDownloadOrder] = useState(false);
     useEffect(() => {
         dispatch({
             type: 'usercenter/getUserCapsuleOrder',
@@ -24,6 +27,23 @@ const OrderTable = ({ orderList = [], dispatch }) => {
                 _id,
             },
         });
+    };
+
+    const handleDownload = async record => {
+        setDownloadOrder(record);
+    };
+
+    const getDownloadUrlAndOpen = async data => {
+        const res = await request('/api/capsuleOrder/postDownload', {
+            data,
+            method: 'post',
+        });
+        if (res && res.data) {
+            window.open(`${process.env.DOWNLOAD_URL}/${res.data.url}`);
+            setDownloadOrder(false);
+        } else {
+            message.error('服务器错误，请稍后再试');
+        }
     };
 
     const columns = [
@@ -51,11 +71,17 @@ const OrderTable = ({ orderList = [], dispatch }) => {
         },
         {
             title: '下载',
-            dataIndex: 'download',
-            key: 'download',
-            render: () => (
+            dataIndex: '_id',
+            key: '_id',
+            render: (id, record) => (
                 <Flex p="20px" alignItems="center" justifyContent="center">
-                    <ReactSVG src={IconDownload} style={{ width: '24px' }} />
+                    <ReactSVG
+                        src={IconDownload}
+                        style={{ width: '24px' }}
+                        onClick={() => {
+                            handleDownload(record);
+                        }}
+                    />
                 </Flex>
             ),
         },
@@ -72,7 +98,20 @@ const OrderTable = ({ orderList = [], dispatch }) => {
             ),
         },
     ];
-    return <OrderTableComponent columns={columns} dataSource={orderList} />;
+    return (
+        <>
+            <OrderTableComponent columns={columns} dataSource={orderList} />
+            {!downloadOrder ? null : (
+                <OrderDownload
+                    order={downloadOrder}
+                    onGetDownloadUrlAndOpen={getDownloadUrlAndOpen}
+                    onClose={() => {
+                        setDownloadOrder(false);
+                    }}
+                />
+            )}
+        </>
+    );
 };
 
 export default connect(({ usercenter }) => {

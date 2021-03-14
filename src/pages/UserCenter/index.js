@@ -6,10 +6,11 @@ import OrderDownload from '@/components/OrderDownload';
 import DIYOrder from './components/DIYOrder';
 import CapsuleOrder from './components/CapsuleOrder';
 import ShopOrder from './components/ShopOrder';
+import { connect } from 'dva';
 
 const { TabPane } = Tabs;
 
-export default class Business extends React.Component {
+class UserCenter extends React.Component {
     state = {
         downloadOrder: {},
     };
@@ -21,8 +22,9 @@ export default class Business extends React.Component {
     }
 
     handleDownloadOrder(order) {
-        this.setState({
-            downloadOrder: order,
+        this.props.dispatch({
+            type: 'usercenter/downloadOrder',
+            payload: order,
         });
     }
     render() {
@@ -83,3 +85,7 @@ export default class Business extends React.Component {
         );
     }
 }
+
+// export default UserCenter;
+
+export default connect(() => {})(UserCenter);

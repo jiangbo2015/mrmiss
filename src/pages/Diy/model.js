@@ -532,11 +532,18 @@ export default {
             const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
             console.log('gourpByStyle', gourpByStyle);
             for (var key in gourpByStyle) {
+                let price = lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.price);
+                let size = gourpByStyle[key][0].styleAndColor[0].size;
+                let styleNos = gourpByStyle[key][0].styleAndColor.map(sc => sc.style.styleNo).join(',');
+
                 gourpByStyle[key] = {
-                    list: gourpByStyle[key],
+                    list: gourpByStyle[key].map(x => ({ ...x, price: _.sumBy(x.styleAndColor, sc => sc.style.price) })),
                     key,
                     sizes: gourpByStyle[key][0].styleAndColor[0].style.size?.split('/'),
                     weight: lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.weight),
+                    styleNos,
+                    price,
+                    size,
                 };
             }
             const saveItems = saveOrder?.map((o, k) => {
@@ -568,6 +575,9 @@ export default {
                     isSelect: false,
                     weight: weight ? weight : 0,
                     sizes: sizeArr,
+                    styleNos: o.styleNos,
+                    price: o.price,
+                    size: o.size,
                 };
             });
             yield put({

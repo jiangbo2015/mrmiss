@@ -67,3 +67,9 @@ export const delShopOrder = data =>
         method: 'post',
         data,
     });
+
+export const downloadOrder = data =>
+    request('/api/order/postDownload', {
+        method: 'post',
+        data,
+    });

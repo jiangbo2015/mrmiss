@@ -1,6 +1,6 @@
 import IconDelete from '@/public/icons/icon-delete.svg';
 import IconDownload from '@/public/icons/icon-download.svg';
-import { Popconfirm, DatePicker, Button } from 'antd';
+import { Popconfirm, DatePicker, Button, message } from 'antd';
 import { connect } from 'dva';
 import React, { useEffect, useState } from 'react';
 import { ReactSVG } from 'react-svg';
@@ -11,6 +11,8 @@ import SearchInput from '@/components/SearchInput';
 import { DeleteOutlined } from '@ant-design/icons';
 import Modal from '@/components/Modal';
 import IconUserSign from '@/public/icons/icon-usersign.svg';
+import request from '@/utils/request';
+import OrderDownload from '@/components/OrderDownload';
 
 const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     const [selectUserModal, setSelectUserModal] = useState(false);
@@ -20,6 +22,40 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     const [timeRange, setTimeRange] = useState([]);
     const [queryKey, setQueryKey] = useState('');
     const { order = [], capsuleOrder = [], shopOrder = [] } = ownOrderList;
+    const [downloadOrder, setDownloadOrder] = useState(false);
+
+    const handleDownload = async record => {
+        console.log(record);
+        if (record.orderType === 'shop') {
+            const req = await request('/api/shopOrder/postDownload', {
+                data: { _id: record._id },
+                method: 'post',
+            });
+            if (req) {
+                // console.log(req)
+                window.open(`${process.env.DOWNLOAD_URL}/${req.data.url}`);
+            }
+        } else {
+            setDownloadOrder(record);
+        }
+    };
+
+    const getDownloadUrlAndOpen = async data => {
+        let api = '/api/order/postDownload';
+        if (downloadOrder.type === 'capsule') {
+            api = '/api/orderCapsule/postDownload';
+        }
+        const res = await request(api, {
+            data,
+            method: 'post',
+        });
+        if (res && res.data) {
+            window.open(`${process.env.DOWNLOAD_URL}/${res.data.url}`);
+            setDownloadOrder(false);
+        } else {
+            message.error('服务器错误，请稍后再试');
+        }
+    };
 
     useEffect(() => {
         dispatch({
@@ -31,7 +67,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
                 queryKey,
             },
         });
-        console.log('timeRange', timeRange);
+        // console.log('timeRange', timeRange);
     }, [dispatch, userId, selectedUsers, timeRange, queryKey]);
 
     const data = [
@@ -41,7 +77,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     ];
 
     const updateSelectedRowKeys = (selectedRowKeys, selectedRows) => {
-        console.log('selectedRowKeys', selectedRowKeys);
+        // console.log('selectedRowKeys', selectedRowKeys);
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
     };
@@ -100,9 +136,15 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
             title: '下载',
             dataIndex: 'download',
             key: 'download',
-            render: () => (
+            render: (_, record) => (
                 <Flex p="20px" alignItems="center" justifyContent="center">
-                    <ReactSVG src={IconDownload} style={{ width: '24px' }} />
+                    <ReactSVG
+                        src={IconDownload}
+                        style={{ width: '24px' }}
+                        onClick={() => {
+                            handleDownload(record);
+                        }}
+                    />
                 </Flex>
             ),
         },
@@ -222,6 +264,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
                     },
                 }}
             />
+            {!downloadOrder ? null : <OrderDownload order={downloadOrder} onGetDownloadUrlAndOpen={getDownloadUrlAndOpen} />}
         </Box>
     );
 };
