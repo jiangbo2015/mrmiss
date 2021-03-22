@@ -142,10 +142,10 @@ export default {
         *fetchMyShopCart({ payload }, { call, put }) {
             console.log('******fetchMyShopCart');
             const res = yield call(api.getMyShopCart, payload);
-            if (res && res.data) {
+            if (res && Array.isArray(res.data)) {
                 yield put({
                     type: 'setMyShopCartList',
-                    payload: res.data,
+                    payload: res.data.filter(x => x.shopStyle),
                 });
             }
             // { styleAndColor: params, goodId: goodId }
