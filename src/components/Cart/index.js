@@ -143,10 +143,11 @@ const Cart = ({ myShopCartList = [], dispatch, triggle, triggleStyle, currentUse
     let sumPrice = 0;
     myShopCartList.map(sc => {
         console.log('sc.count', sc.count);
-        let itemCount = currentUser.role == 1 ? sc.shopStyle.caseNum : sc.shopStyle.numInBag;
+        let { shopStyle = { caseNum: 0, numInBag: 0, price: 0 } } = sc;
+        let itemCount = currentUser.role == 1 ? shopStyle.caseNum : shopStyle.numInBag;
         sumCount += sc.count * itemCount;
         console.log('sumCount', sumCount);
-        sumPrice += sc.count * itemCount * sc.shopStyle.price;
+        sumPrice += sc.count * itemCount * shopStyle.price;
     });
     useEffect(() => {
         // console.log('fetchMyShopCart');

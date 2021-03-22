@@ -44,7 +44,7 @@ class Business extends React.Component {
     };
 
     handleDelete = () => {
-        console.log(this.state);
+        // console.log(this.state);
         const { dispatch } = this.props;
         const { selectedRowKeys } = this.state;
         if (selectedRowKeys.length < 1) {

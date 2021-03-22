@@ -40,6 +40,11 @@ export const getCustomerUser = data =>
         params: data,
     });
 
+export const getOwnUnReadedOrder = () =>
+    request('/api/user/getOwnUnReadedOrder', {
+        method: 'get',
+    });
+
 export const delOwnUser = data =>
     request('/api/user/delOwnUser', {
         method: 'post',

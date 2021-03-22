@@ -37,6 +37,7 @@ export default {
             // const { data } = yield call(api.login, payload);
             // 登录成功，将token写入本地，并跳转到主体
             const { data } = yield call(api.getCustomerUser, payload);
+            const { upreadData } = yield call(api.getOwnUnReadedOrder);
             if (data) {
                 yield put({
                     type: 'setCustomerList',
@@ -44,6 +45,7 @@ export default {
                 });
                 // history.push('/main');
             }
+            console.log('upreadData', upreadData);
         },
         *getOwnOrderList({ payload }, { call, put }) {
             const { data } = yield call(api.getOwnOrderList, payload);
