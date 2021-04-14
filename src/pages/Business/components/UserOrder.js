@@ -10,6 +10,7 @@ import UserListMinTable from './UserListMinTable';
 import SearchInput from '@/components/SearchInput';
 import { DeleteOutlined } from '@ant-design/icons';
 import Modal from '@/components/Modal';
+import Select from '@/components/Select';
 import IconUserSign from '@/public/icons/icon-usersign.svg';
 import request from '@/utils/request';
 import OrderDownload from '@/components/OrderDownload';
@@ -19,6 +20,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const [selectedRows, setSelectedRows] = useState([]);
+    const [isMerge, setIsMerge] = useState('all');
     const [timeRange, setTimeRange] = useState([]);
     const [queryKey, setQueryKey] = useState('');
     const { order = [], capsuleOrder = [], shopOrder = [] } = ownOrderList;
@@ -58,17 +60,21 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     };
 
     useEffect(() => {
+        let payload = {
+            userId,
+            timeRange,
+            selectedUsers,
+            queryKey,
+        };
+        if (isMerge !== 'all') {
+            payload.isMerge = isMerge;
+        }
         dispatch({
             type: 'business/getOwnOrderList',
-            payload: {
-                userId,
-                timeRange,
-                selectedUsers,
-                queryKey,
-            },
+            payload,
         });
         // console.log('timeRange', timeRange);
-    }, [dispatch, userId, selectedUsers, timeRange, queryKey]);
+    }, [dispatch, userId, selectedUsers, timeRange, queryKey, isMerge]);
 
     const data = [
         ...order.map(x => ({ ...x, orderType: 'order' })),
@@ -81,6 +87,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
     };
+
     const handleDelete = record => () => {
         dispatch({
             type: 'business/delOwnOrder',
@@ -107,6 +114,15 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
         setQueryKey(e.target.value);
     };
 
+    const handleMerge = () => {
+        dispatch({
+            type: 'business/mergeOwnOrder',
+            payload: {
+                selectedRowKeys,
+            },
+        });
+    };
+
     const columns = [
         {
             title: '订单编号',
@@ -131,6 +147,12 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
             key: 'totalPrice',
             render: (text, record) =>
                 record.orderType === 'shop' ? record.sumPrice : text?.reduce((left, right) => left + right.rowTotalPrice, 0),
+        },
+        {
+            title: '是否合并提交',
+            dataIndex: 'isMerge',
+            key: 'isMerge',
+            render: text => (text ? '已提交' : <Box color="#FDDB3A"> 未提交</Box>),
         },
         {
             title: '下载',
@@ -188,7 +210,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
                     }}
                 />
             </Modal>
-            <Flex mb="8px">
+            <Flex mb="8px" alignItems="center">
                 <Box>
                     <DatePicker.RangePicker
                         style={{ color: '#fff' }}
@@ -201,15 +223,13 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
                         }}
                     ></DatePicker.RangePicker>
                 </Box>
-                <Flex mx="12px" color="#fff" bg="#4A4A4A" px="10px" py="4px" sx={{ cursor: 'pointer' }}>
-                    合并下载所选订单
-                </Flex>
                 {userId ? null : (
                     <Flex
                         color="#fff"
                         bg="#4A4A4A"
                         px="10px"
                         py="4px"
+                        m="12px"
                         sx={{ cursor: 'pointer' }}
                         alignItems="center"
                         onClick={() => {
@@ -226,6 +246,40 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
                         />
                     </Flex>
                 )}
+                <Select
+                    width="100px"
+                    style={{ margin: '0 8px' }}
+                    onChange={val => setIsMerge(val)}
+                    value={isMerge}
+                    options={[
+                        {
+                            label: '所有',
+                            value: 'all',
+                        },
+                        {
+                            label: '已合并提交',
+                            value: 1,
+                        },
+                        {
+                            label: '未合并提交',
+                            value: 0,
+                        },
+                    ]}
+                />
+                {isMerge === 0 ? (
+                    <Flex
+                        color="#fff"
+                        bg="#4A4A4A"
+                        px="10px"
+                        py="4px"
+                        sx={{ cursor: 'pointer', borderRadius: '16px' }}
+                        onClick={() => {
+                            handleMerge();
+                        }}
+                    >
+                        合并提交所选订单
+                    </Flex>
+                ) : null}
             </Flex>
             <Flex bg="#41444B" p="14px">
                 <Flex alignItems="center">
