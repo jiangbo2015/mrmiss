@@ -71,12 +71,14 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
             payload: favorite,
         });
 
-        // favorite.styleAndColor[0].colorIds;
+        let selectedColorsArr = favorite.styleAndColor.map(x => x.colorIds);
+        let selectColors = lodash.union(lodash.flatten(selectedColorsArr).map(x => x._id));
+        console.log(selectColors);
         dispatch({
             type: 'diy/batchSetSelectColorList',
             payload: {
-                plainColors: favorite.styleAndColor[0].colorIds.map(x => x._id),
-                flowerColors: favorite.styleAndColor[0].colorIds.map(x => x._id),
+                plainColors: selectColors,
+                flowerColors: selectColors,
             },
         });
     };
@@ -94,8 +96,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
         // console.log('window.timeOrder', window.timeOrder);
         const nfavoriteArr = favoriteArr.sort((a, b) => {
             return window.timeOrder
-                ? new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime()
-                : new Date(a.updateTime).getTime() - new Date(b.updateTime).getTime();
+                ? new Date(a.updateTime).getTime() - new Date(b.updateTime).getTime()
+                : new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
         });
         dispatch({
             type: 'diy/setFavoriteArr',
@@ -152,10 +154,10 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                             ))}
                         </Box>
                         <Box>
-                            {bigerVisible.styleAndColor.map(d => (
+                            {bigerVisible.styleAndColor.map((d, i) => (
                                 <StyleItem
                                     width={`${(300 * d.style.styleBackSize) / 27}px`}
-                                    styleId={`${bigerVisible._id}-${d._id}-item`}
+                                    styleId={`${bigerVisible._id}-${d._id}-${i}-big`}
                                     colors={d.colorIds}
                                     key={`${bigerVisible._id}-${d._id}-${Math.random() * 1000000}`}
                                     {...d.style}
@@ -175,21 +177,24 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                 visible={orderVisible}
                 onCancel={() => {
                     setOrderVisible(false);
-                    console.log('setOrderVisible');
+                    dispatch({
+                        type: 'diy/toogleSelectAllFavorite',
+                        payload: false,
+                    });
                 }}
             />
             <Propmt
                 visible={capsuleInputVisible}
                 placeholder="请输入胶囊名称："
-                onOk={async (input, covermap) => {
-                    console.log('covermap', covermap);
+                onOk={async input => {
+                    console.log('covermap');
                     if (!input) {
                         message.info('胶囊名称不能为空');
                         return;
                     }
                     await dispatch({
                         type: 'diy/createCapsule',
-                        payload: { input, covermap },
+                        payload: { input },
                     });
                     setCapsuleInputVisible(false);
                 }}
@@ -363,7 +368,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                             {favorite.styleAndColor.map(d => (
                                 <StyleItem
                                     width={favoriteBox[favoritePattern].size}
-                                    styleId={`${favorite._id}-${d._id}-item`}
+                                    styleId={`${favorite._id}-${d._id}-favorite`}
                                     colors={d.colorIds}
                                     key={`${favorite._id}-${d._id}-${Math.random() * 1000000}`}
                                     {...d.style}

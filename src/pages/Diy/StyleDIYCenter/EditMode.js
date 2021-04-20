@@ -82,17 +82,31 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             width: '560px',
                             display: 'flex',
                             justifyContent: 'center',
+                            flexDirection: 'column',
+                            alignItems: 'center',
                         }}
                     >
-                        {favoriteEditObj.styleAndColor.map(d => (
+                        {favoriteEditObj.styleAndColor.map((d, i) => (
                             <StyleItem
                                 width={`${(300 * d.style.styleSize) / 27}px`}
-                                styleId={`${favoriteEditObj._id}-${d._id}-item`}
-                                colors={selectColorList}
+                                styleId={`${favoriteEditObj._id}-${d._id}-${i}-item`}
+                                colors={d.colorIds}
                                 key={`${favoriteEditObj._id}-${d._id}-${Math.random() * 1000000}`}
                                 {...d.style}
                                 style={{
                                     cursor: 'pointer',
+                                }}
+                                showGroupStroke={true}
+                                curStylesEditGroupIndex={d.currentStyleRegion - 1}
+                                onSetEditSvgGroupIndex={val => {
+                                    favoriteEditObj.styleAndColor[i].currentStyleRegion = val + 1;
+                                    favoriteEditObj.styleAndColor[(i + 1) % 2].currentStyleRegion = 0;
+                                    dispatch({
+                                        type: 'diy/setFavoriteEditObj',
+                                        payload: {
+                                            ...favoriteEditObj,
+                                        },
+                                    });
                                 }}
                             />
                         ))}
@@ -102,13 +116,15 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             width: '560px',
                             display: 'flex',
                             justifyContent: 'center',
+                            flexDirection: 'column',
+                            alignItems: 'center',
                         }}
                     >
-                        {favoriteEditObj.styleAndColor.map(d => (
+                        {favoriteEditObj.styleAndColor.map((d, i) => (
                             <StyleItem
                                 width={`${(300 * d.style.styleBackSize) / 27}px`}
-                                styleId={`${favoriteEditObj._id}-${d._id}-item`}
-                                colors={selectColorList}
+                                styleId={`${favoriteEditObj._id}-${d._id}-${i}-item1`}
+                                colors={d.colorIds}
                                 key={`${favoriteEditObj._id}-${d._id}-${Math.random() * 1000000}`}
                                 {...d.style}
                                 svgUrl={d.style.svgUrlBack}
@@ -116,6 +132,18 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                                 styleSize={d.style.styleBackSize}
                                 style={{
                                     cursor: 'pointer',
+                                }}
+                                showGroupStroke={true}
+                                curStylesEditGroupIndex={d.currentStyleRegion - 1}
+                                onSetEditSvgGroupIndex={val => {
+                                    favoriteEditObj.styleAndColor[i].currentStyleRegion = val + 1;
+                                    favoriteEditObj.styleAndColor[(i + 1) % 2].currentStyleRegion = 0;
+                                    dispatch({
+                                        type: 'diy/setFavoriteEditObj',
+                                        payload: {
+                                            ...favoriteEditObj,
+                                        },
+                                    });
                                 }}
                             />
                         ))}
@@ -130,4 +158,8 @@ export default connect(({ diy = {} }) => ({
     favoriteEditObj: diy.favoriteEditObj,
     collocationPattern: diy.collocationPattern,
     selectColorList: diy.selectColorList,
+    currentStyleRegion: diy.currentStyleRegion,
+    currentStyleRegion1: diy.currentStyleRegion1,
+    singleSelectColorList: diy.singleSelectColorList,
+    singleSelectColorList1: diy.singleSelectColorList1,
 }))(App);

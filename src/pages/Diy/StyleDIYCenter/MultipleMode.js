@@ -25,6 +25,8 @@ const App = ({
     selectStyleList,
     dispatch,
     selectColorList,
+    singleSelectColorList = [],
+    singleSelectColorList1 = [],
     currentGood = { category: [] },
     currentGoodCategory = '',
     styleQueryKey,
@@ -80,7 +82,10 @@ const App = ({
         });
         dispatch({
             type: 'diy/batchSetSelectColorList',
-            payload: { plainColors: [], flowerColors: [] },
+            payload: {
+                plainColors: [...singleSelectColorList.map(x => x._id), ...singleSelectColorList1.map(x => x._id)],
+                flowerColors: [...singleSelectColorList.map(x => x._id), ...singleSelectColorList1.map(x => x._id)],
+            },
         });
     };
     const handleSelectStyle = style => {
@@ -91,9 +96,11 @@ const App = ({
     };
     const handleSelectAll = () => {
         if (docs.length > selectStyleList.length) {
+            const payload = [...selectStyleList, ...docs.filter(x => selectStyleList.findIndex(s => s._id === x._id) < 0)];
+            console.log('payload', payload);
             dispatch({
                 type: 'diy/batchSetSelectStyleList',
-                payload: [...selectStyleList, ...docs.filter(x => selectStyleList.findIndex(s => s._id === x._id) < 0)],
+                payload,
             });
         } else {
             dispatch({
@@ -107,7 +114,14 @@ const App = ({
             handleSetCurrentGoodCategory(currentGood.category[0]._id);
             handleFetchMore();
         }
-    }, [currentGood, styleQueryKey]);
+    }, [currentGood]);
+
+    useEffect(() => {
+        if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
+            // handleSetCurrentGoodCategory(currentGood.category[0]._id);
+            handleFetchMore();
+        }
+    }, [styleQueryKey]);
     useEffect(() => {
         dispatch({
             type: 'diy/setStyleQueryChangeKey',
@@ -143,6 +157,7 @@ const App = ({
             payload: category,
         });
     };
+    console.log('selectStyleList.length < docs.length ', selectStyleList, docs.length);
     return (
         <div
             style={{
@@ -180,8 +195,7 @@ const App = ({
                             padding: '4px',
                             marginLeft: '12px',
                             marginBottom: '4px',
-                            opacity: assign ? (selectStyleList.length < docs.length ? 0.3 : 1) : 0,
-                            pointerEvents: assign ? 'painted' : 'none',
+                            opacity: selectStyleList.length < docs.length ? 0.3 : 1,
                         }}
                         onClick={() => {
                             handleSelectAll();
@@ -302,7 +316,7 @@ const App = ({
                                     />
                                 </div>
                             </Tooltip>
-                            <div
+                            {/* <div
                                 style={{
                                     display: assign ? 'flex' : 'none',
                                     alignItems: 'center',
@@ -322,7 +336,7 @@ const App = ({
                                         handleEditPrice({ style: d._id, price: value });
                                     }}
                                 />
-                            </div>
+                            </div> */}
                         </div>
                     );
                 })}
@@ -340,4 +354,6 @@ export default connect(({ diy = {}, channel = {} }) => ({
     styleQueryKey: diy.styleQueryKey,
     styleQueryChangeKey: diy.styleQueryChangeKey,
     currentAdminChannel: channel.currentAdminChannel,
+    singleSelectColorList: diy.singleSelectColorList,
+    singleSelectColorList1: diy.singleSelectColorList1,
 }))(App);

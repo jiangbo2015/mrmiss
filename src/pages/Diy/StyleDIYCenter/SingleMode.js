@@ -22,11 +22,15 @@ const App = ({
     currentStyle = {},
     currentStyle1 = {},
     selectColorList = [],
+    singleSelectColorList = [],
+    singleSelectColorList1 = [],
     collocationBg,
     currentGood = { category: [] },
     currentGoodCategory = '',
     currentStyleRegion,
+    currentStyleRegion1,
     selectStyleList = [],
+
     styleQueryChangeKey,
 }) => {
     let docs = [];
@@ -47,11 +51,18 @@ const App = ({
     if (categoryObj && categoryObj.name === '分体') {
         const top = currentGood.category.find(x => x.name === '单衣');
         if (top) {
-            docs = styleList[top._id];
+            //选择的放在前面
+            docs =
+                selectStyleList.length > 0
+                    ? [...styleList[top._id].filter(x => x.isSelected), ...styleList[top._id].filter(x => !x.isSelected)]
+                    : styleList[top._id];
         }
         const bottom = currentGood.category.find(x => x.name === '单裤');
         if (bottom) {
-            docs1 = styleList[bottom._id];
+            docs1 =
+                selectStyleList.length > 0
+                    ? [...styleList[bottom._id].filter(x => x.isSelected), ...styleList[bottom._id].filter(x => !x.isSelected)]
+                    : styleList[bottom._id];
         }
     }
     const params = {
@@ -70,6 +81,18 @@ const App = ({
             type: 'diy/setCurrentGoodCategory',
             payload: category,
         });
+        dispatch({
+            type: 'diy/setSingleSelectColorList',
+            payload: [],
+        });
+        dispatch({
+            type: 'diy/setSingleSelectColorList1',
+            payload: [],
+        });
+        dispatch({
+            type: 'diy/batchSetSelectColorList',
+            payload: { plainColors: [], flowerColors: [] },
+        });
     };
     const handleChangeCollocationPattern = pattern => {
         dispatch({
@@ -80,10 +103,6 @@ const App = ({
             dispatch({
                 type: 'diy/batchSetSelectColorList',
                 payload: { plainColors: [], flowerColors: [] },
-            });
-            dispatch({
-                type: 'diy/batchSetSelectStyleList',
-                payload: [],
             });
         }
         if (pattern === 'multiple') {
@@ -127,16 +146,52 @@ const App = ({
     };
 
     const handleSelectStyle = style => {
+        if (style._id === currentStyle._id) {
+            return;
+        }
         dispatch({
             type: 'diy/setCurrentStyle',
             payload: style,
         });
+        dispatch({
+            type: 'diy/setSingleSelectColorList',
+            payload: [],
+        });
+        dispatch({
+            type: 'diy/batchSetSelectColorList',
+            payload: {
+                plainColors: [...singleSelectColorList1.map(x => x._id)],
+                flowerColors: [...singleSelectColorList1.map(x => x._id)],
+            },
+        });
+        dispatch({
+            type: 'diy/setCurrentStyleRegion',
+            payload: 0,
+        });
     };
 
     const handleSelectStyle1 = style => {
+        if (style._id === currentStyle1._id) {
+            return;
+        }
         dispatch({
             type: 'diy/setCurrentStyle1',
             payload: style,
+        });
+        dispatch({
+            type: 'diy/setSingleSelectColorList1',
+            payload: [],
+        });
+        dispatch({
+            type: 'diy/batchSetSelectColorList',
+            payload: {
+                plainColors: [...singleSelectColorList.map(x => x._id)],
+                flowerColors: [...singleSelectColorList.map(x => x._id)],
+            },
+        });
+        dispatch({
+            type: 'diy/setCurrentStyleRegion1',
+            payload: 0,
         });
     };
 
@@ -144,6 +199,14 @@ const App = ({
         // console.log('handleSetCurrentStyleRegion', val);
         dispatch({
             type: 'diy/setCurrentStyleRegion',
+            payload: val + 1,
+        });
+    };
+
+    const handleSetCurrentStyleRegion1 = val => {
+        // console.log('handleSetCurrentStyleRegion', val);
+        dispatch({
+            type: 'diy/setCurrentStyleRegion1',
             payload: val + 1,
         });
     };
@@ -233,22 +296,22 @@ const App = ({
             {categoryObj && categoryObj.name === '分体' ? (
                 <MultipleStyleSelector
                     currentStyle={currentStyle}
-                    selectColorList={selectColorList}
+                    selectColorList={singleSelectColorList}
                     currentStyleRegion={currentStyleRegion}
                     docs={docs}
                     handleSelectStyle={handleSelectStyle}
                     handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
                     currentStyle2={currentStyle1}
-                    selectColorList2={selectColorList}
-                    currentStyleRegion2={currentStyleRegion}
+                    selectColorList2={singleSelectColorList1}
+                    currentStyleRegion2={currentStyleRegion1}
                     docs2={docs1}
                     handleSelectStyle2={handleSelectStyle1}
-                    handleSetCurrentStyleRegion2={handleSetCurrentStyleRegion}
+                    handleSetCurrentStyleRegion2={handleSetCurrentStyleRegion1}
                 />
             ) : (
                 <SingleStyleSelector
                     currentStyle={currentStyle}
-                    selectColorList={selectColorList}
+                    selectColorList={singleSelectColorList}
                     currentStyleRegion={currentStyleRegion}
                     docs={docs}
                     handleSelectStyle={handleSelectStyle}
@@ -270,6 +333,9 @@ export default connect(({ diy }) => ({
     currentGood: diy.currentGood,
     currentGoodCategory: diy.currentGoodCategory,
     currentStyleRegion: diy.currentStyleRegion,
+    currentStyleRegion1: diy.currentStyleRegion1,
+    singleSelectColorList: diy.singleSelectColorList,
+    singleSelectColorList1: diy.singleSelectColorList1,
     styleQueryKey: diy.styleQueryKey,
     styleQueryChangeKey: diy.styleQueryChangeKey,
 }))(App);

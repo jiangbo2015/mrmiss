@@ -33,9 +33,9 @@ export default ({ placeholder, style = {}, ...props }) => {
         // <div style={{ background: '#fff' }}>
         <Modal closable={false} mask={false} footer={false} className="mrmissPropmt" {...props}>
             <Input placeholder={placeholder} ref={inputRef} />
-            <Upload {...uploadProps} beforeUpload={beforeUpload} onChange={handleAdd}>
+            {/* <Upload {...uploadProps} beforeUpload={beforeUpload} onChange={handleAdd}>
                 {imgUrl ? <Avatar src={imgUrl}></Avatar> : <UploadBtn type={onLoad ? 'loading' : 'plus'}></UploadBtn>}
-            </Upload>
+            </Upload> */}
             <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Button onClick={props.onCancel} className="madal-button">
                     取消

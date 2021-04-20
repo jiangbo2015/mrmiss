@@ -19,6 +19,7 @@ const App = ({
     collocationPattern,
     currentAdminChannel,
     currentUser,
+    favoriteEditObj,
 }) => {
     const handleAddFavorite = async () => {
         let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
@@ -67,6 +68,26 @@ const App = ({
                 type: 'diy/addFavorites',
                 payload: favorites,
             });
+        } else if (collocationPattern === 'edit') {
+            let payload = {
+                _id: favoriteEditObj._id,
+                goodId: currentGood._id,
+                goodCategory,
+                styleAndColor: [],
+            };
+            if (favoriteEditObj._id) {
+                payload.styleAndColor = favoriteEditObj.styleAndColor.map(x => ({
+                    styleId: x.style._id,
+                    colorIds: x.colorIds.map(x => x._id),
+                }));
+
+                await dispatch({
+                    type: 'diy/updateFavorite',
+                    payload,
+                });
+            }
+
+            // updateFavorite
         }
     };
 
@@ -158,6 +179,7 @@ export default connect(({ diy = {}, channel, user }) => ({
     currentStyle1: diy.currentStyle1,
     selectColorList: diy.selectColorList,
     selectStyleList: diy.selectStyleList,
+    favoriteEditObj: diy.favoriteEditObj,
     currentAdminChannel: channel.currentAdminChannel,
     currentUser: user.info,
 }))(App);

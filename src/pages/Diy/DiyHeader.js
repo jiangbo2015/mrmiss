@@ -52,7 +52,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
         } else {
             dispatch({
                 type: 'diy/setCollocationPattern',
-                payload: 'single',
+                payload: 'multiple',
             });
             dispatch({
                 type: 'diy/batchSetSelectColorList',

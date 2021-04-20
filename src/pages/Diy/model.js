@@ -11,9 +11,11 @@ export default {
         colorList: { docs: [] },
         flowerList: { docs: [] },
         styleList: {},
-        collocationPattern: 'single', //搭配模式 single:单一模式；multiple:多个模式；paintPrew:花布大图模式 assign:分配模式
+        collocationPattern: 'multiple', //搭配模式 single:单一模式；multiple:多个模式；paintPrew:花布大图模式 assign:分配模式
         collocationBg: false, //搭配背景 false:black|true:white
         selectColorList: [],
+        singleSelectColorList: [], // 单个搭配时需要使用
+        singleSelectColorList1: [], // 单个搭配时需要使用 分体下装
         styleColorings: [], // 款式着色
         selectStyleList: [],
         favoriteArr: [],
@@ -23,6 +25,7 @@ export default {
         favoriteToOrderGroupList: [],
         goodsList: [],
         currentStyleRegion: 0,
+        currentStyleRegion1: 0, // 分体时需要使用
         bigPicColor: {},
         styleQueryKey: '',
         styleQueryChangeKey: '',
@@ -70,6 +73,14 @@ export default {
             return {
                 ...state,
                 currentStyleRegion: action.payload,
+                currentStyleRegion1: 0,
+            };
+        },
+        setCurrentStyleRegion1(state, action) {
+            return {
+                ...state,
+                currentStyleRegion: 0,
+                currentStyleRegion1: action.payload,
             };
         },
         setGoodsList(state, action) {
@@ -129,6 +140,18 @@ export default {
             return {
                 ...state,
                 selectColorList: action.payload,
+            };
+        },
+        setSingleSelectColorList(state, action) {
+            return {
+                ...state,
+                singleSelectColorList: action.payload,
+            };
+        },
+        setSingleSelectColorList1(state, action) {
+            return {
+                ...state,
+                singleSelectColorList1: action.payload,
             };
         },
         setSelectStyleList(state, action) {
@@ -300,37 +323,52 @@ export default {
                 colorList = { docs: [] },
                 flowerList = { docs: [] },
                 selectColorList,
+                singleSelectColorList,
+                singleSelectColorList1,
                 collocationPattern,
+                currentStyleRegion1,
                 currentStyleRegion,
+                favoriteEditObj,
             } = yield select(state => state.diy);
             // setStyleColorings
             let newValue = [];
+            let newValue1 = [];
             const { item, index } = payload;
             const findSelectIndex = selectColorList.findIndex(x => x && x._id == item._id);
 
             switch (collocationPattern) {
-                case 'edit': {
-                }
-                case 'single':
-                    console.log('single');
+                case 'edit':
                     {
-                        if (currentStyleRegion) {
+                        // favoriteEditObj
+                        if (
+                            favoriteEditObj.styleAndColor[0].currentStyleRegion ||
+                            (favoriteEditObj.styleAndColor.length > 1 && favoriteEditObj.styleAndColor[1].currentStyleRegion)
+                        ) {
                             // 自主选择区域
 
-                            newValue = [...selectColorList];
+                            newValue = [...favoriteEditObj.styleAndColor[0].colorIds];
+
+                            if (favoriteEditObj.styleAndColor.length > 1) {
+                                newValue1 = [...favoriteEditObj.styleAndColor[1].colorIds];
+                            }
+
+                            let tempValue = favoriteEditObj.styleAndColor[0].currentStyleRegion ? newValue : newValue1;
+                            let tempRegion = favoriteEditObj.styleAndColor[0].currentStyleRegion
+                                ? favoriteEditObj.styleAndColor[0].currentStyleRegion
+                                : favoriteEditObj.styleAndColor[1].currentStyleRegion;
                             // 选中区域已有颜色
-                            if (newValue[currentStyleRegion - 1]) {
-                                let tempId = newValue[currentStyleRegion - 1]._id;
-                                let tempType = newValue[currentStyleRegion - 1].type;
+                            if (tempValue[tempRegion - 1]) {
+                                let tempId = tempValue[tempRegion - 1]._id;
+                                let tempType = tempValue[tempRegion - 1].type;
                                 let isEixised = false;
                                 // 点击了选中区域的相同颜色 则取消该区域的选中
-                                if (newValue[currentStyleRegion - 1]._id === item._id) {
-                                    newValue[currentStyleRegion - 1] = {};
-                                    isEixised = newValue.find(nv => nv && nv._id === item._id);
+                                if (tempValue[tempRegion - 1]._id === item._id) {
+                                    tempValue[tempRegion - 1] = {};
+                                    isEixised = tempValue.find(nv => nv && nv._id === item._id);
                                 } else {
                                     //否则换一种颜色
-                                    newValue[currentStyleRegion - 1] = item;
-                                    isEixised = newValue.find(nv => nv && nv._id === tempId);
+                                    tempValue[tempRegion - 1] = item;
+                                    isEixised = tempValue.find(nv => nv && nv._id === tempId);
                                     if (item.type) {
                                         flowerList.docs[index].isSelected = true;
                                     } else {
@@ -348,7 +386,7 @@ export default {
                                     }
                                 }
                             } else {
-                                newValue[currentStyleRegion - 1] = item;
+                                tempValue[tempRegion - 1] = item;
                                 if (item.type) {
                                     flowerList.docs[index].isSelected = true;
                                 } else {
@@ -356,24 +394,58 @@ export default {
                                 }
                             }
                         } else {
-                            //能选中3个颜色
-                            if (selectColorList.length > 2) {
-                                if (selectColorList[2].type === 0) {
-                                    const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[2]._id);
-                                    findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
+                            return;
+                        }
+                    }
+                    break;
+                case 'single':
+                    {
+                        if (currentStyleRegion || currentStyleRegion1) {
+                            // 自主选择区域
+
+                            newValue = [...singleSelectColorList];
+                            newValue1 = [...singleSelectColorList1];
+                            let tempValue = currentStyleRegion ? newValue : newValue1;
+                            let tempRegion = currentStyleRegion ? currentStyleRegion : currentStyleRegion1;
+                            // 选中区域已有颜色
+                            if (tempValue[tempRegion - 1]) {
+                                let tempId = tempValue[tempRegion - 1]._id;
+                                let tempType = tempValue[tempRegion - 1].type;
+                                let isEixised = false;
+                                // 点击了选中区域的相同颜色 则取消该区域的选中
+                                if (tempValue[tempRegion - 1]._id === item._id) {
+                                    tempValue[tempRegion - 1] = {};
+                                    isEixised = tempValue.find(nv => nv && nv._id === item._id);
                                 } else {
-                                    const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[2]._id);
-                                    findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
+                                    //否则换一种颜色
+                                    tempValue[tempRegion - 1] = item;
+                                    isEixised = tempValue.find(nv => nv && nv._id === tempId);
+                                    if (item.type) {
+                                        flowerList.docs[index].isSelected = true;
+                                    } else {
+                                        colorList.docs[index].isSelected = true;
+                                    }
                                 }
-                                newValue = [selectColorList[0], selectColorList[1], item];
+
+                                if (!isEixised) {
+                                    if (tempType === 0) {
+                                        const findIndex = colorList.docs.findIndex(x => x._id === tempId);
+                                        findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
+                                    } else {
+                                        const findIndex = flowerList.docs.findIndex(x => x._id === tempId);
+                                        findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
+                                    }
+                                }
                             } else {
-                                newValue = [...selectColorList, item];
+                                tempValue[tempRegion - 1] = item;
+                                if (item.type) {
+                                    flowerList.docs[index].isSelected = true;
+                                } else {
+                                    colorList.docs[index].isSelected = true;
+                                }
                             }
-                            if (item.type) {
-                                flowerList.docs[index].isSelected = true;
-                            } else {
-                                colorList.docs[index].isSelected = true;
-                            }
+                        } else {
+                            return;
                         }
                     }
                     break;
@@ -388,22 +460,22 @@ export default {
                             } else {
                                 colorList.docs[index].isSelected = false;
                             }
-                        }
-
-                        newValue = [item]; //只能选中一个颜色
-                        if (selectColorList.length > 0) {
-                            if (selectColorList[0].type === 0) {
-                                const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[0]._id);
-                                findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
-                            } else {
-                                const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[0]._id);
-                                findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
-                            }
-                        }
-                        if (item.type) {
-                            flowerList.docs[index].isSelected = true;
                         } else {
-                            colorList.docs[index].isSelected = true;
+                            newValue = [item]; //只能选中一个颜色
+                            if (selectColorList.length > 0) {
+                                if (selectColorList[0].type === 0) {
+                                    const findIndex = colorList.docs.findIndex(x => x._id === selectColorList[0]._id);
+                                    findIndex < 0 ? null : (colorList.docs[findIndex].isSelected = false);
+                                } else {
+                                    const findIndex = flowerList.docs.findIndex(x => x._id === selectColorList[0]._id);
+                                    findIndex < 0 ? null : (flowerList.docs[findIndex].isSelected = false);
+                                }
+                            }
+                            if (item.type) {
+                                flowerList.docs[index].isSelected = true;
+                            } else {
+                                colorList.docs[index].isSelected = true;
+                            }
                         }
                     }
                     break;
@@ -435,10 +507,35 @@ export default {
                     break;
             }
 
-            yield put({
-                type: 'setSelectColorList',
-                payload: newValue,
-            });
+            if (collocationPattern === 'single') {
+                yield put({
+                    type: 'setSingleSelectColorList',
+                    payload: newValue,
+                });
+                console.log('newValue1', newValue1);
+                yield put({
+                    type: 'setSingleSelectColorList1',
+                    payload: newValue1,
+                });
+            }
+            if (collocationPattern === 'edit') {
+                favoriteEditObj.styleAndColor[0].colorIds = newValue;
+                if (favoriteEditObj.styleAndColor.length > 1) {
+                    favoriteEditObj.styleAndColor[1].colorIds = newValue1;
+                }
+                yield put({
+                    type: 'setFavoriteEditObj',
+                    payload: {
+                        ...favoriteEditObj,
+                    },
+                });
+            } else {
+                yield put({
+                    type: 'setSelectColorList',
+                    payload: newValue,
+                });
+            }
+
             yield put({
                 type: 'setColorAndFlowerList',
                 payload: {
@@ -622,7 +719,7 @@ export default {
         },
         *batchSetSelectStyleList({ payload = [] }, { call, put, select }) {
             const { styleList, currentGoodCategory } = yield select(state => state.diy);
-
+            console.log('styleList[currentGoodCategory]', styleList[currentGoodCategory]);
             if (!styleList[currentGoodCategory]) {
                 return;
             }
@@ -638,7 +735,7 @@ export default {
 
                 return {
                     ...x,
-                    _id: x.style,
+                    _id: x.style || x._id,
                 };
             });
 
