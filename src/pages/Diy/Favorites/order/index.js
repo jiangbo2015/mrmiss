@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import lodash from 'lodash';
 
-import { Popover, Input, Badge } from 'antd';
+import { message } from 'antd';
 import { ReactSVG } from 'react-svg';
 import { Flex, Box } from 'rebass/styled-components';
 
@@ -13,8 +13,22 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
         // const orderData = parseOrderData();
         const res = _.groupBy(orderData, 'isSelect');
 
-        // console.log('res', res);
-        // return;
+        if (!res['true'] || res['true'].length < 1) {
+            message.warn('请选择要发送的中包');
+            return;
+        }
+        for (let i = 0; i < res['true'].length; i++) {
+            for (let j = 0; j < res['true'].length; j++) {
+                const row = res['true'][i];
+                const item = res['true'][i].items[j];
+                if (!item.total) {
+                    console.log(row);
+                    message.warn(`版型编号${row.styleNos}中有款式未填写数量`);
+                    return;
+                }
+            }
+        }
+
         await dispatch({
             type: 'diy/addOrder',
             payload: {
@@ -31,6 +45,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
                 isSend: 1,
             },
         });
+        onCancel();
         // setShowChange(false);
     };
 
@@ -43,8 +58,19 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
                 goodsId: currentGood._id,
             },
         });
+        onCancel();
         // setShowChange(false);
     };
+
+    const handleDelRow = ind => {
+        // const orderData = parseOrderData();
+        dispatch({
+            type: 'diy/delOrderRow',
+            payload: ind,
+        });
+        // setShowChange(false);
+    };
+
     return (
         <>
             <OrderMark
@@ -53,6 +79,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
                 onCancel={onCancel}
                 onSave={handleSave}
                 onSend={handleSend}
+                onDelRow={handleDelRow}
             />
         </>
     );

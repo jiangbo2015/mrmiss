@@ -10,7 +10,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex alignSelf="flex-end" py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex alignSelf="flex-end" pt="20px" pb="40px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -89,18 +89,15 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     zIndex: 100,
                 },
                 content: {
-                    padding: 0,
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
+                    width: '1120px',
+                    margin: 'auto',
                 },
             }}
         >
             <Flex flexDirection="column" alignItems="center" alignItems="center" bg="#fff" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
-                    <Box mr="10px" height="675px" css={{ overflowY: 'auto' }}>
+                    <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
                         <Flex flexDirection="column">
                             {colorWithStyleImgs.map((item, i) => (
                                 <Box
@@ -132,8 +129,8 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     </Box>
                     <Box>
                         <Box
-                            width="675px"
-                            height="675px"
+                            width="475px"
+                            height="475px"
                             bg="#F8F8F8"
                             css={{
                                 '.swiper-container': {
@@ -142,11 +139,16 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             }}
                         >
                             {colorWithStyleImgs[current].type ? (
-                                <Swiper>
+                                <Swiper
+                                    scrollbar={{
+                                        el: '.swiper-scrollbar-style2',
+                                        hide: false,
+                                    }}
+                                >
                                     {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
                                         <Flex justifyContent="center" alignItems="center" height="100%">
                                             <StyleItem
-                                                width="280px"
+                                                width="180px"
                                                 styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                                 colors={d.colorIds}
                                                 key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
@@ -161,7 +163,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                     {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
                                         <Flex justifyContent="center" alignItems="center" height="100%">
                                             <StyleItem
-                                                width="280px"
+                                                width="180px"
                                                 styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                                 colors={d.colorIds}
                                                 key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
@@ -182,7 +184,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                 <Swiper>
                                     {colorWithStyleImgs[current].imgs.map((item, i) => (
                                         <Flex justifyContent="center" alignItems="center" height="100%">
-                                            <Image src={filterImageUrl(item)} maxWidth="400px"></Image>
+                                            <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
                                         </Flex>
                                     ))}
                                 </Swiper>
@@ -192,12 +194,12 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
 
                     <Box pl="30px">
                         <Text>2021 swimwear series</Text>
-                        <Text color="#313131" fontSize="28px" fontWeight="bold" my="20px">
+                        <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
                             ¥{price}
                         </Text>
                         <Text>Ref {code} </Text>
                         {currentCapsuleStyle.type ? (
-                            <Flex mt="30px">
+                            <Flex mt="14px">
                                 {colorWithStyleImgs[0].favorite.styleAndColor.map(d => (
                                     <Flex justifyContent="center" alignItems="center" height="100%">
                                         <StyleItem
@@ -231,7 +233,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             </Flex>
                         ) : null}
 
-                        <Flex mt="60px">
+                        <Flex mt="30px">
                             {colorWithStyleImgs.map((item, i) => (
                                 <StyleSwitcher
                                     key={i}
@@ -243,7 +245,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                 />
                             ))}
                         </Flex>
-                        <Text fontSize="16px" mt="90px">
+                        <Text fontSize="16px" mt="40px">
                             尺码/中包
                         </Text>
                         <Flex mt="20px">
@@ -257,8 +259,8 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                         <Box
                             bg="#000"
                             width="100%"
-                            py="16px"
-                            mt="80px"
+                            py="12px"
+                            mt="40px"
                             css={{ cursor: 'pointer' }}
                             onClick={() => {
                                 handleAddOrder();
@@ -270,7 +272,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                         </Box>
                     </Box>
                 </Flex>
-                <Box width="1060px" bg="#fff" pt="100px">
+                <Box width="1060px" bg="#fff" pt="30px">
                     <Text pb="38px" fontSize="24px">
                         Related Products 类似产品
                     </Text>

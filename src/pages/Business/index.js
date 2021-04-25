@@ -117,36 +117,37 @@ class Business extends React.Component {
                 </Modal>
                 <Box height="116px" width={[1]} bg="#FDDB3B" mt="74px" />
 
-                <Flex
-                    alignItems="center"
-                    justifyContent="center"
-                    height="84px"
-                    bg="#41444B"
-                    sx={{
-                        color: '#6F6F6F',
-                        button: {
-                            width: '220px',
-                            ':hover': {
-                                bg: '#FDDB3B',
-                                color: '#000',
+                {currentUser.role > 3 ? null : (
+                    <Flex
+                        alignItems="center"
+                        justifyContent="center"
+                        height="84px"
+                        bg="#41444B"
+                        sx={{
+                            color: '#6F6F6F',
+                            button: {
+                                width: '220px',
+                                ':hover': {
+                                    bg: '#FDDB3B',
+                                    color: '#000',
+                                },
                             },
-                        },
-                    }}
-                >
-                    <Button
-                        type="primary"
-                        shape="round"
-                        onClick={() => {
-                            this.setState({
-                                ...this.state,
-                                userAddModal: true,
-                            });
                         }}
-                        style={{ margin: '0 50px' }}
                     >
-                        {`新增${lastLevel}`}
-                    </Button>
-                    {/* <Button
+                        <Button
+                            type="primary"
+                            shape="round"
+                            onClick={() => {
+                                this.setState({
+                                    ...this.state,
+                                    userAddModal: true,
+                                });
+                            }}
+                            style={{ margin: '0 50px' }}
+                        >
+                            {`新增${lastLevel}`}
+                        </Button>
+                        {/* <Button
                         type="primary"
                         shape="round"
                         style={{ margin: '0 50px' }}
@@ -159,19 +160,20 @@ class Business extends React.Component {
                     >
                         通道权限管理
                     </Button> */}
-                    <Button
-                        type="primary"
-                        shape="round"
-                        onClick={() => {
-                            this.setState({
-                                ...this.state,
-                                userOrderModal: true,
-                            });
-                        }}
-                    >
-                        {`${lastLevel}订单管理`}
-                    </Button>
-                </Flex>
+                        <Button
+                            type="primary"
+                            shape="round"
+                            onClick={() => {
+                                this.setState({
+                                    ...this.state,
+                                    userOrderModal: true,
+                                });
+                            }}
+                        >
+                            {`${lastLevel}订单管理`}
+                        </Button>
+                    </Flex>
+                )}
                 <Box p="20px">
                     <Flex justifyContent="space-between" p="30px 0">
                         <Flex alignItems="center">

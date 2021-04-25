@@ -7,6 +7,8 @@ import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import MultipleStyleSelector from './MultipleStyleSelector';
 import SingleStyleSelector from './SingleStyleSelector';
+import { ColotItem } from '../ColorSelector';
+import { ImgItem } from '../FlowerSelector';
 
 import ArrowIcon from '@/public/icons/icon-arrow.svg';
 import ExpandIcon from '@/public/icons/icon-expand.svg';
@@ -22,6 +24,8 @@ const App = ({
     currentStyle = {},
     currentStyle1 = {},
     selectColorList = [],
+    flowerList = { docs: [] },
+    colorList = { docs: [] },
     singleSelectColorList = [],
     singleSelectColorList1 = [],
     collocationBg,
@@ -293,6 +297,55 @@ const App = ({
                     />
                 </div>
             </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div
+                    style={{
+                        display: 'flex',
+                        height: '45px',
+                        alignItems: 'center',
+                        padding: '0 10px',
+                        opacity: selectColorList.filter(x => x.type === 0).length > 0 ? 1 : 0,
+                    }}
+                >
+                    {colorList.docs
+                        .filter(x => x.isSelected)
+                        .map((d, index) => (
+                            <ColotItem
+                                size="12px"
+                                key={`bar-${d._id}`}
+                                // isSelected={d.isSelected}
+                                color={d.value}
+                                onClick={() => {
+                                    handleSelectColor({ item: d, index });
+                                }}
+                            />
+                        ))}
+                </div>
+                <div
+                    style={{
+                        display: 'flex',
+                        height: '45px',
+                        alignItems: 'center',
+                        padding: '0 10px',
+                        opacity: selectColorList.filter(x => x.type !== 0).length > 0 ? 1 : 0,
+                    }}
+                >
+                    {flowerList.docs
+                        .filter(x => x.isSelected)
+                        .map((d, index) => (
+                            <ImgItem
+                                size="12px"
+                                key={`bar-${d._id}`}
+                                // isSelected={d.isSelected}
+                                img={d.value}
+                                onClick={() => {
+                                    handleSelectColor({ item: d, index });
+                                }}
+                            />
+                        ))}
+                </div>
+            </div>
+
             {categoryObj && categoryObj.name === '分体' ? (
                 <MultipleStyleSelector
                     currentStyle={currentStyle}
@@ -327,6 +380,8 @@ export default connect(({ diy }) => ({
     currentStyle: diy.currentStyle,
     currentStyle1: diy.currentStyle1,
     selectColorList: diy.selectColorList,
+    flowerList: diy.flowerList,
+    colorList: diy.colorList,
     selectStyleList: diy.selectStyleList,
     collocationBg: diy.collocationBg,
     collocationPattern: diy.collocationPattern,

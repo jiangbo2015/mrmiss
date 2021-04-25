@@ -9,7 +9,7 @@ import { connect } from 'dva';
 import SearchInput from '@/components/SearchInput';
 import { SaveOutlined } from '@ant-design/icons';
 
-const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUser, onOk, selecteds = [] }) => {
+const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUser, onOk, selecteds = [], isSingle }) => {
     const [queryKey, setQueryKey] = useState('');
     const [selectRowKeys, setSelectRowKeys] = useState([]);
     const [findCustomerList, setFindCustomerList] = useState([]);
@@ -90,6 +90,9 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUs
                 rowSelection={{
                     type: 'checkbox',
                     onChange: selectedRowKeys => {
+                        if (isSingle && selectedRowKeys.length > 1) {
+                            return;
+                        }
                         setSelectRowKeys(selectedRowKeys);
                         // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },

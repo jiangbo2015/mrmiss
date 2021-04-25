@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { Box, Flex, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import { InputNumber } from 'antd';
-
+import { ReactSVG } from 'react-svg';
 import { filterImageUrl } from '@/utils/helper';
+import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 
 // 胶囊组件
-export default ({ handleOpen, item, showNum, curChannelPrice, onEditPrice, isSelect }) => {
+export default ({ handleOpen, item, showNum, isAssign, curChannelPrice, onEditPrice, isSelect, onSelect = () => {} }) => {
     const { colorWithStyleImgs = [], code, price } = item;
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -28,7 +29,22 @@ export default ({ handleOpen, item, showNum, curChannelPrice, onEditPrice, isSel
                 },
             }}
         >
-            <Box p="30px" bg="#F7F7F7" css={{ borderRadius: '10px' }}>
+            <Box p="30px" bg="#F7F7F7" css={{ borderRadius: '10px', position: 'relative' }}>
+                <ReactSVG
+                    src={SelectedIcon}
+                    style={{
+                        width: '16px',
+                        height: '16px',
+                        opacity: isSelect ? '1' : '0.3',
+                        position: 'absolute',
+                        top: '12px',
+                        left: '12px',
+                    }}
+                    onClick={e => {
+                        e.stopPropagation();
+                        onSelect(item);
+                    }}
+                />
                 <Flex justifyContent="center" height="200px" alignItems="center" flexDirection="column">
                     <Image width="100px" src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
                 </Flex>

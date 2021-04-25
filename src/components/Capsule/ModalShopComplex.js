@@ -10,7 +10,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex py="40px" justifyContent="flex-end" alignSelf="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex pt="20px" pb="40px" justifyContent="flex-end" alignSelf="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -101,7 +101,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
     };
     return (
         <Flex justifyContent="center">
-            <Box mr="10px" height="675px" css={{ overflowY: 'auto' }}>
+            <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
                 <Flex flexDirection="column">
                     {colorWithStyleImgs.map((item, i) => (
                         <Box
@@ -133,8 +133,8 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
             </Box>
             <Box>
                 <Box
-                    width="675px"
-                    height="675px"
+                    width="475px"
+                    height="475px"
                     bg="#F8F8F8"
                     css={{
                         '.swiper-container': {
@@ -145,7 +145,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                     <Swiper>
                         {colorWithStyleImgs[current].imgs.map((item, i) => (
                             <Flex justifyContent="center" alignItems="center" height="100%">
-                                <Image src={filterImageUrl(item)} maxWidth="400px"></Image>
+                                <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
                             </Flex>
                         ))}
                     </Swiper>
@@ -154,12 +154,12 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
 
             <Box pl="30px">
                 <Text>2021 swimwear series</Text>
-                <Text color="#313131" fontSize="28px" fontWeight="bold" my="20px">
+                <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
                     ¥{price}
                 </Text>
                 <Text>Ref {code} </Text>
 
-                <Flex mt="60px">
+                <Flex mt="30px">
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
@@ -171,10 +171,10 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                         />
                     ))}
                 </Flex>
-                <Text fontSize="16px" mt="90px">
+                <Text fontSize="16px" mt="40px">
                     Size / Quantity
                 </Text>
-                <Box mt="15px">
+                <Box mt="10px">
                     <Flex>
                         <SizeBox>S / Q</SizeBox>
                         {size?.split('/').map((item, i) => (
@@ -196,13 +196,13 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                         </Flex>
                     ))}
                 </Box>
-                <Flex mt="40px">
+                <Flex mt="20px">
                     <strong>中包:</strong>
                     <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
                     <strong>装箱:</strong>
                     <Text>{currentShopStyle.caseNum}pcs</Text>
                 </Flex>
-                <Box bg="#000" width="100%" py="16px" mt="80px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
+                <Box bg="#000" width="100%" py="12px" mt="40px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
                     <Text color="#fff" textAlign="center">
                         加入购物车
                     </Text>
@@ -258,13 +258,14 @@ const ModalSimple = ({
                 overlay: {
                     background: 'rgba(0,0,0,0.5)',
                     zIndex: 100,
+                    justifyContent: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
                 },
                 content: {
-                    padding: 0,
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
+                    width: '1120px',
+                    margin: 'auto',
+                    inset: 'auto',
                 },
             }}
         >

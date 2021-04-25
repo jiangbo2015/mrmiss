@@ -22,14 +22,15 @@ export default ({ data = [], selectedItem = {}, onSelect }) => {
                     >
                         {item.namecn}
                     </Text>
-                    {Array.isArray(item.children)
+                    {selectedItem._id === item._id || (selectedItem.branch === item._id && Array.isArray(item.children))
                         ? item.children.map(c => (
                               <Text
                                   key={i}
                                   css={{
-                                      fontSize: selectedItem._id === c._id ? '18px' : '16px',
+                                      fontSize: selectedItem._id === c._id ? '16px' : '14px',
                                       color: selectedItem._id === c._id ? '#000' : '#5c5c5c99',
                                       padding: selectedItem._id === c._id ? '10px 0' : '4px 0',
+                                      paddingLeft: '10px',
                                       cursor: 'pointer',
                                   }}
                                   onClick={() => {

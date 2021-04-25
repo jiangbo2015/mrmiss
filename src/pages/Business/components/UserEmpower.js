@@ -38,7 +38,7 @@ const UserListTable = ({
     const [copiedUserModal, setCopiedUserModal] = useState(false);
     const [clocked, setClocked] = useState(true);
     const [tableData, setTableData] = useState([]);
-    const { lastLevel } = currentUser;
+    const { lastLevel, role } = currentUser;
     useEffect(() => {
         dispatch({
             type: 'channel/fetchMyAdminChannelList',
@@ -67,18 +67,24 @@ const UserListTable = ({
                 key: 'shop',
                 name: '现货购买',
             },
-            {
-                key: 'channelEmpowerUserd',
-                name: '通道分配器的使用授权',
-                empowered: currentCustomer.channelEmpowerUserd,
-            },
-            {
-                key: 'innerDataUserd',
-                name: '内部数据分析的使用权限',
-                empowered: currentCustomer.innerDataUserd,
-            },
-            { key: 'businessUserd', name: '业务管理的使用权限', empowered: currentCustomer.businessUserd },
         ];
+
+        if (role === 1) {
+            baseData = [
+                ...baseData,
+                {
+                    key: 'channelEmpowerUserd',
+                    name: '通道分配器的使用授权',
+                    empowered: currentCustomer.channelEmpowerUserd,
+                },
+                {
+                    key: 'innerDataUserd',
+                    name: '内部数据分析的使用权限',
+                    empowered: currentCustomer.innerDataUserd,
+                },
+                { key: 'businessUserd', name: '业务管理的使用权限', empowered: currentCustomer.businessUserd },
+            ];
+        }
         baseData[0].goodsInfo = goodsList.map((g, i) => {
             let findChannel = currentCustomer.channels.find(x => x.assignedId === g._id);
             let findGood = currentCustomer.goods.find(x => x === g._id);
@@ -328,7 +334,7 @@ const UserListTable = ({
                 }}
                 width="600px"
             >
-                <UserListMinTable />
+                <UserListMinTable isSingle />
             </Modal>
             <Flex p="16px" justifyContent="center" alignItems="center" flexDirection={batch ? 'column' : 'row'}>
                 <ReactSVG style={{ width: '40px', height: '40px' }} src={IconEmpower} />
@@ -348,12 +354,15 @@ const UserListTable = ({
                     shape="circle"
                     size="large"
                     icon={clocked ? <LockOutlined /> : <UnlockOutlined />}
-                    style={{ backgroundColor: '#D2D2D2' }}
+                    style={{ backgroundColor: '#D2D2D2', margin: '0 50px 0 0' }}
                     onClick={() => {
+                        if (!clocked) {
+                            handleSave();
+                        }
                         setClocked(!clocked);
                     }}
                 />
-                <Button
+                {/* <Button
                     shape="circle"
                     size="large"
                     disabled={clocked}
@@ -363,7 +372,7 @@ const UserListTable = ({
                         margin: '0 50px 0 20px',
                     }}
                     onClick={handleSave}
-                />
+                /> */}
                 {batch ? null : (
                     <Button
                         shape="circle"

@@ -69,6 +69,9 @@ const LineItem = ({ data, showNum, onUpdate }) => {
                                 text={item.colorObj.namecn}
                                 isSelect={i === current}
                                 size={16}
+                                onClick={() => {
+                                    setCurrent(i);
+                                }}
                             />
                         ))}
                     </Flex>
@@ -137,7 +140,15 @@ const LineItem = ({ data, showNum, onUpdate }) => {
  * handleReduce: 点击-
  * handleRemove: 点击x 删除
  */
-const Cart = ({ myShopCartList = [], dispatch, triggle, triggleStyle, currentUser }) => {
+const Cart = ({
+    myShopCartList = [],
+    dispatch,
+    triggle,
+    triggleStyle,
+    currentUser,
+    selectedList = [],
+    clearSelected = () => {},
+}) => {
     const [visible, setVisible] = useState(false);
     let sumCount = 0;
     let sumPrice = 0;
@@ -152,11 +163,26 @@ const Cart = ({ myShopCartList = [], dispatch, triggle, triggleStyle, currentUse
     useEffect(() => {
         // console.log('fetchMyShopCart');
         if (visible) {
-            dispatch({
-                type: 'shop/fetchMyShopCart',
-            });
+            init();
+        } else {
+            clearSelected();
         }
     }, [visible]);
+    const init = async () => {
+        for (let i = 0; i < selectedList.length; i++) {
+            await dispatch({
+                type: 'shop/addShopCart',
+                payload: {
+                    shopStyle: selectedList[i].style,
+                    count: 1,
+                },
+            });
+        }
+
+        dispatch({
+            type: 'shop/fetchMyShopCart',
+        });
+    };
     const handleUpdate = data => {
         dispatch({
             type: 'shop/updateShopCart',
@@ -164,8 +190,11 @@ const Cart = ({ myShopCartList = [], dispatch, triggle, triggleStyle, currentUse
         });
     };
 
-    const handleOrder = () => {
-        dispatch({
+    const handleOrder = async () => {
+        if (myShopCartList.length < 1) {
+            return;
+        }
+        await dispatch({
             type: 'shop/addShopOrder',
             payload: {
                 sumCount,
@@ -174,8 +203,10 @@ const Cart = ({ myShopCartList = [], dispatch, triggle, triggleStyle, currentUse
                     shopStyleObj: sc.shopStyle,
                     count: sc.count,
                 })),
+                scIds: myShopCartList.map(x => x._id),
             },
         });
+        setVisible(false);
     };
     return (
         <>

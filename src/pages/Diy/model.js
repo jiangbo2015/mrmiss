@@ -682,6 +682,14 @@ export default {
                 payload: Object.values(gourpByStyle).concat(saveItems),
             });
         },
+        *delOrderRow({ payload }, { put, select }) {
+            const { favoriteToOrderGroupList } = yield select(state => state.diy);
+            favoriteToOrderGroupList.split(payload, 1);
+            yield put({
+                type: 'setFavoriteToOrderGroupList',
+                payload: [...favoriteToOrderGroupList],
+            });
+        },
         *createCapsule({ payload }, { call, put, select }) {
             const { info = {} } = yield select(state => state.user);
             const { selectFavoriteList } = yield select(state => state.diy);

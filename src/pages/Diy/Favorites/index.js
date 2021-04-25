@@ -91,14 +91,38 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
             payload: { _id: favorite._id },
         });
     };
-    const handleToggleTime = async () => {
+    const handleToggleTime = async val => {
         window.timeOrder = !window.timeOrder;
         // console.log('window.timeOrder', window.timeOrder);
-        const nfavoriteArr = favoriteArr.sort((a, b) => {
-            return window.timeOrder
-                ? new Date(a.updateTime).getTime() - new Date(b.updateTime).getTime()
-                : new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
-        });
+        let nfavoriteArr = [];
+
+        switch (val) {
+            case 'Earliest':
+                {
+                    nfavoriteArr = favoriteArr.sort((a, b) => {
+                        return new Date(a.updateTime).getTime() - new Date(b.updateTime).getTime();
+                    });
+                }
+                break;
+            case 'Latest':
+                {
+                    nfavoriteArr = favoriteArr.sort((a, b) => {
+                        return new Date(b.updateTime).getTime() - new Date(a.updateTime).getTime();
+                    });
+                }
+                break;
+            case 'category':
+                {
+                    nfavoriteArr = favoriteArr.sort((a, b) => {
+                        if (a.styleAndColor.length === b.styleAndColor.length) {
+                            return a.goodCategory.sort - b.goodCategory.sort;
+                        } else {
+                            return a.styleAndColor.length - b.styleAndColor.length;
+                        }
+                    });
+                }
+                break;
+        }
         dispatch({
             type: 'diy/setFavoriteArr',
             payload: [...nfavoriteArr],
@@ -216,11 +240,16 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     }}
                 >
                     <Select
-                        style={{ marginRight: '20px' }}
-                        onClick={handleToggleTime}
-                        value="Time"
-                        disabled
-                        options={[{ label: 'Time', value: 'time' }]}
+                        style={{ marginRight: '20px', width: '110px' }}
+                        onChange={val => {
+                            handleToggleTime(val);
+                        }}
+                        defaultValue="Latest"
+                        options={[
+                            { label: 'Latest', value: 'Latest' },
+                            { label: 'Earliest', value: 'Earliest' },
+                            { label: 'By category', value: 'category' },
+                        ]}
                     />
                     <ReactSVG
                         style={{

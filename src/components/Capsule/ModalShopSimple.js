@@ -11,7 +11,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex alignSelf="flex-end" py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex alignSelf="flex-end" pt="20px" pb="40px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -67,7 +67,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
             },
         }}
     >
-        <Dot bg={type ? false : bg} src={type ? bg : ''} size={`${size}px`} isSelect={isSelect} />
+        <Dot {...props} bg={type ? false : bg} src={type ? bg : ''} size={`${size}px`} isSelect={isSelect} />
         <Flex className="intro" mt="10px" css={{ visibility: 'hidden' }}>
             <Box
                 css={{
@@ -111,18 +111,15 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                     zIndex: 100,
                 },
                 content: {
-                    padding: 0,
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
+                    width: '1120px',
+                    margin: 'auto',
                 },
             }}
         >
             <Flex alignItems="center" flexDirection="column" bg="#fff" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
-                    <Box mr="10px" height="675px" css={{ overflowY: 'auto' }}>
+                    <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
                         <Flex flexDirection="column">
                             {colorWithStyleImgs.map((item, i) => (
                                 <Box
@@ -154,8 +151,8 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                     </Box>
                     <Box>
                         <Box
-                            width="675px"
-                            height="675px"
+                            width="475px"
+                            height="475px"
                             bg="#F8F8F8"
                             css={{
                                 '.swiper-container': {
@@ -166,7 +163,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             <Swiper>
                                 {colorWithStyleImgs[current].imgs.map((item, i) => (
                                     <Flex justifyContent="center" alignItems="center" height="100%">
-                                        <Image src={filterImageUrl(item)} maxWidth="400px"></Image>
+                                        <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
                                     </Flex>
                                 ))}
                             </Swiper>
@@ -181,12 +178,12 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                     </Box>
                     <Box pl="30px">
                         <Text>2021 swimwear series</Text>
-                        <Text color="#313131" fontSize="28px" fontWeight="bold" my="20px">
+                        <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
                             ¥{price}
                         </Text>
                         <Text>Ref {code} </Text>
 
-                        <Flex mt="60px">
+                        <Flex mt="30px">
                             {colorWithStyleImgs.map((item, i) => (
                                 <StyleSwitcher
                                     key={i}
@@ -198,10 +195,10 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                                 />
                             ))}
                         </Flex>
-                        <Text fontSize="16px" mt="90px">
+                        <Text fontSize="16px" mt="20px">
                             Size / Quantity
                         </Text>
-                        <Box mt="15px">
+                        <Box mt="10px">
                             <Flex>
                                 <SizeBox>S / Q</SizeBox>
                                 {size?.split('/').map((item, i) => (
@@ -223,20 +220,20 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                                 </Flex>
                             ))}
                         </Box>
-                        <Flex mt="40px">
+                        <Flex mt="20px">
                             <strong>中包:</strong>
                             <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
                             <strong>装箱:</strong>
                             <Text>{currentShopStyle.caseNum}pcs</Text>
                         </Flex>
-                        <Box bg="#000" width="100%" py="16px" mt="80px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
+                        <Box bg="#000" width="100%" py="12px" mt="20px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
                             <Text color="#fff" textAlign="center">
                                 加入购物车
                             </Text>
                         </Box>
                     </Box>
                 </Flex>
-                <Box width="1060px" bg="#fff" pt="100px">
+                <Box width="1060px" bg="#fff" pt="40px">
                     <Text pb="38px" fontSize="24px">
                         Related Products 类似产品
                     </Text>

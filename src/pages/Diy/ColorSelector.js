@@ -6,7 +6,7 @@ import AllIcon from '@/public/icons/icon-all.svg';
 import { Tooltip } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
-const ColotItem = ({ color, isSelected, size = '44px', ...props }) => (
+export const ColotItem = ({ color, isSelected, size = '44px', ...props }) => (
     <div
         {...props}
         style={{
@@ -113,31 +113,6 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
                         ]}
                     />
                 </div>
-                <div
-                    style={{
-                        padding: '0 21px',
-                        width: '100%',
-                        display: 'grid',
-                        gridTemplateColumns: '1fr 1fr 1fr',
-                        gridRowGap: '55px',
-                        height: '520px',
-                        alignContent: 'start',
-                        overflowY: 'scroll',
-                    }}
-                >
-                    {colorList.docs.map((d, index) => (
-                        <Tooltip title={d.code} key={`${d._id}-tooltip`}>
-                            <ColotItem
-                                key={d._id}
-                                isSelected={d.isSelected}
-                                color={d.value}
-                                onClick={() => {
-                                    handleSelectColor({ item: d, index });
-                                }}
-                            />
-                        </Tooltip>
-                    ))}
-                </div>
                 {assign && selectColorList.length > 0 ? (
                     <div
                         style={{
@@ -149,7 +124,7 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
                             margin: '0 10px',
                             position: 'absolute',
                             left: 0,
-                            bottom: '25px',
+                            top: '65px',
                         }}
                     >
                         <div
@@ -176,6 +151,31 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
                         </div>
                     </div>
                 ) : null}
+                <div
+                    style={{
+                        padding: '0 21px',
+                        width: '100%',
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr',
+                        gridRowGap: '55px',
+                        height: '520px',
+                        alignContent: 'start',
+                        overflowY: 'scroll',
+                    }}
+                >
+                    {colorList.docs.map((d, index) => (
+                        <Tooltip title={d.code} key={`${d._id}-tooltip`}>
+                            <ColotItem
+                                key={d._id}
+                                isSelected={d.isSelected}
+                                color={d.value}
+                                onClick={() => {
+                                    handleSelectColor({ item: d, index });
+                                }}
+                            />
+                        </Tooltip>
+                    ))}
+                </div>
             </div>
         </>
     );

@@ -10,7 +10,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex py="40px" justifyContent="flex-end" alignSelf="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex alignSelf="flex-end" pt="20px" pb="40px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -95,7 +95,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
 
     return (
         <Flex justifyContent="center">
-            <Box mr="10px" height="675px" css={{ overflowY: 'auto' }}>
+            <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
                 <Flex flexDirection="column">
                     {colorWithStyleImgs.map((item, i) => (
                         <Box
@@ -127,8 +127,8 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
             </Box>
             <Box>
                 <Box
-                    width="675px"
-                    height="675px"
+                    width="475px"
+                    height="475px"
                     bg="#F8F8F8"
                     css={{
                         '.swiper-container': {
@@ -141,7 +141,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                             {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
                                     <StyleItem
-                                        width="280px"
+                                        width="180px"
                                         styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                         colors={d.colorIds}
                                         key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
@@ -155,7 +155,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                             {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
                                     <StyleItem
-                                        width="280px"
+                                        width="180px"
                                         styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                         colors={d.colorIds}
                                         key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
@@ -175,7 +175,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                         <Swiper>
                             {colorWithStyleImgs[current].imgs.map((item, i) => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
-                                    <Image src={filterImageUrl(item)} maxWidth="400px"></Image>
+                                    <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
                                 </Flex>
                             ))}
                         </Swiper>
@@ -185,12 +185,12 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
 
             <Box pl="30px">
                 <Text>2021 swimwear series</Text>
-                <Text color="#313131" fontSize="28px" fontWeight="bold" my="20px">
+                <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
                     ¥{price}
                 </Text>
                 <Text>Ref {code} </Text>
                 {currentCapsuleStyle.type ? (
-                    <Flex mt="30px">
+                    <Flex mt="14px">
                         {colorWithStyleImgs[0].favorite.styleAndColor.map(d => (
                             <Flex justifyContent="center" alignItems="center" height="100%">
                                 <StyleItem
@@ -222,7 +222,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     </Flex>
                 ) : null}
 
-                <Flex mt="60px">
+                <Flex mt="30px">
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
@@ -234,10 +234,10 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                         />
                     ))}
                 </Flex>
-                <Text fontSize="16px" mt="90px">
+                <Text fontSize="16px" mt="40px">
                     尺码/中包
                 </Text>
-                <Flex mt="20px">
+                <Flex mt="10px">
                     {size?.split('/').map((item, i) => (
                         <Box key={i} mr="15px">
                             <Text textAlign="center">{item}</Text>
@@ -248,8 +248,8 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                 <Box
                     bg="#000"
                     width="100%"
-                    py="16px"
-                    mt="80px"
+                    py="12px"
+                    mt="40px"
                     css={{ cursor: 'pointer' }}
                     onClick={() => {
                         onAddtoCart(currentCapsuleStyle);
@@ -312,13 +312,15 @@ const ModalSimple = ({
                 overlay: {
                     background: 'rgba(0,0,0,0.5)',
                     zIndex: 100,
+                    justifyContent: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
                 },
                 content: {
-                    padding: 0,
-                    left: 0,
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
+                    width: '1120px',
+                    margin: 'auto',
+                    inset: 'auto',
+                    maxHeight: '98%',
                 },
             }}
         >
@@ -330,9 +332,9 @@ const ModalSimple = ({
                 />
                 <Flex
                     justifyContent="center"
-                    mt="20px"
-                    mb="40px"
-                    pt="10px"
+                    mt="10px"
+                    mb="20px"
+                    pt="6px"
                     sx={{
                         borderTop: '1px #000 solid',
                     }}
@@ -358,8 +360,8 @@ const ModalSimple = ({
                 />
                 <Flex
                     justifyContent="center"
-                    mt="20px"
-                    pt="10px"
+                    mt="10px"
+                    pt="6px"
                     sx={{
                         borderTop: '1px #000 solid',
                     }}

@@ -8,7 +8,7 @@ import { ReactSVG } from 'react-svg';
 import AllIcon from '@/public/icons/icon-all.svg';
 import Select from '@/components/Select';
 
-const ImgItem = ({ img, isSelected, size = '44px', ...props }) => (
+export const ImgItem = ({ img, isSelected, size = '44px', ...props }) => (
     <div
         {...props}
         style={{
@@ -118,6 +118,44 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     ]}
                 />
             </div>
+            {assign && selectColorList.length > 0 ? (
+                <div
+                    style={{
+                        width: 'calc(100% - 40px)',
+                        overflowX: 'scroll',
+                        background: '#2E2E2E',
+                        borderRadius: '6px',
+                        boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.18)',
+                        margin: '0 10px',
+                        position: 'absolute',
+                        left: 0,
+                        top: '65px',
+                    }}
+                >
+                    <div
+                        style={{
+                            display: 'flex',
+                            height: '45px',
+                            alignItems: 'center',
+                            padding: '0 10px',
+                        }}
+                    >
+                        {selectColorList
+                            .filter(x => x.type === 1)
+                            .map((d, index) => (
+                                <ImgItem
+                                    size="17px"
+                                    key={`bar-${d._id}`}
+                                    // isSelected={d.isSelected}
+                                    img={d.value}
+                                    onClick={() => {
+                                        handleSelectColor({ item: d, index });
+                                    }}
+                                />
+                            ))}
+                    </div>
+                </div>
+            ) : null}
             <div
                 style={{
                     padding: '0 21px',
@@ -150,44 +188,6 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     </Tooltip>
                 ))}
             </div>
-            {assign && selectColorList.length > 0 ? (
-                <div
-                    style={{
-                        width: 'calc(100% - 40px)',
-                        overflowX: 'scroll',
-                        background: '#2E2E2E',
-                        borderRadius: '6px',
-                        boxShadow: '0px 2px 4px 1px rgba(0, 0, 0, 0.18)',
-                        margin: '0 10px',
-                        position: 'absolute',
-                        left: 0,
-                        bottom: '25px',
-                    }}
-                >
-                    <div
-                        style={{
-                            display: 'flex',
-                            height: '45px',
-                            alignItems: 'center',
-                            padding: '0 10px',
-                        }}
-                    >
-                        {selectColorList
-                            .filter(x => x.type === 1)
-                            .map((d, index) => (
-                                <ImgItem
-                                    size="17px"
-                                    key={`bar-${d._id}`}
-                                    // isSelected={d.isSelected}
-                                    img={d.value}
-                                    onClick={() => {
-                                        handleSelectColor({ item: d, index });
-                                    }}
-                                />
-                            ))}
-                    </div>
-                </div>
-            ) : null}
         </div>
     );
 };

@@ -90,7 +90,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
             initCountInfos[ri] = {};
             initParteInfos[ri] = {};
             initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
-            initRowPickTypes[ri] = g.pickType ? g.pickType : { val: 0, pieceCount: 0 };
+            initRowPickTypes[ri] = g.pickType?.val === 1 ? g.pickType : { val: 1, pieceCount: 1 };
             g.list.map(favorite => {
                 const favoriteKey = `${favorite._id}-${ri}`;
                 initCountInfos[ri][favoriteKey] = {};

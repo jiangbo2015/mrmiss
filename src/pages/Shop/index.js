@@ -39,6 +39,7 @@ const Shop = ({
     const [queryKey, setQueryKey] = useState('');
 
     const [selectedAll, setSelectedAll] = useState(false);
+    const [selectedList, setSelectedList] = useState([]);
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     useEffect(() => {
         dispatch({
@@ -207,6 +208,17 @@ const Shop = ({
         }
     };
 
+    const handleSelect = capsule => {
+        console.log(capsule);
+        const findIndex = selectedList.findIndex(x => x.style === capsule._id);
+        if (findIndex < 0) {
+            setSelectedList([...selectedList, { style: capsule._id, price: capsule.price }]);
+        } else {
+            selectedList.splice(findIndex, 1);
+            setSelectedList([...selectedList]);
+        }
+    };
+
     return (
         <Layout pt="74px" bg="#ffffff">
             <section>
@@ -270,6 +282,10 @@ const Shop = ({
                                             style={{ backgroundColor: '#D2D2D2' }}
                                         />
                                     }
+                                    selectedList={selectedList}
+                                    clearSelected={() => {
+                                        setSelectedList([]);
+                                    }}
                                 />
                             ) : null}
                         </Flex>
@@ -282,15 +298,20 @@ const Shop = ({
                             }}
                         >
                             {shopStyleList.docs.map((item, index) => {
-                                const selected = selectAssignedStyleList.find(x => x.style === item._id);
+                                const selected =
+                                    currentAdminChannel.codename === 'A'
+                                        ? selectedList.find(x => x.style === item._id)
+                                        : selectAssignedStyleList.find(x => x.style === item._id);
                                 return (
                                     <CapsItem
                                         item={item}
-                                        key={item._id}
+                                        key={`${item._id}-capsule`}
                                         showNum={currentUser.role == 1 ? item.caseNum : item.numInBag}
                                         handleOpen={() => handleOpenDetail(item)}
                                         curChannelPrice={selected ? selected.price : item.price}
                                         isSelect={!!selected}
+                                        isAssign={currentAdminChannel.codename !== 'A'}
+                                        onSelect={handleSelect}
                                         onEditPrice={currentAdminChannel.codename === 'A' || !selected ? null : handleEditPrice}
                                     />
                                 );

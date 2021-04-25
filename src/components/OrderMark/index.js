@@ -10,6 +10,7 @@ import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import IconSend from '@/public/icons/icon-send.svg';
 import { filterImageUrl } from '@/utils/helper';
 import { Badge, Input, Popover } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import lodash from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
@@ -67,7 +68,16 @@ const getListStyle = isDraggingOver => ({
     border: '1px solid #161616',
 });
 
-const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, currentGood = {}, onSave, onSend }) => {
+const OrderMark = ({
+    commodityToOrderGroupList,
+    dispatch,
+    visible,
+    onCancel,
+    currentGood = {},
+    onSave,
+    onSend,
+    onDelRow = () => {},
+}) => {
     const [showChange, setShowChange] = useState(false);
     // const [selectRow, setSelectRow] = useState([]);
     const [sourceData, setSourceData] = useState([]);
@@ -86,7 +96,7 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
             initCountInfos[ri] = {};
             initParteInfos[ri] = {};
             initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
-            initRowPickTypes[ri] = g.pickType ? g.pickType : { val: 0, pieceCount: 0 };
+            initRowPickTypes[ri] = g.pickType?.val === 1 ? g.pickType : { val: 1, pieceCount: 1 };
             g.list.map(favorite => {
                 const favoriteKey = `${favorite._id}-${ri}`;
                 initCountInfos[ri][favoriteKey] = {};
@@ -279,7 +289,7 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
             getContainer={document.body}
             width={'100%'}
             style={{ padding: 0 }}
-            bodyStyle={{ padding: 0, paddingTop: '24px' }}
+            bodyStyle={{ padding: 0, paddingTop: '24px', paddingBottom: '80px' }}
             footer={null}
             title="订单制作器"
         >
@@ -337,10 +347,23 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                                             height: '18px',
                                             position: 'absolute',
                                             top: '10px',
-                                            right: '10px',
+                                            right: '40px',
                                         }}
                                     />
                                 </Popover>
+
+                                <DeleteOutlined
+                                    width="18px"
+                                    height="18px"
+                                    style={{
+                                        position: 'absolute',
+                                        top: '10px',
+                                        right: '10px',
+                                    }}
+                                    onClick={() => {
+                                        onDelRow(ind);
+                                    }}
+                                />
 
                                 <Droppable key={ind} droppableId={`${ind}`} direction="horizontal">
                                     {(provided, snapshot) => (
@@ -527,10 +550,10 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                                                     : 0
                                             }
                                             options={[
-                                                { label: '单色单码', value: 0 },
+                                                // { label: '单色单码', value: 0 },
                                                 { label: '混色混码', value: 1 },
-                                                { label: '单色混码混箱', value: 2 },
-                                                { label: '单色混码单箱', value: 3 },
+                                                // { label: '单色混码混箱', value: 2 },
+                                                // { label: '单色混码单箱', value: 3 },
                                             ]}
                                             onSelect={val => {
                                                 console.log(val);
@@ -603,7 +626,17 @@ const OrderMark = ({ commodityToOrderGroupList, dispatch, visible, onCancel, cur
                     );
                 })}
             </DragDropContext>
-            <Flex mt="60px" height="56px" bg="#C0B3B6" justifyContent="center" alignItems="center">
+            <Flex
+                sx={{
+                    position: 'fixed',
+                    bottom: 0,
+                    width: '100%',
+                }}
+                height="56px"
+                bg="#C0B3B6"
+                justifyContent="center"
+                alignItems="center"
+            >
                 <Badge dot={showChange}>
                     <ReactSVG
                         src={IconSave}
