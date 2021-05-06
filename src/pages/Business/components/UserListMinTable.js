@@ -88,16 +88,13 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUs
                 rowKey={record => record._id}
                 // selectRowKeys={selectRowKeys}
                 rowSelection={{
-                    type: 'checkbox',
+                    type: isSingle?'radio':'checkbox',
                     onChange: selectedRowKeys => {
-                        if (isSingle && selectedRowKeys.length > 1) {
-                            return;
-                        }
                         setSelectRowKeys(selectedRowKeys);
                         // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
-                        console.log(record);
+                        // console.log(record);
                         return {
                             disabled: record.name === 'Disabled User',
                             orderNo: record.orderNo,

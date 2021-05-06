@@ -1,5 +1,6 @@
 import * as api from '@/apis/business';
 import { message } from 'antd';
+import lodash from 'lodash';
 import defaultData from './defaultData';
 
 export default {
@@ -101,6 +102,46 @@ export default {
             } else {
                 message.error(msg);
             }
+        },
+        *mergeOwnOrder({ payload }, { call, put }) {
+            const {selectedRows} = payload
+            const orderMap = lodash.groupBy(selectedRows, 'orderType')
+            const orderTypes = Object.keys(orderMap)
+            console.log('orderMap', orderMap)
+            for(let i = 0;i<orderTypes.length;i++){
+                const k = orderTypes[i];
+                switch(k){
+                    case 'order': {
+                        const { success, message: msg } = yield call(api.mergeOrder, {children:orderMap[k],isSend:1});
+                        if (success) {
+                            
+                        } else {
+                            message.error(msg);
+                        }
+                    }break;
+                    case 'capsule': {
+                        const { success, message: msg } = yield call(api.mergeCapsuleOrder, {children:orderMap[k],isSend:1});
+                        if (success) {
+                          
+                        } else {
+                            message.error(msg);
+                        }
+                    }break;
+                    case 'shop': {
+                        const { success, message: msg } = yield call(api.mergeShopOrder, {children:orderMap[k],isSend:1});
+                        if (success) {
+                           
+                        } else {
+                            message.error(msg);
+                        }
+                    }break;
+                }
+            }
+            yield put({
+                type: 'getOwnOrderList',
+            });
+            return true;
+            
         },
     },
 };

@@ -17,16 +17,22 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
             message.warn('请选择要发送的中包');
             return;
         }
+        let sumCount = 0;
+        let sumPrice = 0;
         for (let i = 0; i < res['true'].length; i++) {
-            for (let j = 0; j < res['true'].length; j++) {
-                const row = res['true'][i];
-                const item = res['true'][i].items[j];
+            const row = res['true'][i];
+            for (let j = 0; j < row.items.length; j++) {
+                const item = row.items[j];
+                console.log(item)
                 if (!item.total) {
                     console.log(row);
                     message.warn(`版型编号${row.styleNos}中有款式未填写数量`);
                     return;
                 }
+                
             }
+            sumCount += row.rowTotal
+            sumPrice += row.rowTotalPrice
         }
 
         await dispatch({
@@ -43,6 +49,8 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
                 orderData: res['true'],
                 goodsId: currentGood._id,
                 isSend: 1,
+                sumCount,
+                sumPrice
             },
         });
         onCancel();

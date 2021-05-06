@@ -62,3 +62,21 @@ export const delOwnOrder = data =>
         method: 'post',
         data,
     });
+export const mergeOrder = data =>
+    request('/api/order/merge', {
+        method: 'post',
+        data,
+    });
+
+export const mergeCapsuleOrder = data =>
+    request('/api/capsuleOrder/merge', {
+        method: 'post',
+        data,
+    });
+
+export const mergeShopOrder = data =>
+    request('/api/shopOrder/merge', {
+        method: 'post',
+        data,
+    });
+    

@@ -8,7 +8,7 @@ const UserInfo = ({ currentUser, dispatch }) => {
             payload: data,
         });
     };
-    return <UserInfoFrom data={currentUser} onSumbit={handleSubmit} />;
+    return <UserInfoFrom data={currentUser} role={currentUser.role} onSumbit={handleSubmit} />;
 };
 
 export default connect(({ user }) => {

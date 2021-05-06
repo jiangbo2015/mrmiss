@@ -52,14 +52,13 @@ const OrderTable = ({ orderList = [], dispatch }) => {
         },
         {
             title: '总数量',
-            dataIndex: 'totalCount',
-            key: 'totalCount',
-            render: (_, record) => <Box>{lodash.sumBy(record.orderData, 'rowTotal')}</Box>,
+            dataIndex: 'sumCount',
+            key: 'sumPrice',
         },
         {
             title: '总金额',
-            dataIndex: 'totalPrice',
-            render: (_, record) => <Box>{lodash.sumBy(record.orderData, 'rowTotalPrice')}</Box>,
+            dataIndex: 'sumPrice',
+            key: 'sumPrice',
         },
         {
             title: '下载',

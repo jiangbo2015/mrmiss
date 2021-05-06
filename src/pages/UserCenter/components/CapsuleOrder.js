@@ -59,15 +59,13 @@ const OrderTable = ({ orderList = [], dispatch }) => {
         },
         {
             title: '总数量',
-            dataIndex: 'orderData',
-            key: 'totalCount',
-            render: (text, record) => text?.reduce((left, right) => left + right.rowTotal, 0),
+            dataIndex: 'sumCount',
+            key: 'sumPrice',
         },
         {
             title: '总金额',
-            dataIndex: 'orderData',
-            key: 'totalPrice',
-            render: (text, record) => text?.reduce((left, right) => left + right.rowTotalPrice, 0),
+            dataIndex: 'sumPrice',
+            key: 'sumPrice',
         },
         {
             title: '下载',

@@ -6,7 +6,7 @@ import { Box } from 'rebass/styled-components';
 
 const { TabPane } = Tabs;
 
-const UserInfoForm = ({ data, onSumbit, isAdd }) => {
+const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
     const [form] = Form.useForm();
     const [showChange, setShowChange] = useState(false);
     useEffect(() => {
@@ -53,14 +53,14 @@ const UserInfoForm = ({ data, onSumbit, isAdd }) => {
                     <Form.Item label="增值税号码" name="VATNo">
                         <InputBlackRaduis />
                     </Form.Item>
-                    <Form.Item label="所属商业代理" name="businessAgent">
+                    {isAdd || role!==1 ? <Form.Item label={role === 3 ? "所属商业代理": "所属产品经理"} name="businessAgent">
                         <InputBlackRaduis />
-                    </Form.Item>
+                    </Form.Item> : null}
                 </Col>
                 <Col span={8}>
-                    <Form.Item label="公司全名" name="companyFullName">
+                    {role===1 ? null :<Form.Item label="公司全名" name="companyFullName">
                         <InputGray />
-                    </Form.Item>
+                    </Form.Item>}                   
                     <Form.Item label="联系人" name="contact">
                         <InputGray />
                     </Form.Item>
@@ -76,7 +76,7 @@ const UserInfoForm = ({ data, onSumbit, isAdd }) => {
                     <Form.Item label="网站" name="webside">
                         <InputGray />
                     </Form.Item>
-                    <Form.Item name="type">
+                    {role===4 ? <Form.Item name="type">
                         <Radio.Group>
                             <Radio value={1}>零售店</Radio>
                             <Radio value={2}>百货</Radio>
@@ -84,7 +84,7 @@ const UserInfoForm = ({ data, onSumbit, isAdd }) => {
                             <Radio value={4}>网店</Radio>
                             <Radio value={5}>其它</Radio>
                         </Radio.Group>
-                    </Form.Item>
+                    </Form.Item> : null }  
                 </Col>
                 <Col span={9}>
                     <Box

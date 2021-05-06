@@ -213,7 +213,7 @@ const OrderMark = ({
                     sizeInfoObject[k.split('-')[2]] = currentCountInfo[k];
                     total += currentCountInfo[k];
                 });
-                total *= currentParteInfo;
+                // let total = lodash.sum(Object.values(sizeInfoObject));
                 let unitPrice = favorite.price;
 
                 let item = {

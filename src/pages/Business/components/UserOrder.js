@@ -114,12 +114,28 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
         setQueryKey(e.target.value);
     };
 
-    const handleMerge = () => {
-        dispatch({
+    const handleMerge = async () => {
+        console.log('selectedRows',selectedRows)
+
+        await dispatch({
             type: 'business/mergeOwnOrder',
             payload: {
-                selectedRowKeys,
+                selectedRows,
             },
+        });
+
+        let payload = {
+            userId,
+            timeRange,
+            selectedUsers,
+            queryKey,
+        };
+        if (isMerge !== 'all') {
+            payload.isMerge = isMerge;
+        }
+        dispatch({
+            type: 'business/getOwnOrderList',
+            payload,
         });
     };
 
@@ -128,6 +144,20 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
             title: '订单编号',
             dataIndex: 'orderNo',
             key: 'orderNo',
+            render: (value, record) => (
+                <a
+                    style={{ textDecoration: 'underline' }}
+                    onClick={() => {
+                        // dispatch({
+                        //     type: 'business/setCurrentCustomer',
+                        //     payload: record,
+                        // });
+                        // setUserInfoModal(true)
+                    }}
+                >
+                    {value}
+                </a>
+            ),
         },
         {
             title: '日期',
@@ -136,17 +166,13 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
         },
         {
             title: '总数量',
-            dataIndex: 'orderData',
-            key: 'totalCount',
-            render: (text, record) =>
-                record.orderType === 'shop' ? record.sumCount : text?.reduce((left, right) => left + right.rowTotal, 0),
+            dataIndex: 'sumCount',
+            key: 'sumCount',
         },
         {
             title: '总金额',
-            dataIndex: 'orderData',
-            key: 'totalPrice',
-            render: (text, record) =>
-                record.orderType === 'shop' ? record.sumPrice : text?.reduce((left, right) => left + right.rowTotalPrice, 0),
+            dataIndex: 'sumPrice',
+            key: 'sumPrice',
         },
         {
             title: '是否合并提交',
