@@ -53,9 +53,9 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
                     <Form.Item label="增值税号码" name="VATNo">
                         <InputBlackRaduis />
                     </Form.Item>
-                    {isAdd || role!==1 ? <Form.Item label={role === 3 ? "所属商业代理": "所属产品经理"} name="businessAgent">
+                    {isAdd || role===1 ?null: <Form.Item label={role === 4 ? "所属商业代理": "所属产品经理"} name="businessAgent">
                         <InputBlackRaduis />
-                    </Form.Item> : null}
+                    </Form.Item> }
                 </Col>
                 <Col span={8}>
                     {role===1 ? null :<Form.Item label="公司全名" name="companyFullName">

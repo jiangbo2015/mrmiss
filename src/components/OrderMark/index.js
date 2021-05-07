@@ -198,7 +198,8 @@ const OrderMark = ({
 
     const parseOrderData = () => {
         const orderData = sourceData.map((row, ri) => {
-            const { list, sizes, key, size, price, styleNos } = row;
+            const { list, sizes, key, size, price, styleNos, originId,
+                originNo } = row;
             let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
             let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
             const items = list.map(favorite => {
@@ -229,7 +230,7 @@ const OrderMark = ({
                 } else {
                     item.type = 1;
                     item.favoriteId = favorite._id;
-                    item.favorite = favorite.favoriteObj;
+                    item.favorite = favorite.favoriteObj ? favorite.favoriteObj : favorite;
                 }
                 return item;
             });
@@ -245,6 +246,8 @@ const OrderMark = ({
                 price,
                 styleNos,
                 aboutCases,
+                originId,
+                originNo
             };
         });
         return orderData;
@@ -294,12 +297,13 @@ const OrderMark = ({
             title="订单制作器"
         >
             <Flex justifyContent="space-between" alignItems="center" ml="54px" mr="34px">
-                <SelectAll
+                {onSend ? <SelectAll
                     selectAll={sourceData.length === sourceData.filter(x => x.isSelect).length}
                     onSelectAll={bool => {
                         handleSelectAll(bool);
                     }}
-                />
+                /> : <div/>}
+                
                 <Flex>
                     {renderCountsInfo()}
                     <Flex flexDirection="column" alignItems="center" pl="20px">
@@ -316,7 +320,7 @@ const OrderMark = ({
                         <Flex alignItems="center" m="0px 24px">
                             <ReactSVG
                                 src={SelectedIcon}
-                                style={{ width: '20px', height: '20px', opacity: el.isSelect ? '1' : '0.3' }}
+                                style={{ width: '20px', height: '20px', opacity: el.isSelect ? '1' : '0.3' ,display: onSend ? 'block' : 'none' }}
                                 onClick={() => {
                                     sourceData[ind].isSelect = !sourceData[ind].isSelect;
                                     setSourceData([...sourceData]);
@@ -382,7 +386,7 @@ const OrderMark = ({
                                                     : 0;
 
                                                 return (
-                                                    <Draggable key={favorite._id} draggableId={favorite._id} index={index}>
+                                                    <Draggable isDragDisabled={onSend ? false : true} key={favorite._id} draggableId={favorite._id} index={index}>
                                                         {(provided, snapshot) => (
                                                             <div
                                                                 ref={provided.innerRef}
@@ -649,7 +653,7 @@ const OrderMark = ({
                         }}
                     />
                 </Badge>
-                <ReactSVG
+                {onSend ? <ReactSVG
                     src={IconSend}
                     style={{
                         width: '18px',
@@ -660,7 +664,7 @@ const OrderMark = ({
                     onClick={() => {
                         handleSend();
                     }}
-                />
+                /> : null}
             </Flex>
         </Modal>
     );

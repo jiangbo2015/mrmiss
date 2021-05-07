@@ -318,6 +318,13 @@ export default {
             }
             // { styleAndColor: params, goodId: goodId }
         },
+        *updateOrder({ payload }, { call, put, select }) {     
+            const res = yield call(api.updateOrder, payload);
+            if (res && res.data) {
+                message.info('保存成功');
+            }
+            // { styleAndColor: params, goodId: goodId }
+        },
         *toogleSelectColor({ payload }, { call, put, select }) {
             const {
                 colorList = { docs: [] },

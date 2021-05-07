@@ -79,4 +79,23 @@ export const mergeShopOrder = data =>
         method: 'post',
         data,
     });
+
+
+export const getOrderDetail = data =>
+    request('/api/order/detail', {
+        method: 'get',
+        params: data,
+    });
+
+export const getCapsuleOrderDetail = data =>
+    request('/api/capsuleOrder/detail', {
+        method: 'get',
+        params: data,
+    });
+
+export const getShopOrderDetail = data =>
+    request('/api/shopOrder/detail', {
+        method: 'get',
+        params: data,
+    });
     

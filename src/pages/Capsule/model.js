@@ -168,6 +168,13 @@ export default {
             }
             // { styleAndColor: params, goodId: goodId }
         },
+        *updateOrder({ payload }, { call, put, select }) {     
+            const res = yield call(api.updateOrder, payload);
+            if (res && res.data) {
+                message.info('保存成功');
+            }
+            // { styleAndColor: params, goodId: goodId }
+        },
         *addOrderMark({ payload }, { call, put, select }) {
             // console.log('capsule/addOrder');
             let { currentCapsule, currentCapsuleStyle } = yield select(state => state.capsule);

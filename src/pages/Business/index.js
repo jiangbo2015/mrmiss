@@ -3,7 +3,7 @@ import Modal from '@/components/Modal';
 import SearchInput from '@/components/SearchInput';
 import UserInfoFrom from '@/components/UserInfoFrom';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Popconfirm } from 'antd';
+import { Button, Popconfirm,Badge } from 'antd';
 import { connect } from 'dva';
 import React from 'react';
 import { Box, Flex } from 'rebass/styled-components';
@@ -69,8 +69,8 @@ class Business extends React.Component {
     };
 
     render() {
-        const { currentUser = {} } = this.props;
-        const { lastLevel } = currentUser;
+        const { currentUser = {}, unReadedNum } = this.props;
+        const { lastLevel,role } = currentUser;
         return (
             <Layout>
                 <Modal
@@ -85,7 +85,7 @@ class Business extends React.Component {
                         });
                     }}
                 >
-                    <UserInfoFrom onSumbit={this.handleSubmit} isAdd />
+                    <UserInfoFrom onSumbit={this.handleSubmit} isAdd role={role}/>
                 </Modal>
                 <Modal
                     visible={this.state.channelEmpowerModal}
@@ -167,10 +167,24 @@ class Business extends React.Component {
                                 this.setState({
                                     ...this.state,
                                     userOrderModal: true,
+                                    unReaded: false,
                                 });
+                            }}
+                            style={{
+                                display:'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
                             }}
                         >
                             {`${lastLevel}订单管理`}
+                            {unReadedNum ? <Badge style={{marginLeft: '8px'}} count={unReadedNum} onClick={(e)=>{
+                                e.stopPropagation();
+                                this.setState({
+                                    ...this.state,
+                                    userOrderModal: true,
+                                    unReaded: true,
+                                });
+                            }}/> : null}
                         </Button>
                     </Flex>
                 )}
@@ -229,4 +243,4 @@ class Business extends React.Component {
     }
 }
 
-export default connect(({ user }) => ({ currentUser: user.info }))(Business);
+export default connect(({ user,business }) => ({ currentUser: user.info,unReadedNum: business.unReadedNum }))(Business);

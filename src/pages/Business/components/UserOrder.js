@@ -7,6 +7,7 @@ import { ReactSVG } from 'react-svg';
 import { Flex, Box } from 'rebass/styled-components';
 import OrderTableComponent from './OrderTableComponent';
 import UserListMinTable from './UserListMinTable';
+import DCOrderEditor from './DC-OrderEditor'
 import SearchInput from '@/components/SearchInput';
 import { DeleteOutlined } from '@ant-design/icons';
 import Modal from '@/components/Modal';
@@ -15,7 +16,7 @@ import IconUserSign from '@/public/icons/icon-usersign.svg';
 import request from '@/utils/request';
 import OrderDownload from '@/components/OrderDownload';
 
-const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
+const OrderTable = ({ ownOrderList = {}, dispatch, userId,currentOrder }) => {
     const [selectUserModal, setSelectUserModal] = useState(false);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -25,6 +26,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     const [queryKey, setQueryKey] = useState('');
     const { order = [], capsuleOrder = [], shopOrder = [] } = ownOrderList;
     const [downloadOrder, setDownloadOrder] = useState(false);
+    const [showDetailOrder, setShowDetailOrder] = useState(false);
 
     const handleDownload = async record => {
         console.log(record);
@@ -139,25 +141,29 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
         });
     };
 
+    const handleShowOrderDetail = async (record) => {
+        await dispatch({
+            type: 'business/createCurrentOrderToGroupList',
+            payload: record,
+        });
+        setShowDetailOrder(true)
+    }
+
     const columns = [
         {
             title: '订单编号',
             dataIndex: 'orderNo',
             key: 'orderNo',
-            render: (value, record) => (
+            render: (value, record) =>
                 <a
                     style={{ textDecoration: 'underline' }}
                     onClick={() => {
-                        // dispatch({
-                        //     type: 'business/setCurrentCustomer',
-                        //     payload: record,
-                        // });
+                        handleShowOrderDetail(record)
                         // setUserInfoModal(true)
                     }}
                 >
                     {value}
                 </a>
-            ),
         },
         {
             title: '日期',
@@ -211,6 +217,12 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     ];
     return (
         <Box>
+            <DCOrderEditor 
+                visible={showDetailOrder} 
+                onCancel={()=>{
+                    setShowDetailOrder(false)
+                }}
+            />
             <Modal
                 className="mm-yellow-modal"
                 footer={false}
@@ -349,9 +361,10 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId }) => {
     );
 };
 
-export default connect(state => {
+export default connect(({business}) => {
     // console.log('props', props);
     return {
-        ownOrderList: state.business.ownOrderList,
+        ownOrderList: business.ownOrderList,
+        currentOrder: business.currentOrder,
     };
 })(OrderTable);
