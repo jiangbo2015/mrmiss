@@ -222,7 +222,7 @@ const Shop = ({
     return (
         <Layout pt="74px" bg="#F7F7F7">
             <section>
-                <Box bg="#F7F7F7" py="90px" maxWidth="1440px" mx="auto">
+                <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title
                         title="SHOP"
                         subtitle="This season's capsule is launched by mrmiss 2021 limited capsule
@@ -230,7 +230,7 @@ const Shop = ({
             products here..."
                     />
                 </Box>
-                <Box css={{ position: 'relative' }} maxWidth="1440px" mx="auto">
+                <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">
                     <SidebarStyles data={branchList} selectedItem={currentSelectedBar} onSelect={handleSelectBranch} />
                     <Container>
                         <Flex pt="30px" pb="79px" justifyContent="space-between">

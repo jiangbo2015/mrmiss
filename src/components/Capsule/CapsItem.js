@@ -88,7 +88,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
                             // console.log('colorObj', value);
                             return (
                                 <Dot
-                                    size="20px"
+                                    size="15px"
                                     onClick={e => {
                                         e.stopPropagation();
                                         setCurrent(i);

@@ -15,7 +15,7 @@ const preset = {
         heading: 'inherit',
         monospace: 'Menlo, monospace',
     },
-    breakpoints: ['750', '1440', '1920'],
+    breakpoints: ['750', '1480', '1920'],
     fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
     fontWeights: {
         body: 400,

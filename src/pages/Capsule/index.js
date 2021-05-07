@@ -216,7 +216,7 @@ const Capsule = ({
 
     return (
         <Layout pt="74px" bg="#fff">
-            <Box maxWidth="1440px" margin="auto" py="90px" px="40px">
+            <Box maxWidth="1480px" margin="auto" py="90px" px="40px">
                 <Title
                     title="Our capsule"
                     subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
@@ -225,10 +225,10 @@ const Capsule = ({
                 {/* <Carousel carousels={capsuleList.map(c => c.covermap)} /> */}
             </Box>
             <section>
-                <Box bg="#fff" py="90px" maxWidth="1440px" mx="auto">
+                <Box bg="#fff" py="90px" maxWidth="1480px" mx="auto">
                     <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
                 </Box>
-                <Box css={{ position: 'relative' }} maxWidth="1440px" mx="auto">
+                <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">
                     <SidebarStyles data={capsuleList} selectedItem={currentSelectedBar} onSelect={handleSelectCapsule} />
                     <Container>
                         <Flex pt="30px" pb="79px" justifyContent="space-between">

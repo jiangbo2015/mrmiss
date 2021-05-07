@@ -90,7 +90,7 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                             // console.log('colorObj', value);
                             return (
                                 <Dot
-                                    size="20px"
+                                    size="15px"
                                     onClick={e => {
                                         e.stopPropagation();
                                         setCurrent(i);

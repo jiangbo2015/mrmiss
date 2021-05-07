@@ -26,7 +26,7 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
         <Layout bg="#fbf8fa">
             {/* <Login /> */}
             <Banner isLogin={currentUser.id ? true : false} imgsInfo={systemDetail} />
-            <Box p="40px" maxWidth="1440px" m="auto">
+            <Box p="40px" maxWidth="1480px" m="auto">
                 <Box mb="40px">
                     <Title
                         title="我们的胶囊"
@@ -37,7 +37,7 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
                 <Carousel carousels={systemDetail.carousels}></Carousel>
             </Box>
             <Box bg="#fff" px="40px" py="40px">
-                <Box bg="#fff" maxWidth="1440px" m="auto">
+                <Box bg="#fff" maxWidth="1480px" m="auto">
                     {/* <div id="aboutas">aboutas</div> */}
                     <Title
                         title="关于我们"
