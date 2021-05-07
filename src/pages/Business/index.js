@@ -3,7 +3,7 @@ import Modal from '@/components/Modal';
 import SearchInput from '@/components/SearchInput';
 import UserInfoFrom from '@/components/UserInfoFrom';
 import { DeleteOutlined } from '@ant-design/icons';
-import { Button, Popconfirm,Badge } from 'antd';
+import { Button, Popconfirm, Badge } from 'antd';
 import { connect } from 'dva';
 import React from 'react';
 import { Box, Flex } from 'rebass/styled-components';
@@ -70,7 +70,9 @@ class Business extends React.Component {
 
     render() {
         const { currentUser = {}, unReadedNum } = this.props;
-        const { lastLevel,role } = currentUser;
+        const { unReaded } = this.state;
+
+        const { lastLevel, role } = currentUser;
         return (
             <Layout>
                 <Modal
@@ -85,7 +87,7 @@ class Business extends React.Component {
                         });
                     }}
                 >
-                    <UserInfoFrom onSumbit={this.handleSubmit} isAdd role={role}/>
+                    <UserInfoFrom onSumbit={this.handleSubmit} isAdd role={role} />
                 </Modal>
                 <Modal
                     visible={this.state.channelEmpowerModal}
@@ -101,7 +103,7 @@ class Business extends React.Component {
                     <UserEmpower batch selectedRows={this.state.selectedRows} />
                 </Modal>
                 <Modal
-                    title={`${lastLevel}订单管理`}
+                    title={`${lastLevel}订单管理${unReaded ? '(未查看)' : ''}`}
                     visible={this.state.userOrderModal}
                     footer={false}
                     width="1200px"
@@ -113,7 +115,7 @@ class Business extends React.Component {
                         });
                     }}
                 >
-                    <UserOrder />
+                    <UserOrder unReaded={unReaded} />
                 </Modal>
                 <Box height="116px" width={[1]} bg="#FDDB3B" mt="74px" />
 
@@ -171,20 +173,26 @@ class Business extends React.Component {
                                 });
                             }}
                             style={{
-                                display:'flex',
+                                display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
                             }}
                         >
                             {`${lastLevel}订单管理`}
-                            {unReadedNum ? <Badge style={{marginLeft: '8px'}} count={unReadedNum} onClick={(e)=>{
-                                e.stopPropagation();
-                                this.setState({
-                                    ...this.state,
-                                    userOrderModal: true,
-                                    unReaded: true,
-                                });
-                            }}/> : null}
+                            {unReadedNum ? (
+                                <Badge
+                                    style={{ marginLeft: '8px' }}
+                                    count={unReadedNum}
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        this.setState({
+                                            ...this.state,
+                                            userOrderModal: true,
+                                            unReaded: true,
+                                        });
+                                    }}
+                                />
+                            ) : null}
                         </Button>
                     </Flex>
                 )}
@@ -243,4 +251,4 @@ class Business extends React.Component {
     }
 }
 
-export default connect(({ user,business }) => ({ currentUser: user.info,unReadedNum: business.unReadedNum }))(Business);
+export default connect(({ user, business }) => ({ currentUser: user.info, unReadedNum: business.unReadedNum }))(Business);

@@ -7,7 +7,7 @@ import { ReactSVG } from 'react-svg';
 import { Flex, Box } from 'rebass/styled-components';
 import OrderTableComponent from './OrderTableComponent';
 import UserListMinTable from './UserListMinTable';
-import DCOrderEditor from './DC-OrderEditor'
+import DCOrderEditor from './DC-OrderEditor';
 import SearchInput from '@/components/SearchInput';
 import { DeleteOutlined } from '@ant-design/icons';
 import Modal from '@/components/Modal';
@@ -16,7 +16,7 @@ import IconUserSign from '@/public/icons/icon-usersign.svg';
 import request from '@/utils/request';
 import OrderDownload from '@/components/OrderDownload';
 
-const OrderTable = ({ ownOrderList = {}, dispatch, userId,currentOrder }) => {
+const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReaded }) => {
     const [selectUserModal, setSelectUserModal] = useState(false);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -71,6 +71,9 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId,currentOrder }) => {
         if (isMerge !== 'all') {
             payload.isMerge = isMerge;
         }
+        if (unReaded) {
+            payload.isReaded = 0;
+        }
         dispatch({
             type: 'business/getOwnOrderList',
             payload,
@@ -117,7 +120,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId,currentOrder }) => {
     };
 
     const handleMerge = async () => {
-        console.log('selectedRows',selectedRows)
+        console.log('selectedRows', selectedRows);
 
         await dispatch({
             type: 'business/mergeOwnOrder',
@@ -141,29 +144,30 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId,currentOrder }) => {
         });
     };
 
-    const handleShowOrderDetail = async (record) => {
+    const handleShowOrderDetail = async record => {
         await dispatch({
             type: 'business/createCurrentOrderToGroupList',
             payload: record,
         });
-        setShowDetailOrder(true)
-    }
+        setShowDetailOrder(true);
+    };
 
     const columns = [
         {
             title: '订单编号',
             dataIndex: 'orderNo',
             key: 'orderNo',
-            render: (value, record) =>
+            render: (value, record) => (
                 <a
                     style={{ textDecoration: 'underline' }}
                     onClick={() => {
-                        handleShowOrderDetail(record)
+                        handleShowOrderDetail(record);
                         // setUserInfoModal(true)
                     }}
                 >
                     {value}
                 </a>
+            ),
         },
         {
             title: '日期',
@@ -217,10 +221,10 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId,currentOrder }) => {
     ];
     return (
         <Box>
-            <DCOrderEditor 
-                visible={showDetailOrder} 
-                onCancel={()=>{
-                    setShowDetailOrder(false)
+            <DCOrderEditor
+                visible={showDetailOrder}
+                onCancel={() => {
+                    setShowDetailOrder(false);
                 }}
             />
             <Modal
@@ -361,7 +365,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId,currentOrder }) => {
     );
 };
 
-export default connect(({business}) => {
+export default connect(({ business }) => {
     // console.log('props', props);
     return {
         ownOrderList: business.ownOrderList,
