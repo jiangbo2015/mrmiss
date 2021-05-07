@@ -326,7 +326,7 @@ const OrderMark = ({
                                     setSourceData([...sourceData]);
                                 }}
                             />
-                            <Box m="10px" width="100%" sx={{ position: 'relative' }}>
+                            <Box m="10px" width="100%" sx={{ position: 'relative' }} className='dropwrapper'>
                                 <Popover
                                     content={
                                         <Box width="160px">
@@ -369,7 +369,7 @@ const OrderMark = ({
                                     }}
                                 />
 
-                                <Droppable key={ind} droppableId={`${ind}`} direction="horizontal">
+                                <Droppable key={ind} droppableId={`${ind}`} direction="horizontal" className='dropwrapper'>
                                     {(provided, snapshot) => (
                                         <div
                                             ref={provided.innerRef}
@@ -665,8 +665,7 @@ const OrderMark = ({
                         handleSend();
                     }}
                 /> : null}
-            </Flex>
-         }
+            </Flex>}
         </Modal>
     );
 };
