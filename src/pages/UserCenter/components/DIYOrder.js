@@ -10,7 +10,7 @@ import lodash from 'lodash';
 import request from '@/utils/request';
 import OrderDownload from '@/components/OrderDownload';
 
-const OrderTable = ({ orderList = [], dispatch }) => {
+const OrderTable = ({ orderList = [], dispatch,onShowDetail }) => {
     const [downloadOrder, setDownloadOrder] = useState(false);
     useEffect(() => {
         dispatch({
@@ -44,6 +44,17 @@ const OrderTable = ({ orderList = [], dispatch }) => {
             title: '订单编号',
             dataIndex: 'orderNo',
             key: 'orderNo',
+            render: (value, record) => (
+                <a
+                    style={{ textDecoration: 'underline' }}
+                    onClick={() => {
+                        onShowDetail({...record,orderType:'order'})
+                        // setUserInfoModal(true) record
+                    }}
+                >
+                    {value}
+                </a>
+            ),
         },
         {
             title: '日期',

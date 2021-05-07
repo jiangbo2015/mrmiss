@@ -40,6 +40,17 @@ const OrderTable = ({ orderList = [], dispatch }) => {
             title: '订单编号',
             dataIndex: 'orderNo',
             key: 'orderNo',
+            render: (value, record) => (
+                <a
+                    style={{ textDecoration: 'underline' }}
+                    onClick={() => {
+                        onShowDetail(record)
+                        // setUserInfoModal(true) record
+                    }}
+                >
+                    {value}
+                </a>
+            ),
         },
         {
             title: '日期',

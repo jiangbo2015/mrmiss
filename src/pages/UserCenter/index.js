@@ -2,6 +2,8 @@ import React from 'react';
 import { Box } from 'rebass/styled-components';
 import { Tabs } from 'antd';
 import UserInfo from './components/UserInfo';
+import DCOrderEditor from './components/DC-OrderDetail';
+import SOrderEditor from './components/S-OrderDetail';
 import OrderDownload from '@/components/OrderDownload';
 import DIYOrder from './components/DIYOrder';
 import CapsuleOrder from './components/CapsuleOrder';
@@ -13,6 +15,8 @@ const { TabPane } = Tabs;
 class UserCenter extends React.Component {
     state = {
         downloadOrder: {},
+        showDetailOrder: false,
+        showShopDetailOrder: false,
     };
     callback() {}
     static getDerivedStateFromError(error) {
@@ -27,8 +31,34 @@ class UserCenter extends React.Component {
             payload: order,
         });
     }
+
+
+    async handleShowOrderDetail (record){
+        await this.props.dispatch({
+            type: 'usercenter/createCurrentOrderToGroupList',
+            payload: record,
+        });
+        this.setState({
+            ...this.state,
+            showDetailOrder: true
+        })
+    };
+
+    async handleShowShopOrderDetail (record){
+        await this.props.dispatch({
+            type: 'usercenter/createCurrentShopOrderToGroupList',
+            payload: record,
+        });
+        this.setState({
+            ...this.state,
+            showShopDetailOrder: true
+        })
+    };
     render() {
-        console.log(this.props);
+        const {
+            showDetailOrder,
+            showShopDetailOrder,
+        } = this.state
         return (
             <Box
                 width={1}
@@ -47,6 +77,26 @@ class UserCenter extends React.Component {
                     },
                 }}
             >
+                <DCOrderEditor
+                    visible={showDetailOrder}
+                    onCancel={() => {
+                        // setShowDetailOrder(false);
+                        this.setState({
+                            ...this.state,
+                            showDetailOrder: false
+                        })
+                    }}
+                />
+                <SOrderEditor
+                    visible={showShopDetailOrder}
+                    onCancel={() => {
+                        // setShowShopDetailOrder(false)
+                        this.setState({
+                            ...this.state,
+                            showShopDetailOrder: false
+                        })
+                    }}
+                />
                 {this.state.downloadOrder._id ? (
                     <OrderDownload
                         onClose={() => {
@@ -72,13 +122,22 @@ class UserCenter extends React.Component {
                         <UserInfo />
                     </TabPane>
                     <TabPane tab="我的定制订单" key={2}>
-                        <DIYOrder onDownloadOrder={this.handleDownloadOrder.bind(this)} />
+                        <DIYOrder 
+                            onDownloadOrder={this.handleDownloadOrder.bind(this)} 
+                            onShowDetail={this.handleShowOrderDetail.bind(this)}
+                        />
                     </TabPane>
                     <TabPane tab="我的胶囊订单" key={3}>
-                        <CapsuleOrder onDownloadOrder={this.handleDownloadOrder.bind(this)} />
+                        <CapsuleOrder 
+                            onDownloadOrder={this.handleDownloadOrder.bind(this)} 
+                            onShowDetail={this.handleShowOrderDetail.bind(this)}
+                        />
                     </TabPane>
                     <TabPane tab="我的网店订单" key={4}>
-                        <ShopOrder onDownloadOrder={this.handleDownloadOrder.bind(this)} />
+                        <ShopOrder 
+                            onDownloadOrder={this.handleDownloadOrder.bind(this)}
+                            onShowDetail={this.handleShowShopOrderDetail.bind(this)}
+                        />
                     </TabPane>
                 </Tabs>
             </Box>
