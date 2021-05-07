@@ -2,7 +2,7 @@ import { ReactSVG } from 'react-svg';
 import { Box } from 'rebass/styled-components';
 import AllIcon from '@/public/icons/icon-all.svg';
 
-export default ({ selectAll, onSelectAll }) => {
+export default ({ selectAll, onSelectAll,style={} }) => {
     return (
         <Box
             bg="#000000"
@@ -10,6 +10,7 @@ export default ({ selectAll, onSelectAll }) => {
                 border: selectAll ? '1px solid #AFAFAF' : '1px solid #000',
                 paddingBottom: '4px',
                 borderRadius: '3px',
+                ...style
             }}
             onClick={() => {
                 onSelectAll(!selectAll);

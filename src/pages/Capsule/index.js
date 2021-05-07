@@ -221,8 +221,8 @@ const Capsule = ({
                     title="Our capsule"
                     subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
                 />
-                <ExbImage imgsInfo={currentCapsule} />
-                <Carousel carousels={capsuleList.map(c => c.covermap)} />
+                {/* <ExbImage imgsInfo={currentCapsule} /> */}
+                {/* <Carousel carousels={capsuleList.map(c => c.covermap)} /> */}
             </Box>
             <section>
                 <Box bg="#fff" py="90px" maxWidth="1440px" mx="auto">

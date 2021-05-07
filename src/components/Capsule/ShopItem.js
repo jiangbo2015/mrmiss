@@ -8,7 +8,7 @@ import { filterImageUrl } from '@/utils/helper';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 
 // 胶囊组件
-export default ({ handleOpen, item, showNum, isAssign, curChannelPrice, onEditPrice, isSelect, onSelect = () => {} }) => {
+export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEditPrice, isSelect, onSelect = () => {} }) => {
     const { colorWithStyleImgs = [], code, price } = item;
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -29,7 +29,7 @@ export default ({ handleOpen, item, showNum, isAssign, curChannelPrice, onEditPr
                 },
             }}
         >
-            <Box p="30px" bg="#F7F7F7" css={{ borderRadius: '10px', position: 'relative' }}>
+            <Box p="30px" bg={bg} css={{ borderRadius: '10px', position: 'relative' }}>
                 <ReactSVG
                     src={SelectedIcon}
                     style={{

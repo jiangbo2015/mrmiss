@@ -220,9 +220,9 @@ const Shop = ({
     };
 
     return (
-        <Layout pt="74px" bg="#ffffff">
+        <Layout pt="74px" bg="#F7F7F7">
             <section>
-                <Box bg="#fff" py="90px" maxWidth="1440px" mx="auto">
+                <Box bg="#F7F7F7" py="90px" maxWidth="1440px" mx="auto">
                     <Title
                         title="SHOP"
                         subtitle="This season's capsule is launched by mrmiss 2021 limited capsule
@@ -304,6 +304,7 @@ const Shop = ({
                                         : selectAssignedStyleList.find(x => x.style === item._id);
                                 return (
                                     <CapsItem
+                                        bg="#ffffff"
                                         item={item}
                                         key={`${item._id}-capsule`}
                                         showNum={currentUser.role == 1 ? item.caseNum : item.numInBag}

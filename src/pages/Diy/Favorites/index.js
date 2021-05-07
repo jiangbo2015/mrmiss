@@ -232,6 +232,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
+                    position: 'relative',
                 }}
             >
                 <div
@@ -276,6 +277,12 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     selectAll={selectAll}
                     onSelectAll={() => {
                         handleSelectAll();
+                    }}
+                    style={{
+                        position: 'absolute',
+                        left: '50%',
+                        top: '50%',
+                        transform: 'translate(-50%, -50%)'
                     }}
                 />
                 <Flex alignItems="center">
