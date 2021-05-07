@@ -1,4 +1,5 @@
 import * as api from '@/apis/business';
+import { IdcardFilled } from '@ant-design/icons';
 import { message } from 'antd';
 import lodash from 'lodash';
 import defaultData from './defaultData';
@@ -13,6 +14,7 @@ export default {
         ownOrderList: {},
         currentOrder:{},
         editOrderGroupList: [],
+        currentShopOrderData: []
     },
     reducers: {
         setCustomerList(state, action) {
@@ -49,6 +51,12 @@ export default {
             return {
                 ...state,
                 unReadedNum: action.payload,
+            };
+        },
+        setCurrentShopOrderData(state, action) {
+            return {
+                ...state,
+                currentShopOrderData: action.payload,
             };
         },
     },
@@ -311,6 +319,65 @@ export default {
                 type: 'setEditOrderGroupList',
                 payload: Object.values(gourpByStyle).concat(saveItems),
             });
-        }
+        },
+        *createCurrentShopOrderToGroupList({ payload }, { call, put, select }) {
+            
+            const res = yield call(api.getShopOrderDetail, { _id: payload._id });
+            
+            
+            console.log('createCurrentShopOrderToGroupList', res)
+            let saveOrder = [];
+            if(res?.data?.children?.length>0){
+                for(let i = 0; i < res.data.children.length; i ++){
+                    const itemOrder = res.data.children[i]
+                    const items = res.data.children[i].orderData.map(x => ({
+                        ...x,
+                        originId: itemOrder._id,
+                        originNo: itemOrder.orderNo
+                    }))
+                    saveOrder.push(...items)
+                }
+                // res?.data?.children
+            }
+
+            if(res?.data?.orderData?.length>0){
+                for(let i = 0; i < res.data.orderData.length; i ++){
+                    const itemOrderDate = res.data.orderData[i]
+                    itemOrderDate.originId = res.data._id;
+                    itemOrderDate.originNo = res.data.orderNo;
+                    saveOrder.push(itemOrderDate)
+                }
+                // res?.data?.children
+            }
+        
+            console.log('saveOrder', saveOrder)
+            yield put({
+                type: 'setCurrentOrder',
+                payload: payload,
+            });
+            yield put({
+                type: 'setCurrentShopOrderData',
+                payload: saveOrder,
+            });
+        },
+        *updateShopOrderData({ payload }, { call, put, select }) {
+            const { currentShopOrderData = [] } = yield select(state => state.business);
+          
+            const changedIndex = currentShopOrderData.findIndex(x => x._id === payload._id)
+            if(changedIndex>=0){
+                if(payload.isDel){
+                    currentShopOrderData.splice(changedIndex,1)
+                }
+                if(payload.count){
+                    currentShopOrderData[changedIndex].count = payload.count
+                }
+                yield put({
+                    type: 'setCurrentShopOrderData',
+                    payload: [...currentShopOrderData],
+                });
+            }
+
+
+        },
     },
 };

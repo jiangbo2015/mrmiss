@@ -266,6 +266,7 @@ const ModalSimple = ({
                     width: '1120px',
                     margin: 'auto',
                     inset: 'auto',
+                    maxHeight: '98%',
                 },
             }}
         >

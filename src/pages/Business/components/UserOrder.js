@@ -8,6 +8,7 @@ import { Flex, Box } from 'rebass/styled-components';
 import OrderTableComponent from './OrderTableComponent';
 import UserListMinTable from './UserListMinTable';
 import DCOrderEditor from './DC-OrderEditor';
+import SOrderEditor from './S-OrderEditor';
 import SearchInput from '@/components/SearchInput';
 import { DeleteOutlined } from '@ant-design/icons';
 import Modal from '@/components/Modal';
@@ -27,6 +28,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
     const { order = [], capsuleOrder = [], shopOrder = [] } = ownOrderList;
     const [downloadOrder, setDownloadOrder] = useState(false);
     const [showDetailOrder, setShowDetailOrder] = useState(false);
+    const [showShopDetailOrder, setShowShopDetailOrder] = useState(false);
 
     const handleDownload = async record => {
         console.log(record);
@@ -152,6 +154,15 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
         setShowDetailOrder(true);
     };
 
+    const handleShowShopOrderDetail = async record => {
+        await dispatch({
+            type: 'business/createCurrentShopOrderToGroupList',
+            payload: record,
+        });
+        setShowShopDetailOrder(true);
+    };
+
+
     const columns = [
         {
             title: '订单编号',
@@ -161,7 +172,12 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
                 <a
                     style={{ textDecoration: 'underline' }}
                     onClick={() => {
-                        handleShowOrderDetail(record);
+                        if(record.orderType === 'shop'){
+                            handleShowShopOrderDetail(record)
+                        }else {
+                            handleShowOrderDetail(record);
+                        }
+                        
                         // setUserInfoModal(true)
                     }}
                 >
@@ -225,6 +241,12 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
                 visible={showDetailOrder}
                 onCancel={() => {
                     setShowDetailOrder(false);
+                }}
+            />
+            <SOrderEditor
+                visible={showShopDetailOrder}
+                onCancel={() => {
+                    setShowShopDetailOrder(false)
                 }}
             />
             <Modal

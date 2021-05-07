@@ -24,6 +24,12 @@ export const updateShopCart = data =>
         data,
     });
 
+export const updateShopOrder = data =>
+    request('/api/shopOrder/update', {
+        method: 'post',
+        data,
+    });
+
 export const getMyShopCart = data =>
     request('/api/shopCart/getMyList', {
         method: 'get',

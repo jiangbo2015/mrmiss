@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import { Box, Flex, Image, Text } from 'rebass/styled-components';
 
-import temp from '@/public/temp.jpg';
+// import temp from '@/public/temp.jpg';
 
-import Dot from '../Capsule/Dot';
+// import Dot from '../Capsule/Dot';
 import { StyleSwitcher, SizeBox } from '../Capsule/ModalShopSimple';
 import { filterImageUrl } from '@/utils/helper';
 import Modal from '../Modal';
@@ -30,13 +30,13 @@ const RoundBtn = props => (
 
 const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
     console.log('showNum', showNum);
-    const { shopStyle, count, _id } = data;
-    const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum } = shopStyle;
+    const { shopStyleObj, count, _id } = data;
+    const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum } = shopStyleObj;
     const [current, setCurrent] = useState(0);
     return (
         <Box p="50px" mb="25px" sx={{ background: '#fff', borderRadius: '6px' }}>
             <Flex alignItems="center" justifyContent="space-between">
-                {readOnly ? null :                  <RoundBtn
+                {readOnly ? null :  <RoundBtn
                     mr="10px"
                     onClick={() => {
                         onUpdate({ _id, isDel: 1 });
@@ -142,97 +142,69 @@ const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
  * handleRemove: 点击x 删除
  */
 const Cart = ({
-    myShopCartList = [],
+    currentShopOrderData = [],
     dispatch,
     triggle,
-    triggleStyle,
+    onSave,
+    onUpdate,
+    visible,
     currentUser,
-    selectedList = [],
+    currentOrder = {},
     clearSelected = () => {},
+    onCancel,
     readOnly
 }) => {
-    const [visible, setVisible] = useState(false);
+    // const [visible, setVisible] = useState(false);
     let sumCount = 0;
     let sumPrice = 0;
-    myShopCartList.map(sc => {
+    currentShopOrderData.map(sc => {
         console.log('sc.count', sc.count);
-        let { shopStyle = { caseNum: 0, numInBag: 0, price: 0 } } = sc;
-        let itemCount = currentUser.role == 1 ? shopStyle.caseNum : shopStyle.numInBag;
+        let { shopStyleObj = { caseNum: 0, numInBag: 0, price: 0 } } = sc;
+        let itemCount = currentUser.role == 1 ? shopStyleObj.caseNum : shopStyleObj.numInBag;
         sumCount += sc.count * itemCount;
         console.log('sumCount', sumCount);
-        sumPrice += sc.count * itemCount * shopStyle.price;
+        sumPrice += sc.count * itemCount * shopStyleObj.price;
     });
     useEffect(() => {
         // console.log('fetchMyShopCart');
         if (visible) {
-            init();
+            // init();
         } else {
             clearSelected();
         }
     }, [visible]);
-    const init = async () => {
-        for (let i = 0; i < selectedList.length; i++) {
-            await dispatch({
-                type: 'shop/addShopCart',
-                payload: {
-                    shopStyle: selectedList[i].style,
-                    count: 1,
-                },
-            });
-        }
 
-        dispatch({
-            type: 'shop/fetchMyShopCart',
-        });
-    };
     const handleUpdate = data => {
-        dispatch({
-            type: 'shop/updateShopCart',
-            payload: data,
-        });
+        console.log('data', data)
+        onUpdate(data)
     };
 
     const handleOrder = async () => {
-        if (myShopCartList.length < 1) {
+        if (currentShopOrderData.length < 1) {
             return;
         }
-        await dispatch({
-            type: 'shop/addShopOrder',
-            payload: {
-                sumCount,
-                sumPrice,
-                orderData: myShopCartList.map(sc => ({
-                    shopStyleObj: sc.shopStyle,
-                    count: sc.count,
-                })),
-                scIds: myShopCartList.map(x => x._id),
-            },
-        });
-        setVisible(false);
+        onSave(currentShopOrderData)
     };
     return (
-        <>
-            <span onClick={() => setVisible(true)} style={triggleStyle}>
-                {triggle}
-            </span>
-            <Modal
+        <Modal
                 footer={null}
                 visible={visible}
                 width={'100%'}
-                onCancel={() => setVisible(false)}
+                onCancel={onCancel}
                 style={{ background: '#E6E2E7' }}
                 bodyStyle={{
                     background: '#E6E2E7',
                 }}
             >
-                {readOnly ? null : <Flex justifyContent="center" fontSize="18px" pb="20px">
-                    <b>购物车</b>
-                </Flex>}
-                {myShopCartList.map((item, index) => (
+                <Flex justifyContent="center" fontSize="18px" pb="20px">
+                    <b>{currentOrder.orderNo}</b>
+                </Flex>
+                
+                {currentShopOrderData.map((item, index) => (
                     <LineItem
                         readOnly={readOnly}
                         key={`shop-cart-${index}-${item._id}`}
-                        showNum={currentUser.role == 1 ? item.shopStyle.caseNum : item.shopStyle.numInBag}
+                        showNum={currentUser.role == 1 ? item.shopStyleObj.caseNum : item.shopStyleObj.numInBag}
                         data={item}
                         onUpdate={handleUpdate}
                     />
@@ -251,16 +223,12 @@ const Cart = ({
                         }}
                         onClick={handleOrder}
                     >
-                        确认购买
+                        保存
                     </Button>
                 </Flex>}
                 
             </Modal>
-        </>
     );
 };
 
-export default connect(({ shop = {}, user }) => ({
-    myShopCartList: shop.myShopCartList,
-    currentUser: user.info,
-}))(Cart);
+export default Cart

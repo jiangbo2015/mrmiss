@@ -178,5 +178,13 @@ export default {
             }
             // { styleAndColor: params, goodId: goodId }
         },
+        *updateOrder({ payload }, { call, put, select }) {
+            const res = yield call(api.updateShopOrder, payload);
+            if (res && res.data) {
+                 message.info('更新成功');
+            }
+            // { styleAndColor: params, goodId: goodId }
+        },
+        
     },
 };

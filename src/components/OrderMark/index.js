@@ -70,7 +70,7 @@ const getListStyle = isDraggingOver => ({
 
 const OrderMark = ({
     commodityToOrderGroupList,
-    dispatch,
+    readOnly,
     visible,
     onCancel,
     currentGood = {},
@@ -630,7 +630,7 @@ const OrderMark = ({
                     );
                 })}
             </DragDropContext>
-            <Flex
+            {readOnly ? null :  <Flex
                 sx={{
                     position: 'fixed',
                     bottom: 0,
@@ -666,6 +666,7 @@ const OrderMark = ({
                     }}
                 /> : null}
             </Flex>
+         }
         </Modal>
     );
 };

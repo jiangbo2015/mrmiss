@@ -113,6 +113,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                 content: {
                     width: '1120px',
                     margin: 'auto',
+                    maxHeight: '98%',
                 },
             }}
         >
