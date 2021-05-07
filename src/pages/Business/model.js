@@ -58,17 +58,38 @@ export default {
             // const { data } = yield call(api.login, payload);
             // 登录成功，将token写入本地，并跳转到主体
             const { data } = yield call(api.getCustomerUser, payload);
-            const upreadData = yield call(api.getOwnUnReadedOrder);
-            if (data) {
-                yield put({
-                    type: 'setCustomerList',
-                    payload: data,
-                });
-                // history.push('/main');
-            }
-            console.log('upreadData', upreadData.data);
-            if(upreadData.data){
-                const unReadedNum = upreadData.data.order.length + upreadData.data.capsuleOrder.length + upreadData.data.shopOrder.length
+            const res = yield call(api.getOwnUnReadedOrder);
+            const upreadData = res.data;
+            const userUnReadMap = {}
+            if(upreadData){
+                const unReadedNum = upreadData.order.length + upreadData.capsuleOrder.length + upreadData.shopOrder.length
+                
+                for(let i = 0 ; i<upreadData.order.length; i++){
+                    const itemOrder = upreadData.order[i]
+                    if(userUnReadMap[itemOrder.user]){
+                        userUnReadMap[itemOrder.user] += 1;
+                    }else {
+                        userUnReadMap[itemOrder.user] = 1
+                    }
+                }
+
+                for(let i = 0 ; i<upreadData.capsuleOrder.length; i++){
+                    const itemOrder = upreadData.capsuleOrder[i]
+                    if(userUnReadMap[itemOrder.user]){
+                        userUnReadMap[itemOrder.user] += 1;
+                    }else {
+                        userUnReadMap[itemOrder.user] = 1
+                    }
+                }
+
+                for(let i = 0 ; i<upreadData.shopOrder.length; i++){
+                    const itemOrder = upreadData.shopOrder[i]
+                    if(userUnReadMap[itemOrder.user]){
+                        userUnReadMap[itemOrder.user] += 1;
+                    }else {
+                        userUnReadMap[itemOrder.user] = 1
+                    }
+                }
                 if (data) {
                     yield put({
                         type: 'setUnReadedNum',
@@ -76,6 +97,17 @@ export default {
                     });
                     // history.push('/main');
                 }
+            }
+
+            if (data) {
+                yield put({
+                    type: 'setCustomerList',
+                    payload: data.map(d => ({
+                        ...d,
+                        unReadedNum: userUnReadMap[d._id]
+                    })),
+                });
+                // history.push('/main');
             }
         },
         *getOwnOrderList({ payload }, { call, put }) {

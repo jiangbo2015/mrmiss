@@ -3,7 +3,7 @@ import Modal from '@/components/Modal';
 // import { ReactSVG } from 'react-svg';
 import Table from '@/components/Table';
 import UserInfoFrom from '@/components/UserInfoFrom';
-
+import { Badge } from 'antd';
 // import IconDelete from '@/public/icons/icon-delete.svg';
 import { connect } from 'dva';
 import React, { useEffect, useState } from 'react';
@@ -14,6 +14,8 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
     const [empowerSingleCustomer, setEmpowerSingleCustomer] = useState(false);
     const [userOrderModal, setUserOrderModal] = useState(false);
     const [userInfoModal, setUserInfoModal] = useState(false);
+    const [unOrderReader, setUnOrderReader] = useState(false);
+    
     const { lastLevel } = currentUser;
     useEffect(() => {
         dispatch({
@@ -79,21 +81,35 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
         },
         {
             title: `${lastLevel}订单`,
-            dataIndex: 'totalPrice',
-            key: 'totalPrice',
-            render: (_, record) => (
-                <a
-                    style={{ textDecoration: 'underline' }}
-                    onClick={() => {
-                        setUserOrderModal(true);
-                        dispatch({
-                            type: 'business/setCurrentCustomer',
-                            payload: record,
-                        });
-                    }}
-                >
-                    查看
-                </a>
+            dataIndex: 'unReadedNum',
+            key: 'unReadedNum',
+            render: (value, record) => (
+                <div style={{display:'flex', alignItems: 'center', justifyContent:'center'}}>
+                    <a
+                        style={{ textDecoration: 'underline' }}
+                        onClick={() => {
+                            setUserOrderModal(true);
+                            setUnOrderReader(false);
+                            dispatch({
+                                type: 'business/setCurrentCustomer',
+                                payload: record,
+                            });
+                        }}
+                    >
+                        查看
+                    </a>
+                    {value ? <Badge count={value} style={{marginLeft: '8px'}} 
+                                onClick={() => {
+                                        setUserOrderModal(true);
+                                        setUnOrderReader(true);
+                                        dispatch({
+                                            type: 'business/setCurrentCustomer',
+                                            payload: record,
+                                        });
+                                    }}
+                            />:null}
+                </div>
+
             ),
         },
     ];
@@ -110,7 +126,7 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                 <UserEmpower />
             </Modal>
             <Modal
-                title={`${currentCustomer.name}的订单`}
+                title={`${currentCustomer.name}的订单${unOrderReader?'(未阅读)':''}`}
                 visible={userOrderModal}
                 footer={false}
                 width="1200px"
@@ -118,7 +134,7 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                     setUserOrderModal(false);
                 }}
             >
-                <UserOrder userId={currentCustomer._id} />
+                <UserOrder userId={currentCustomer._id} unReaded={unOrderReader} />
             </Modal>
 
             <Modal
