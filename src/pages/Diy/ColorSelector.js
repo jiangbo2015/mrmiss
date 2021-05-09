@@ -6,6 +6,7 @@ import AllIcon from '@/public/icons/icon-all.svg';
 import { Tooltip } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
+
 export const ColotItem = ({ color, isSelected, size = '44px', ...props }) => (
     <div
         {...props}
@@ -158,7 +159,7 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
                         display: 'grid',
                         gridTemplateColumns: '1fr 1fr 1fr',
                         gridRowGap: '55px',
-                        height: '520px',
+                        height: '600px',
                         alignContent: 'start',
                         overflowY: 'scroll',
                     }}

@@ -164,7 +164,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     gridTemplateColumns: '1fr 1fr 1fr',
                     gridTemplateColumns: '1fr 1fr 1fr',
                     gridRowGap: '55px',
-                    height: '520px',
+                    height: '600px',
                     alignContent: 'start',
                     overflowY: 'scroll',
                 }}
