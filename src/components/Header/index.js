@@ -27,7 +27,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(1);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconUser} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'24px' }} src={IconUser} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的用户信息
@@ -38,7 +38,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(2);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconDIYOrder} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'22.5px' }} src={IconDIYOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的定制订单
@@ -49,7 +49,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(3);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconCapOrder} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'26px' }} src={IconCapOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的胶囊订单
@@ -60,7 +60,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(4);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconShopOrder} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'24px' }} src={IconShopOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的网店订单
@@ -69,7 +69,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
         {businessUserd ? (
             <Menu.Item
                 className="menuItemH"
-                icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconManage} />}
+                icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'24px' }}  src={IconManage} />}
                 onClick={() => {
                     history.push('/business');
                 }}
@@ -80,7 +80,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
         {innerDataUserd ? (
             <Menu.Item
                 className="menuItemH"
-                icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={ChartIcon} />}
+                icon={<ReactSVG style={{ width: '24px',height:'28px' }} src={ChartIcon} />}
                 onClick={() => {
                     history.push('/chart');
                 }}
@@ -93,7 +93,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
         <Menu.Item
             onClick={handleLogout}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={IconBack} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'27px' }} src={IconBack} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 退出登录
@@ -322,8 +322,8 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                     </>
                 ) : null}
                 {!currentUser._id ? (
-                    <div className="menuItem" style={{ display: 'flex', alignItems: 'flex-end' }}>
-                        <ReactSVG src={IconUserSign} style={{ width: '24px', height: '24px', paddingRight: '4px' }} />
+                    <div className="menuItem" style={{ display: 'flex', alignItems: 'center' }}>
+                        <ReactSVG src={IconUserSign} style={{ width: '20px', height: '20px', marginRight: '4px' }} />
                         <span>
                             {intl.formatMessage({
                                 id: 'login',
