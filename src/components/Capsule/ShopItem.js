@@ -46,7 +46,7 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                     }}
                 />
                 <Flex justifyContent="center" height="200px" alignItems="center" flexDirection="column">
-                    <Image width="100px" src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
+                    <Image sx={{width: '70%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
                 </Flex>
 
                 <Box
