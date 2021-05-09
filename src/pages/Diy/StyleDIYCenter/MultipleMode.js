@@ -178,6 +178,7 @@ const App = ({
                     style={{
                         display: 'flex',
                         alignItems: 'center',
+                        marginLeft: '-10px'
                     }}
                 >
                     <Select
