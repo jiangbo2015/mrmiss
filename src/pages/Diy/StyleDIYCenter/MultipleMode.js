@@ -182,7 +182,8 @@ const App = ({
                 >
                     <Select
                         value={currentGoodCategory}
-                        style={{ marginRight: '20px', minWidth: '92px' }}
+                        style={{ marginRight: '20px'}}
+                        width='88px'
                         options={currentGood.category.filter(x => x.name !== '分体').map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
@@ -193,8 +194,8 @@ const App = ({
                             width: '20px',
                             height: '20px',
                             padding: '4px',
-                            marginLeft: '12px',
-                            marginBottom: '4px',
+                            marginLeft: '24px',
+                            marginBottom: '6px',
                             opacity: selectStyleList.length < docs.length ? 0.3 : 1,
                         }}
                         onClick={() => {

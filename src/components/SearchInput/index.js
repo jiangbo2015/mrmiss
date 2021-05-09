@@ -9,7 +9,7 @@ export default ({ onSearch, placeholder = 'Search color', style = {}, mode = 'bl
         <Input
             onPressEnter={onSearch}
             enterButton={false}
-            style={{ padding: '2px', fontSize: '12px !important', ...style }}
+            style={{ textAlign: 'center', padding: '2px', fontSize: '12px !important', ...style }}
             className={mode === 'white' ? 'searchInputWhite' : 'searchInput'}
             placeholder={placeholder}
             prefix={<ReactSVG style={{ width: '28px', height: '28px' }} src={searchIcon} />}

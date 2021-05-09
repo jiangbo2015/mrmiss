@@ -734,7 +734,7 @@ export default {
         },
         *batchSetSelectStyleList({ payload = [] }, { call, put, select }) {
             const { styleList, currentGoodCategory } = yield select(state => state.diy);
-            console.log('styleList[currentGoodCategory]', styleList[currentGoodCategory]);
+            // console.log('styleList[currentGoodCategory]', styleList[currentGoodCategory]);
             if (!styleList[currentGoodCategory]) {
                 return;
             }
