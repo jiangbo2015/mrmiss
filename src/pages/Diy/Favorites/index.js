@@ -358,7 +358,6 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                     gridGap: '20px 20px',
                     justifyContent: 'center',
                     alignContent: 'start',
-                    overflowY: 'scroll',
                 }}
                 loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
             >

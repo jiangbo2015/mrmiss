@@ -99,13 +99,13 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 background: '#323232',
                 // display: 'flex',
                 width: '100%',
-                height: '140px',
+                height: '90px',
             }}
         >
-            <Flex alignItems="center" width="256px">
-                <Image width="240px" src={IconPng} />
+            <Flex alignItems="center" width="256px" height="2px">
+              
             </Flex>
-            <Flex pt="20px" flexDirection="column" alignItems="center">
+            <Flex pt="18px" flexDirection="column" alignItems="center">
                 <Flex width="50px" justifyContent="space-between">
                     <ReactSVG
                         src={CirCleArrow}
@@ -142,7 +142,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                     ))}
                 </Flex>
             </Flex>
-            <Box pt="44px">
+            <Box pt="30px">
                 <Switcher ref={ref} assigned={currentGood} />
             </Box>
         </Flex>

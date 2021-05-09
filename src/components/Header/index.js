@@ -3,6 +3,7 @@ import Modal from '@/components/Modal';
 import UserCenter from '@/pages/UserCenter';
 import WhiteChartIcon from '@/public/icons/icon-chart-white.svg';
 import ChartIcon from '@/public/icons/icon-chart.svg';
+import WLogoIcon from '@/public/w-logo.svg';
 import IconBack from '@/public/icons/icon-menuback.svg';
 import IconCapOrder from '@/public/icons/icon-menucaporder.svg';
 import IconDIYOrder from '@/public/icons/icon-menudiyorder.svg';
@@ -19,7 +20,7 @@ import { Flex } from 'rebass/styled-components';
 import { history, setLocale, useIntl } from 'umi';
 import './index.less';
 
-const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd }) => (
+const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd, innerDataUserd }) => (
     <Menu>
         <Menu.Item
             onClick={() => {
@@ -76,6 +77,18 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd 
                 <a>业务管理</a>
             </Menu.Item>
         ) : null}
+        {innerDataUserd ? (
+            <Menu.Item
+                className="menuItemH"
+                icon={<ReactSVG style={{ display: 'inline-block', width: '24px' }} src={ChartIcon} />}
+                onClick={() => {
+                    history.push('/chart');
+                }}
+            >
+                <a>数据分析</a>
+            </Menu.Item>
+        ) : null}
+
 
         <Menu.Item
             onClick={handleLogout}
@@ -255,21 +268,20 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                 </div>
             </div>
             <div>
-                {currentUser._id && currentUser.innerDataUserd ? (
                     <ReactSVG
-                        src={headerBgColor !== '#fff' ? WhiteChartIcon : ChartIcon}
+                        src={WLogoIcon}
                         style={{
-                            width: '32px',
+                            width: '96px',
                             position: 'absolute',
                             left: '50%',
                             top: '50%',
+                            color: headerBgColor !== '#fff' ? '#fff' :'#000',
                             transform: 'translate(-50%, -50%)',
                         }}
                         onClick={() => {
-                            history.push('/chart');
+                            history.push('/');
                         }}
                     />
-                ) : null}
             </div>
             <div style={{ display: 'flex' }}>
                 {currentUser._id ? (
@@ -333,6 +345,7 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                                 }}
                                 handleLogout={handleLogout}
                                 businessUserd={currentUser.businessUserd}
+                                innerDataUserd={currentUser.innerDataUserd}
                             />
                         }
                         trigger={['click']}
