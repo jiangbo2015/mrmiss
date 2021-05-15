@@ -10,7 +10,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex alignSelf="flex-end" pt="20px" pb="40px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex alignSelf="flex-end" pt="12px" pb="12px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -95,13 +95,13 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
 
     return (
         <Flex justifyContent="center">
-            <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
+            <Box mr="10px" height="355px" css={{ overflowY: 'auto' }}>
                 <Flex flexDirection="column">
                     {colorWithStyleImgs.map((item, i) => (
                         <Box
                             mb="8px"
                             p="20px 30px"
-                            bg="#F8F8F8"
+                            bg="#FFFFFF"
                             onClick={() => {
                                 setCurrent(i);
                             }}
@@ -127,9 +127,9 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
             </Box>
             <Box>
                 <Box
-                    width="475px"
-                    height="475px"
-                    bg="#F8F8F8"
+                    width="355px"
+                    height="355px"
+                    bg="#FFFFFF"
                     css={{
                         '.swiper-container': {
                             height: '100%',
@@ -141,7 +141,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                             {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
                                     <StyleItem
-                                        width="180px"
+                                        width="220px"
                                         styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                         colors={d.colorIds}
                                         key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
@@ -155,7 +155,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                             {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
                                     <StyleItem
-                                        width="180px"
+                                        width="220px"
                                         styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                         colors={d.colorIds}
                                         key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
@@ -175,7 +175,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                         <Swiper>
                             {colorWithStyleImgs[current].imgs.map((item, i) => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
-                                    <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
+                                    <Image src={filterImageUrl(item)} width='280px'></Image>
                                 </Flex>
                             ))}
                         </Swiper>
@@ -185,7 +185,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
 
             <Box pl="30px">
                 <Text>2021 swimwear series</Text>
-                <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
+                <Text color="#313131" fontSize="28px" fontWeight="bold" my="6px">
                     ¥{price}
                 </Text>
                 <Text>Ref {code} </Text>
@@ -222,7 +222,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     </Flex>
                 ) : null}
 
-                <Flex mt="30px">
+                <Flex mt="16px">
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
@@ -234,7 +234,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                         />
                     ))}
                 </Flex>
-                <Text fontSize="16px" mt="40px">
+                <Text fontSize="16px" mt="20px">
                     尺码/中包
                 </Text>
                 <Flex mt="10px">
@@ -274,9 +274,9 @@ const ModalSimple = ({
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
     // console.log('currentCapsuleStyle', currentCapsuleStyle);
-    console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList);
-    console.log('currentCapsuleTopStyleIndex', currentCapsuleTopStyleIndex);
-    const [current, setCurrent] = useState(0);
+    // console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList);
+    // console.log('currentCapsuleTopStyleIndex', currentCapsuleTopStyleIndex);
+    // const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
         Modal.setAppElement('body');
@@ -321,65 +321,61 @@ const ModalSimple = ({
                     margin: 'auto',
                     inset: 'auto',
                     maxHeight: '98%',
+                    padding: 0
                 },
             }}
         >
-            <Flex flexDirection="column" alignItems="center" bg="#fff" pb="50px">
+            <Flex flexDirection="column" alignItems="center" bg="#F7F7F7" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
-                <ItemBox
-                    onAddtoCart={handleAddtoCart}
-                    currentCapsuleStyle={capsuleStyleTopAndBottomList.top[currentCapsuleTopStyleIndex]}
-                />
+                
                 <Flex
-                    justifyContent="center"
-                    mt="10px"
-                    mb="20px"
+                    justifyContent='space-between'
+                    alignItems='center'
                     pt="6px"
-                    sx={{
-                        borderTop: '1px #000 solid',
-                    }}
                     width="1060px"
                 >
-                    <Box>
+                 
                         <ArrowBtn
                             onClick={() => {
                                 handleChangeTopIndex(currentCapsuleTopStyleIndex - 1);
                             }}
                         ></ArrowBtn>
+                    <ItemBox
+                    onAddtoCart={handleAddtoCart}
+                    currentCapsuleStyle={capsuleStyleTopAndBottomList.top[currentCapsuleTopStyleIndex]}
+                />
                         <ArrowBtn
                             onClick={() => {
                                 handleChangeTopIndex(currentCapsuleTopStyleIndex + 1);
                             }}
                             right
                         ></ArrowBtn>
-                    </Box>
+                  
                 </Flex>
-                <ItemBox
-                    onAddtoCart={handleAddtoCart}
-                    currentCapsuleStyle={capsuleStyleTopAndBottomList.bottom[currentCapsuleBottomStyleIndex]}
-                />
+               
                 <Flex
-                    justifyContent="center"
-                    mt="10px"
-                    pt="6px"
-                    sx={{
-                        borderTop: '1px #000 solid',
-                    }}
-                    width="1060px"
+                     justifyContent='space-between'
+                     alignItems='center'
+                        pt="6px"
+                        width="1060px"
                 >
-                    <Box>
+                 
                         <ArrowBtn
                             onClick={() => {
                                 handleChangeBottomIndex(currentCapsuleBottomStyleIndex - 1);
                             }}
                         ></ArrowBtn>
+                        <ItemBox
+                            onAddtoCart={handleAddtoCart}
+                            currentCapsuleStyle={capsuleStyleTopAndBottomList.bottom[currentCapsuleBottomStyleIndex]}
+                        />
                         <ArrowBtn
                             onClick={() => {
                                 handleChangeBottomIndex(currentCapsuleBottomStyleIndex + 1);
                             }}
                             right
                         ></ArrowBtn>
-                    </Box>
+                    
                 </Flex>
             </Flex>
         </Modal>

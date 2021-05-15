@@ -215,17 +215,17 @@ const Capsule = ({
     };
 
     return (
-        <Layout pt="74px" bg="#fff">
-            <Box maxWidth="1480px" margin="auto" py="90px" px="40px">
+        <Layout pt="74px" bg="#F7F7F7">
+            {/* <Box maxWidth="1480px" margin="auto" py="90px" px="40px">
                 <Title
                     title="Our capsule"
                     subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
-                />
+                /> */}
                 {/* <ExbImage imgsInfo={currentCapsule} /> */}
                 {/* <Carousel carousels={capsuleList.map(c => c.covermap)} /> */}
-            </Box>
+            {/* </Box> */}
             <section>
-                <Box bg="#fff" py="90px" maxWidth="1480px" mx="auto">
+                <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
                 </Box>
                 <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">

@@ -56,9 +56,9 @@ const Shop = ({
             let haveTop = false;
             let haveBottom = false;
             currentBranch.children.map(x => {
-                if (x.nameen.toUpperCase() === 'TOP') {
+                if (x.nameen.toUpperCase() === 'TOP' || x.namecn.toUpperCase() === '单衣') {
                     haveTop = x;
-                } else if (x.nameen.toUpperCase() === 'BOTTOM') {
+                } else if (x.nameen.toUpperCase() === 'BOTTOM' || x.namecn.toUpperCase() === '单裤') {
                     haveBottom = x;
                 }
             });

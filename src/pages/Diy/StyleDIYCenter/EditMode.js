@@ -84,6 +84,7 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             justifyContent: 'center',
                             flexDirection: 'column',
                             alignItems: 'center',
+                          
                         }}
                     >
                         {favoriteEditObj.styleAndColor.map((d, i) => (
@@ -95,6 +96,7 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                                 {...d.style}
                                 style={{
                                     cursor: 'pointer',
+                                    paddingBottom: i ? '0':'60px'
                                 }}
                                 showGroupStroke={true}
                                 curStylesEditGroupIndex={d.currentStyleRegion - 1}
@@ -118,6 +120,7 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             justifyContent: 'center',
                             flexDirection: 'column',
                             alignItems: 'center',
+
                         }}
                     >
                         {favoriteEditObj.styleAndColor.map((d, i) => (
@@ -132,6 +135,7 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                                 styleSize={d.style.styleBackSize}
                                 style={{
                                     cursor: 'pointer',
+                                    paddingBottom: i ? '0':'60px'
                                 }}
                                 showGroupStroke={true}
                                 curStylesEditGroupIndex={d.currentStyleRegion - 1}
@@ -160,6 +164,4 @@ export default connect(({ diy = {} }) => ({
     selectColorList: diy.selectColorList,
     currentStyleRegion: diy.currentStyleRegion,
     currentStyleRegion1: diy.currentStyleRegion1,
-    singleSelectColorList: diy.singleSelectColorList,
-    singleSelectColorList1: diy.singleSelectColorList1,
 }))(App);

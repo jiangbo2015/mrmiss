@@ -304,7 +304,7 @@ const App = ({
                         height: '45px',
                         alignItems: 'center',
                         padding: '0 10px',
-                        opacity: selectColorList.filter(x => x.type === 0).length > 0 ? 1 : 0,
+                        opacity: selectColorList.filter(x => x?.type === 0).length > 0 ? 1 : 0,
                     }}
                 >
                     {colorList.docs
@@ -327,7 +327,7 @@ const App = ({
                         height: '45px',
                         alignItems: 'center',
                         padding: '0 10px',
-                        opacity: selectColorList.filter(x => x.type !== 0).length > 0 ? 1 : 0,
+                        opacity: selectColorList.filter(x => x?.type !== 0).length > 0 ? 1 : 0,
                     }}
                 >
                     {flowerList.docs

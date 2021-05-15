@@ -29,30 +29,32 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
                 },
             }}
         >
-            <Box p="30px" bg="#F7F7F7" css={{ borderRadius: '10px' }}>
-                <Flex justifyContent="center" mb="40px" height="200px" alignItems="center" flexDirection="column">
+            <Box p="30px" bg="#FFFFFF" css={{ borderRadius: '10px' }}>
+                <Flex justifyContent="center" mb="40px" sx={{
+                    minHeight: '300px'
+                }} alignItems="center" flexDirection="column">
                     {colorWithStyleImgs[current].type ? (
-                        colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
+                        colorWithStyleImgs[current].favorite.styleAndColor.map((d,i) => (
                             <StyleItem
+                                width='150px'
                                 styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                 colors={d.colorIds}
                                 key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
                                 {...d.styleId}
                                 style={{
                                     cursor: 'pointer',
+                                    marginTop: i ? '30px' : 0
                                 }}
                             />
                         ))
                     ) : (
-                        <Image sx={{width: '70%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
+                        <Image sx={{width: '90%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
                     )}
                 </Flex>
 
                 <Box
                     css={{ fontSize: '12px' }}
-                    onClick={e => {
-                        e.stopPropagation();
-                    }}
+                    
                 >
                     <Text>Ref.{item.code}</Text>
                     <Text mt="5px">Size.{item.size}</Text>
@@ -67,6 +69,9 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
                                 value={curChannelPrice}
                                 onChange={value => {
                                     onEditPrice({ style: item._id, price: value });
+                                }}
+                                onClick={e => {
+                                    e.stopPropagation();
                                 }}
                             />
                         ) : (

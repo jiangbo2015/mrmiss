@@ -421,12 +421,18 @@ export default {
                                 let isEixised = false;
                                 // 点击了选中区域的相同颜色 则取消该区域的选中
                                 if (tempValue[tempRegion - 1]._id === item._id) {
-                                    tempValue[tempRegion - 1] = {};
-                                    isEixised = tempValue.find(nv => nv && nv._id === item._id);
+                                    tempValue[tempRegion - 1] = {}
+                                    let vfinded = newValue.find(nv => nv && nv._id === item._id);
+                                    let v1finded = newValue1.find(nv => nv && nv._id === item._id);
+                                    isEixised = vfinded || v1finded
+                                    // isEixised = tempValue.find(nv => nv && nv._id === item._id);
                                 } else {
                                     //否则换一种颜色
                                     tempValue[tempRegion - 1] = item;
-                                    isEixised = tempValue.find(nv => nv && nv._id === tempId);
+                                    let vfinded = newValue.find(nv => nv && nv._id === tempId);
+                                    let v1finded = newValue1.find(nv => nv && nv._id === tempId);
+                                    isEixised = vfinded || v1finded
+                                    // isEixised = tempValue.find(nv => nv && nv._id === tempId);
                                     if (item.type) {
                                         flowerList.docs[index].isSelected = true;
                                     } else {

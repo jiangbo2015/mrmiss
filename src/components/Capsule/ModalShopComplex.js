@@ -10,7 +10,7 @@ import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
 export const CloseBtn = props => (
-    <Flex pt="20px" pb="40px" justifyContent="flex-end" alignSelf="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
+    <Flex py="20px" justifyContent="flex-end" alignSelf="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
     </Flex>
 );
@@ -100,14 +100,15 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
         });
     };
     return (
-        <Flex justifyContent="center">
-            <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
+        <Flex justifyContent='flex-start' width="1000px" p="0 50px">
+            <Flex>
+            <Box mr="10px" height="355px" css={{ overflowY: 'auto' }}>
                 <Flex flexDirection="column">
                     {colorWithStyleImgs.map((item, i) => (
                         <Box
                             mb="8px"
                             p="20px 30px"
-                            bg="#F8F8F8"
+                            bg="#FFFFFF"
                             onClick={() => {
                                 setCurrent(i);
                             }}
@@ -133,9 +134,9 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
             </Box>
             <Box>
                 <Box
-                    width="475px"
-                    height="475px"
-                    bg="#F8F8F8"
+                    width="355px"
+                    height="355px"
+                    bg="#FFFFFF"
                     css={{
                         '.swiper-container': {
                             height: '100%',
@@ -145,21 +146,21 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                     <Swiper>
                         {colorWithStyleImgs[current].imgs.map((item, i) => (
                             <Flex justifyContent="center" alignItems="center" height="100%">
-                                <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
+                                <Image src={filterImageUrl(item)} width="300px"></Image>
                             </Flex>
                         ))}
                     </Swiper>
                 </Box>
             </Box>
-
+            </Flex>
             <Box pl="30px">
                 <Text>2021 swimwear series</Text>
-                <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
+                <Text color="#313131" fontSize="28px" fontWeight="bold" my="4px">
                     ¥{price}
                 </Text>
                 <Text>Ref {code} </Text>
 
-                <Flex mt="30px">
+                <Flex mt="8px">
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
@@ -171,10 +172,10 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                         />
                     ))}
                 </Flex>
-                <Text fontSize="16px" mt="40px">
+                <Text fontSize="16px" mt="4px">
                     Size / Quantity
                 </Text>
-                <Box mt="10px">
+                <Box mt="2px">
                     <Flex>
                         <SizeBox>S / Q</SizeBox>
                         {size?.split('/').map((item, i) => (
@@ -196,13 +197,13 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                         </Flex>
                     ))}
                 </Box>
-                <Flex mt="20px">
+                <Flex mt="2px">
                     <strong>中包:</strong>
                     <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
                     <strong>装箱:</strong>
                     <Text>{currentShopStyle.caseNum}pcs</Text>
                 </Flex>
-                <Box bg="#000" width="100%" py="12px" mt="40px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
+                <Box bg="#000" width="100%" py="10px" mt="6px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
                     <Text color="#fff" textAlign="center">
                         加入购物车
                     </Text>
@@ -267,71 +268,67 @@ const ModalSimple = ({
                     margin: 'auto',
                     inset: 'auto',
                     maxHeight: '98%',
+                    padding: 0
                 },
             }}
         >
-            <Flex flexDirection="column" alignItems="center" bg="#fff" pb="50px">
+            <Flex flexDirection="column" alignItems="center" bg="#f7f7f7" pb="10px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 {shopStyleTopAndBottomList.top.length <= 0 ? null : (
                     <>
-                        <ItemBox
-                            onAddtoCart={handleAddtoCart}
-                            currentShopStyle={shopStyleTopAndBottomList.top[currentShopTopStyleIndex]}
-                        />
+                        
                         <Flex
-                            justifyContent="center"
-                            mt="20px"
-                            mb="40px"
-                            pt="10px"
-                            sx={{
-                                borderTop: '1px #000 solid',
-                            }}
+                            justifyContent='space-between'
+                            alignItems='center'
+                            pt="6px"
                             width="1060px"
                         >
-                            <Box>
+                         
                                 <ArrowBtn
                                     onClick={() => {
                                         handleChangeTopIndex(currentShopTopStyleIndex - 1);
                                     }}
                                 ></ArrowBtn>
+                                <ItemBox
+                                    onAddtoCart={handleAddtoCart}
+                                    currentShopStyle={shopStyleTopAndBottomList.top[currentShopTopStyleIndex]}
+                                />
                                 <ArrowBtn
                                     onClick={() => {
                                         handleChangeTopIndex(currentShopTopStyleIndex + 1);
                                     }}
                                     right
                                 ></ArrowBtn>
-                            </Box>
+                       
                         </Flex>
                     </>
                 )}
                 {shopStyleTopAndBottomList.bottom.length <= 0 ? null : (
                     <>
-                        <ItemBox
-                            onAddtoCart={handleAddtoCart}
-                            currentShopStyle={shopStyleTopAndBottomList.bottom[currentShopBottomStyleIndex]}
-                        />
+                        
                         <Flex
-                            justifyContent="center"
-                            mt="20px"
-                            pt="10px"
-                            sx={{
-                                borderTop: '1px #000 solid',
-                            }}
+                            justifyContent='space-between'
+                            alignItems='center'
+                            pt="6px"
                             width="1060px"
                         >
-                            <Box>
+                        
                                 <ArrowBtn
                                     onClick={() => {
                                         handleChangeBottomIndex(currentShopBottomStyleIndex - 1);
                                     }}
                                 ></ArrowBtn>
+                                <ItemBox
+                                    onAddtoCart={handleAddtoCart}
+                                    currentShopStyle={shopStyleTopAndBottomList.bottom[currentShopBottomStyleIndex]}
+                                />
                                 <ArrowBtn
                                     onClick={() => {
                                         handleChangeBottomIndex(currentShopBottomStyleIndex + 1);
                                     }}
                                     right
                                 ></ArrowBtn>
-                            </Box>
+                            
                         </Flex>
                     </>
                 )}

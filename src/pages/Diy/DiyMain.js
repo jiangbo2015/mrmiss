@@ -20,6 +20,8 @@ const App = ({
     currentAdminChannel,
     currentUser,
     favoriteEditObj,
+    singleSelectColorList,
+    singleSelectColorList1
 }) => {
     const handleAddFavorite = async () => {
         let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
@@ -32,13 +34,13 @@ const App = ({
             if (currentStyle._id) {
                 payload.styleAndColor.push({
                     styleId: currentStyle._id,
-                    colorIds: selectColorList.map(x => x._id),
+                    colorIds: singleSelectColorList.map(x => x._id),
                 });
             }
             if (currentStyle1._id) {
                 payload.styleAndColor.push({
                     styleId: currentStyle1._id,
-                    colorIds: selectColorList.map(x => x._id),
+                    colorIds: singleSelectColorList1.map(x => x._id),
                 });
             }
             await dispatch({
@@ -123,7 +125,7 @@ const App = ({
             </div>
             <div
                 style={{
-                    height: '60px',
+                    height: '48px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -182,4 +184,6 @@ export default connect(({ diy = {}, channel, user }) => ({
     favoriteEditObj: diy.favoriteEditObj,
     currentAdminChannel: channel.currentAdminChannel,
     currentUser: user.info,
+    singleSelectColorList: diy.singleSelectColorList,
+    singleSelectColorList1: diy.singleSelectColorList1,
 }))(App);

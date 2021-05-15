@@ -114,19 +114,21 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                     width: '1120px',
                     margin: 'auto',
                     maxHeight: '98%',
+                    padding: 0,
+                    background: '#f7f7f7'
                 },
             }}
         >
-            <Flex alignItems="center" flexDirection="column" bg="#fff" pb="50px">
+            <Flex alignItems="center" flexDirection="column" bg="#f7f7f7" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
-                    <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
+                    <Box mr="10px" height="355px" css={{ overflowY: 'auto' }}>
                         <Flex flexDirection="column">
                             {colorWithStyleImgs.map((item, i) => (
                                 <Box
                                     mb="8px"
-                                    p="20px 30px"
-                                    bg="#F8F8F8"
+                                    p="10px 15px"
+                                    bg="#FFFFFF"
                                     onClick={() => {
                                         setCurrent(i);
                                     }}
@@ -144,7 +146,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                                             />
                                         ))
                                     ) : (
-                                        <Image width="100px" src={filterImageUrl(item.imgs[0])} mx="auto" />
+                                        <Image width="120px" src={filterImageUrl(item.imgs[0])} mx="auto" />
                                     )}
                                 </Box>
                             ))}
@@ -152,9 +154,9 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                     </Box>
                     <Box>
                         <Box
-                            width="475px"
-                            height="475px"
-                            bg="#F8F8F8"
+                            width="355px"
+                            height="355px"
+                            bg="#FFFFFF"
                             css={{
                                 '.swiper-container': {
                                     height: '100%',
@@ -164,7 +166,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             <Swiper>
                                 {colorWithStyleImgs[current].imgs.map((item, i) => (
                                     <Flex justifyContent="center" alignItems="center" height="100%">
-                                        <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
+                                        <Image src={filterImageUrl(item)} width="340px"></Image>
                                     </Flex>
                                 ))}
                             </Swiper>
@@ -179,12 +181,12 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                     </Box>
                     <Box pl="30px">
                         <Text>2021 swimwear series</Text>
-                        <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
+                        <Text color="#313131" fontSize="28px" fontWeight="bold" my="4px">
                             ¥{price}
                         </Text>
                         <Text>Ref {code} </Text>
 
-                        <Flex mt="30px">
+                        <Flex mt="8px">
                             {colorWithStyleImgs.map((item, i) => (
                                 <StyleSwitcher
                                     key={i}
@@ -196,10 +198,10 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                                 />
                             ))}
                         </Flex>
-                        <Text fontSize="16px" mt="20px">
+                        <Text fontSize="16px" mt="4px">
                             Size / Quantity
                         </Text>
-                        <Box mt="10px">
+                        <Box mt="4px">
                             <Flex>
                                 <SizeBox>S / Q</SizeBox>
                                 {size?.split('/').map((item, i) => (
@@ -209,9 +211,12 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                                 ))}
                             </Flex>
                             {colorWithStyleImgs.map((item, index) => (
-                                <Flex>
+                                <Flex key={`${item._id}-index`}>
                                     <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                        {item.colorObj.code}
+                                        <Dot type={item.colorObj.type}
+                                            bg={item.colorObj.type ? filterImageUrl(item.colorObj.value) : item.colorObj.value}
+                                            code={item.colorObj.code}
+                                            text={item.colorObj.namecn} size='14px' />
                                     </SizeBox>
                                     {size?.split('/').map((s, i) => (
                                         <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
@@ -221,21 +226,21 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                                 </Flex>
                             ))}
                         </Box>
-                        <Flex mt="20px">
+                        <Flex mt="4px">
                             <strong>中包:</strong>
                             <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
                             <strong>装箱:</strong>
                             <Text>{currentShopStyle.caseNum}pcs</Text>
                         </Flex>
-                        <Box bg="#000" width="100%" py="12px" mt="20px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
+                        <Box bg="#000" width="100%" py="10px" mt="4px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
                             <Text color="#fff" textAlign="center">
                                 加入购物车
                             </Text>
                         </Box>
                     </Box>
                 </Flex>
-                <Box width="1060px" bg="#fff" pt="40px">
-                    <Text pb="38px" fontSize="24px">
+                <Box width="1060px" pt="10px">
+                    <Text pb="22px" fontSize="24px">
                         Related Products 类似产品
                     </Text>
                     <Box

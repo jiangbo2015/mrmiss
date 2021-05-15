@@ -123,7 +123,7 @@ const SwitcherComponent = ({
                     ))}
                 </Swiper>
                 {curABC !== 'A' ? (
-                    <Flex sx={{ position: 'absolute', right: 0, borderRadius: '6px', overflow: 'hidden' }} mt="20px">
+                    <Flex sx={{ position: 'absolute', right: 0, borderRadius: '6px', overflow: 'hidden', zIndex: 999 }} mt="20px">
                         <Flex bg="#BBBBBB" width="76px" fontSize="10px" p="6px 14px">
                             通道备注
                         </Flex>

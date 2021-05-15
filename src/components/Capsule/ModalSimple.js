@@ -92,25 +92,26 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     width: '1120px',
                     margin: 'auto',
                     maxHeight: '98%',
+                    padding: 0
                 },
             }}
         >
-            <Flex flexDirection="column" alignItems="center" alignItems="center" bg="#fff" pb="50px">
+            <Flex flexDirection="column" alignItems="center" alignItems="center" bg="#f7f7f7" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
-                    <Box mr="10px" height="475px" css={{ overflowY: 'auto' }}>
+                    <Box mr="10px" height="375px" css={{ overflowY: 'auto' }}>
                         <Flex flexDirection="column">
                             {colorWithStyleImgs.map((item, i) => (
                                 <Box
                                     mb="8px"
                                     p="20px 30px"
-                                    bg="#F8F8F8"
+                                    bg="#FFFFFF"
                                     onClick={() => {
                                         setCurrent(i);
                                     }}
                                 >
                                     {item.type ? (
-                                        item.favorite.styleAndColor.map(d => (
+                                        item.favorite.styleAndColor.map((d, i) => (
                                             <StyleItem
                                                 styleId={`${item.favorite._id}-${d._id}-item`}
                                                 colors={d.colorIds}
@@ -118,6 +119,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                                 {...d.styleId}
                                                 style={{
                                                     cursor: 'pointer',
+                                                    marginTop: i ?  '20px' : 0
                                                 }}
                                             />
                                         ))
@@ -130,14 +132,15 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     </Box>
                     <Box>
                         <Box
-                            width="475px"
-                            height="475px"
-                            bg="#F8F8F8"
+                            width="375px"
+                            minHeight="375px"
+                            bg="#FFFFFF"
                             css={{
                                 '.swiper-container': {
                                     height: '100%',
                                 },
                             }}
+                            p='10px'
                         >
                             {colorWithStyleImgs[current].type ? (
                                 <Swiper
@@ -146,46 +149,51 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                         hide: false,
                                     }}
                                 >
-                                    {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
-                                        <Flex justifyContent="center" alignItems="center" height="100%">
-                                            <StyleItem
-                                                width="180px"
-                                                styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
-                                                colors={d.colorIds}
-                                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
-                                                    1000000}`}
-                                                {...d.styleId}
-                                                style={{
-                                                    cursor: 'pointer',
-                                                }}
-                                            />
-                                        </Flex>
-                                    ))}
-                                    {colorWithStyleImgs[current].favorite.styleAndColor.map(d => (
-                                        <Flex justifyContent="center" alignItems="center" height="100%">
-                                            <StyleItem
-                                                width="180px"
-                                                styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
-                                                colors={d.colorIds}
-                                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
-                                                    1000000}`}
-                                                {...d.styleId}
-                                                svgUrl={d.styleId.svgUrlBack}
-                                                shadowUrl={d.styleId.shadowUrlBack}
-                                                styleSize={d.styleId.styleBackSize}
-                                                style={{
-                                                    cursor: 'pointer',
-                                                }}
-                                            />
-                                        </Flex>
-                                    ))}
+                                    <Flex alignItems="center" flexDirection='column' minHeight='375px' justifyContent='center'>
+                                        {colorWithStyleImgs[current].favorite.styleAndColor.map((d,i) => (
+                                            // <Flex >
+                                                <StyleItem
+                                                    width="220px"
+                                                    styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                                    colors={d.colorIds}
+                                                    key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                        1000000}`}
+                                                    {...d.styleId}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        marginTop: i ?  '40px' : 0
+                                                    }}
+                                                />
+                                            // </Flex>
+                                        ))}
+                                    </Flex>
+                                    <Flex alignItems="center" flexDirection='column' minHeight='375px' justifyContent='center'>
+                                        {colorWithStyleImgs[current].favorite.styleAndColor.map((d,i) => (
+                                            // <Flex justifyContent="center" alignItems="center" height="100%">
+                                                <StyleItem
+                                                    width="220px"
+                                                    styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                                    colors={d.colorIds}
+                                                    key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                        1000000}`}
+                                                    {...d.styleId}
+                                                    svgUrl={d.styleId.svgUrlBack}
+                                                    shadowUrl={d.styleId.shadowUrlBack}
+                                                    styleSize={d.styleId.styleBackSize}
+                                                    style={{
+                                                        cursor: 'pointer',
+                                                        marginTop: i ?  '40px' : 0
+                                                    }}
+                                                />
+                                        ))}
+                                    </Flex>
                                 </Swiper>
                             ) : null}
                             {colorWithStyleImgs[current].type ? null : (
                                 <Swiper>
                                     {colorWithStyleImgs[current].imgs.map((item, i) => (
                                         <Flex justifyContent="center" alignItems="center" height="100%">
-                                            <Image src={filterImageUrl(item)} maxWidth="200px"></Image>
+                                            <Image src={filterImageUrl(item)} width="300px"></Image>
                                         </Flex>
                                     ))}
                                 </Swiper>
@@ -273,7 +281,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                         </Box>
                     </Box>
                 </Flex>
-                <Box width="1060px" bg="#fff" pt="30px">
+                <Box width="1060px" pt="30px">
                     <Text pb="38px" fontSize="24px">
                         Related Products 类似产品
                     </Text>

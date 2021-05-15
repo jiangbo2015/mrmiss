@@ -45,15 +45,14 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                         onSelect(item);
                     }}
                 />
-                <Flex justifyContent="center" height="200px" alignItems="center" flexDirection="column">
-                    <Image sx={{width: '70%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
+                <Flex justifyContent="center"  alignItems="center" flexDirection="column">
+                    <Image sx={{width: '95%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
                 </Flex>
 
                 <Box
+                    mt='30px'
                     css={{ fontSize: '12px' }}
-                    onClick={e => {
-                        e.stopPropagation();
-                    }}
+                    
                 >
                     <Text fontSize="16px">{showNum} PCS</Text>
                     <Text mt="5px">Ref.{item.code}</Text>
@@ -69,6 +68,9 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                                 value={curChannelPrice}
                                 onChange={value => {
                                     onEditPrice({ style: item._id, price: value });
+                                }}
+                                onClick={e => {
+                                    e.stopPropagation();
                                 }}
                             />
                         ) : (
