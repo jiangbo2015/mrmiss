@@ -94,7 +94,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
     }, []);
 
     return (
-        <Flex justifyContent="center">
+        <Flex justifyContent='flex-start' width="1000px" p="0 50px">
             <Box mr="10px" height="355px" css={{ overflowY: 'auto' }}>
                 <Flex flexDirection="column">
                     {colorWithStyleImgs.map((item, i) => (
