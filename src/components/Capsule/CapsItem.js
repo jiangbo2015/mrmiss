@@ -31,12 +31,12 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
         >
             <Box p="30px" bg="#FFFFFF" css={{ borderRadius: '10px' }}>
                 <Flex justifyContent="center" mb="40px" sx={{
-                    minHeight: '300px'
+                    minHeight: '320px'
                 }} alignItems="center" flexDirection="column">
                     {colorWithStyleImgs[current].type ? (
                         colorWithStyleImgs[current].favorite.styleAndColor.map((d,i) => (
                             <StyleItem
-                                width='150px'
+                                width='164px'
                                 styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                 colors={d.colorIds}
                                 key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
@@ -48,7 +48,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect }) =>
                             />
                         ))
                     ) : (
-                        <Image sx={{width: '90%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
+                        <Image sx={{width: '95%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
                     )}
                 </Flex>
 
