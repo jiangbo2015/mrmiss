@@ -93,6 +93,10 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
         Modal.setAppElement('body');
     }, []);
 
+    useEffect(() =>{
+        setCurrent(0)
+    }, [currentCapsuleStyle])
+
     return (
         <Flex justifyContent='flex-start' width="1000px" p="0 50px">
             <Box mr="10px" height="355px" css={{ overflowY: 'auto' }}>
