@@ -213,10 +213,11 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             {colorWithStyleImgs.map((item, index) => (
                                 <Flex key={`${item._id}-index`}>
                                     <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                        <Dot type={item.colorObj.type}
+                                        {/* <Dot type={item.colorObj.type}
                                             bg={item.colorObj.type ? filterImageUrl(item.colorObj.value) : item.colorObj.value}
                                             code={item.colorObj.code}
-                                            text={item.colorObj.namecn} size='14px' />
+                                            text={item.colorObj.namecn} size='14px' /> */}
+                                        {item.code}
                                     </SizeBox>
                                     {size?.split('/').map((s, i) => (
                                         <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
