@@ -96,7 +96,7 @@ const OrderMark = ({
             initCountInfos[ri] = {};
             initParteInfos[ri] = {};
             initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
-            initRowPickTypes[ri] = g.pickType?.val === 1 ? g.pickType : { val: 1, pieceCount: 1 };
+            initRowPickTypes[ri] = g.pickType ? g.pickType : { val: 1, pieceCount: 1 };
             g.list.map(favorite => {
                 const favoriteKey = `${favorite._id}-${ri}`;
                 initCountInfos[ri][favoriteKey] = {};
@@ -130,18 +130,18 @@ const OrderMark = ({
 
             let sum = 0;
             // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
-            if (rowPickTypes[row].val == 1) {
+            // if (rowPickTypes[row].val == 1) {
                 if (rowPickTypes[row].pieceCount) {
                     sum = lodash.sum(Object.values(countInfos[row]).map(ci => lodash.sum(Object.values(ci))));
                     sum = sum * rowPickTypes[row].pieceCount;
                 }
-            } else {
-                for (var key in rowParte) {
-                    if (!countInfos[row][key]) return;
-                    let parte = rowParte[key];
-                    sum += lodash.sum(Object.values(countInfos[row][key])) * parte;
-                }
-            }
+            // } else {
+            //     for (var key in rowParte) {
+            //         if (!countInfos[row][key]) return;
+            //         let parte = rowParte[key];
+            //         sum += lodash.sum(Object.values(countInfos[row][key])) * parte;
+            //     }
+            // }
 
             singleTotalInfos[row] = sum;
             singleTotalPriceInfos[row] = sum * rowUnitPrice;
@@ -288,7 +288,10 @@ const OrderMark = ({
         <Modal
             visible={visible}
             destroyOnClose
-            onCancel={onCancel}
+            onCancel={() => {
+                const orderData = parseOrderData();
+                onCancel(orderData)
+            }}
             getContainer={document.body}
             width={'100%'}
             style={{ padding: 0 }}
@@ -499,38 +502,6 @@ const OrderMark = ({
                                                                                     Object.values(currentCountInfo),
                                                                                 )}
                                                                             />
-                                                                            {rowPickTypes[ind] &&
-                                                                            rowPickTypes[ind].val === 1 ? null : (
-                                                                                <Box>
-                                                                                    <InputNumber
-                                                                                        value={
-                                                                                            currentParteInfo
-                                                                                                ? currentParteInfo
-                                                                                                : 0
-                                                                                        }
-                                                                                        onChange={val => {
-                                                                                            if (!parteInfos[ind]) {
-                                                                                                parteInfos[ind] = {};
-                                                                                            }
-                                                                                            parteInfos[ind][favoriteKey] = val;
-                                                                                            setParteInfos({
-                                                                                                ...parteInfos,
-                                                                                            });
-                                                                                            setShowChange(true);
-                                                                                        }}
-                                                                                    />
-                                                                                    份
-                                                                                </Box>
-                                                                            )}
-
-                                                                            {rowPickTypes[ind] &&
-                                                                            rowPickTypes[ind].val === 1 ? null : (
-                                                                                <>
-                                                                                    总数：
-                                                                                    {lodash.sum(Object.values(currentCountInfo)) *
-                                                                                        currentParteInfo}
-                                                                                </>
-                                                                            )}
                                                                         </Flex>
                                                                     </Box>
                                                                 </Flex>
@@ -554,10 +525,10 @@ const OrderMark = ({
                                                     : 0
                                             }
                                             options={[
-                                                // { label: '单色单码', value: 0 },
+                                                { label: '单色单码', value: 0 },
                                                 { label: '混色混码', value: 1 },
-                                                // { label: '单色混码混箱', value: 2 },
-                                                // { label: '单色混码单箱', value: 3 },
+                                                { label: '单色混码混箱', value: 2 },
+                                                { label: '单色混码单箱', value: 3 },
                                             ]}
                                             onSelect={val => {
                                                 console.log(val);
@@ -568,7 +539,7 @@ const OrderMark = ({
                                                 setShowChange(true);
                                             }}
                                         />
-                                        {rowPickTypes[ind] && rowPickTypes[ind].val === 1 ? (
+                                       
                                             <Flex color="#ffffff" fontSize="12px" alignItems="center">
                                                 <Flex alignItems="center" p="0 10px">
                                                     每份
@@ -601,10 +572,10 @@ const OrderMark = ({
                                                             setShowChange(true);
                                                         }}
                                                     />
-                                                    件
+                                                    份
                                                 </Flex>
                                             </Flex>
-                                        ) : null}
+                                       
                                     </Flex>
 
                                     <Flex color="#ffffff">

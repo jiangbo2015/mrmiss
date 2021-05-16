@@ -313,8 +313,8 @@ export default {
                 data._id = editOrderSaveId;
             }
             const res = yield call(apiFun, payload);
-            if (res && res.data) {
-                message.info('保存成功');
+            if (res && res.data && payload.successMsg) {
+                message.info(payload.successMsg);
             }
             // { styleAndColor: params, goodId: goodId }
         },
@@ -656,7 +656,7 @@ export default {
                     size,
                 };
             }
-            const saveItems = saveOrder?.map((o, k) => {
+            const saveItems = saveOrder?.filter(x => x?.items[0]?.favorite).map((o, k) => {
                 let item = o.items[0];
                 let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-')}`;
                 let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
@@ -697,7 +697,7 @@ export default {
         },
         *delOrderRow({ payload }, { put, select }) {
             const { favoriteToOrderGroupList } = yield select(state => state.diy);
-            favoriteToOrderGroupList.split(payload, 1);
+            favoriteToOrderGroupList.splice(payload, 1);
             yield put({
                 type: 'setFavoriteToOrderGroupList',
                 payload: [...favoriteToOrderGroupList],

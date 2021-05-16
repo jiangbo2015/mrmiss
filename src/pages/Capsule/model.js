@@ -231,7 +231,7 @@ export default {
                 });
             }
 
-            const saveItems = saveOrder.map((o, k) => {
+            const saveItems = saveOrder.filter(x => x?.items[0]?.favorite).map((o, k) => {
                 let item = o.items[0];
                 let now = new Date();
                 let key = `${now.getTime()}-${o.styleNos}`;

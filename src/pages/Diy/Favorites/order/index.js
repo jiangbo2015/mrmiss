@@ -40,6 +40,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
             payload: {
                 orderData: res['false'],
                 goodsId: currentGood._id,
+                successMsg: ''
             },
         });
 
@@ -50,7 +51,8 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
                 goodsId: currentGood._id,
                 isSend: 1,
                 sumCount,
-                sumPrice
+                sumPrice,
+                successMsg: '发送成功'
             },
         });
         onCancel();
@@ -64,9 +66,25 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
             payload: {
                 orderData,
                 goodsId: currentGood._id,
+                successMsg: '保存成功'
             },
         });
         onCancel();
+        // setShowChange(false);
+    };
+
+    const handleClose = async orderData => {
+        // const orderData = parseOrderData();
+        onCancel();
+        await dispatch({
+            type: 'diy/addOrder',
+            payload: {
+                orderData,
+                goodsId: currentGood._id,
+                successMsg: ''
+            },
+        });
+      
         // setShowChange(false);
     };
 
@@ -84,7 +102,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
             <OrderMark
                 visible={visible}
                 commodityToOrderGroupList={favoriteToOrderGroupList}
-                onCancel={onCancel}
+                onCancel={handleClose}
                 onSave={handleSave}
                 onSend={handleSend}
                 onDelRow={handleDelRow}

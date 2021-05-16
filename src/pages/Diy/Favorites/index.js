@@ -29,20 +29,20 @@ const favoriteBox = {
     large: { h: '31.2vw', w: 'calc(33.3% - 13px)', size: '12vw' },
 };
 
-const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
+const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentAdminChannel }) => {
     const selectAll = favoriteArr.length === favoriteArr.filter(x => x.isSelected).length;
     console.log('favoritePattern', favoritePattern);
     const [orderVisible, setOrderVisible] = useState(false);
     const [bigerVisible, setBigerVisible] = useState(false);
     const [capsuleInputVisible, setCapsuleInputVisible] = useState(false);
-    const handleFetchMore = async () => {
-        // if (currentGood._id) {
-        //     dispatch({
-        //         type: 'diy/fetchFavoriteList',
-        //         payload: { goodsId: currentGood._id },
-        //     });
-        // }
-    };
+    // const handleFetchMore = async () => {
+    //     // if (currentGood._id) {
+    //     //     dispatch({
+    //     //         type: 'diy/fetchFavoriteList',
+    //     //         payload: { goodsId: currentGood._id },
+    //     //     });
+    //     // }
+    // };
     useEffect(() => {
         if (currentGood._id) {
             dispatch({
@@ -151,6 +151,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
             style={{
                 padding: '30px 2.1%',
                 background: '#4A4949',
+                display: currentAdminChannel.codename === 'A' ? 'block' : 'none'
             }}
         >
             <Modal
@@ -462,8 +463,9 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
     );
 };
 
-export default connect(({ diy = {} }) => ({
+export default connect(({ diy = {}, channel={} }) => ({
     favoriteArr: diy.favoriteArr,
     favoritePattern: diy.favoritePattern,
     currentGood: diy.currentGood,
+    currentAdminChannel: channel.currentAdminChannel
 }))(App);
