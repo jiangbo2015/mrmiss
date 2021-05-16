@@ -14,8 +14,8 @@ import banner from '@/public/banner.jpeg';
 // import carousel1 from '@/public/carousel1.jpg';
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, Flex, Image } from 'rebass/styled-components';
-import Carousel from '../Home/Carousel';
-import ExbImage from './ExbImage';
+// import Carousel from '../Home/Carousel';
+// import ExbImage from './ExbImage';
 import OrderMarkModal from './OrderMarkModal';
 import { connect } from 'dva';
 import { Button } from 'antd';
@@ -29,6 +29,7 @@ import IconCapsuleCar from '@/public/icons/icon-capsule-car.svg';
 const Capsule = ({
     capsuleList,
     dispatch,
+    selectCapsuleList,
     currentCapsule = {},
     currentCapsuleStyle = {},
     currentSelectedBar = {},
@@ -41,6 +42,8 @@ const Capsule = ({
     const [visible, setVisible] = useState(false);
     const [queryKey, setQueryKey] = useState('');
     const [selectedAll, setSelectedAll] = useState(false);
+    const [selectedList, setSelectedList] = useState([]);
+
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     const [haveTopAndBottom, setHaveTopAndBottom] = useState(false);
     const [visibleComplex, setVisibleComplex] = useState(false);
@@ -214,6 +217,22 @@ const Capsule = ({
         setQueryKey(e.target.value);
     };
 
+    const handleSelect = capsule => {
+        // console.log(capsule);
+        const findIndex = selectedList.findIndex(x => x._id === capsule._id);
+        if (findIndex < 0) {
+            dispatch({
+                type:'capsule/setSelectCapsuleList',
+                payload: [...selectCapsuleList, capsule]
+            })
+            // setSelectCapsuleList
+            // setSelectedList([...selectedList, { style: capsule._id, price: capsule.price }]);
+        } else {
+            selectCapsuleList.splice(findIndex, 1);
+            setSelectedList([...selectCapsuleList]);
+        }
+    };
+
     return (
         <Layout pt="74px" bg="#F7F7F7">
             {/* <Box maxWidth="1480px" margin="auto" py="90px" px="40px">
@@ -287,11 +306,13 @@ const Capsule = ({
                             }}
                         >
                             {capsuleStyleList.docs.map((item, index) => {
-                                const selected = selectAssignedStyleList.find(x => x.style === item._id);
+                                const selected = currentAdminChannel.codename === 'A'
+                                        ? selectCapsuleList.find(x => x._id === item._id) : selectAssignedStyleList.find(x => x.style === item._id);
                                 return (
                                     <CapsItem
                                         item={item}
                                         key={item._id}
+                                        onSelect={handleSelect}
                                         handleOpen={() => handleOpenDetail(item)}
                                         curChannelPrice={selected ? selected.price : item.price}
                                         isSelect={!!selected}
@@ -323,4 +344,5 @@ export default connect(({ capsule = {}, channel = {}, user = {} }) => ({
     currentSelectedBar: capsule.currentSelectedBar,
     currentAdminChannel: channel.currentAdminChannel,
     capsuleStyleTopAndBottomList: capsule.capsuleStyleTopAndBottomList,
+    selectCapsuleList: capsule.selectCapsuleList
 }))(Capsule);

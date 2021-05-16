@@ -14,6 +14,11 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
         dispatch({
             type: 'capsule/toDoOrder',
         });
+
+        dispatch({
+            type: 'capsule/setSelectCapsuleList',
+            payload: []
+        });
     }, []);
     const handleSend = async orderData => {
         // const orderData = parseOrderData();
@@ -33,9 +38,11 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
                     orderData: res['true'],
                     isSend: 1,
                     capsuleId: currentCapsule._id,
+                    successMsg: '发送成功'
                 },
             });
         }
+        onCancel()
 
         // setShowChange(false);
     };
@@ -47,8 +54,24 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
             payload: {
                 orderData,
                 capsuleId: currentCapsule._id,
+                successMsg: '保存成功'
             },
         });
+        onCancel()
+        // setShowChange(false);
+    };
+
+    const handleClose = async orderData => {
+        // const orderData = parseOrderData();
+        onCancel()
+        await dispatch({
+            type: 'capsule/addOrder',
+            payload: {
+                orderData,
+                capsuleId: currentCapsule._id,
+            },
+        });
+      
         // setShowChange(false);
     };
     return (
@@ -56,7 +79,7 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
             <OrderMark
                 visible={visible}
                 commodityToOrderGroupList={capsuleToOrderGroupList}
-                onCancel={onCancel}
+                onCancel={handleClose}
                 onSave={handleSave}
                 onSend={handleSend}
             />
