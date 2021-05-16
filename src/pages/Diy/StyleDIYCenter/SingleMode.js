@@ -219,7 +219,7 @@ const App = ({
         <div
             style={{
                 padding: '28px 20px',
-                background: collocationBg ? '#ffffff' : '#222222',
+                background: '#222222',
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -345,7 +345,7 @@ const App = ({
                         ))}
                 </div>
             </div>
-
+       
             {categoryObj && categoryObj.name === '分体' ? (
                 <MultipleStyleSelector
                     currentStyle={currentStyle}
@@ -360,6 +360,7 @@ const App = ({
                     docs2={docs1}
                     handleSelectStyle2={handleSelectStyle1}
                     handleSetCurrentStyleRegion2={handleSetCurrentStyleRegion1}
+                    collocationBg={collocationBg}
                 />
             ) : (
                 <SingleStyleSelector
@@ -369,6 +370,7 @@ const App = ({
                     docs={docs}
                     handleSelectStyle={handleSelectStyle}
                     handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
+                    collocationBg={collocationBg}
                 />
             )}
         </div>

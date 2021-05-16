@@ -9,10 +9,11 @@ const App = ({
     docs,
     handleSelectStyle,
     handleSetCurrentStyleRegion,
+    collocationBg
 }) => {
     const params = {
         scrollbar: {
-            el: '.swiper-scrollbar',
+            el: '.swiper-scrollbar-style2',
             hide: false,
         },
     };
@@ -27,6 +28,7 @@ const App = ({
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: '28px 0',
+                    backgroundColor: collocationBg ? '#f7f7f7' : '#222222'
                 }}
                 onClick={() => {
                     handleSetCurrentStyleRegion(-1);

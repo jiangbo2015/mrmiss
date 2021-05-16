@@ -97,17 +97,15 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
         // setShowChange(false);
     };
 
-    return (
-        <>
-            <OrderMark
-                visible={visible}
-                commodityToOrderGroupList={favoriteToOrderGroupList}
-                onCancel={handleClose}
-                onSave={handleSave}
-                onSend={handleSend}
-                onDelRow={handleDelRow}
-            />
-        </>
+    return (      
+        <OrderMark
+            visible={visible}
+            commodityToOrderGroupList={favoriteToOrderGroupList}
+            onCancel={handleClose}
+            onSave={handleSave}
+            onSend={handleSend}
+            onDelRow={handleDelRow}
+        />
     );
 };
 
