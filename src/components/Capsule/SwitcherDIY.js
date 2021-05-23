@@ -4,16 +4,13 @@ import React, { forwardRef, useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import { ReactSVG } from 'react-svg';
 import { Box, Flex, Text } from 'rebass/styled-components';
-import { InputGray } from '@/components/Input';
+
 import { connect } from 'dva';
 import ABC from './ABC';
 import styles from './switcher.less';
 
 export const Arrow = ({ right, fill, ...props }) => (
     <Box
-        css={{
-            display: 'inline-block',
-        }}
         {...props}
     >
         <ReactSVG
@@ -22,7 +19,9 @@ export const Arrow = ({ right, fill, ...props }) => (
             style={
                 right && {
                     transform: 'rotateZ(180deg)',
-                }
+
+                } 
+               
             }
         />
     </Box>
@@ -36,9 +35,11 @@ const SwitcherComponent = ({
     assigned = {},
     currentUser,
     refInstance,
+    curABC,
+    setCurABC
 }) => {
     const ref = refInstance;
-    const [curABC, setCurABC] = useState('A');
+    // const [curABC, setCurABC] = useState('A');
     const settings = {
         slidesPerView: 3,
         spaceBetween: 10,
@@ -62,7 +63,7 @@ const SwitcherComponent = ({
             const temp = myAdminChannelList.find(x => x.codename === codename);
             dispatch({
                 type: 'channel/setCurrentChannel',
-                payload: temp ? temp : { codename, assignedId: assigned._id, remark: '' },
+                payload: temp ? temp : { codename: curABC, assignedId: assigned._id, remark: '' },
             });
         }
     }, [myAdminChannelList, curABC]);
@@ -93,64 +94,33 @@ const SwitcherComponent = ({
         }
     };
 
-    const handleUpdateRemarks = val => {
-        dispatch({
-            type: 'channel/update',
-            payload: { remark: val, codename: curABC, assignedId: assigned._id },
-        });
-    };
-
     if (!currentUser.channelEmpowerUserd) return <Flex width="256px" />;
     return (
-        <Flex className="switcher">
-            <Arrow onClick={goPrev} />
-
-            <div
-                style={{ margin: '0 20px', position: 'relative' }}
-                onClick={() => {
-                    setEditChannelMark(true);
-                }}
-            >
-                <Swiper
-                    {...settings}
-                    ref={ref}
-                    onChange={(...args) => {
-                        console.log('Swiper onChange', args);
+        <Flex alignItems="center">
+            <Arrow onClick={goPrev}/>
+            <Flex className="switcher" style={{ margin: '20px'}}>
+                <div
+                    
+                    onClick={() => {
+                        setEditChannelMark(true);
                     }}
                 >
-                    {ABC.map((item, i) => (
-                        <Text key={i}>{item}</Text>
-                    ))}
-                </Swiper>
-                {curABC !== 'A' ? (
-                    <Flex sx={{ position: 'absolute', right: 0, borderRadius: '6px', overflow: 'hidden', zIndex: 999 }} mt="20px">
-                        <Flex bg="#BBBBBB" width="76px" fontSize="10px" p="6px 14px">
-                            通道备注
-                        </Flex>
-                        <InputGray
-                            style={{ width: '200px', color: '#767676' }}
-                            placeholder="10字以内"
-                            // defaultVaule={}
-                            value={currentAdminChannel.remark}
-                            onChange={e => {
-                                dispatch({
-                                    type: 'channel/setCurrentChannel',
-                                    payload: { ...currentAdminChannel, remark: e.target.value },
-                                });
-                            }}
-                            onBlur={e => {
-                                if (handleUpdateRemarks) {
-                                    handleUpdateRemarks(e.target.value);
-                                }
-                            }}
-                            maxLength={10}
-                        />
-                    </Flex>
-                ) : null}
-            </div>
+                    <Swiper
+                        {...settings}
+                        ref={ref}
+                        onChange={(...args) => {
+                            // console.log('Swiper onChange', args);
+                        }}
+                    >
+                        {ABC.map((item, i) => (
+                            <Text key={i}>{item}</Text>
+                        ))}
+                    </Swiper>
+                </div>
+            </Flex>
             <Arrow right onClick={goNext} />
         </Flex>
-    );
+);
 };
 const Switcher = connect(({ channel, user }) => ({
     myAdminChannelList: channel.myAdminChannelList,

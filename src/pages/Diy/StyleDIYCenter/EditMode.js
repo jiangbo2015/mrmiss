@@ -70,7 +70,21 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                     }}
                 />
             </div>
-            <div style={{ width: '560px', display: 'flex', alignItems: 'center', flex: 1 }}>
+            <div 
+                onClick={() => {
+                    favoriteEditObj.styleAndColor[0].currentStyleRegion = 0;
+                    if(favoriteEditObj.styleAndColor.length > 1) {
+                        favoriteEditObj.styleAndColor[1].currentStyleRegion = 0;
+                    }
+                    dispatch({
+                        type: 'diy/setFavoriteEditObj',
+                        payload: {
+                            ...favoriteEditObj,
+                        },
+                    });
+                }}
+                style={{ width: '560px', display: 'flex', alignItems: 'center', flex: 1 }}
+            >
                 <Swiper
                     {...params}
                     style={{

@@ -17,7 +17,7 @@ function useUserInfo() {
                     setInfo(data);
                 }
             } catch (e) {
-                console.log(e, 'catch');
+                // console.log(e, 'catch');
                 setInfo(null);
             }
         };
@@ -28,7 +28,7 @@ function useUserInfo() {
 
 const Wrapper = props => {
     const [info] = useUserInfo();
-    console.log(info, 'info');
+    // console.log(info, 'info');
     /**
      * 1，默认状态为loading，接口拿到数据后判断
      */

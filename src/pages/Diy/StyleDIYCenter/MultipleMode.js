@@ -35,6 +35,7 @@ const App = ({
     assign,
     curChannslPrice,
 }) => {
+    console.log('assign', assign)
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     let docs = [];
     if (styleList[currentGoodCategory]) {

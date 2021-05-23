@@ -163,23 +163,40 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                 footer={false}
             >
                 {bigerVisible ? (
-                    <Flex m="60px" justifyContent="space-around">
-                        <Box>
+                    <Box
+                    sx={{
+                        display: "grid",
+                        gridAutoFlow: "column",
+                        gridTemplateColumns: "50% 50%",
+                        gridTemplateRows:
+                            Array.isArray(bigerVisible.styleAndColor) && bigerVisible.styleAndColor.length > 1
+                                ? "50% 50%"
+                                : "",
+                    }}
+                    width="700px"
+                    color="#000"
+                >
+                        
                             {bigerVisible.styleAndColor.map(d => (
-                                <StyleItem
-                                    width={`${(300 * d.style.styleSize) / 27}px`}
-                                    styleId={`${bigerVisible._id}-${d._id}-item`}
-                                    colors={d.colorIds}
-                                    key={`${bigerVisible._id}-${d._id}-${Math.random() * 1000000}`}
-                                    {...d.style}
-                                    style={{
-                                        cursor: 'pointer',
-                                    }}
-                                />
+                                <Flex alignItems={d.style.vposition}
+								justifyContent="center" width='350px' py='40px'>
+                                    <StyleItem
+                                        width={`${(300 * d.style.styleSize) / 27}px`}
+                                        styleId={`${bigerVisible._id}-${d._id}-item`}
+                                        colors={d.colorIds}
+                                        key={`${bigerVisible._id}-${d._id}-${Math.random() * 1000000}`}
+                                        {...d.style}
+                                        style={{
+                                            cursor: 'pointer',
+                                        }}
+                                    />
+                                </Flex>
                             ))}
-                        </Box>
-                        <Box>
+                     
+                    
                             {bigerVisible.styleAndColor.map((d, i) => (
+                                 <Flex alignItems={d.style.vposition}
+                                 justifyContent="center" width='350px' py='40px'>
                                 <StyleItem
                                     width={`${(300 * d.style.styleBackSize) / 27}px`}
                                     styleId={`${bigerVisible._id}-${d._id}-${i}-big`}
@@ -193,9 +210,10 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                                         cursor: 'pointer',
                                     }}
                                 />
+                                </Flex>
                             ))}
-                        </Box>
-                    </Flex>
+                  
+                    </Box>
                 ) : null}
             </Modal>
             <OrderModal
@@ -242,7 +260,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                     }}
                 >
                     <Select
-                        style={{ marginRight: '20px', width: '110px' }}
+                        style={{ marginRight: '20px'}}
+                        width='110px'
                         onChange={val => {
                             handleToggleTime(val);
                         }}

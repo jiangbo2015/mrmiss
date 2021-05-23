@@ -52,7 +52,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
                 isSend: 1,
                 sumCount,
                 sumPrice,
-                successMsg: '发送成功'
+                successMsg: '订单发送成功，您可以在我的定制订单中查看'
             },
         });
         onCancel();

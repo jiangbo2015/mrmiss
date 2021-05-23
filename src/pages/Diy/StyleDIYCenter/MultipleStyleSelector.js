@@ -17,13 +17,18 @@ const App = ({
     handleSetCurrentStyleRegion2,
     collocationBg
 }) => {
+    const paramsST = {
+        scrollbar: {
+            el: '.swiper-scrollbar-style2-st',
+            hide: false,
+        },
+    };
     const params = {
         scrollbar: {
             el: '.swiper-scrollbar-style2',
             hide: false,
         },
     };
-
     return docs.length === 0 ? null : (
         <>
             <div
@@ -34,6 +39,7 @@ const App = ({
                     alignItems: 'center',
                     justifyContent: 'center',
                     flexDirection: 'column',
+                    position: 'relative',
                     backgroundColor: collocationBg ? '#f7f7f7' : '#222222'
                 }}
                 onClick={() => {
@@ -42,8 +48,11 @@ const App = ({
                 }}
             >
                 <div style={{ width: '20vw', marginBottom: '3vw' }}>
+                    <div style={{color: '#fff', position: 'absolute' , right: 0}}>
+                        {currentStyle.styleNo}
+                    </div>
                     <Swiper
-                        {...params}
+                        {...paramsST}
                         style={{
                             margin: '0 auto',
                         }}
@@ -53,6 +62,7 @@ const App = ({
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                paddingTop: '20px'
                             }}
                             onClick={e => {
                                 e.stopPropagation();
@@ -75,6 +85,7 @@ const App = ({
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
+                                paddingTop: '20px'
                             }}
                         >
                             <StyleItem
@@ -92,6 +103,9 @@ const App = ({
                     </Swiper>
                 </div>
                 <div style={{ width: '20vw' }}>
+                <div style={{color: '#fff', position: 'absolute' , right: 0}}>
+                        {currentStyle2.styleNo}
+                    </div>
                     <Swiper
                         {...params}
                         style={{
@@ -103,6 +117,7 @@ const App = ({
                                 alignItems: 'center',
                                 display: 'flex',
                                 justifyContent: 'center',
+                                paddingBottom: '10px'
                             }}
                             onClick={e => {
                                 e.stopPropagation();
@@ -125,6 +140,7 @@ const App = ({
                                 alignItems: 'center',
                                 display: 'flex',
                                 justifyContent: 'center',
+                                paddingBottom: '10px'
                             }}
                         >
                             <StyleItem

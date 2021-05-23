@@ -48,12 +48,12 @@ export default ({ order, onGetDownloadUrlAndOpen }) => {
         setStyleSvgIdMapCount(tempStyleSvgIdMapCount);
     }, [orderData]);
     const handlePngLoaded = ({ colorUrl }) => {
-        console.log(window.pngNum++);
+        // console.log(window.pngNum++);
         setStyleSvgIdMap([...styleSvgIdMap, colorUrl]);
     };
 
     const uploadStyleImage = async (svgString, imgUrl) => {
-        console.log('uploadStyleImage');
+        // console.log('uploadStyleImage');
         const { file } = await svg2pngFile(svgString, imgUrl);
         // /api/common/uploadkit
 
@@ -80,15 +80,15 @@ export default ({ order, onGetDownloadUrlAndOpen }) => {
 
     const handleDownload = async () => {
         let orderItemImages = [];
-        console.log('handleDownload', orderData);
+        // console.log('handleDownload', orderData);
         for (let i = 0; i < orderData.length; i++) {
             // stylesImageInfoList
-            console.log(`----${i}----`);
+            // console.log(`----${i}----`);
             let rowImages = [];
             const { items } = orderData[i];
 
             for (let j = 0; j < items.length; j++) {
-                console.log(`----${i}----`, j);
+                // console.log(`----${i}----`, j);
 
                 const item = items[j];
                 let styleImgs = [];
@@ -97,7 +97,7 @@ export default ({ order, onGetDownloadUrlAndOpen }) => {
                 } else {
                     //diy款式生成,需合成图片
                     for (let k = 0; k < item.favorite.styleAndColor.length; k++) {
-                        console.log(`----${i}----${j}`, k);
+                        // console.log(`----${i}----${j}`, k);
                         const x = item.favorite.styleAndColor[k];
                         let fsId = `${item.favorite._id}-${x.styleId._id}`;
                         let shadowUrl = x.styleId.shadowUrl;

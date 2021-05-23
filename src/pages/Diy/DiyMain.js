@@ -87,6 +87,7 @@ const App = ({
                     type: 'diy/updateFavorite',
                     payload,
                 });
+                message.info('修改成功');
             }
 
             // updateFavorite

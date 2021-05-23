@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef,useState } from 'react';
 
 import { Flex, Box, Image } from 'rebass/styled-components';
 import { ReactSVG } from 'react-svg';
 import CirCleArrow from '@/public/icons/circle_arrow.svg';
 import IconPng from '@/public/icon.png';
 // import styles from './index.less';
+import { InputGray } from '@/components/Input';
 
-import Switcher from '@/components/Capsule/Switcher';
+import Switcher from '@/components/Capsule/SwitcherDIY';
 
 import { connect } from 'dva';
 
@@ -27,6 +28,7 @@ const ClassifyItem = ({ children, isSelected, ...props }) => (
 
 const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminChannel }) => {
     const ref = useRef(null);
+    const [curABC, setCurABC] = useState('A');
     useEffect(() => {
         dispatch({
             type: 'diy/fetchGoodsList',
@@ -34,9 +36,10 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     }, []);
 
     useEffect(() => {
+        console.log('codename', codename)
         const { codename, styles = [], flowerColors = [], plainColors = [] } = currentAdminChannel;
-        if (codename !== 'A') {
-            console.log(currentAdminChannel);
+        if (curABC !== 'A') {
+            console.log('----payload: assign----');
             dispatch({
                 type: 'diy/setCollocationPattern',
                 payload: 'assign',
@@ -63,7 +66,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 payload: [],
             });
         }
-    }, [currentAdminChannel]);
+    }, [currentAdminChannel,curABC]);
 
     useEffect(() => {
         if (goodsList.length > 0) {
@@ -89,24 +92,29 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
         });
     };
 
-    // console.log(swiperRef);
+    const handleUpdateRemarks = val => {
+        dispatch({
+            type: 'channel/update',
+            payload: { remark: val, codename: curABC, assignedId: assigned._id },
+        });
+    };
+
     return (
         <Flex
             justifyContent="space-between"
+            alignItems='center'
             px="2.1%"
             sx={{
                 marginTop: '74px',
                 background: '#323232',
                 // display: 'flex',
                 width: '100%',
-                height: '78px',
+                height: '58px',
+                position: 'relative'
             }}
         >
-            <Flex alignItems="center" width="256px" height="2px">
-              
-            </Flex>
-            <Flex pt="14px" flexDirection="column" alignItems="center">
-                <Flex width="50px" justifyContent="space-between">
+            <Flex alignItems="center">
+
                     <ReactSVG
                         src={CirCleArrow}
                         style={{
@@ -117,19 +125,9 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                             handleChangeStep(-1);
                         }}
                     />
-                    <ReactSVG
-                        src={CirCleArrow}
-                        style={{
-                            width: '18px',
-                            height: '18px',
-                            transform: 'rotateZ(180deg)',
-                        }}
-                        onClick={() => {
-                            handleChangeStep(1);
-                        }}
-                    />
-                </Flex>
-                <Flex alignItems="center" pt="8px">
+
+
+                <Flex alignItems="center">
                     {goodsList.map(g => (
                         <ClassifyItem
                             isSelected={g._id === currentGood._id}
@@ -141,9 +139,53 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                         </ClassifyItem>
                     ))}
                 </Flex>
+                <ReactSVG
+                        src={CirCleArrow}
+                        style={{
+                            width: '18px',
+                            height: '18px',
+                            transform: 'rotateZ(180deg)',
+                        }}
+                        onClick={() => {
+                            handleChangeStep(1);
+                        }}
+                    />
             </Flex>
-            <Box pt="24px">
-                <Switcher ref={ref} assigned={currentGood} />
+            <Box style={{
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            // color: headerBgColor !== '#fff' ? '#fff' :'#000',
+                            transform: 'translate(-50%, -50%)',
+                        }}>
+                <Switcher ref={ref} assigned={currentGood} setCurABC={setCurABC} curABC={curABC}/>
+            </Box>
+            <Box>
+                {curABC !== 'A' ? (
+                    <Flex >
+                        <Flex bg="#BBBBBB" width="76px" fontSize="10px" p="6px 14px">
+                            通道备注
+                        </Flex>
+                        <InputGray
+                            style={{ width: '200px', color: '#767676' }}
+                            placeholder="10字以内"
+                            // defaultVaule={}
+                            value={currentAdminChannel.remark}
+                            onChange={e => {
+                                dispatch({
+                                    type: 'channel/setCurrentChannel',
+                                    payload: { ...currentAdminChannel, remark: e.target.value },
+                                });
+                            }}
+                            onBlur={e => {
+                                if (handleUpdateRemarks) {
+                                    handleUpdateRemarks(e.target.value);
+                                }
+                            }}
+                            maxLength={10}
+                        />
+                    </Flex>
+                ) : null}
             </Box>
         </Flex>
     );

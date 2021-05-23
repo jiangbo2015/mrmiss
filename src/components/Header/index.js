@@ -17,7 +17,7 @@ import 'normalize.css';
 import { useEffect, useState } from 'react';
 import { ReactSVG } from 'react-svg';
 import { Flex } from 'rebass/styled-components';
-import { history, setLocale, useIntl } from 'umi';
+import { history, setLocale, useIntl, Link } from 'umi';
 import './index.less';
 
 const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd, innerDataUserd }) => (
@@ -70,22 +70,19 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
             <Menu.Item
                 className="menuItemH"
                 icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'24px' }}  src={IconManage} />}
-                onClick={() => {
-                    history.push('/business');
-                }}
+                // onClick={() => {
+                //     history.push('/business');
+                // }}
             >
-                <a>业务管理</a>
+                <Link to="/business" target='_blank'>业务管理</Link>
             </Menu.Item>
         ) : null}
         {innerDataUserd ? (
             <Menu.Item
                 className="menuItemH"
                 icon={<ReactSVG style={{ width: '24px',height:'28px' }} src={ChartIcon} />}
-                onClick={() => {
-                    history.push('/chart');
-                }}
             >
-                <a>数据分析</a>
+                <Link to="/chart" target='_blank'>数据分析</Link>
             </Menu.Item>
         ) : null}
 
@@ -244,30 +241,38 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                     <span onClick={() => setLocale('zh-CN', false)}>CN</span>/
                     <span onClick={() => setLocale('en-US', false)}>EN</span>
                 </div>
-                <div
-                    className="menuItem"
-                    onClick={() => {
-                        history.push('/#aboutas');
-                    }}
-                >
-                    {intl.formatMessage({
-                        id: 'about_us',
-                        defaultMessage: '关于我们',
-                    })}
-                </div>
-                <div
-                    className="menuItem"
-                    onClick={() => {
-                        history.push('/contactus');
-                    }}
-                >
-                    {intl.formatMessage({
-                        id: 'concat_us',
-                        defaultMessage: '联系我们',
-                    })}
-                </div>
+                <Link to='/#aboutas' target='_blank'>
+                    <div
+                        style={{
+                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                        }}
+                        className="menuItem"
+                        onClick={() => {
+                            history.push('/#aboutas');
+                        }}
+                    >
+                        {intl.formatMessage({
+                            id: 'about_us',
+                            defaultMessage: '关于我们',
+                        })}
+                    </div>
+                </Link>
+                <Link to='/contactus' target='_blank'>
+                    <div className="menuItem" 
+                            style={{
+                                color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                            }}>
+                            {intl.formatMessage({
+                                id: 'concat_us',
+                                defaultMessage: '联系我们',
+                            })}
+                            
+                    </div>
+                </Link>
             </div>
+            
             <div>
+                <Link to='/' target='_blank'>
                     <ReactSVG
                         src={WLogoIcon}
                         style={{
@@ -278,46 +283,44 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                             color: headerBgColor !== '#fff' ? '#fff' :'#000',
                             transform: 'translate(-50%, -50%)',
                         }}
-                        onClick={() => {
-                            history.push('/');
-                        }}
+                        // onClick={() => {
+                        //     history.push('/');
+                        // }}
                     />
+                </Link>
             </div>
             <div style={{ display: 'flex' }}>
                 {currentUser._id ? (
                     <>
                         {currentUser.goods.length ? (
-                            <div
-                                className="menuItem"
-                                onClick={() => {
-                                    history.push('/diy');
-                                }}
-                            >
-                                {intl.formatMessage({ id: 'diy', defaultMessage: '定制' })}
-                            </div>
+                            <Link to='/diy' target='_blank'>
+                                <div className="menuItem" style={{
+                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                        }}>
+                                    {intl.formatMessage({ id: 'diy', defaultMessage: '定制' })}
+                                </div>
+                            </Link>
                         ) : null}
                         {currentUser.capsules.length ? (
-                            <div
-                                className="menuItem"
-                                onClick={() => {
-                                    history.push('/capsule');
-                                }}
-                            >
-                                {intl.formatMessage({
-                                    id: 'capsule',
-                                    defaultMessage: '胶囊系列',
-                                })}
-                            </div>
+                            <Link to='/capsule' target='_blank'>
+                                <div className="menuItem" style={{
+                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                        }}>
+                                    {intl.formatMessage({
+                                        id: 'capsule',
+                                        defaultMessage: '胶囊系列',
+                                    })}
+                                </div>
+                            </Link>
                         ) : null}
                         {currentUser.branchs.length ? (
-                            <div
-                                className="menuItem"
-                                onClick={() => {
-                                    history.push('/shop');
-                                }}
-                            >
-                                {intl.formatMessage({ id: 'shop', defaultMessage: '网店' })}
-                            </div>
+                            <Link to='/shop' target='_blank'>
+                                <div className="menuItem" style={{
+                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                        }}>
+                                    {intl.formatMessage({ id: 'shop', defaultMessage: '网店' })}
+                                </div>
+                            </Link>
                         ) : null}
                     </>
                 ) : null}

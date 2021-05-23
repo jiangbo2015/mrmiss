@@ -11,12 +11,15 @@ export default {
             shopStyles: [],
             plainColors: [],
             flowerColors: [],
+            codename: 'A'
         },
         myAdminChannelList: [], //我管理的通道列表
         myChannelList: [], //我被分配的通道列表
     },
     reducers: {
         setCurrentChannel(state, action) {
+            console.log('======setCurrentChannel=======')
+            console.log(action.payload)
             return {
                 ...state,
                 currentAdminChannel: action.payload,
