@@ -3,6 +3,7 @@ import Layout from '@/components/Layout';
 import Title from '@/components/Title';
 import Footer from '@/components/Footer';
 import map from '@/public/map.png';
+// import mp4 from '@/public/imgs/08.mp4';
 import { connect } from 'dva';
 import { useEffect } from 'react';
 import { Box } from 'rebass/styled-components';

@@ -5,10 +5,15 @@ import './index.less';
 const Banner = ({ isLogin, imgsInfo = {} }) => {
     return (
         <div className="wrapper">
-            <img className="banner" src={filterImageUrl(imgsInfo.img3)} />
-            <img className="banner" src={filterImageUrl(imgsInfo.img2)} />
-            <img className="banner" src={filterImageUrl(imgsInfo.img1)} />
-            <img className="banner-vir" src={filterImageUrl(imgsInfo.img1)} />
+            <video
+                src="https://ik.imagekit.io/mrmiss/1621796269869_EtsurM5nz.mp4"
+                muted="muted"
+                autoplay="autoplay"
+                loop
+                style={{ width: '100%' }}
+            >
+                your browser does not support the video tag
+            </video>
             {isLogin ? null : <Login />}
         </div>
     );
