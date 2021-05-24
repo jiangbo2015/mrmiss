@@ -6,7 +6,9 @@ import { useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { connect } from 'dva';
-const Layout = ({ pt, headerBgColor, dispatch, bg = '#ffffff', ...props }) => {
+import LoginBox from '@/pages/User/Login';
+
+const Layout = ({ pt, headerBgColor, dispatch, isLogin, setOpenLogin, bg = '#ffffff', ...props }) => {
     useEffect(() => {
         dispatch({
             type: 'user/getCurrentUser',
@@ -20,10 +22,11 @@ const Layout = ({ pt, headerBgColor, dispatch, bg = '#ffffff', ...props }) => {
                 {intl.formatMessage({ id: 'hello', defaultMessage: '你好' })} */}
                 {/* <Button onClick={() => setLocale('zh-CN', false)}>中文</Button>
                 <Button onClick={() => setLocale('en-US', false)}>英文</Button> */}
-                <Header headerBgColor={headerBgColor}></Header>
+                <Header headerBgColor={headerBgColor} setOpenLogin={setOpenLogin}></Header>
                 {props.children}
             </Box>
             <Footer />
+            {isLogin ? <LoginBox setOpenLogin={setOpenLogin} /> : null}
         </ThemeProvider>
     );
 };

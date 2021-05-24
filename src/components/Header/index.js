@@ -27,7 +27,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(1);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'24px' }} src={IconUser} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '24px' }} src={IconUser} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的用户信息
@@ -38,7 +38,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(2);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'22.5px' }} src={IconDIYOrder} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '22.5px' }} src={IconDIYOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的定制订单
@@ -49,7 +49,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(3);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'26px' }} src={IconCapOrder} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '26px' }} src={IconCapOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的胶囊订单
@@ -60,7 +60,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 onOpenMyCenter(4);
             }}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'24px' }} src={IconShopOrder} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '24px' }} src={IconShopOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 我的网店订单
@@ -69,28 +69,28 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
         {businessUserd ? (
             <Menu.Item
                 className="menuItemH"
-                icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'24px' }}  src={IconManage} />}
+                icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '24px' }} src={IconManage} />}
                 // onClick={() => {
                 //     history.push('/business');
                 // }}
             >
-                <Link to="/business" target='_blank'>业务管理</Link>
+                <Link to="/business" target="_blank">
+                    业务管理
+                </Link>
             </Menu.Item>
         ) : null}
         {innerDataUserd ? (
-            <Menu.Item
-                className="menuItemH"
-                icon={<ReactSVG style={{ width: '24px',height:'28px' }} src={ChartIcon} />}
-            >
-                <Link to="/chart" target='_blank'>数据分析</Link>
+            <Menu.Item className="menuItemH" icon={<ReactSVG style={{ width: '24px', height: '28px' }} src={ChartIcon} />}>
+                <Link to="/chart" target="_blank">
+                    数据分析
+                </Link>
             </Menu.Item>
         ) : null}
-
 
         <Menu.Item
             onClick={handleLogout}
             className="menuItemH"
-            icon={<ReactSVG style={{ display: 'inline-block', width: '24px',height:'27px' }} src={IconBack} />}
+            icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '27px' }} src={IconBack} />}
         >
             <a target="_blank" rel="noopener noreferrer">
                 退出登录
@@ -109,7 +109,7 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
     </Menu>
 );
 
-const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
+const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch }) => {
     const intl = useIntl();
     const [headBg, setHeadBg] = useState(false);
     const [myCenter, setMyCenter] = useState(false);
@@ -241,7 +241,7 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                     <span onClick={() => setLocale('zh-CN', false)}>CN</span>/
                     <span onClick={() => setLocale('en-US', false)}>EN</span>
                 </div>
-                <Link to='/#aboutas' target='_blank'>
+                <Link to="/#aboutas" target="_blank">
                     <div
                         style={{
                             color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
@@ -257,22 +257,23 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                         })}
                     </div>
                 </Link>
-                <Link to='/contactus' target='_blank'>
-                    <div className="menuItem" 
-                            style={{
-                                color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
-                            }}>
-                            {intl.formatMessage({
-                                id: 'concat_us',
-                                defaultMessage: '联系我们',
-                            })}
-                            
+                <Link to="/contactus" target="_blank">
+                    <div
+                        className="menuItem"
+                        style={{
+                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                        }}
+                    >
+                        {intl.formatMessage({
+                            id: 'concat_us',
+                            defaultMessage: '联系我们',
+                        })}
                     </div>
                 </Link>
             </div>
-            
+
             <div>
-                <Link to='/' target='_blank'>
+                <Link to="/" target="_blank">
                     <ReactSVG
                         src={WLogoIcon}
                         style={{
@@ -280,7 +281,7 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                             position: 'absolute',
                             left: '50%',
                             top: '50%',
-                            color: headerBgColor !== '#fff' ? '#fff' :'#000',
+                            color: headerBgColor !== '#fff' ? '#fff' : '#000',
                             transform: 'translate(-50%, -50%)',
                         }}
                         // onClick={() => {
@@ -293,19 +294,25 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                 {currentUser._id ? (
                     <>
                         {currentUser.goods.length ? (
-                            <Link to='/diy' target='_blank'>
-                                <div className="menuItem" style={{
-                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
-                        }}>
+                            <Link to="/diy" target="_blank">
+                                <div
+                                    className="menuItem"
+                                    style={{
+                                        color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                                    }}
+                                >
                                     {intl.formatMessage({ id: 'diy', defaultMessage: '定制' })}
                                 </div>
                             </Link>
                         ) : null}
                         {currentUser.capsules.length ? (
-                            <Link to='/capsule' target='_blank'>
-                                <div className="menuItem" style={{
-                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
-                        }}>
+                            <Link to="/capsule" target="_blank">
+                                <div
+                                    className="menuItem"
+                                    style={{
+                                        color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                                    }}
+                                >
                                     {intl.formatMessage({
                                         id: 'capsule',
                                         defaultMessage: '胶囊系列',
@@ -314,10 +321,13 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                             </Link>
                         ) : null}
                         {currentUser.branchs.length ? (
-                            <Link to='/shop' target='_blank'>
-                                <div className="menuItem" style={{
-                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
-                        }}>
+                            <Link to="/shop" target="_blank">
+                                <div
+                                    className="menuItem"
+                                    style={{
+                                        color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                                    }}
+                                >
                                     {intl.formatMessage({ id: 'shop', defaultMessage: '网店' })}
                                 </div>
                             </Link>
@@ -325,7 +335,18 @@ const Header = ({ currentUser, headerBgColor = '#fff', dispatch }) => {
                     </>
                 ) : null}
                 {!currentUser._id ? (
-                    <div className="menuItem" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div
+                        className="menuItem"
+                        style={{ display: 'flex', alignItems: 'center' }}
+                        onClick={() => {
+                            if (setOpenLogin) {
+                                setOpenLogin(true);
+                            } else {
+                                history.push('/');
+                            }
+                            //  ?  : ;
+                        }}
+                    >
                         <ReactSVG src={IconUserSign} style={{ width: '20px', height: '20px', marginRight: '4px' }} />
                         <span>
                             {intl.formatMessage({

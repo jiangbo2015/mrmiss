@@ -1,22 +1,25 @@
 import { connect } from 'dva';
 import { useState } from 'react';
-import { Button } from 'rebass/styled-components';
+import { ReactSVG } from 'react-svg';
+import { Button, Flex } from 'rebass/styled-components';
 import { useIntl } from 'umi';
 import './index.less';
+import IconClose from '@/public/icons/icon-close.svg';
 
-const Login = ({ dispatch }) => {
+const Login = ({ dispatch, setOpenLogin }) => {
     const [account, setAccount] = useState('');
     const [pwd, setPwd] = useState('');
     const intl = useIntl();
     const handleLogin = async () => {
         console.log('click');
-        dispatch({
+        await dispatch({
             type: 'user/login',
             payload: {
                 account,
                 password: pwd,
             },
         });
+        setOpenLogin(false);
     };
 
     return (
@@ -26,6 +29,16 @@ const Login = ({ dispatch }) => {
             // sx={{ position: 'absolute', zIndex: 999 }}
             className="loginWrapper"
         >
+            <Flex width={[1]} justifyContent="flex-end">
+                <ReactSVG
+                    onClick={() => {
+                        setOpenLogin(false);
+                    }}
+                    src={IconClose}
+                    style={{ width: '20px', height: '20px', marginRight: '-20px' }}
+                />
+            </Flex>
+
             <div className="loginTitle">
                 {intl.formatMessage({
                     id: 'sign_in',

@@ -5,14 +5,15 @@ import Footer from '@/components/Footer';
 import map from '@/public/map.png';
 // import mp4 from '@/public/imgs/08.mp4';
 import { connect } from 'dva';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from 'rebass/styled-components';
 import Carousel from './Carousel';
 import FeatureImage from './FeatureImage';
 
 const App = ({ dispatch, currentUser, location, systemDetail }) => {
     // const { currentUser } = props;
-    console.log('location', location);
+    // console.log('location', location);
+    const [openLogin, setOpenLogin] = useState(false);
     useEffect(() => {
         dispatch({
             type: 'home/init',
@@ -24,9 +25,9 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
         }
     }, [location.hash]);
     return (
-        <Layout bg="#fbf8fa">
+        <Layout bg="#fbf8fa" setOpenLogin={setOpenLogin} isLogin={openLogin}>
             {/* <Login /> */}
-            <Banner isLogin={currentUser.id ? true : false} imgsInfo={systemDetail} />
+            <Banner imgsInfo={systemDetail} />
             <Box p="40px" maxWidth="1480px" m="auto">
                 <Box mb="40px">
                     <Title

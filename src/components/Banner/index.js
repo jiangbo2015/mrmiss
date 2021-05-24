@@ -1,5 +1,4 @@
-import Login from '@/pages/User/Login';
-import { filterImageUrl } from '@/utils/helper';
+// import { filterImageUrl } from '@/utils/helper';
 import './index.less';
 
 const Banner = ({ isLogin, imgsInfo = {} }) => {
@@ -14,7 +13,6 @@ const Banner = ({ isLogin, imgsInfo = {} }) => {
             >
                 your browser does not support the video tag
             </video>
-            {isLogin ? null : <Login />}
         </div>
     );
 };
