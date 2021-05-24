@@ -6,7 +6,7 @@ import { useIntl } from 'umi';
 import './index.less';
 import IconClose from '@/public/icons/icon-close.svg';
 
-const Login = ({ dispatch, setOpenLogin }) => {
+const Login = ({ dispatch, setOpenLogin, isLogin }) => {
     const [account, setAccount] = useState('');
     const [pwd, setPwd] = useState('');
     const intl = useIntl();
