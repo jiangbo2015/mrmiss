@@ -318,7 +318,7 @@ export default {
             }
             // { styleAndColor: params, goodId: goodId }
         },
-        *updateOrder({ payload }, { call, put, select }) {     
+        *updateOrder({ payload }, { call, put, select }) {
             const res = yield call(api.updateOrder, payload);
             if (res && res.data) {
                 message.info('保存成功');
@@ -421,17 +421,17 @@ export default {
                                 let isEixised = false;
                                 // 点击了选中区域的相同颜色 则取消该区域的选中
                                 if (tempValue[tempRegion - 1]._id === item._id) {
-                                    tempValue[tempRegion - 1] = {}
+                                    tempValue[tempRegion - 1] = {};
                                     let vfinded = newValue.find(nv => nv && nv._id === item._id);
                                     let v1finded = newValue1.find(nv => nv && nv._id === item._id);
-                                    isEixised = vfinded || v1finded
+                                    isEixised = vfinded || v1finded;
                                     // isEixised = tempValue.find(nv => nv && nv._id === item._id);
                                 } else {
                                     //否则换一种颜色
                                     tempValue[tempRegion - 1] = item;
                                     let vfinded = newValue.find(nv => nv && nv._id === tempId);
                                     let v1finded = newValue1.find(nv => nv && nv._id === tempId);
-                                    isEixised = vfinded || v1finded
+                                    isEixised = vfinded || v1finded;
                                     // isEixised = tempValue.find(nv => nv && nv._id === tempId);
                                     if (item.type) {
                                         flowerList.docs[index].isSelected = true;
@@ -656,40 +656,42 @@ export default {
                     size,
                 };
             }
-            const saveItems = saveOrder?.filter(x => x?.items[0]?.favorite).map((o, k) => {
-                let item = o.items[0];
-                let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-')}`;
-                let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
-                let weight = lodash.sumBy(item.favorite.styleAndColor, sc => sc.styleId.weight);
-                console.log('weight', weight);
-                let sizeObjInit = {};
-                sizeArr?.map(s => {
-                    sizeObjInit[s] = 0;
-                });
-                // console.log('sizeObjInit', sizeObjInit);
-                return {
-                    list: o.items.map(i => ({
-                        ...i.favorite,
-                        parte: i.parte,
-                        price: _.sum(i.favorite.styleAndColor.map(sc => sc.styleId.price)),
-                        sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
-                        styleAndColor: i.favorite.styleAndColor.map(sc => ({
-                            colorIds: sc.colorIds,
-                            styleId: sc.styleId._id,
-                            style: sc.styleId,
+            const saveItems = saveOrder
+                ?.filter(x => x?.items[0]?.favorite)
+                .map((o, k) => {
+                    let item = o.items[0];
+                    let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-')}`;
+                    let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
+                    let weight = lodash.sumBy(item.favorite.styleAndColor, sc => sc.styleId.weight);
+                    console.log('weight', weight);
+                    let sizeObjInit = {};
+                    sizeArr?.map(s => {
+                        sizeObjInit[s] = 0;
+                    });
+                    // console.log('sizeObjInit', sizeObjInit);
+                    return {
+                        list: o.items.map(i => ({
+                            ...i.favorite,
+                            parte: i.parte,
+                            price: _.sum(i.favorite.styleAndColor.map(sc => sc.styleId.price)),
+                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
+                            styleAndColor: i.favorite.styleAndColor.map(sc => ({
+                                colorIds: sc.colorIds.filter(c => c),
+                                styleId: sc.styleId._id,
+                                style: sc.styleId,
+                            })),
                         })),
-                    })),
-                    key,
-                    pickType: o.pickType,
-                    rowRemarks: o.rowRemarks,
-                    isSelect: false,
-                    weight: weight ? weight : 0,
-                    sizes: sizeArr,
-                    styleNos: o.styleNos,
-                    price: o.price,
-                    size: o.size,
-                };
-            });
+                        key,
+                        pickType: o.pickType,
+                        rowRemarks: o.rowRemarks,
+                        isSelect: false,
+                        weight: weight ? weight : 0,
+                        sizes: sizeArr,
+                        styleNos: o.styleNos,
+                        price: o.price,
+                        size: o.size,
+                    };
+                });
             yield put({
                 type: 'setFavoriteToOrderGroupList',
                 payload: Object.values(gourpByStyle).concat(saveItems),

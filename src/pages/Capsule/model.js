@@ -175,7 +175,7 @@ export default {
             }
             // { styleAndColor: params, goodId: goodId }
         },
-        *updateOrder({ payload }, { call, put, select }) {     
+        *updateOrder({ payload }, { call, put, select }) {
             const res = yield call(api.updateOrder, payload);
             if (res && res.data) {
                 message.info('保存成功');
@@ -200,8 +200,6 @@ export default {
                 saveOrderData = resOrder.data[0];
             }
 
-
-
             saveOrderData.orderData = saveOrderData.orderData.concat([
                 {
                     styleNos: currentCapsuleStyle.code,
@@ -223,7 +221,7 @@ export default {
             }
         },
         *toDoOrder({ payload }, { call, put, select }) {
-            const { currentCapsule,selectCapsuleList } = yield select(state => state.capsule);
+            const { currentCapsule, selectCapsuleList } = yield select(state => state.capsule);
             const res = yield call(api.getMyOrderList, { isSend: 0, capsuleId: currentCapsule._id });
             let saveOrder = [];
             if (res && Array.isArray(res.data) && res.data.length > 0) {
@@ -240,112 +238,115 @@ export default {
                 });
             }
 
-            let saveItems = saveOrder.filter(x => x?.items[0]?.favorite).map((o, k) => {
-                let item = o.items[0];
-                let now = new Date();
-                let key = `${now.getTime()}-${o.styleNos}`;
-                let sizeArr = [];
-                let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
-                if (item.type) {
-                    sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
-                        ? item.favorite.styleAndColor[0].styleId.size?.split('/')
-                        : [];
-                } else {
-                    sizeArr = o.size ? o.size?.split('/') : [];
-                }
+            let saveItems = saveOrder
+                .filter(x => x?.items[0]?.favorite)
+                .map((o, k) => {
+                    let item = o.items[0];
+                    let now = new Date();
+                    let key = `${now.getTime()}-${o.styleNos}`;
+                    let sizeArr = [];
+                    let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
+                    if (item.type) {
+                        sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
+                            ? item.favorite.styleAndColor[0].styleId.size?.split('/')
+                            : [];
+                    } else {
+                        sizeArr = o.size ? o.size?.split('/') : [];
+                    }
 
-                let sizeObjInit = {};
-                sizeArr?.map(s => {
-                    sizeObjInit[s] = 0;
-                });
-                return {
-                    list: o.items.map(i => ({
-                        _id: i._id,
-                        ...i.favorite,
-                        favoriteObj: i.favorite,
-                        parte: i.parte,
-                        type: i.type ? 'favorite' : 'img',
-                        imgs: i.imgs,
+                    let sizeObjInit = {};
+                    sizeArr?.map(s => {
+                        sizeObjInit[s] = 0;
+                    });
+                    return {
+                        list: o.items.map(i => ({
+                            _id: i._id,
+                            ...i.favorite,
+                            favoriteObj: i.favorite,
+                            parte: i.parte,
+                            type: i.type ? 'favorite' : 'img',
+                            imgs: i.imgs,
+                            price: o.price,
+                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
+                            styleAndColor: i.type
+                                ? i.favorite.styleAndColor.map(sc => ({
+                                      colorIds: sc.colorIds.filter(c => c),
+                                      styleId: sc.styleId._id,
+                                      style: sc.styleId,
+                                  }))
+                                : [
+                                      {
+                                          colorIds: i.colorObj ? [i.colorObj] : [],
+                                          style: { styleNo: key },
+                                      },
+                                  ],
+                        })),
+                        key,
+                        styleNos: o.styleNos,
                         price: o.price,
-                        sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
-                        styleAndColor: i.type
-                            ? i.favorite.styleAndColor.map(sc => ({
-                                  colorIds: sc.colorIds,
-                                  styleId: sc.styleId._id,
-                                  style: sc.styleId,
-                              }))
-                            : [
-                                  {
-                                      colorIds: i.colorObj ? [i.colorObj] : [],
-                                      style: { styleNo: key },
-                                  },
-                              ],
-                    })),
-                    key,
-                    styleNos: o.styleNos,
-                    price: o.price,
-                    size: o.size,
-                    weight: o.weight ? o.weight : 0,
-                    pickType: o.pickType,
-                    rowRemarks: o.rowRemarks,
-                    isSelect: false,
-                    sizes: sizeArr,
-                };
-            });
-
-
-            saveItems = saveItems.concat(selectCapsuleList.map(c => {
-                let item = c.colorWithStyleImgs[0];
-                let now = new Date();
-                let key = `${now.getTime()}-${c.styleNos}`;
-                let sizeArr = [];
-                // let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
-                if (item.type) {
-                    sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
-                        ? item.favorite.styleAndColor[0].styleId.size?.split('/')
-                        : [];
-                } else {
-                    sizeArr = c.size ? c.size?.split('/') : [];
-                }
-
-                let sizeObjInit = {};
-                sizeArr?.map(s => {
-                    sizeObjInit[s] = 0;
+                        size: o.size,
+                        weight: o.weight ? o.weight : 0,
+                        pickType: o.pickType,
+                        rowRemarks: o.rowRemarks,
+                        isSelect: false,
+                        sizes: sizeArr,
+                    };
                 });
 
-                
-                return {
-                styleNos: c.code,
-                price: c.price,
-                size: c.size,
-                weight: c.weight ? c.weight : 0,
-                pickType: {val: 0},
-                rowRemarks: '',
-                isSelect: false,
-                sizes: sizeArr,
-                list: c.colorWithStyleImgs.map(i => ({
-                    _id: i._id,
-                    ...i.favorite,
-                    favoriteObj: i.favorite,
-                    parte: i.parte,
-                    type: i.type ? 'favorite' : 'img',
-                    imgs: i.imgs,
-                    price: c.price,
-                    sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
-                    styleAndColor: i.type
-                        ? i.favorite.styleAndColor.map(sc => ({
-                              colorIds: sc.colorIds,
-                              styleId: sc.styleId._id,
-                              style: sc.styleId,
-                          }))
-                        : [
-                              {
-                                  colorIds: i.colorObj ? [i.colorObj] : [],
-                                  style: { styleNo: key },
-                              },
-                          ],
-                })),
-            }}));
+            saveItems = saveItems.concat(
+                selectCapsuleList.map(c => {
+                    let item = c.colorWithStyleImgs[0];
+                    let now = new Date();
+                    let key = `${now.getTime()}-${c.styleNos}`;
+                    let sizeArr = [];
+                    // let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
+                    if (item.type) {
+                        sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
+                            ? item.favorite.styleAndColor[0].styleId.size?.split('/')
+                            : [];
+                    } else {
+                        sizeArr = c.size ? c.size?.split('/') : [];
+                    }
+
+                    let sizeObjInit = {};
+                    sizeArr?.map(s => {
+                        sizeObjInit[s] = 0;
+                    });
+
+                    return {
+                        styleNos: c.code,
+                        price: c.price,
+                        size: c.size,
+                        weight: c.weight ? c.weight : 0,
+                        pickType: { val: 0 },
+                        rowRemarks: '',
+                        isSelect: false,
+                        sizes: sizeArr,
+                        list: c.colorWithStyleImgs.map(i => ({
+                            _id: i._id,
+                            ...i.favorite,
+                            favoriteObj: i.favorite,
+                            parte: i.parte,
+                            type: i.type ? 'favorite' : 'img',
+                            imgs: i.imgs,
+                            price: c.price,
+                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
+                            styleAndColor: i.type
+                                ? i.favorite.styleAndColor.map(sc => ({
+                                      colorIds: sc.colorIds,
+                                      styleId: sc.styleId._id,
+                                      style: sc.styleId,
+                                  }))
+                                : [
+                                      {
+                                          colorIds: i.colorObj ? [i.colorObj] : [],
+                                          style: { styleNo: key },
+                                      },
+                                  ],
+                        })),
+                    };
+                }),
+            );
             yield put({
                 type: 'setCapsuleToOrderGroupList',
                 payload: saveItems,

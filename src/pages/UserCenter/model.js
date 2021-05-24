@@ -1,6 +1,6 @@
 import * as api from '@/apis/user';
 import * as businessApi from '@/apis/business';
-import lodash from 'lodash'
+import lodash from 'lodash';
 export default {
     namespace: 'usercenter',
     state: {
@@ -12,7 +12,7 @@ export default {
         myDiyOrder: [],
         editOrderGroupList: [],
         currentShopOrderData: [],
-        currentOrder: {}
+        currentOrder: {},
     },
     reducers: {
         setUserInfo(state, action) {
@@ -137,45 +137,49 @@ export default {
 
         *createCurrentOrderToGroupList({ payload }, { call, put, select }) {
             const { selectFavoriteList, currentGood } = yield select(state => state.diy);
-            let res = {}
-            
-            switch(payload.orderType){
-                case 'order': {
-                    res = yield call(businessApi.getOrderDetail, { _id: payload._id });
-                } break;
-                case 'capsule':{
-                    res = yield call(businessApi.getCapsuleOrderDetail, { _id: payload._id});
-                } break;
-                case 'shop':{
-                    res = yield call(businessApi.getShopOrderDetail, { _id: payload._id });
-                } break;
+            let res = {};
+
+            switch (payload.orderType) {
+                case 'order':
+                    {
+                        res = yield call(businessApi.getOrderDetail, { _id: payload._id });
+                    }
+                    break;
+                case 'capsule':
+                    {
+                        res = yield call(businessApi.getCapsuleOrderDetail, { _id: payload._id });
+                    }
+                    break;
+                case 'shop':
+                    {
+                        res = yield call(businessApi.getShopOrderDetail, { _id: payload._id });
+                    }
+                    break;
             }
-            console.log('createCurrentOrderToGroupList', res)
+            console.log('createCurrentOrderToGroupList', res);
             let saveOrder = [];
-            if(res?.data?.children?.length>0){
-                for(let i = 0; i < res.data.children.length; i ++){
-                    const itemOrder = res.data.children[i]
+            if (res?.data?.children?.length > 0) {
+                for (let i = 0; i < res.data.children.length; i++) {
+                    const itemOrder = res.data.children[i];
                     const items = res.data.children[i].orderData.map(x => ({
                         ...x,
                         originId: itemOrder._id,
-                        originNo: itemOrder.orderNo
-                    }))
-                    saveOrder.push(...items)
+                        originNo: itemOrder.orderNo,
+                    }));
+                    saveOrder.push(...items);
                 }
                 // res?.data?.children
             }
 
-            if(res?.data?.orderData?.length>0){
-                for(let i = 0; i < res.data.orderData.length; i ++){
-                    const itemOrderDate = res.data.orderData[i]
+            if (res?.data?.orderData?.length > 0) {
+                for (let i = 0; i < res.data.orderData.length; i++) {
+                    const itemOrderDate = res.data.orderData[i];
                     itemOrderDate.originId = res.data._id;
                     itemOrderDate.originNo = res.data.orderNo;
-                    saveOrder.push(itemOrderDate)
+                    saveOrder.push(itemOrderDate);
                 }
                 // res?.data?.children
             }
-            
-    
 
             const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
             console.log('gourpByStyle', gourpByStyle);
@@ -196,9 +200,13 @@ export default {
             }
             const saveItems = saveOrder?.map((o, k) => {
                 let item = o.items[0];
-                let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.style?._id ? sc.styleId : sc.styleId._id).join('-')}`;
+                let key = `${k}-${item.favorite.styleAndColor
+                    .map(sc => (sc.style?._id ? sc.styleId : sc.styleId._id))
+                    .join('-')}`;
                 // let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
-                let weight = lodash.sumBy(item.favorite.styleAndColor, sc => sc.style?._id ? sc.style?.weight : sc.styleId.weight);
+                let weight = lodash.sumBy(item.favorite.styleAndColor, sc =>
+                    sc.style?._id ? sc.style?.weight : sc.styleId.weight,
+                );
                 console.log('weight', weight);
                 let sizeObjInit = {};
                 let sizeArr = [];
@@ -206,18 +214,17 @@ export default {
                 //     sizeObjInit[s] = 0;
                 // });
 
-              
                 sizeArr = sizeArr = o.size ? o.size?.split('/') : [];
-               
+
                 // console.log('sizeObjInit', sizeObjInit);
                 return {
                     list: o.items.map(i => ({
                         ...i.favorite,
                         parte: i.parte,
-                        price: _.sum(i.favorite.styleAndColor.map(sc => sc?.style?.price ? sc.style.price : sc.styleId.price)),
+                        price: _.sum(i.favorite.styleAndColor.map(sc => (sc?.style?.price ? sc.style.price : sc.styleId.price))),
                         sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
                         styleAndColor: i.favorite.styleAndColor.map(sc => ({
-                            colorIds: sc.colorIds,
+                            colorIds: sc.colorIds.filter(c => c),
                             styleId: sc.style ? sc.style._id : sc.styleId._id,
                             style: sc.style ? sc.style : sc.styleId,
                         })),
@@ -232,10 +239,10 @@ export default {
                     price: o.price,
                     size: o.size,
                     originId: o.originId,
-                    originNo: o.originNo
+                    originNo: o.originNo,
                 };
             });
-            
+
             yield put({
                 type: 'setCurrentOrder',
                 payload: payload,
@@ -246,36 +253,34 @@ export default {
             });
         },
         *createCurrentShopOrderToGroupList({ payload }, { call, put, select }) {
-            
             const res = yield call(businessApi.getShopOrderDetail, { _id: payload._id });
-            
-            
-            console.log('createCurrentShopOrderToGroupList', res)
+
+            console.log('createCurrentShopOrderToGroupList', res);
             let saveOrder = [];
-            if(res?.data?.children?.length>0){
-                for(let i = 0; i < res.data.children.length; i ++){
-                    const itemOrder = res.data.children[i]
+            if (res?.data?.children?.length > 0) {
+                for (let i = 0; i < res.data.children.length; i++) {
+                    const itemOrder = res.data.children[i];
                     const items = res.data.children[i].orderData.map(x => ({
                         ...x,
                         originId: itemOrder._id,
-                        originNo: itemOrder.orderNo
-                    }))
-                    saveOrder.push(...items)
+                        originNo: itemOrder.orderNo,
+                    }));
+                    saveOrder.push(...items);
                 }
                 // res?.data?.children
             }
 
-            if(res?.data?.orderData?.length>0){
-                for(let i = 0; i < res.data.orderData.length; i ++){
-                    const itemOrderDate = res.data.orderData[i]
+            if (res?.data?.orderData?.length > 0) {
+                for (let i = 0; i < res.data.orderData.length; i++) {
+                    const itemOrderDate = res.data.orderData[i];
                     itemOrderDate.originId = res.data._id;
                     itemOrderDate.originNo = res.data.orderNo;
-                    saveOrder.push(itemOrderDate)
+                    saveOrder.push(itemOrderDate);
                 }
                 // res?.data?.children
             }
-        
-            console.log('saveOrder', saveOrder)
+
+            console.log('saveOrder', saveOrder);
             yield put({
                 type: 'setCurrentOrder',
                 payload: payload,
