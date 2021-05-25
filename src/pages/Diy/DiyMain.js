@@ -25,6 +25,8 @@ const App = ({
 }) => {
     const handleAddFavorite = async () => {
         let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
+        let goodCategoryMultiple = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
+        
         if (collocationPattern === 'single' || collocationPattern === 'expand') {
             let payload = {
                 goodId: currentGood._id,
@@ -58,7 +60,7 @@ const App = ({
             const favorites = selectStyleList.map(x => ({
                 user: currentUser._id,
                 goodId: currentGood._id,
-                goodCategory,
+                goodCategory: goodCategoryMultiple,
                 styleAndColor: [
                     {
                         styleId: x._id,
