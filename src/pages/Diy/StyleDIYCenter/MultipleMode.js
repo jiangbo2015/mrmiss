@@ -28,18 +28,18 @@ const App = ({
     singleSelectColorList = [],
     singleSelectColorList1 = [],
     currentGood = { category: [] },
-    currentGoodCategory = '',
+    currentGoodCategoryMultiple = '',
     styleQueryKey,
     styleQueryChangeKey,
     currentAdminChannel,
     assign,
     curChannslPrice,
 }) => {
-    console.log('assign', assign)
+    console.log('assign', assign);
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     let docs = [];
-    if (styleList[currentGoodCategory]) {
-        docs = styleList[currentGoodCategory];
+    if (styleList[currentGoodCategoryMultiple]) {
+        docs = styleList[currentGoodCategoryMultiple];
         // console.log('docs', docs);
     }
 
@@ -62,7 +62,7 @@ const App = ({
         window.timeOrder = !window.timeOrder;
         console.log('window.timeOrder', window.timeOrder);
 
-        styleList[currentGoodCategory] = styleList[currentGoodCategory].sort((a, b) => {
+        styleList[currentGoodCategoryMultiple] = styleList[currentGoodCategoryMultiple].sort((a, b) => {
             return window.timeOrder
                 ? new Date(b.createdAt ? b.createdAt : b.createTime).getTime() -
                       new Date(a.createdAt ? a.createdAt : a.createTime).getTime()
@@ -132,7 +132,7 @@ const App = ({
             type: 'diy/setStyleQueryKey',
             payload: '',
         });
-    }, [currentGood, currentGoodCategory]);
+    }, [currentGood, currentGoodCategoryMultiple]);
 
     useEffect(() => {
         const { shopStyles = [] } = currentAdminChannel;
@@ -154,7 +154,7 @@ const App = ({
 
     const handleSetCurrentGoodCategory = category => {
         dispatch({
-            type: 'diy/setCurrentGoodCategory',
+            type: 'diy/setCurrentGoodCategoryMultiple',
             payload: category,
         });
     };
@@ -179,13 +179,13 @@ const App = ({
                     style={{
                         display: 'flex',
                         alignItems: 'center',
-                        marginLeft: '-10px'
+                        marginLeft: '-10px',
                     }}
                 >
                     <Select
-                        value={currentGoodCategory}
-                        style={{ marginRight: '20px'}}
-                        width='88px'
+                        value={currentGoodCategoryMultiple}
+                        style={{ marginRight: '20px' }}
+                        width="88px"
                         options={currentGood.category.filter(x => x.name !== '分体').map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
@@ -353,7 +353,7 @@ export default connect(({ diy = {}, channel = {} }) => ({
     selectColorList: diy.selectColorList,
     selectStyleList: diy.selectStyleList,
     currentGood: diy.currentGood,
-    currentGoodCategory: diy.currentGoodCategory,
+    currentGoodCategoryMultiple: diy.currentGoodCategoryMultiple,
     styleQueryKey: diy.styleQueryKey,
     styleQueryChangeKey: diy.styleQueryChangeKey,
     currentAdminChannel: channel.currentAdminChannel,

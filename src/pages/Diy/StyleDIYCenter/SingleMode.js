@@ -80,7 +80,7 @@ const App = ({
             handleSetCurrentGoodCategory(currentGood.category[0]._id);
         }
     }, [currentGood]);
-    const handleSetCurrentGoodCategory = category => {
+    const handleSetCurrentGoodCategory = (category, noChange) => {
         dispatch({
             type: 'diy/setCurrentGoodCategory',
             payload: category,
@@ -110,9 +110,9 @@ const App = ({
             });
         }
         if (pattern === 'multiple') {
-            if (categoryObj.name === '分体') {
-                handleSetCurrentGoodCategory(currentGood.category[0]._id);
-            }
+            // if (categoryObj.name === '分体') {
+            //     handleSetCurrentGoodCategory(currentGood.category[0]._id);
+            // }
         }
     };
     useEffect(() => {
@@ -242,7 +242,7 @@ const App = ({
                     }}
                 >
                     <Select
-                        width='88px'
+                        width="88px"
                         value={currentGoodCategory}
                         style={{ marginRight: '20px', minWidth: '92px' }}
                         options={currentGood.category.map(c => ({ label: c.name, value: c._id }))}
@@ -346,7 +346,7 @@ const App = ({
                         ))}
                 </div>
             </div>
-       
+
             {categoryObj && categoryObj.name === '分体' ? (
                 <MultipleStyleSelector
                     currentStyle={currentStyle}

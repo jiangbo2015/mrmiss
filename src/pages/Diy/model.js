@@ -29,6 +29,7 @@ export default {
         bigPicColor: {},
         styleQueryKey: '',
         styleQueryChangeKey: '',
+        currentGoodCategoryMultiple: '',
     },
     reducers: {
         setEditOrderSaveId(state, action) {
@@ -196,6 +197,14 @@ export default {
             return {
                 ...state,
                 currentGoodCategory: action.payload,
+                // currentSingleGoodCategory: action.payload,
+            };
+        },
+        setCurrentGoodCategoryMultiple(state, action) {
+            return {
+                ...state,
+                currentGoodCategoryMultiple: action.payload,
+                // currentSingleGoodCategory: action.payload,
             };
         },
     },
