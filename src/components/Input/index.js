@@ -22,7 +22,7 @@ export const InputBottomWhiteBorder = props => (
             color: 'white',
             background: '#000',
             height: '18px',
-            width: '24px',
+            width: '50px',
             padding: '0',
             textAlign: 'center',
         }}

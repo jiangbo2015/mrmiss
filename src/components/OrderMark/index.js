@@ -131,10 +131,10 @@ const OrderMark = ({
             let sum = 0;
             // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
             // if (rowPickTypes[row].val == 1) {
-                if (rowPickTypes[row].pieceCount) {
-                    sum = lodash.sum(Object.values(countInfos[row]).map(ci => lodash.sum(Object.values(ci))));
-                    sum = sum * rowPickTypes[row].pieceCount;
-                }
+            if (rowPickTypes[row].pieceCount) {
+                sum = lodash.sum(Object.values(countInfos[row]).map(ci => lodash.sum(Object.values(ci))));
+                sum = sum * rowPickTypes[row].pieceCount;
+            }
             // } else {
             //     for (var key in rowParte) {
             //         if (!countInfos[row][key]) return;
@@ -198,8 +198,7 @@ const OrderMark = ({
 
     const parseOrderData = () => {
         const orderData = sourceData.map((row, ri) => {
-            const { list, sizes, key, size, price, styleNos, originId,
-                originNo } = row;
+            const { list, sizes, key, size, price, styleNos, originId, originNo } = row;
             let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
             let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
             const items = list.map(favorite => {
@@ -247,7 +246,7 @@ const OrderMark = ({
                 styleNos,
                 aboutCases,
                 originId,
-                originNo
+                originNo,
             };
         });
         return orderData;
@@ -290,7 +289,7 @@ const OrderMark = ({
             destroyOnClose
             onCancel={() => {
                 const orderData = parseOrderData();
-                onCancel(orderData)
+                onCancel(orderData);
             }}
             getContainer={document.body}
             width={'100%'}
@@ -300,13 +299,17 @@ const OrderMark = ({
             title="订单制作器"
         >
             <Flex justifyContent="space-between" alignItems="center" ml="54px" mr="34px">
-                {onSend ? <SelectAll
-                    selectAll={sourceData.length === sourceData.filter(x => x.isSelect).length}
-                    onSelectAll={bool => {
-                        handleSelectAll(bool);
-                    }}
-                /> : <div/>}
-                
+                {onSend ? (
+                    <SelectAll
+                        selectAll={sourceData.length === sourceData.filter(x => x.isSelect).length}
+                        onSelectAll={bool => {
+                            handleSelectAll(bool);
+                        }}
+                    />
+                ) : (
+                    <div />
+                )}
+
                 <Flex>
                     {renderCountsInfo()}
                     <Flex flexDirection="column" alignItems="center" pl="20px">
@@ -323,13 +326,18 @@ const OrderMark = ({
                         <Flex alignItems="center" m="0px 24px">
                             <ReactSVG
                                 src={SelectedIcon}
-                                style={{ width: '20px', height: '20px', opacity: el.isSelect ? '1' : '0.3' ,display: onSend ? 'block' : 'none' }}
+                                style={{
+                                    width: '20px',
+                                    height: '20px',
+                                    opacity: el.isSelect ? '1' : '0.3',
+                                    display: onSend ? 'block' : 'none',
+                                }}
                                 onClick={() => {
                                     sourceData[ind].isSelect = !sourceData[ind].isSelect;
                                     setSourceData([...sourceData]);
                                 }}
                             />
-                            <Box m="10px" width="100%" sx={{ position: 'relative' }} className='dropwrapper'>
+                            <Box m="10px" width="100%" sx={{ position: 'relative' }} className="dropwrapper">
                                 <Popover
                                     content={
                                         <Box width="160px">
@@ -372,7 +380,7 @@ const OrderMark = ({
                                     }}
                                 />
 
-                                <Droppable key={ind} droppableId={`${ind}`} direction="horizontal" className='dropwrapper'>
+                                <Droppable key={ind} droppableId={`${ind}`} direction="horizontal" className="dropwrapper">
                                     {(provided, snapshot) => (
                                         <div
                                             ref={provided.innerRef}
@@ -389,7 +397,12 @@ const OrderMark = ({
                                                     : 0;
 
                                                 return (
-                                                    <Draggable isDragDisabled={onSend ? false : true} key={favorite._id} draggableId={favorite._id} index={index}>
+                                                    <Draggable
+                                                        isDragDisabled={onSend ? false : true}
+                                                        key={favorite._id}
+                                                        draggableId={favorite._id}
+                                                        index={index}
+                                                    >
                                                         {(provided, snapshot) => (
                                                             <div
                                                                 ref={provided.innerRef}
@@ -539,43 +552,43 @@ const OrderMark = ({
                                                 setShowChange(true);
                                             }}
                                         />
-                                       
-                                            <Flex color="#ffffff" fontSize="12px" alignItems="center">
-                                                <Flex alignItems="center" p="0 10px">
-                                                    每份
-                                                    <InputBottomWhiteBorder
-                                                        value={lodash.sum(
-                                                            Object.values(currentRowCountInfo).map(ci =>
-                                                                lodash.sum(Object.values(ci)),
-                                                            ),
-                                                        )}
-                                                    />
-                                                    件
-                                                </Flex>
-                                                <Flex
-                                                    alignItems="center"
-                                                    sx={{
-                                                        '.ant-input-number-handler-wrap': {
-                                                            display: 'none !important',
-                                                        },
-                                                    }}
-                                                >
-                                                    共
-                                                    <InputNumber
-                                                        value={rowPickTypes[ind].pieceCount}
-                                                        type="number"
-                                                        onChange={val => {
-                                                            rowPickTypes[ind] = { ...rowPickTypes[ind], pieceCount: val };
-                                                            setRowPickTypes({
-                                                                ...rowPickTypes,
-                                                            });
-                                                            setShowChange(true);
-                                                        }}
-                                                    />
-                                                    份
-                                                </Flex>
+
+                                        <Flex color="#ffffff" fontSize="12px" alignItems="center">
+                                            <Flex alignItems="center" p="0 10px">
+                                                每份
+                                                <InputBottomWhiteBorder
+                                                    value={lodash.sum(
+                                                        Object.values(currentRowCountInfo).map(ci =>
+                                                            lodash.sum(Object.values(ci)),
+                                                        ),
+                                                    )}
+                                                />
+                                                件
                                             </Flex>
-                                       
+                                            <Flex
+                                                alignItems="center"
+                                                sx={{
+                                                    '.ant-input-number-handler-wrap': {
+                                                        display: 'none !important',
+                                                    },
+                                                }}
+                                            >
+                                                共
+                                                <InputNumber
+                                                    value={rowPickTypes[ind].pieceCount}
+                                                    type="number"
+                                                    style={{ width: '60px' }}
+                                                    onChange={val => {
+                                                        rowPickTypes[ind] = { ...rowPickTypes[ind], pieceCount: val };
+                                                        setRowPickTypes({
+                                                            ...rowPickTypes,
+                                                        });
+                                                        setShowChange(true);
+                                                    }}
+                                                />
+                                                份
+                                            </Flex>
+                                        </Flex>
                                     </Flex>
 
                                     <Flex color="#ffffff">
@@ -601,42 +614,46 @@ const OrderMark = ({
                     );
                 })}
             </DragDropContext>
-            {readOnly ? null :  <Flex
-                sx={{
-                    position: 'fixed',
-                    bottom: 0,
-                    width: '100%',
-                }}
-                height="56px"
-                bg="#C0B3B6"
-                justifyContent="center"
-                alignItems="center"
-            >
-                <Badge dot={showChange}>
-                    <ReactSVG
-                        src={IconSave}
-                        style={{
-                            width: '20px',
-                            height: '20px',
-                        }}
-                        onClick={() => {
-                            handleSave();
-                        }}
-                    />
-                </Badge>
-                {onSend ? <ReactSVG
-                    src={IconSend}
-                    style={{
-                        width: '18px',
-                        height: '18px',
-                        marginLeft: '40px',
-                        marginBottom: '4px',
+            {readOnly ? null : (
+                <Flex
+                    sx={{
+                        position: 'fixed',
+                        bottom: 0,
+                        width: '100%',
                     }}
-                    onClick={() => {
-                        handleSend();
-                    }}
-                /> : null}
-            </Flex>}
+                    height="56px"
+                    bg="#C0B3B6"
+                    justifyContent="center"
+                    alignItems="center"
+                >
+                    <Badge dot={showChange}>
+                        <ReactSVG
+                            src={IconSave}
+                            style={{
+                                width: '20px',
+                                height: '20px',
+                            }}
+                            onClick={() => {
+                                handleSave();
+                            }}
+                        />
+                    </Badge>
+                    {onSend ? (
+                        <ReactSVG
+                            src={IconSend}
+                            style={{
+                                width: '18px',
+                                height: '18px',
+                                marginLeft: '40px',
+                                marginBottom: '4px',
+                            }}
+                            onClick={() => {
+                                handleSend();
+                            }}
+                        />
+                    ) : null}
+                </Flex>
+            )}
         </Modal>
     );
 };

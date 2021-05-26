@@ -529,6 +529,9 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                 >
                                                     共
                                                     <InputNumber
+                                                        style={{
+                                                            width: '60px',
+                                                        }}
                                                         value={rowPickTypes[ind].pieceCount}
                                                         type="number"
                                                         onChange={val => {
