@@ -2,7 +2,7 @@ import { defineConfig } from 'umi';
 
 export default defineConfig({
     define: {
-        'process.env.API_URL': 'prod 环境api url',
+        'process.env.API_URL': 'https://we-idesign.com',
         'process.env.DOWNLOAD_URL': 'https://crm.we-idesign.com',
     },
 });
