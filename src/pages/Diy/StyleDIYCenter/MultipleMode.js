@@ -185,7 +185,7 @@ const App = ({
                     <Select
                         value={currentGoodCategoryMultiple}
                         style={{ marginRight: '20px' }}
-                        width="88px"
+                        width="98px"
                         options={currentGood.category.filter(x => x.name !== '分体').map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />

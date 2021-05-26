@@ -21,12 +21,13 @@ const App = ({
     currentUser,
     favoriteEditObj,
     singleSelectColorList,
-    singleSelectColorList1
+    singleSelectColorList1,
+    currentGoodCategoryMultiple = '',
 }) => {
     const handleAddFavorite = async () => {
         let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
         let goodCategoryMultiple = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
-        
+
         if (collocationPattern === 'single' || collocationPattern === 'expand') {
             let payload = {
                 goodId: currentGood._id,

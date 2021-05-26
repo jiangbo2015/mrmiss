@@ -242,7 +242,7 @@ const App = ({
                     }}
                 >
                     <Select
-                        width="88px"
+                        width="98px"
                         value={currentGoodCategory}
                         style={{ marginRight: '20px', minWidth: '92px' }}
                         options={currentGood.category.map(c => ({ label: c.name, value: c._id }))}
