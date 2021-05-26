@@ -7,7 +7,7 @@ const Banner = ({ isLogin, imgsInfo = {} }) => {
             <video
                 src="https://ik.imagekit.io/mrmiss/1621796269869_EtsurM5nz.mp4"
                 muted="muted"
-                autoplay="autoplay"
+                autoPlay="autoplay"
                 loop
                 style={{ width: '100%' }}
             >

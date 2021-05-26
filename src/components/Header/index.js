@@ -293,7 +293,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
             <div style={{ display: 'flex' }}>
                 {currentUser._id ? (
                     <>
-                        {currentUser.goods.length ? (
+                        {currentUser?.goods?.length ? (
                             <Link to="/diy" target="_blank">
                                 <div
                                     className="menuItem"
@@ -305,7 +305,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                                 </div>
                             </Link>
                         ) : null}
-                        {currentUser.capsules.length ? (
+                        {currentUser?.capsules?.length ? (
                             <Link to="/capsule" target="_blank">
                                 <div
                                     className="menuItem"
@@ -320,7 +320,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                                 </div>
                             </Link>
                         ) : null}
-                        {currentUser.branchs.length ? (
+                        {currentUser?.branchs?.length ? (
                             <Link to="/shop" target="_blank">
                                 <div
                                     className="menuItem"
