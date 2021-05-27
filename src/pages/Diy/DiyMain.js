@@ -24,7 +24,7 @@ const App = ({
     singleSelectColorList1,
     currentGoodCategoryMultiple = '',
 }) => {
-    console.log('currentGoodCategoryMultiple',currentGoodCategoryMultiple)
+    // console.log('currentGoodCategoryMultiple',currentGoodCategoryMultiple)
     const handleAddFavorite = async () => {
         let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
         let goodCategoryMultiple = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);

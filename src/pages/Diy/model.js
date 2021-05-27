@@ -567,7 +567,7 @@ export default {
             });
         },
         *toogleSelectStyle({ payload }, { call, put, select }) {
-            const { styleList, selectStyleList, currentGoodCategory } = yield select(state => state.diy);
+            const { styleList, selectStyleList, currentGoodCategoryMultiple } = yield select(state => state.diy);
             const { item, index } = payload;
             let newValue = [];
 
@@ -575,10 +575,10 @@ export default {
             if (findSelectIndex >= 0) {
                 newValue = [...selectStyleList];
                 newValue.splice(findSelectIndex, 1);
-                styleList[currentGoodCategory][index].isSelected = false;
+                styleList[currentGoodCategoryMultiple][index].isSelected = false;
             } else {
                 newValue = [...selectStyleList, item];
-                styleList[currentGoodCategory][index].isSelected = true;
+                styleList[currentGoodCategoryMultiple][index].isSelected = true;
             }
 
             yield put({
