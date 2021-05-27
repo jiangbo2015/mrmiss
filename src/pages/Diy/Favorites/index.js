@@ -24,9 +24,9 @@ import styles from './index.less';
 import OrderModal from './order/index';
 
 const favoriteBox = {
-    small: { h: '15.6vw', w: 'calc(16.52% - 16px)', size: '6vw' },
-    middle: { h: '23.4vw', w: 'calc(25% - 15px)', size: '9vw' },
-    large: { h: '31.2vw', w: 'calc(33.3% - 13px)', size: '12vw' },
+    small: { h: '15.6vw', w: 'calc(16.52% - 16px)', size: 6},
+    middle: { h: '23.4vw', w: 'calc(25% - 15px)', size: 9 },
+    large: { h: '31.2vw', w: 'calc(33.3% - 13px)', size: 12 },
 };
 
 const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentAdminChannel }) => {
@@ -422,7 +422,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                         >
                             {favorite.styleAndColor.map(d => (
                                 <StyleItem
-                                    width={favoriteBox[favoritePattern].size}
+                                    width={`${(favoriteBox[favoritePattern].size * d.style.styleSize) / 27}vw`}
+                                    // width={favoriteBox[favoritePattern].size}
                                     styleId={`${favorite._id}-${d._id}-favorite`}
                                     colors={d.colorIds}
                                     key={`${favorite._id}-${d._id}-${Math.random() * 1000000}`}
