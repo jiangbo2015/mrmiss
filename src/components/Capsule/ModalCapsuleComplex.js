@@ -84,7 +84,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 );
 
 const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
-    console.log('currentCapsuleStyle', currentCapsuleStyle);
+    // console.log('currentCapsuleStyle', currentCapsuleStyle);
     const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
     // console.log('currentCapsuleStyle', currentCapsuleStyle);
     const [current, setCurrent] = useState(0);
