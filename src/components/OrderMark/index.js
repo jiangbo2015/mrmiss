@@ -441,6 +441,7 @@ const OrderMark = ({
                                                                                 <StyleItem
                                                                                     styleId={`${favorite._id}-${d._id}-item`}
                                                                                     colors={d.colorIds}
+                                                                                    width={`${d.style?.styleSize*100/27}px`}
                                                                                     key={`${favorite._id}-${
                                                                                         d._id
                                                                                     }-${Math.random() * 1000000}`}

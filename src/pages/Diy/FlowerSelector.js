@@ -18,9 +18,26 @@ export const ImgItem = ({ img, isSelected, size = '44px', ...props }) => (
             cursor: 'pointer',
         }}
     >
-        <div
+        {/* <div
             style={{
                 background: `url(${filterImageUrl(img)})`,
+                width: size,
+                height: size,
+                borderRadius: '50% 50%',
+                backgroundSize: '100% 100%',
+                boxSizing: 'content-box',
+                backgroundClip: 'content-box',
+                padding: '5px',
+                border: isSelected ? '1px solid #fff' : '1px solid rgba(0,0,0,0)',
+            }}
+        /> */}
+        <img
+            src={filterImageUrl(img)}
+            // width={size}
+            // height={size}
+            style={{
+                // background: `url(${filterImageUrl(img)})`,
+                display: 'block',
                 width: size,
                 height: size,
                 borderRadius: '50% 50%',

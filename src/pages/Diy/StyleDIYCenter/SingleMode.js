@@ -305,7 +305,7 @@ const App = ({
                         height: '45px',
                         alignItems: 'center',
                         padding: '0 10px',
-                        opacity: selectColorList.filter(x => x?.type === 0).length > 0 ? 1 : 0,
+                        // opacity: selectColorList.filter(x => x?.type === 0).length > 0 ? 1 : 0,
                     }}
                 >
                     {colorList.docs
@@ -316,9 +316,7 @@ const App = ({
                                 key={`bar-${d._id}`}
                                 // isSelected={d.isSelected}
                                 color={d.value}
-                                onClick={() => {
-                                    handleSelectColor({ item: d, index });
-                                }}
+                                
                             />
                         ))}
                 </div>
@@ -328,7 +326,7 @@ const App = ({
                         height: '45px',
                         alignItems: 'center',
                         padding: '0 10px',
-                        opacity: selectColorList.filter(x => x?.type !== 0).length > 0 ? 1 : 0,
+                        // opacity: selectColorList.filter(x => x?.type !== 0).length > 0 ? 1 : 0,
                     }}
                 >
                     {flowerList.docs
@@ -336,12 +334,9 @@ const App = ({
                         .map((d, index) => (
                             <ImgItem
                                 size="12px"
-                                key={`bar-${d._id}`}
+                                key={`bar-${d._id}-${index}`}
                                 // isSelected={d.isSelected}
                                 img={d.value}
-                                onClick={() => {
-                                    handleSelectColor({ item: d, index });
-                                }}
                             />
                         ))}
                 </div>
