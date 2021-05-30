@@ -29,6 +29,7 @@ const ClassifyItem = ({ children, isSelected, ...props }) => (
 const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminChannel }) => {
     const ref = useRef(null);
     const [curABC, setCurABC] = useState('A');
+    const inputRef = useRef();
     useEffect(() => {
         dispatch({
             type: 'diy/fetchGoodsList',
@@ -95,7 +96,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     const handleUpdateRemarks = val => {
         dispatch({
             type: 'channel/update',
-            payload: { remark: val, codename: curABC, assignedId: assigned._id },
+            payload: { remark: val, codename: curABC, assignedId: currentGood._id },
         });
     };
 
@@ -170,13 +171,8 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                             style={{ width: '200px', color: '#767676' }}
                             placeholder="10字以内"
                             // defaultVaule={}
+                            ref={inputRef}
                             value={currentAdminChannel.remark}
-                            onChange={e => {
-                                dispatch({
-                                    type: 'channel/setCurrentChannel',
-                                    payload: { ...currentAdminChannel, remark: e.target.value },
-                                });
-                            }}
                             onBlur={e => {
                                 if (handleUpdateRemarks) {
                                     handleUpdateRemarks(e.target.value);

@@ -162,7 +162,7 @@ const App = ({
     return (
         <div
             style={{
-                padding: '28px 20px',
+                padding: '28px 0px',
                 background: '#222222',
             }}
         >
@@ -186,7 +186,7 @@ const App = ({
                         value={currentGoodCategoryMultiple}
                         style={{ marginRight: '20px' }}
                         width="98px"
-                        options={currentGood.category.filter(x => x.name !== '分体').map(c => ({ label: c.name, value: c._id }))}
+                        options={currentGood.category.filter(x => x.name.indexOf('分体')<0).map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
                     <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />

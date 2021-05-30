@@ -71,10 +71,10 @@ const App = ({
                             <StyleItem
                                 // width="170px"
                                 width={`${(currentStyle.styleSize / 27) * 14}vw`}
-                                styleId={`single-${currentStyle._id}`}
+                                styleId={`multiple-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
-                                styleId={currentStyle._id}
+                                // styleId={currentStyle._id}
                                 showGroupStroke={true}
                                 curStylesEditGroupIndex={currentStyleRegion - 1}
                                 onSetEditSvgGroupIndex={handleSetCurrentStyleRegion}
@@ -92,7 +92,7 @@ const App = ({
                                 width={`${(currentStyle.styleBackSize / 27) * 14}vw`}
                                 colors={selectColorList}
                                 {...currentStyle}
-                                styleId={`single-${currentStyle._id}`}
+                                styleId={`multiple-back-${currentStyle._id}`}
                                 svgUrl={currentStyle.svgUrlBack}
                                 showGroupStroke={true}
                                 shadowUrl={currentStyle.shadowUrlBack}
@@ -126,10 +126,10 @@ const App = ({
                             <StyleItem
                                 // width="170px"
                                 width={`${(currentStyle2.styleSize / 27) * 14}vw`}
-                                styleId={`single-${currentStyle2._id}`}
+                                styleId={`multiple-${currentStyle2._id}`}
                                 colors={selectColorList2}
                                 {...currentStyle2}
-                                styleId={currentStyle2._id}
+                                // styleId={currentStyle2._id}
                                 showGroupStroke={true}
                                 curStylesEditGroupIndex={currentStyleRegion2 - 1}
                                 onSetEditSvgGroupIndex={handleSetCurrentStyleRegion2}
@@ -147,7 +147,7 @@ const App = ({
                                 width={`${(currentStyle2.styleBackSize / 27) * 14}vw`}
                                 colors={selectColorList2}
                                 {...currentStyle2}
-                                styleId={`single-${currentStyle2._id}`}
+                                styleId={`multiple-back-${currentStyle2._id}`}
                                 svgUrl={currentStyle2.svgUrlBack}
                                 showGroupStroke={true}
                                 shadowUrl={currentStyle2.shadowUrlBack}

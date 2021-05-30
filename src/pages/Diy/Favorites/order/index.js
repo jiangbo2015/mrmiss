@@ -97,6 +97,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
         // setShowChange(false);
     };
 
+    console.log('favoriteToOrderGroupList', favoriteToOrderGroupList)
     return (      
         <OrderMark
             visible={visible}

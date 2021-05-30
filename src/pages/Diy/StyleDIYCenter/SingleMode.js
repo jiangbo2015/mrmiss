@@ -52,8 +52,13 @@ const App = ({
 
         // console.log('docs', docs);
     }
-    if (categoryObj && categoryObj.name === '分体') {
-        const top = currentGood.category.find(x => x.name === '单衣');
+    if (categoryObj && categoryObj.name.indexOf('分体') >= 0) {
+        // 分体
+        let categoryName = categoryObj.name.replace('分体', '')
+        // categoryName.replce('分体', '')
+        let categoryNameTop = `${categoryName}单衣`
+        let categoryNameBottom = `${categoryName}单裤`
+        const top = currentGood.category.find(x => x.name === categoryNameTop);
         if (top) {
             //选择的放在前面
             docs =
@@ -61,7 +66,7 @@ const App = ({
                     ? [...styleList[top._id].filter(x => x.isSelected), ...styleList[top._id].filter(x => !x.isSelected)]
                     : styleList[top._id];
         }
-        const bottom = currentGood.category.find(x => x.name === '单裤');
+        const bottom = currentGood.category.find(x => x.name === categoryNameBottom);
         if (bottom) {
             docs1 =
                 selectStyleList.length > 0
@@ -342,7 +347,7 @@ const App = ({
                 </div>
             </div>
 
-            {categoryObj && categoryObj.name === '分体' ? (
+            {categoryObj && categoryObj.name.indexOf('分体')>=0 ? (
                 <MultipleStyleSelector
                     currentStyle={currentStyle}
                     selectColorList={singleSelectColorList}

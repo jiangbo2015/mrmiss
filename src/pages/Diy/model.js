@@ -20,7 +20,7 @@ export default {
         selectStyleList: [],
         favoriteArr: [],
         favoriteEditObj: { styleAndColor: [] },
-        favoritePattern: 'middle', //  large, middle, small
+        favoritePattern: 'small', //  large, middle, small
         selectFavoriteList: [],
         favoriteToOrderGroupList: [],
         goodsList: [],
@@ -711,7 +711,7 @@ export default {
             favoriteToOrderGroupList.splice(payload, 1);
             yield put({
                 type: 'setFavoriteToOrderGroupList',
-                payload: [...favoriteToOrderGroupList],
+                payload: [...favoriteToOrderGroupList.filter(x => x.list.length)],
             });
         },
         *createCapsule({ payload }, { call, put, select }) {

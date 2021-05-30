@@ -114,11 +114,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
             case 'category':
                 {
                     nfavoriteArr = favoriteArr.sort((a, b) => {
-                        if (a.styleAndColor.length === b.styleAndColor.length) {
-                            return a.goodCategory.sort - b.goodCategory.sort;
-                        } else {
-                            return a.styleAndColor.length - b.styleAndColor.length;
-                        }
+                        // console.log('a.goodCategory.sort - b.goodCategory.sort', a.goodCategory.sort-b.goodCategory.sort)
+                        return a.goodCategory.sort - b.goodCategory.sort;
                     });
                 }
                 break;
@@ -288,8 +285,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                         width="100px"
                         options={[
                             { label: 'Large', value: 'large' },
-                            { label: 'middle', value: 'middle' },
-                            { label: 'small', value: 'small' },
+                            { label: 'Middle', value: 'middle' },
+                            { label: 'Small', value: 'small' },
                         ]}
                     />
                 </div>

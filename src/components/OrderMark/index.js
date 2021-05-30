@@ -88,52 +88,80 @@ const OrderMark = ({
     const [singleTotalPriceInfos, setSingleTotalPriceInfos] = useState({}); //每行总金额
     const [parteInfos, setParteInfos] = useState({}); // 所有 分数 信息
     useEffect(() => {
-        let initCountInfos = {};
-        let initParteInfos = {};
-        let initRowPickTypes = {};
-        let initRowRemarks = {};
-        commodityToOrderGroupList.map((g, ri) => {
-            initCountInfos[ri] = {};
-            initParteInfos[ri] = {};
-            initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
-            initRowPickTypes[ri] = g.pickType ? g.pickType : { val: 1, pieceCount: 1 };
-            g.list.map(favorite => {
-                const favoriteKey = `${favorite._id}-${ri}`;
-                initCountInfos[ri][favoriteKey] = {};
-                if (favorite.sizeInfoObject) {
-                    Object.keys(favorite.sizeInfoObject).map(s => {
-                        const sizeKey = `${ri}-${favorite._id}-${s}`;
-                        initCountInfos[ri][favoriteKey][sizeKey] = favorite.sizeInfoObject[s];
-                    });
-                }
-
-                if (favorite.parte) {
-                    initParteInfos[ri][favoriteKey] = favorite.parte;
-                }
-            });
-        });
         setSourceData(commodityToOrderGroupList);
-        setCountInfos(initCountInfos);
-        setParteInfos(initParteInfos);
-        setRowPickTypes(initRowPickTypes);
-        setRowRemarks(initRowRemarks);
+
+
+
+        // let initCountInfos = {};
+        // let initParteInfos = {};
+        // let initRowPickTypes = {};
+        // let initRowRemarks = {};
+        // const source = commodityToOrderGroupList.map((g, ri) => {
+        //     initCountInfos[ri] = {};
+        //     initParteInfos[ri] = {};
+        //     // initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
+        //     // initRowPickTypes[ri] = g.pickType ? g.pickType : { val: 1, pieceCount: 1 };
+        //     g.list.map(favorite => {
+        //         const favoriteKey = `${favorite._id}-${ri}`;
+        //         initCountInfos[ri][favoriteKey] = {};
+        //         if (favorite.sizeInfoObject) {
+        //             Object.keys(favorite.sizeInfoObject).map(s => {
+        //                 const sizeKey = `${ri}-${favorite._id}-${s}`;
+        //                 initCountInfos[ri][favoriteKey][sizeKey] = favorite.sizeInfoObject[s];
+        //             });
+        //         }
+
+        //         // if (favorite.parte) {
+        //         //     initParteInfos[ri][favoriteKey] = favorite.parte;
+        //         // }
+        //     });
+        //     // g.pickType
+        // });
     }, [commodityToOrderGroupList]);
     // useEffect(() => {
-    //     console.log('----sourceData----', sourceData);
+    //     let initCountInfos = {};
+    //     let initParteInfos = {};
+    //     let initRowPickTypes = {};
+    //     let initRowRemarks = {};
+    //     sourceData.map((g, ri) => {
+    //         initCountInfos[ri] = {};
+    //         initParteInfos[ri] = {};
+    //         initRowRemarks[ri] = g.rowRemarks ? g.rowRemarks : '';
+    //         initRowPickTypes[ri] = g.pickType ? g.pickType : { val: 1, pieceCount: 1 };
+    //         g.list.map(favorite => {
+    //             const favoriteKey = `${favorite._id}-${ri}`;
+    //             initCountInfos[ri][favoriteKey] = {};
+    //             if (favorite.sizeInfoObject) {
+    //                 Object.keys(favorite.sizeInfoObject).map(s => {
+    //                     const sizeKey = `${ri}-${favorite._id}-${s}`;
+    //                     initCountInfos[ri][favoriteKey][sizeKey] = favorite.sizeInfoObject[s];
+    //                 });
+    //             }
+
+    //             if (favorite.parte) {
+    //                 initParteInfos[ri][favoriteKey] = favorite.parte;
+    //             }
+    //         });
+    //     });
+    //     setCountInfos(initCountInfos);
+    //     setParteInfos(initParteInfos);
+    //     setRowPickTypes(initRowPickTypes);
+    //     setRowRemarks(initRowRemarks);
     // }, [sourceData]);
     useEffect(() => {
-        Object.keys(countInfos).map(row => {
-            let rowParte = parteInfos[row];
-            if (!countInfos[row]) return;
+        sourceData.map((g,row) => {
+            // let rowParte = parteInfos[row];
+            if (sourceData[row].list.length < 1) return;
+            // console.log('sourceData[row], row', sourceData[row], row)
             let rowUnitPrice = 0;
             rowUnitPrice += sourceData[row].list[0].price;
 
             let sum = 0;
             // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
             // if (rowPickTypes[row].val == 1) {
-            if (rowPickTypes[row].pieceCount) {
-                sum = lodash.sum(Object.values(countInfos[row]).map(ci => lodash.sum(Object.values(ci))));
-                sum = sum * rowPickTypes[row].pieceCount;
+            if (sourceData[row].pickType.pieceCount) {
+                sum = lodash.sum(sourceData[row].list.map(l => lodash.sum(Object.values(l.sizeInfoObject))));
+                sum = sum * sourceData[row].pickType.pieceCount;
             }
             // } else {
             //     for (var key in rowParte) {
@@ -148,14 +176,18 @@ const OrderMark = ({
         });
         setSingleTotalInfos({ ...singleTotalInfos });
         setSingleTotalPriceInfos({ ...singleTotalPriceInfos });
-    }, [countInfos, parteInfos, rowPickTypes]);
+    }, [sourceData]);
 
     const onDragEnd = result => {
         const { source, destination } = result;
-        const sInd = +source.droppableId;
-
+        const sInd = parseInt(source.droppableId, 10);
+        
+        // console.log('onDragEnd sInd', source.droppableId, sInd)
+        // console.log('onDragEnd sInd', destination.droppableId)
+        // console.log(sourceData[sInd],sourceData[dInd])
         // dropped outside the list
         if (!destination) {
+            console.log('dropped outside the list')
             const sourceClone = Array.from(sourceData[sInd].list);
             const [removed] = sourceClone.splice(source.index, 1);
             sourceData[sInd].list = sourceClone;
@@ -178,47 +210,44 @@ const OrderMark = ({
             setRowPickTypes({ ...rowPickTypes });
             return;
         }
-        const dInd = +destination.droppableId;
+        const dInd = parseInt(destination.droppableId, 10);
         if (sInd === dInd) {
+            // console.log('sInd === dInd');
             // console.log('sInd', sInd);
+            // console.log('dInd', dInd);
             // console.log('sourceData', sourceData);
             const items = reorder(sourceData[sInd].list, source.index, destination.index);
             const newState = [...sourceData];
             newState[sInd] = { ...sourceData[sInd], list: items };
             setSourceData(newState);
-        } else if (sourceData[sInd].key === sourceData[dInd].key) {
+        } else if (sourceData[sInd].styleNos === sourceData[dInd].styleNos) {
+            // console.log('sourceData[sInd].key === sourceData[dInd].key', sourceData[sInd].key);
             const result = move(sourceData[sInd].list, sourceData[dInd].list, source, destination);
             const newState = [...sourceData];
             newState[sInd].list = result[sInd];
             newState[dInd].list = result[dInd];
-
             setSourceData(newState.filter(group => group.list.length));
         }
     };
 
     const parseOrderData = () => {
         const orderData = sourceData.map((row, ri) => {
-            const { list, sizes, key, size, price, styleNos, originId, originNo } = row;
-            let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
-            let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
+            const { list, sizes, key, size, price, styleNos, originId, originNo, rowRemarks , pickType} = row;
+            // let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
+            // let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
             const items = list.map(favorite => {
                 const favoriteKey = `${favorite._id}-${ri}`;
-                let currentCountInfo = currentRowCountInfo[favoriteKey] ? currentRowCountInfo[favoriteKey] : {};
+                // let currentCountInfo = favorite;
 
-                let currentParteInfo = currentRowParteInfo[favoriteKey] ? currentRowParteInfo[favoriteKey] : 0;
+                // let currentParteInfo = currentRowParteInfo[favoriteKey] ? currentRowParteInfo[favoriteKey] : 0;
 
-                let sizeInfoObject = {};
-                let total = 0;
-                Object.keys(currentCountInfo).map(k => {
-                    sizeInfoObject[k.split('-')[2]] = currentCountInfo[k];
-                    total += currentCountInfo[k];
-                });
-                // let total = lodash.sum(Object.values(sizeInfoObject));
+                let sizeInfoObject = favorite.sizeInfoObject;
+                let total = lodash.sum(Object.values(sizeInfoObject));
                 let unitPrice = favorite.price;
 
                 let item = {
                     sizeInfoObject,
-                    parte: currentParteInfo,
+                    parte: 0,  //废弃
                     total,
                     totalPrice: unitPrice * total,
                 };
@@ -235,10 +264,10 @@ const OrderMark = ({
             });
             let aboutCases = singleTotalInfos[ri] && row.weight ? Math.ceil((singleTotalInfos[ri] * row.weight) / 35000) : 0;
             return {
-                pickType: rowPickTypes[ri],
+                pickType,
                 rowTotal: singleTotalInfos[ri],
                 rowTotalPrice: singleTotalPriceInfos[ri],
-                rowRemarks: rowRemarks[ri],
+                rowRemarks,
                 items,
                 isSelect: !!row.isSelect,
                 size,
@@ -251,6 +280,12 @@ const OrderMark = ({
         });
         return orderData;
     };
+
+    const handleDelRow = (row) => {
+        
+        sourceData.splice(row, 1)
+        setSourceData([...sourceData])
+    }
 
     const handleSend = async () => {
         const orderData = parseOrderData();
@@ -282,7 +317,9 @@ const OrderMark = ({
             </Flex>
         ));
     };
-
+    // if(parteInfos.length !== sourceData.length) return null;
+    // if(countInfos.length !== countInfos.length) return null;
+    // if(parteInfos.length !== parteInfos.length) return null;
     return (
         <Modal
             visible={visible}
@@ -343,12 +380,14 @@ const OrderMark = ({
                                         <Box width="160px">
                                             <Input.TextArea
                                                 rows={3}
-                                                value={rowRemarks[ind]}
+                                                value={el.rowRemarks}
                                                 onChange={e => {
-                                                    rowRemarks[ind] = e.target.value;
-                                                    setRowRemarks({
-                                                        ...rowRemarks,
-                                                    });
+                                                    // rowRemarks[ind] = e.target.value;
+                                                    // setRowRemarks({
+                                                    //     ...rowRemarks,
+                                                    // });
+                                                    sourceData[ind].rowRemarks = e.target.value
+                                                    setSourceData([...sourceData])
                                                     setShowChange(true);
                                                 }}
                                             />
@@ -376,7 +415,7 @@ const OrderMark = ({
                                         right: '10px',
                                     }}
                                     onClick={() => {
-                                        onDelRow(ind);
+                                        handleDelRow(ind);
                                     }}
                                 />
 
@@ -415,7 +454,7 @@ const OrderMark = ({
                                                             >
                                                                 <Flex justifyContent="space-around">
                                                                     <Flex
-                                                                        flex="1"
+                                                                        
                                                                         flexDirection="column"
                                                                         alignItems="center"
                                                                         justifyContent="space-around"
@@ -478,24 +517,13 @@ const OrderMark = ({
                                                                                         {s}
                                                                                         <InputNumber
                                                                                             value={
-                                                                                                currentCountInfo[sizeKey]
-                                                                                                    ? currentCountInfo[sizeKey]
+                                                                                                favorite.sizeInfoObject[s]
+                                                                                                    ? favorite.sizeInfoObject[s]
                                                                                                     : 0
                                                                                             }
                                                                                             onChange={val => {
-                                                                                                currentCountInfo[sizeKey] = val;
-                                                                                                currentRowCountInfo[
-                                                                                                    favoriteKey
-                                                                                                ] = {
-                                                                                                    ...currentCountInfo,
-                                                                                                };
-
-                                                                                                countInfos[
-                                                                                                    ind
-                                                                                                ] = currentRowCountInfo;
-                                                                                                setCountInfos({
-                                                                                                    ...countInfos,
-                                                                                                });
+                                                                                                sourceData[ind].list[index].sizeInfoObject[s] = val
+                                                                                                setSourceData([...sourceData])
                                                                                                 setShowChange(true);
                                                                                             }}
                                                                                         />
@@ -511,9 +539,9 @@ const OrderMark = ({
                                                                             minWidth="240px"
                                                                         >
                                                                             <Info
-                                                                                label="每份数量"
+                                                                                label="小计"
                                                                                 value={lodash.sum(
-                                                                                    Object.values(currentCountInfo),
+                                                                                    Object.values(favorite.sizeInfoObject)
                                                                                 )}
                                                                             />
                                                                         </Flex>
@@ -534,8 +562,8 @@ const OrderMark = ({
                                             width="120px"
                                             mode="white"
                                             value={
-                                                typeof rowPickTypes[ind] != 'undefined' && rowPickTypes[ind]
-                                                    ? rowPickTypes[ind].val
+                                                typeof el.pickType != 'undefined' && el.pickType
+                                                    ? el.pickType.val
                                                     : 0
                                             }
                                             options={[
@@ -545,11 +573,12 @@ const OrderMark = ({
                                                 { label: '单色混码单箱', value: 3 },
                                             ]}
                                             onSelect={val => {
-                                                console.log(val);
-                                                rowPickTypes[ind] = { ...rowPickTypes[ind], val };
-                                                setRowPickTypes({
-                                                    ...rowPickTypes,
-                                                });
+                                                // console.log(val);
+                                                sourceData[ind].pickType = { ...sourceData[ind].pickType, val };
+                                                setSourceData([...sourceData])
+                                                // setRowPickTypes({
+                                                //     ...rowPickTypes,
+                                                // });
                                                 setShowChange(true);
                                             }}
                                         />
@@ -559,9 +588,9 @@ const OrderMark = ({
                                                 每份
                                                 <InputBottomWhiteBorder
                                                     value={lodash.sum(
-                                                        Object.values(currentRowCountInfo).map(ci =>
-                                                            lodash.sum(Object.values(ci)),
-                                                        ),
+                                                        el.list.map(l =>
+                                                            lodash.sum(Object.values(l.sizeInfoObject))
+                                                        )
                                                     )}
                                                 />
                                                 件
@@ -576,14 +605,20 @@ const OrderMark = ({
                                             >
                                                 共
                                                 <InputNumber
-                                                    value={rowPickTypes[ind].pieceCount}
+                                                    value={el.pickType.pieceCount}
                                                     type="number"
                                                     style={{ width: '60px' }}
                                                     onChange={val => {
-                                                        rowPickTypes[ind] = { ...rowPickTypes[ind], pieceCount: val };
-                                                        setRowPickTypes({
-                                                            ...rowPickTypes,
-                                                        });
+                                                        // rowPickTypes[ind] = { ...rowPickTypes[ind], pieceCount: val };
+                                                        // setRowPickTypes({
+                                                        //     ...rowPickTypes,
+                                                        // });
+                                                    sourceData[ind].pickType = { ...sourceData[ind].pickType, pieceCount: val };
+                                                    setSourceData([...sourceData])
+                                                // setRowPickTypes({
+                                                //     ...rowPickTypes,
+                                                // });
+                                            
                                                         setShowChange(true);
                                                     }}
                                                 />
