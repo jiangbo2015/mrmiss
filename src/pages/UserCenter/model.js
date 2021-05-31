@@ -209,12 +209,9 @@ export default {
                 );
                 console.log('weight', weight);
                 let sizeObjInit = {};
-                let sizeArr = [];
-                // sizeArr?.map(s => {
-                //     sizeObjInit[s] = 0;
-                // });
-
-                sizeArr = sizeArr = o.size ? o.size?.split('/') : [];
+                // let sizeArr = [];
+                // let size = Object.keys(item.sizeInfoObject);
+                let sizeArr = Object.keys(item.sizeInfoObject)
 
                 // console.log('sizeObjInit', sizeObjInit);
                 return {

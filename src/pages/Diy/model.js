@@ -655,14 +655,21 @@ export default {
                 let size = gourpByStyle[key][0].styleAndColor[0].size;
                 let styleNos = gourpByStyle[key][0].styleAndColor.map(sc => sc.style.styleNo).join(',');
 
+                let sizeArr = size?.split('/');
+                    let sizeObjInit = {};
+                    sizeArr?.map(s => {
+                        sizeObjInit[s] = 0;
+                    });
+
                 gourpByStyle[key] = {
-                    list: gourpByStyle[key].map(x => ({ ...x, price: _.sumBy(x.styleAndColor, sc => sc.style.price) })),
+                    list: gourpByStyle[key].map(x => ({ ...x, price: _.sumBy(x.styleAndColor, sc => sc.style.price), sizeInfoObject: {...sizeObjInit}})),
                     key,
                     sizes: gourpByStyle[key][0].styleAndColor[0].style.size?.split('/'),
                     weight: lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.weight),
                     styleNos,
                     price,
                     size,
+                    pickType: {pieceCount:0, val:1},
                 };
             }
             const saveItems = saveOrder
@@ -683,7 +690,7 @@ export default {
                             ...i.favorite,
                             parte: i.parte,
                             price: _.sum(i.favorite.styleAndColor.map(sc => sc.styleId.price)),
-                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
+                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : {...sizeObjInit},
                             styleAndColor: i.favorite.styleAndColor.map(sc => ({
                                 colorIds: sc.colorIds.filter(c => c),
                                 styleId: sc.styleId._id,

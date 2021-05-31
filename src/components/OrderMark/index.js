@@ -250,6 +250,7 @@ const OrderMark = ({
                     parte: 0,  //废弃
                     total,
                     totalPrice: unitPrice * total,
+                    price: unitPrice
                 };
                 if (favorite.type === 'img') {
                     item.imgs = favorite.imgs;
