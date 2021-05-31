@@ -29,6 +29,8 @@ const ClassifyItem = ({ children, isSelected, ...props }) => (
 const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminChannel }) => {
     const ref = useRef(null);
     const [curABC, setCurABC] = useState('A');
+    const [remarkVal, setRemarkVal] = useState('');
+    
     const inputRef = useRef();
     useEffect(() => {
         dispatch({
@@ -40,7 +42,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
         console.log('codename', codename)
         const { codename, styles = [], flowerColors = [], plainColors = [] } = currentAdminChannel;
         if (curABC !== 'A') {
-            console.log('----payload: assign----');
+            setRemarkVal(currentAdminChannel.remark)
             dispatch({
                 type: 'diy/setCollocationPattern',
                 payload: 'assign',
@@ -66,6 +68,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 type: 'diy/batchSetSelectStyleList',
                 payload: [],
             });
+           
         }
     }, [currentAdminChannel,curABC]);
 
@@ -172,10 +175,13 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                             placeholder="10字以内"
                             // defaultVaule={}
                             ref={inputRef}
-                            value={currentAdminChannel.remark}
+                            value={remarkVal}
+                            onChange={(e) => {
+                                setRemarkVal(e.target.value)
+                            }}
                             onBlur={e => {
                                 if (handleUpdateRemarks) {
-                                    handleUpdateRemarks(e.target.value);
+                                    handleUpdateRemarks(remarkVal);
                                 }
                             }}
                             maxLength={10}
