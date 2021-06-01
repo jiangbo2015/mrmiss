@@ -212,6 +212,9 @@ export default {
                 // let sizeArr = [];
                 // let size = Object.keys(item.sizeInfoObject);
                 let sizeArr = Object.keys(item.sizeInfoObject)
+                sizeArr?.map(s => {
+                    sizeObjInit[s] = 0;
+                });
 
                 // console.log('sizeObjInit', sizeObjInit);
                 return {
