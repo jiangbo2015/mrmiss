@@ -10,9 +10,10 @@ export default defineConfig({
     },
     define: {
         // 'process.env.API_URL': 'http://8.209.64.159:3001',
-        // 'process.env.API_URL': 'https://we-idesign.com',
-        'process.env.API_URL': 'http://localhost:3001',
-        'process.env.DOWNLOAD_URL': 'http://localhost:3001',
+        'process.env.API_URL': 'https://we-idesign.com',
+        // 'process.env.API_URL': 'http://localhost:3001',
+        // 'process.env.DOWNLOAD_URL': 'http://localhost:3001',
+        'process.env.DOWNLOAD_URL': 'https://crm.we-idesign.com',
         // 'process.env.DOWNLOAD_URL': 'http://8.209.64.159:3001',
     },
     // proxy: {

@@ -90,8 +90,6 @@ const OrderMark = ({
     useEffect(() => {
         setSourceData(commodityToOrderGroupList);
 
-
-
         // let initCountInfos = {};
         // let initParteInfos = {};
         // let initRowPickTypes = {};
@@ -149,7 +147,7 @@ const OrderMark = ({
     //     setRowRemarks(initRowRemarks);
     // }, [sourceData]);
     useEffect(() => {
-        sourceData.map((g,row) => {
+        sourceData.map((g, row) => {
             // let rowParte = parteInfos[row];
             if (sourceData[row].list.length < 1) return;
             // console.log('sourceData[row], row', sourceData[row], row)
@@ -181,13 +179,13 @@ const OrderMark = ({
     const onDragEnd = result => {
         const { source, destination } = result;
         const sInd = parseInt(source.droppableId, 10);
-        
+
         // console.log('onDragEnd sInd', source.droppableId, sInd)
         // console.log('onDragEnd sInd', destination.droppableId)
         // console.log(sourceData[sInd],sourceData[dInd])
         // dropped outside the list
         if (!destination) {
-            console.log('dropped outside the list')
+            console.log('dropped outside the list');
             const sourceClone = Array.from(sourceData[sInd].list);
             const [removed] = sourceClone.splice(source.index, 1);
             sourceData[sInd].list = sourceClone;
@@ -232,7 +230,7 @@ const OrderMark = ({
 
     const parseOrderData = () => {
         const orderData = sourceData.map((row, ri) => {
-            const { list, sizes, key, size, price, styleNos, originId, originNo, rowRemarks , pickType} = row;
+            const { list, sizes, key, size, price, styleNos, originId, originNo, rowRemarks, pickType } = row;
             // let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
             // let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
             const items = list.map(favorite => {
@@ -247,18 +245,22 @@ const OrderMark = ({
 
                 let item = {
                     sizeInfoObject,
-                    parte: 0,  //废弃
+                    parte: 0, //废弃
                     total,
                     totalPrice: unitPrice * total,
-                    price: unitPrice
+                    price: unitPrice,
                 };
                 if (favorite.type === 'img') {
                     item.imgs = favorite.imgs;
                     item.type = 0;
                     item.colorObj = favorite.styleAndColor[0].colorIds[0];
                 } else {
+                    let colorCodes = favorite.styleAndColor.map(x => x.colorIds.map(c => c.code));
+                    colorCodes = lodash.difference(lodash.flattenDeep(colorCodes));
                     item.type = 1;
                     item.favoriteId = favorite._id;
+                    item.colorCodes = colorCodes.join('/');
+                    // item.favoriteId = favorite.styleAndColor.map(x => x=> colorIds);
                     item.favorite = favorite.favoriteObj ? favorite.favoriteObj : favorite;
                 }
                 return item;
@@ -282,11 +284,10 @@ const OrderMark = ({
         return orderData;
     };
 
-    const handleDelRow = (row) => {
-        
-        sourceData.splice(row, 1)
-        setSourceData([...sourceData])
-    }
+    const handleDelRow = row => {
+        sourceData.splice(row, 1);
+        setSourceData([...sourceData]);
+    };
 
     const handleSend = async () => {
         const orderData = parseOrderData();
@@ -387,8 +388,8 @@ const OrderMark = ({
                                                     // setRowRemarks({
                                                     //     ...rowRemarks,
                                                     // });
-                                                    sourceData[ind].rowRemarks = e.target.value
-                                                    setSourceData([...sourceData])
+                                                    sourceData[ind].rowRemarks = e.target.value;
+                                                    setSourceData([...sourceData]);
                                                     setShowChange(true);
                                                 }}
                                             />
@@ -455,7 +456,6 @@ const OrderMark = ({
                                                             >
                                                                 <Flex justifyContent="space-around">
                                                                     <Flex
-                                                                        
                                                                         flexDirection="column"
                                                                         alignItems="center"
                                                                         justifyContent="space-around"
@@ -481,7 +481,7 @@ const OrderMark = ({
                                                                                 <StyleItem
                                                                                     styleId={`${favorite._id}-${d._id}-item`}
                                                                                     colors={d.colorIds}
-                                                                                    width={`${d.style?.styleSize*100/27}px`}
+                                                                                    width={`${(d.style?.styleSize * 100) / 27}px`}
                                                                                     key={`${favorite._id}-${
                                                                                         d._id
                                                                                     }-${Math.random() * 1000000}`}
@@ -523,8 +523,10 @@ const OrderMark = ({
                                                                                                     : 0
                                                                                             }
                                                                                             onChange={val => {
-                                                                                                sourceData[ind].list[index].sizeInfoObject[s] = val
-                                                                                                setSourceData([...sourceData])
+                                                                                                sourceData[ind].list[
+                                                                                                    index
+                                                                                                ].sizeInfoObject[s] = val;
+                                                                                                setSourceData([...sourceData]);
                                                                                                 setShowChange(true);
                                                                                             }}
                                                                                         />
@@ -542,7 +544,7 @@ const OrderMark = ({
                                                                             <Info
                                                                                 label="小计"
                                                                                 value={lodash.sum(
-                                                                                    Object.values(favorite.sizeInfoObject)
+                                                                                    Object.values(favorite.sizeInfoObject),
                                                                                 )}
                                                                             />
                                                                         </Flex>
@@ -562,11 +564,7 @@ const OrderMark = ({
                                         <Select
                                             width="120px"
                                             mode="white"
-                                            value={
-                                                typeof el.pickType != 'undefined' && el.pickType
-                                                    ? el.pickType.val
-                                                    : 0
-                                            }
+                                            value={typeof el.pickType != 'undefined' && el.pickType ? el.pickType.val : 0}
                                             options={[
                                                 { label: '单色单码', value: 0 },
                                                 { label: '混色混码', value: 1 },
@@ -576,7 +574,7 @@ const OrderMark = ({
                                             onSelect={val => {
                                                 // console.log(val);
                                                 sourceData[ind].pickType = { ...sourceData[ind].pickType, val };
-                                                setSourceData([...sourceData])
+                                                setSourceData([...sourceData]);
                                                 // setRowPickTypes({
                                                 //     ...rowPickTypes,
                                                 // });
@@ -589,9 +587,7 @@ const OrderMark = ({
                                                 每份
                                                 <InputBottomWhiteBorder
                                                     value={lodash.sum(
-                                                        el.list.map(l =>
-                                                            lodash.sum(Object.values(l.sizeInfoObject))
-                                                        )
+                                                        el.list.map(l => lodash.sum(Object.values(l.sizeInfoObject))),
                                                     )}
                                                 />
                                                 件
@@ -614,12 +610,15 @@ const OrderMark = ({
                                                         // setRowPickTypes({
                                                         //     ...rowPickTypes,
                                                         // });
-                                                    sourceData[ind].pickType = { ...sourceData[ind].pickType, pieceCount: val };
-                                                    setSourceData([...sourceData])
-                                                // setRowPickTypes({
-                                                //     ...rowPickTypes,
-                                                // });
-                                            
+                                                        sourceData[ind].pickType = {
+                                                            ...sourceData[ind].pickType,
+                                                            pieceCount: val,
+                                                        };
+                                                        setSourceData([...sourceData]);
+                                                        // setRowPickTypes({
+                                                        //     ...rowPickTypes,
+                                                        // });
+
                                                         setShowChange(true);
                                                     }}
                                                 />
