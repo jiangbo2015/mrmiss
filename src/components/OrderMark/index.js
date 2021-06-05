@@ -319,6 +319,7 @@ const OrderMark = ({
             </Flex>
         ));
     };
+    console.log('sourceData', sourceData)
     // if(parteInfos.length !== sourceData.length) return null;
     // if(countInfos.length !== countInfos.length) return null;
     // if(parteInfos.length !== parteInfos.length) return null;
@@ -359,8 +360,8 @@ const OrderMark = ({
             </Flex>
             <DragDropContext onDragEnd={onDragEnd}>
                 {sourceData.map((el, ind) => {
-                    let currentRowCountInfo = countInfos[ind] ? countInfos[ind] : {};
-                    let currentRowParteInfo = parteInfos[ind] ? parteInfos[ind] : {};
+                    // let currentRowCountInfo = countInfos[ind] ? countInfos[ind] : {};
+                    // let currentRowParteInfo = parteInfos[ind] ? parteInfos[ind] : {};
                     return (
                         <Flex alignItems="center" m="0px 24px">
                             <ReactSVG
@@ -499,7 +500,11 @@ const OrderMark = ({
                                                                             </Box>
                                                                         ))}
                                                                         <Flex mb="30px">
-                                                                            {el.sizes?.map(s => {
+                                                                            {el.sizes?.map((s) => {
+                                                                                if(ind === 0 && index === 0){
+                                                                                    console.log('el.sizes?.map(s', s)
+                                                                                    console.log('favorite.sizeInfoObject[s]', favorite.sizeInfoObject[s])    
+                                                                                }
                                                                                 const sizeKey = `${ind}-${favorite._id}-${s}`;
 
                                                                                 return (
