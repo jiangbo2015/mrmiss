@@ -28,7 +28,7 @@ const App = ({
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: '28px 0',
-                    backgroundColor: collocationBg ? '#f7f7f7' : '#222222',
+                    backgroundColor: collocationBg ? '#ffffff' : '#222222',
                     position: 'relative'
                 }}
                 onClick={() => {

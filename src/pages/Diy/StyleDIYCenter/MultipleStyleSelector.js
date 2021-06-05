@@ -40,7 +40,7 @@ const App = ({
                     justifyContent: 'center',
                     flexDirection: 'column',
                     position: 'relative',
-                    backgroundColor: collocationBg ? '#f7f7f7' : '#222222'
+                    backgroundColor: collocationBg ? '#ffffff' : '#222222'
                 }}
                 onClick={() => {
                     handleSetCurrentStyleRegion(-1);
