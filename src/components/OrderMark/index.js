@@ -501,6 +501,7 @@ const OrderMark = ({
                                                                         ))}
                                                                         <Flex mb="30px">
                                                                             {el.sizes?.map((s) => {
+                                                                                // const sizeKey = `${ind}-${favorite._id}-${s}`;
                                                                                 const sizeKey = `${ind}-${index}-${favorite._id}-${s}`;
                                                                                 if(ind === 0 && index === 0){
                                                                                     console.log('sizeKey`;', sizeKey)
