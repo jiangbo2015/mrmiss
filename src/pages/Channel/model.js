@@ -18,8 +18,8 @@ export default {
     },
     reducers: {
         setCurrentChannel(state, action) {
-            console.log('======setCurrentChannel=======')
-            console.log(action.payload)
+            // console.log('======setCurrentChannel=======')
+            // console.log(action.payload)
             return {
                 ...state,
                 currentAdminChannel: action.payload,
@@ -34,11 +34,11 @@ export default {
     },
     effects: {
         *update({ payload }, { call, put }) {
-            console.log(' channel update');
+            // console.log(' channel update');
             const { data } = yield call(api.update, payload);
             if (data) {
                 message.info('更新成功');
-                // console.log('发送成功');
+                // // console.log('发送成功');
                 // fetchMyAdminChannelList
                 yield put({
                     type: 'fetchMyAdminChannelList',
@@ -49,7 +49,7 @@ export default {
         *fetchMyAdminChannelList({ payload }, { call, put }) {
             const { data } = yield call(api.getMyAdminChannel, payload);
             if (data) {
-                // console.log('发送成功');
+                // // console.log('发送成功');
                 yield put({
                     type: 'setMyAdminChannelList',
                     payload: data,

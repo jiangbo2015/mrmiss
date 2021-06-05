@@ -10,7 +10,7 @@ const ChartDiy = ({ dispatch, diyData }) => {
     }, []);
 
     const handleSearch = value => {
-        console.log(value);
+        // console.log(value);
         dispatch({
             type: 'chart/getDiyData',
             payload: value,

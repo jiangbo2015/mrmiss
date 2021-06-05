@@ -108,7 +108,7 @@ export default props => {
                             return 'loading';
                         }}
                         beforeInjection={svg => {
-                            // console.log("curStylesEditGroupIndex", curStylesEditGroupIndex)
+                            // // console.log("curStylesEditGroupIndex", curStylesEditGroupIndex)
                             svg.setAttribute('id', svgId || key);
                             let svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                             svg.appendChild(svgDefs);
@@ -122,7 +122,7 @@ export default props => {
                                         x: 0,
                                         y: 0,
                                     };
-                                    // console.log("imgVals", imgVals)
+                                    // // console.log("imgVals", imgVals)
                                     let svgPattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
 
                                     svgPattern.setAttribute('id', `${styleId}-${color._id}-${i}`);
@@ -231,7 +231,7 @@ export default props => {
                             return 'loading';
                         }}
                         beforeInjection={svg => {
-                            // console.log("curStylesEditGroupIndex", curStylesEditGroupIndex)
+                            // // console.log("curStylesEditGroupIndex", curStylesEditGroupIndex)
                             svg.setAttribute('id', svgId || key);
                             let svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                             svg.appendChild(svgDefs);
@@ -245,7 +245,7 @@ export default props => {
                                         x: 0,
                                         y: 0,
                                     };
-                                    // console.log("imgVals", imgVals)
+                                    // // console.log("imgVals", imgVals)
                                     let svgPattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
 
                                     svgPattern.setAttribute('id', `${styleId}-${color._id}-${i}`);

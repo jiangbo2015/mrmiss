@@ -50,7 +50,7 @@ const App = ({
                   ]
                 : styleList[currentGoodCategory];
 
-        // console.log('docs', docs);
+        // // console.log('docs', docs);
     }
     if (categoryObj && categoryObj.name.indexOf('分体') >= 0) {
         // 分体
@@ -205,7 +205,7 @@ const App = ({
     };
 
     const handleSetCurrentStyleRegion = val => {
-        // console.log('handleSetCurrentStyleRegion', val);
+        // // console.log('handleSetCurrentStyleRegion', val);
         dispatch({
             type: 'diy/setCurrentStyleRegion',
             payload: val + 1,
@@ -213,7 +213,7 @@ const App = ({
     };
 
     const handleSetCurrentStyleRegion1 = val => {
-        // console.log('handleSetCurrentStyleRegion', val);
+        // // console.log('handleSetCurrentStyleRegion', val);
         dispatch({
             type: 'diy/setCurrentStyleRegion1',
             payload: val + 1,
@@ -257,7 +257,7 @@ const App = ({
                         value="Time"
                         disabled
                         onClick={() => {
-                            console.log('time time');
+                            // console.log('time time');
                         }}
                     />
                 </div>

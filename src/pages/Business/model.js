@@ -62,7 +62,7 @@ export default {
     },
     effects: {
         *getMyCustomer({ payload }, { call, put }) {
-            // console.log('登录成功，将token写入本地，并跳转到主体');
+            // // console.log('登录成功，将token写入本地，并跳转到主体');
             // const { data } = yield call(api.login, payload);
             // 登录成功，将token写入本地，并跳转到主体
             const { data } = yield call(api.getCustomerUser, payload);
@@ -177,7 +177,7 @@ export default {
             const {selectedRows} = payload
             const orderMap = lodash.groupBy(selectedRows, 'orderType')
             const orderTypes = Object.keys(orderMap)
-            console.log('orderMap', orderMap)
+            // console.log('orderMap', orderMap)
             for(let i = 0;i<orderTypes.length;i++){
                 const k = orderTypes[i];
                 switch(k){
@@ -225,7 +225,7 @@ export default {
                     res = yield call(api.getShopOrderDetail, { _id: payload._id });
                 } break;
             }
-            console.log('createCurrentOrderToGroupList', res)
+            // console.log('createCurrentOrderToGroupList', res)
             let saveOrder = [];
             if(res?.data?.children?.length>0){
                 for(let i = 0; i < res.data.children.length; i ++){
@@ -253,7 +253,7 @@ export default {
     
 
             const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
-            console.log('gourpByStyle', gourpByStyle);
+            // console.log('gourpByStyle', gourpByStyle);
             for (var key in gourpByStyle) {
                 let price = lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.price);
                 let size = gourpByStyle[key][0].styleAndColor[0].size;
@@ -274,7 +274,7 @@ export default {
                 let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.style?._id ? sc.styleId : sc.styleId._id).join('-')}`;
                 // let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
                 let weight = lodash.sumBy(item.favorite.styleAndColor, sc => sc.style?._id ? sc.style?.weight : sc.styleId.weight);
-                console.log('weight', weight);
+                // console.log('weight', weight);
                 let sizeObjInit = {};
                 let sizeArr = [];
                 // sizeArr?.map(s => {
@@ -284,7 +284,7 @@ export default {
               
                 sizeArr = sizeArr = o.size ? o.size?.split('/') : [];
                
-                // console.log('sizeObjInit', sizeObjInit);
+                // // console.log('sizeObjInit', sizeObjInit);
                 return {
                     list: o.items.map(i => ({
                         ...i.favorite,
@@ -325,7 +325,7 @@ export default {
             const res = yield call(api.getShopOrderDetail, { _id: payload._id });
             
             
-            console.log('createCurrentShopOrderToGroupList', res)
+            // console.log('createCurrentShopOrderToGroupList', res)
             let saveOrder = [];
             if(res?.data?.children?.length>0){
                 for(let i = 0; i < res.data.children.length; i ++){
@@ -350,7 +350,7 @@ export default {
                 // res?.data?.children
             }
         
-            console.log('saveOrder', saveOrder)
+            // console.log('saveOrder', saveOrder)
             yield put({
                 type: 'setCurrentOrder',
                 payload: payload,

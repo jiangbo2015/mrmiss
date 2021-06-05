@@ -10,7 +10,7 @@ const ChartCom = ({ dispatch, capsuleData }) => {
     }, []);
 
     const handleSearch = value => {
-        console.log(value);
+        // console.log(value);
         dispatch({
             type: 'chart/getCapsuleData',
             payload: value,

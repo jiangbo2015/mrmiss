@@ -150,12 +150,12 @@ const OrderMark = ({
         sourceData.map((g, row) => {
             // let rowParte = parteInfos[row];
             if (sourceData[row].list.length < 1) return;
-            // console.log('sourceData[row], row', sourceData[row], row)
+            // // console.log('sourceData[row], row', sourceData[row], row)
             let rowUnitPrice = 0;
             rowUnitPrice += sourceData[row].list[0].price;
 
             let sum = 0;
-            // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
+            // // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
             // if (rowPickTypes[row].val == 1) {
             if (sourceData[row].pickType.pieceCount) {
                 sum = lodash.sum(sourceData[row].list.map(l => lodash.sum(Object.values(l.sizeInfoObject))));
@@ -180,12 +180,12 @@ const OrderMark = ({
         const { source, destination } = result;
         const sInd = parseInt(source.droppableId, 10);
 
-        // console.log('onDragEnd sInd', source.droppableId, sInd)
-        // console.log('onDragEnd sInd', destination.droppableId)
-        // console.log(sourceData[sInd],sourceData[dInd])
+        // // console.log('onDragEnd sInd', source.droppableId, sInd)
+        // // console.log('onDragEnd sInd', destination.droppableId)
+        // // console.log(sourceData[sInd],sourceData[dInd])
         // dropped outside the list
         if (!destination) {
-            console.log('dropped outside the list');
+            // // console.log('dropped outside the list');
             const sourceClone = Array.from(sourceData[sInd].list);
             const [removed] = sourceClone.splice(source.index, 1);
             sourceData[sInd].list = sourceClone;
@@ -195,7 +195,7 @@ const OrderMark = ({
                 val: 0,
                 pieceCount: 0,
             };
-            // console.log('removed', removed);
+            // // console.log('removed', removed);
             setSourceData([
                 ...sourceData,
                 {
@@ -210,16 +210,16 @@ const OrderMark = ({
         }
         const dInd = parseInt(destination.droppableId, 10);
         if (sInd === dInd) {
-            // console.log('sInd === dInd');
-            // console.log('sInd', sInd);
-            // console.log('dInd', dInd);
-            // console.log('sourceData', sourceData);
+            // // console.log('sInd === dInd');
+            // // console.log('sInd', sInd);
+            // // console.log('dInd', dInd);
+            // // console.log('sourceData', sourceData);
             const items = reorder(sourceData[sInd].list, source.index, destination.index);
             const newState = [...sourceData];
             newState[sInd] = { ...sourceData[sInd], list: items };
             setSourceData(newState);
         } else if (sourceData[sInd].styleNos === sourceData[dInd].styleNos) {
-            // console.log('sourceData[sInd].key === sourceData[dInd].key', sourceData[sInd].key);
+            // // console.log('sourceData[sInd].key === sourceData[dInd].key', sourceData[sInd].key);
             const result = move(sourceData[sInd].list, sourceData[dInd].list, source, destination);
             const newState = [...sourceData];
             newState[sInd].list = result[sInd];
@@ -319,7 +319,7 @@ const OrderMark = ({
             </Flex>
         ));
     };
-    console.log('sourceData', sourceData)
+    // console.log('sourceData', sourceData)
     // if(parteInfos.length !== sourceData.length) return null;
     // if(countInfos.length !== countInfos.length) return null;
     // if(parteInfos.length !== parteInfos.length) return null;
@@ -503,12 +503,8 @@ const OrderMark = ({
                                                                             {el.sizes?.map((s) => {
                                                                                 // const sizeKey = `${ind}-${favorite._id}-${s}`;
                                                                                 const sizeKey = `${ind}-${index}-${favorite._id}-${s}`;
-                                                                                if(ind === 0 && index === 0){
-                                                                                    console.log('sizeKey`;', sizeKey)
-                                                                                    console.log('el.sizes?.map(s', s)
-                                                                                    console.log('favorite.sizeInfoObject[s]', favorite.sizeInfoObject[s])    
-                                                                                }
                                                                                 
+            
 
                                                                                 return (
                                                                                     <Flex
@@ -517,7 +513,6 @@ const OrderMark = ({
                                                                                         key={sizeKey}
                                                                                     >
                                                                                         {s}
-                                                                                        {favorite.sizeInfoObject[s]}
                                                                                         <InputNumber
                                                                                             value={favorite.sizeInfoObject[s]}
                                                                                             onChange={val => {
@@ -570,7 +565,7 @@ const OrderMark = ({
                                                 { label: '单色混码单箱', value: 3 },
                                             ]}
                                             onSelect={val => {
-                                                // console.log(val);
+                                                // // console.log(val);
                                                 sourceData[ind].pickType = { ...sourceData[ind].pickType, val };
                                                 setSourceData([...sourceData]);
                                                 // setRowPickTypes({

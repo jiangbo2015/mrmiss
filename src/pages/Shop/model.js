@@ -140,7 +140,7 @@ export default {
             }
         },
         *fetchMyShopCart({ payload }, { call, put }) {
-            console.log('******fetchMyShopCart');
+            // console.log('******fetchMyShopCart');
             const res = yield call(api.getMyShopCart, payload);
             if (res && Array.isArray(res.data)) {
                 yield put({

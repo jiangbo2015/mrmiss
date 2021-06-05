@@ -31,7 +31,7 @@ const favoriteBox = {
 
 const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentAdminChannel }) => {
     const selectAll = favoriteArr.length === favoriteArr.filter(x => x.isSelected).length;
-    console.log('favoritePattern', favoritePattern);
+    // console.log('favoritePattern', favoritePattern);
     const [orderVisible, setOrderVisible] = useState(false);
     const [bigerVisible, setBigerVisible] = useState(false);
     const [capsuleInputVisible, setCapsuleInputVisible] = useState(false);
@@ -73,7 +73,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
 
         let selectedColorsArr = favorite.styleAndColor.map(x => x.colorIds);
         let selectColors = lodash.union(lodash.flatten(selectedColorsArr).map(x => x._id));
-        console.log(selectColors);
+        // console.log(selectColors);
         dispatch({
             type: 'diy/batchSetSelectColorList',
             payload: {
@@ -93,7 +93,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
     };
     const handleToggleTime = async val => {
         window.timeOrder = !window.timeOrder;
-        // console.log('window.timeOrder', window.timeOrder);
+        // // console.log('window.timeOrder', window.timeOrder);
         let nfavoriteArr = [];
 
         switch (val) {
@@ -114,7 +114,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
             case 'category':
                 {
                     nfavoriteArr = favoriteArr.sort((a, b) => {
-                        // console.log('a.goodCategory.sort - b.goodCategory.sort', a.goodCategory.sort-b.goodCategory.sort)
+                        // // console.log('a.goodCategory.sort - b.goodCategory.sort', a.goodCategory.sort-b.goodCategory.sort)
                         return a.goodCategory.sort - b.goodCategory.sort;
                     });
                 }
@@ -127,7 +127,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
     };
 
     const handleSelectAll = () => {
-        console.log('handleSelectAll');
+        // // console.log('handleSelectAll');
         dispatch({
             type: 'diy/toogleSelectAllFavorite',
             payload: !selectAll,
@@ -227,7 +227,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                 visible={capsuleInputVisible}
                 placeholder="请输入胶囊名称："
                 onOk={async input => {
-                    console.log('covermap');
+                    // console.log('covermap');
                     if (!input) {
                         message.info('胶囊名称不能为空');
                         return;

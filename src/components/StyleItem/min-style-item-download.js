@@ -5,7 +5,7 @@ import StyleImg from './style-img-download';
 export default class A extends React.Component {
     shouldComponentUpdate(nextProps, nextState) {
         if (nextProps.svgId !== this.svgId) {
-            // console.log('render');
+            // // console.log('render');
             return true;
         }
         return false;

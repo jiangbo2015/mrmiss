@@ -58,7 +58,7 @@ export default {
             };
         },
         setStyleQueryChangeKey(state, action) {
-            // console.log('styleQueryChangeKey', action.payload);
+            // // console.log('styleQueryChangeKey', action.payload);
             return {
                 ...state,
                 styleQueryChangeKey: action.payload,
@@ -91,14 +91,14 @@ export default {
             };
         },
         setFavoriteToOrderGroupList(state, action) {
-            console.log('setFavoriteToOrderGroupList', action);
+            // console.log('setFavoriteToOrderGroupList', action);
             return {
                 ...state,
                 favoriteToOrderGroupList: action.payload,
             };
         },
         setFavoritePattern(state, action) {
-            console.log('setFavoritePattern', action);
+            // console.log('setFavoritePattern', action);
             return {
                 ...state,
                 favoritePattern: action.payload,
@@ -211,7 +211,7 @@ export default {
     effects: {
         *fetchStyleList({ payload }, { call, put, select }) {
             // const { styleList = { docs: [] } } = yield select(state => state.diy);
-            // console.log('originData', originData);
+            // // console.log('originData', originData);
             // if (!originData) return;
             const res = yield call(api.getUserStyleList, payload);
             if (res.data && Array.isArray(res.data.category)) {
@@ -228,7 +228,7 @@ export default {
         },
         *fetchGoodsList({ payload }, { call, put, select }) {
             const res = yield call(api.getVisibleList);
-            // console.log('originData', originData);
+            // // console.log('originData', originData);
             // if (!originData) return;
             // goods/getVisibleList
             if (res && res.data) {
@@ -504,7 +504,7 @@ export default {
                 case 'assign':
                     {
                         //已选中，就取消
-                        console.log('findSelectIndex', findSelectIndex);
+                        // console.log('findSelectIndex', findSelectIndex);
                         if (findSelectIndex >= 0) {
                             newValue = [...selectColorList];
                             newValue.splice(findSelectIndex, 1);
@@ -534,7 +534,7 @@ export default {
                     type: 'setSingleSelectColorList',
                     payload: newValue,
                 });
-                console.log('newValue1', newValue1);
+                // console.log('newValue1', newValue1);
                 yield put({
                     type: 'setSingleSelectColorList1',
                     payload: newValue1,
@@ -599,7 +599,7 @@ export default {
 
             const findSelectIndex = selectFavoriteList.findIndex(x => x._id == item._id);
 
-            console.log('findSelectIndex', findSelectIndex);
+            // console.log('findSelectIndex', findSelectIndex);
             if (findSelectIndex >= 0) {
                 newValue = [...selectFavoriteList];
                 newValue.splice(findSelectIndex, 1);
@@ -635,7 +635,7 @@ export default {
             const res = yield call(api.getMyOrderList, { isSend: 0, goodsId: currentGood._id });
             let saveOrder = [];
             if (res && Array.isArray(res.data) && res.data.length > 0) {
-                console.log('data', res.data);
+                // console.log('data', res.data);
                 yield put({
                     type: 'setEditOrderSaveId',
                     payload: res.data[0]._id,
@@ -649,7 +649,7 @@ export default {
             }
 
             const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
-            console.log('gourpByStyle', gourpByStyle);
+            // console.log('gourpByStyle', gourpByStyle);
             for (var key in gourpByStyle) {
                 let price = lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.price);
                 let size = gourpByStyle[key][0].styleAndColor[0].size;
@@ -679,12 +679,12 @@ export default {
                     let key = `${k}-${item.favorite.styleAndColor.map(sc => sc.styleId._id).join('-')}`;
                     let sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/');
                     let weight = lodash.sumBy(item.favorite.styleAndColor, sc => sc.styleId.weight);
-                    console.log('weight', weight);
+                    // console.log('weight', weight);
                     let sizeObjInit = {};
                     sizeArr?.map(s => {
                         sizeObjInit[s] = 0;
                     });
-                    // console.log('sizeObjInit', sizeObjInit);
+                    // // console.log('sizeObjInit', sizeObjInit);
                     return {
                         list: o.items.map(i => ({
                             ...i.favorite,
@@ -758,7 +758,7 @@ export default {
         },
         *batchSetSelectStyleList({ payload = [] }, { call, put, select }) {
             const { styleList, currentGoodCategory } = yield select(state => state.diy);
-            // console.log('styleList[currentGoodCategory]', styleList[currentGoodCategory]);
+            // // console.log('styleList[currentGoodCategory]', styleList[currentGoodCategory]);
             if (!styleList[currentGoodCategory]) {
                 return;
             }

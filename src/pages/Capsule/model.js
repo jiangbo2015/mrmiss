@@ -183,13 +183,13 @@ export default {
             // { styleAndColor: params, goodId: goodId }
         },
         *addOrderMark({ payload }, { call, put, select }) {
-            // console.log('capsule/addOrder');
+            // // console.log('capsule/addOrder');
             let { currentCapsule, currentCapsuleStyle } = yield select(state => state.capsule);
             if (payload) {
                 currentCapsuleStyle = payload;
             }
             const resOrder = yield call(api.getMyOrderList, { isSend: 0, capsuleId: currentCapsule._id });
-            // console.log('currentCapsuleStyle', currentCapsuleStyle);
+            // // console.log('currentCapsuleStyle', currentCapsuleStyle);
             let saveOrderData = {
                 capsuleId: currentCapsule._id,
                 orderData: [],
@@ -225,7 +225,7 @@ export default {
             const res = yield call(api.getMyOrderList, { isSend: 0, capsuleId: currentCapsule._id });
             let saveOrder = [];
             if (res && Array.isArray(res.data) && res.data.length > 0) {
-                console.log('data', res.data);
+                // console.log('data', res.data);
                 yield put({
                     type: 'setEditOrderSaveId',
                     payload: res.data[0]._id,

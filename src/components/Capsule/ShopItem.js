@@ -89,7 +89,7 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                         {colorWithStyleImgs.map((c = {}, i) => {
                             // const { colorObj = {} } = c;
                             // const { value } = colorObj;
-                            // console.log('colorObj', value);
+                            // // console.log('colorObj', value);
                             return (
                                 <Dot
                                     size="15px"

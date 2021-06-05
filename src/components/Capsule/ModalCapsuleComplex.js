@@ -84,9 +84,9 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 );
 
 const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
-    // console.log('currentCapsuleStyle', currentCapsuleStyle);
+    // // console.log('currentCapsuleStyle', currentCapsuleStyle);
     const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
-    // console.log('currentCapsuleStyle', currentCapsuleStyle);
+    // // console.log('currentCapsuleStyle', currentCapsuleStyle);
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
@@ -277,9 +277,9 @@ const ModalSimple = ({
     capsuleStyleTopAndBottomList = { top: [], bottom: [] },
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
-    // console.log('currentCapsuleStyle', currentCapsuleStyle);
-    // console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList);
-    // console.log('currentCapsuleTopStyleIndex', currentCapsuleTopStyleIndex);
+    // // console.log('currentCapsuleStyle', currentCapsuleStyle);
+    // // console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList);
+    // // console.log('currentCapsuleTopStyleIndex', currentCapsuleTopStyleIndex);
     // const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';

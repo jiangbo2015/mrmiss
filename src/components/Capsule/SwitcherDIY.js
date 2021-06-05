@@ -51,7 +51,7 @@ const SwitcherComponent = ({
         },
         on: {
             slideChange: () => {
-                // console.log('ABC[(ref.current.swiper.realIndex + 1) % 10]', ABC[(ref.current.swiper.realIndex + 1) % 10]);
+                // // console.log('ABC[(ref.current.swiper.realIndex + 1) % 10]', ABC[(ref.current.swiper.realIndex + 1) % 10]);
                 setCurABC(ABC[(ref.current.swiper.realIndex + 1) % 10]);
             },
         },
@@ -68,9 +68,9 @@ const SwitcherComponent = ({
         }
     }, [myAdminChannelList, curABC]);
     useEffect(() => {
-        // console.log('useEffect assigned');
+        // // console.log('useEffect assigned');
         if (ref.current !== null && ref.current.swiper !== null) {
-            // console.log('useEffect assigned');
+            // // console.log('useEffect assigned');
             ref.current.swiper.slideTo(3);
         }
         if (assigned && assigned._id) {
@@ -109,7 +109,7 @@ const SwitcherComponent = ({
                         {...settings}
                         ref={ref}
                         onChange={(...args) => {
-                            // console.log('Swiper onChange', args);
+                            // // console.log('Swiper onChange', args);
                         }}
                     >
                         {ABC.map((item, i) => (

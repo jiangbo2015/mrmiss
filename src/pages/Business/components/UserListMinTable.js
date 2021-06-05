@@ -91,10 +91,10 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUs
                     type: isSingle?'radio':'checkbox',
                     onChange: selectedRowKeys => {
                         setSelectRowKeys(selectedRowKeys);
-                        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
+                        // // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
-                        // console.log(record);
+                        // // console.log(record);
                         return {
                             disabled: record.name === 'Disabled User',
                             orderNo: record.orderNo,
@@ -108,7 +108,7 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUs
 };
 
 export default connect(({ business = {}, user }) => {
-    // console.log('props', props);
+    // // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,
         customerList: business.customerList,

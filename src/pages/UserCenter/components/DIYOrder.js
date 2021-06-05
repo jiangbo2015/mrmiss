@@ -113,7 +113,7 @@ const OrderTable = ({ orderList = [], dispatch,onShowDetail }) => {
 };
 
 export default connect(({ usercenter }) => {
-    // console.log('props', props);
+    // // console.log('props', props);
     return {
         orderList: usercenter.myDiyOrder,
     };

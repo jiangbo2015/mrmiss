@@ -29,7 +29,7 @@ const RoundBtn = props => (
 );
 
 const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
-    // console.log('showNum', showNum);
+    // // console.log('showNum', showNum);
     const { shopStyle, count, _id } = data;
     const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum } = shopStyle;
     const [current, setCurrent] = useState(0);
@@ -155,15 +155,15 @@ const Cart = ({
     let sumCount = 0;
     let sumPrice = 0;
     myShopCartList.map(sc => {
-        // console.log('sc.count', sc.count);
+        // // console.log('sc.count', sc.count);
         let { shopStyle = { caseNum: 0, numInBag: 0, price: 0 } } = sc;
         let itemCount = currentUser.role == 1 ? shopStyle.caseNum : shopStyle.numInBag;
         sumCount += sc.count * itemCount;
-        // console.log('sumCount', sumCount);
+        // // console.log('sumCount', sumCount);
         sumPrice += sc.count * itemCount * shopStyle.price;
     });
     useEffect(() => {
-        // console.log('fetchMyShopCart');
+        // // console.log('fetchMyShopCart');
         if (visible) {
             init();
         } else {

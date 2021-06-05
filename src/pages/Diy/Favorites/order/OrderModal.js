@@ -106,7 +106,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                 }
             });
         });
-        console.log('favoriteToOrderGroupList', favoriteToOrderGroupList);
+        // console.log('favoriteToOrderGroupList', favoriteToOrderGroupList);
         setSourceData(favoriteToOrderGroupList);
         setCountInfos(initCountInfos);
         setParteInfos(initParteInfos);
@@ -114,7 +114,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
         setRowRemarks(initRowRemarks);
     }, [favoriteToOrderGroupList]);
     // useEffect(() => {
-    //     console.log('----sourceData----', sourceData);
+    //     // console.log('----sourceData----', sourceData);
     // }, [sourceData]);
     useEffect(() => {
         Object.keys(countInfos).map(row => {
@@ -124,7 +124,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
             rowUnitPrice += lodash.sum(sourceData[row].list[0].styleAndColor.map(sc => sc.style.price));
 
             let sum = 0;
-            // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
+            // // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
             if (rowPickTypes[row].val == 1) {
                 if (rowPickTypes[row].pieceCount) {
                     sum = lodash.sum(Object.values(countInfos[row]).map(ci => lodash.sum(Object.values(ci))));
@@ -160,7 +160,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                 val: 0,
                 pieceCount: 0,
             };
-            // console.log('removed', removed);
+            // // console.log('removed', removed);
             setSourceData([
                 ...sourceData,
                 {
@@ -175,8 +175,8 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
         }
         const dInd = +destination.droppableId;
         if (sInd === dInd) {
-            // console.log('sInd', sInd);
-            // console.log('sourceData', sourceData);
+            // // console.log('sInd', sInd);
+            // // console.log('sourceData', sourceData);
             const items = reorder(sourceData[sInd].list, source.index, destination.index);
             const newState = [...sourceData];
             newState[sInd] = { ...sourceData[sInd], list: items };
@@ -234,7 +234,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
         const orderData = parseOrderData();
         const res = _.groupBy(orderData, 'isSelect');
 
-        // console.log('res', res);
+        // // console.log('res', res);
         // return;
         await dispatch({
             type: 'diy/addOrder',
@@ -280,7 +280,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                 {sourceData.map((el, ind) => {
                     let currentRowCountInfo = countInfos[ind] ? countInfos[ind] : {};
                     let currentRowParteInfo = parteInfos[ind] ? parteInfos[ind] : {};
-                    // console.log('currentCountInfo', currentCountInfo);
+                    // // console.log('currentCountInfo', currentCountInfo);
                     return (
                         <Flex alignItems="center" m="0px 24px">
                             <ReactSVG
@@ -382,7 +382,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                                             </Box>
                                                                         ))}
                                                                         <Flex mb="30px">
-                                                                            {console.log('el.sizes', el.sizes)}
+                                                                            {// console.log('el.sizes', el.sizes)}
                                                                             {el.sizes?.map(s => {
                                                                                 const sizeKey = `${ind}-${favorite._id}-${s}`;
                                                                                 return (
@@ -498,7 +498,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                 { label: '单色混码单箱', value: 3 },
                                             ]}
                                             onSelect={val => {
-                                                console.log(val);
+                                                // console.log(val);
                                                 rowPickTypes[ind] = { ...rowPickTypes[ind], val };
                                                 setRowPickTypes({
                                                     ...rowPickTypes,

@@ -47,7 +47,7 @@ const Shop = ({
         });
     }, []);
     useEffect(() => {
-        console.log('currentSelectedBar', currentSelectedBar);
+        // console.log('currentSelectedBar', currentSelectedBar);
         handleLoadMore(1);
     }, [queryKey, currentSelectedBar]);
 
@@ -92,7 +92,7 @@ const Shop = ({
     }, [currentShopStyle]);
 
     const handleLoadMore = page => {
-        console.log('handleLoadMore', page);
+        // console.log('handleLoadMore', page);
         if (currentBranch._id) {
             let payload = { branch: currentBranch._id, page: page ? page : shopStyleList.page + 1 };
             if (queryKey) {
@@ -127,7 +127,7 @@ const Shop = ({
     useEffect(() => {
         const { shopStyles = [] } = currentAdminChannel;
         setSelectAssignedStyleList(shopStyles);
-        console.log('currentAdminChannel', shopStyles);
+        // console.log('currentAdminChannel', shopStyles);
     }, [currentAdminChannel]);
 
     const handleOpenDetail = capsule => {
@@ -135,7 +135,7 @@ const Shop = ({
             if (haveTopAndBottom) {
                 let index = 0;
                 if (capsule.branchKind === haveTopAndBottom.top._id) {
-                    console.log('--top--');
+                    // console.log('--top--');
                     index = shopStyleTopAndBottomList.top.findIndex(x => x._id === capsule._id);
                     dispatch({
                         type: 'shop/setCurrentShopTopStyleIndex',
@@ -144,7 +144,7 @@ const Shop = ({
                     setVisibleComplex(true);
                     return;
                 } else if (capsule.branchKind === haveTopAndBottom.bottom._id) {
-                    console.log('--bottom--');
+                    // console.log('--bottom--');
                     index = shopStyleTopAndBottomList.bottom.findIndex(x => x._id === capsule._id);
                     dispatch({
                         type: 'shop/setCurrentShopBottomStyleIndex',
@@ -192,7 +192,7 @@ const Shop = ({
     };
 
     const handleSelectAll = () => {
-        console.log('selectedAll', selectedAll);
+        // console.log('selectedAll', selectedAll);
         if (!selectedAll) {
             setSelectedAll(true);
             setSelectAssignedStyleList(
@@ -209,7 +209,7 @@ const Shop = ({
     };
 
     const handleSelect = capsule => {
-        console.log(capsule);
+        // console.log(capsule);
         const findIndex = selectedList.findIndex(x => x.style === capsule._id);
         if (findIndex < 0) {
             setSelectedList([...selectedList, { style: capsule._id, price: capsule.price }]);

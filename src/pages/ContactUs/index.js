@@ -14,7 +14,7 @@ const App = ({ dispatch, currentUser }) => {
 
     const onFinish = () => {
         form.validateFields().then(async (values, error) => {
-            console.log(values);
+            // console.log(values);
             await dispatch({
                 type: 'user/feedback',
                 payload: values,

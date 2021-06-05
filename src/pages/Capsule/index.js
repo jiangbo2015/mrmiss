@@ -71,7 +71,7 @@ const Capsule = ({
 
     useEffect(() => {
         if (currentCapsuleStyle._id && currentCapsuleStyle.goodCategory) {
-            // console.log('currentCapsuleStyle', currentCapsuleStyle);
+            // // console.log('currentCapsuleStyle', currentCapsuleStyle);
             let payload = { capsule: currentCapsule._id, goodCategray: currentCapsuleStyle.goodCategory.name, limit: 4 };
             dispatch({
                 type: 'capsule/fetchCapsuleStyleAboutList',
@@ -137,7 +137,7 @@ const Capsule = ({
             if (haveTopAndBottom && capsule.goodCategory) {
                 let index = 0;
                 if (capsule.goodCategory.name === haveTopAndBottom.top.namecn) {
-                    console.log('--top--');
+                    // console.log('--top--');
                     index = capsuleStyleTopAndBottomList.top.findIndex(x => x.namecn === capsule.goodCategory.name);
                     dispatch({
                         type: 'capsule/setCurrentShopTopStyleIndex',
@@ -146,7 +146,7 @@ const Capsule = ({
                     setVisibleComplex(true);
                     return;
                 } else if (capsule.goodCategory.name === haveTopAndBottom.bottom.namecn) {
-                    console.log('--bottom--');
+                    // console.log('--bottom--');
                     index = capsuleStyleTopAndBottomList.bottom.findIndex(x => x.namecn === capsule.goodCategory.name);
                     dispatch({
                         type: 'capsule/setCurrentShopBottomStyleIndex',
@@ -165,10 +165,10 @@ const Capsule = ({
         } else {
             // 分配
             const findIndex = selectAssignedStyleList.findIndex(x => x.style === capsule._id);
-            // console.log('selectAssignedStyleList', selectAssignedStyleList);
+            // // console.log('selectAssignedStyleList', selectAssignedStyleList);
             if (findIndex < 0) {
-                // console.log({ style: capsule._id, price: capsule.price });x
-                console.log('selectAssignedStyleList', selectAssignedStyleList);
+                // // console.log({ style: capsule._id, price: capsule.price });x
+                // console.log('selectAssignedStyleList', selectAssignedStyleList);
                 setSelectAssignedStyleList([...selectAssignedStyleList, { style: capsule._id, price: capsule.price }]);
             } else {
                 selectAssignedStyleList.splice(findIndex, 1);
@@ -197,7 +197,7 @@ const Capsule = ({
     };
 
     const handleSelectAll = () => {
-        // console.log('selectedAll', selectedAll);
+        // // console.log('selectedAll', selectedAll);
         if (!selectedAll) {
             setSelectedAll(true);
             setSelectAssignedStyleList(
@@ -218,7 +218,7 @@ const Capsule = ({
     };
 
     const handleSelect = capsule => {
-        // console.log(capsule);
+        // // console.log(capsule);
         const findIndex = selectedList.findIndex(x => x._id === capsule._id);
         if (findIndex < 0) {
             dispatch({

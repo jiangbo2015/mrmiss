@@ -12,7 +12,7 @@ const UserInfo = ({ currentUser, dispatch }) => {
 };
 
 export default connect(({ user }) => {
-    // console.log('props', props);
+    // // console.log('props', props);
     return {
         currentUser: user.info,
     };

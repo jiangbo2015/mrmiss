@@ -6,7 +6,7 @@ import Favorites from './Favorites/index';
 import { Flex, Box, Image } from 'rebass/styled-components';
 
 const App = props => {
-    console.log('diy sssss');
+    // console.log('diy sssss');
     return (
         <Layout headerBgColor="#191919">
             <DiyHeader></DiyHeader>

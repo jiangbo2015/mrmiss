@@ -13,11 +13,11 @@ const { TabPane } = Tabs;
 
 export default class Business extends React.Component {
     callback(key) {
-        console.log(key);
+        // console.log(key);
     }
     static getDerivedStateFromError(error) {
         // Update state so the next render will show the fallback UI.
-        console.log('getDerivedStateFromError', error);
+        // console.log('getDerivedStateFromError', error);
         return { hasError: true };
     }
     render() {

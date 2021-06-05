@@ -85,7 +85,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 
 const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = [], dispatch }) => {
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
-    // console.log('currentShopStyle', currentShopStyle);
+    // // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';

@@ -133,7 +133,7 @@ const UserListTable = ({
     };
 
     const handleChangeUserChannel = (key, row, val) => {
-        // console.log(row);
+        // // console.log(row);
         tableData[keyRows[key]].goodsInfo[row].channel = val;
         tableData[keyRows[key]].goodsInfo[row].channelInfo = getChannelInfo({
             codename: val,
@@ -143,7 +143,7 @@ const UserListTable = ({
     };
 
     const handleChangeUserGoodsEmpower = (key, row, val) => {
-        // console.log(row);
+        // // console.log(row);
         tableData[keyRows[key]].goodsInfo[row].empowered = val;
         setTableData([...tableData]);
     };
@@ -191,7 +191,7 @@ const UserListTable = ({
     };
 
     const handleSave = async () => {
-        // console.log(row);
+        // // console.log(row);
         const infos = getAssignedData();
         if (batch) {
             await dispatch({
@@ -403,7 +403,7 @@ const UserListTable = ({
 };
 
 export default connect(({ business = {}, shop, capsule, diy, channel, user }) => {
-    // console.log('props', props);
+    // // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,
         currentCustomerEmpowerInfo: business.currentCustomerEmpowerInfo,

@@ -30,7 +30,7 @@ export default {
         *feedback({ payload }, { call, put }) {
             const { data } = yield call(api.feedback, payload);
             if (data) {
-                console.log('发送成功');
+                // console.log('发送成功');
             }
         },
         *changePwd({ payload }, { call, put }) {
@@ -38,13 +38,13 @@ export default {
             if (data) {
                 localStorage.token = null;
 
-                console.log('发送成功');
+                // console.log('发送成功');
             }
         },
         *update({ payload }, { call, put }) {
             const { data } = yield call(api.update, payload);
             if (data) {
-                console.log('发送成功');
+                // console.log('发送成功');
             }
         },
         *getCurrentUser(_, { call, put }) {
@@ -62,7 +62,7 @@ export default {
                     // history.push('/main');
                 }
             } catch (e) {
-                console.log(e);
+                // console.log(e);
             }
         },
         *logout(_, { call, put }) {

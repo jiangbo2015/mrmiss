@@ -30,7 +30,7 @@ const OrderTable = ({ orderList = [], dispatch }) => {
             method: 'post',
         });
         if (req) {
-            // console.log(req)
+            // // console.log(req)
             window.open(`${process.env.DOWNLOAD_URL}/${req.data.url}`);
         }
     };

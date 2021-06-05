@@ -170,7 +170,7 @@ const UserListTable = ({ channelEmpowerInfo = [], currentCustomer, ...props }) =
 };
 
 export default connect(({ business = {} }) => {
-    // console.log('props', props);
+    // // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,
         channelEmpowerInfo: business.channelEmpowerInfo,

@@ -38,7 +38,7 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
     useEffect(() => {
-        console.log('sort', sort);
+        // console.log('sort', sort);
         if (currentGood._id) {
             let payload = { goodsId: currentGood._id, limit: 10000, type: 0, sort };
             if (queryKey) {

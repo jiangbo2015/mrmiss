@@ -86,7 +86,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
     if (!currentShopStyle) return null;
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
-    // console.log('currentShopStyle', currentShopStyle);
+    // // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
@@ -222,7 +222,7 @@ const ModalSimple = ({
     shopStyleTopAndBottomList = { top: [], bottom: [] },
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
-    // console.log('currentShopStyle', currentShopStyle);
+    // // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';

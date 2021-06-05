@@ -23,7 +23,7 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
     const handleSend = async orderData => {
         // const orderData = parseOrderData();
         const res = _.groupBy(orderData, 'isSelect');
-        console.log('res', res);
+        // console.log('res', res);
         await dispatch({
             type: 'capsule/addOrder',
             payload: {

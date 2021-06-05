@@ -6,7 +6,7 @@ import InputNumber from '@/components/InputNumber';
 import Input, { InputBlackRaduis, InputGray, InputGrayRaduis } from '@/components/Input';
 import Switch from '@/components/Switch';
 const App = props => {
-    console.log(props);
+    // console.log(props);
     return (
         <div style={{ padding: '24px' }}>
             <Select

@@ -24,7 +24,7 @@ const App = ({
     singleSelectColorList1,
     currentGoodCategoryMultiple = '',
 }) => {
-    // console.log('currentGoodCategoryMultiple',currentGoodCategoryMultiple)
+    // // console.log('currentGoodCategoryMultiple',currentGoodCategoryMultiple)
     const handleAddFavorite = async () => {
         let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
         let goodCategoryMultiple = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
@@ -101,7 +101,7 @@ const App = ({
     const handleAssigned = async () => {
         if (collocationPattern === 'assign') {
             const styles = selectStyleList.map(x => ({ style: x._id, price: x.price }));
-            console.log('styles', styles);
+            // console.log('styles', styles);
             await dispatch({
                 type: 'channel/update',
                 payload: {

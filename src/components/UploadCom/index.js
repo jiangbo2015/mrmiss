@@ -22,7 +22,7 @@ export const UploadBtn = ({ type }) => (
 );
 
 const UploadCom = ({ type, isPlain, handleChange, selectedPlainColor, selectedFlowerColor }) => {
-    // console.log(type, typeProps[type]);
+    // // console.log(type, typeProps[type]);
     const selected = isPlain ? selectedPlainColor : selectedFlowerColor;
     return (
         <Upload

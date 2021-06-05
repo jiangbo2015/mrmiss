@@ -63,9 +63,9 @@ const waitTime = time => {
 const App = ({ styleList = { docs: [] }, dispatch, currentStyle = {} }) => {
     const { docs } = styleList;
     const handleFetchMore = async () => {
-        console.log('fetchStyleList');
+        // console.log('fetchStyleList');
         await waitTime(1000);
-        console.log('go go');
+        // console.log('go go');
         dispatch({
             type: 'diy/setCollocationPattern',
         });

@@ -108,7 +108,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect , onS
                         {colorWithStyleImgs.map((c = {}, i) => {
                             // const { colorObj = {} } = c;
                             // const { value } = colorObj;
-                            // console.log('colorObj', value);
+                            // // console.log('colorObj', value);
                             return (
                                 <Dot
                                     size="15px"

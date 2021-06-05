@@ -42,7 +42,7 @@ export default () => {
 	// img.src = `data:image/svg+xml;utf8,${encodeURIComponent(svgText)}`;
 	//svg内容
 	img.src = url //svg内容中可以有中文字符
-	// console.log("svg2png img.onload", svg)
+	// // console.log("svg2png img.onload", svg)
 	//图片初始化完成后调用
 	img.onload = function () {
 		document.body.appendChild(img)

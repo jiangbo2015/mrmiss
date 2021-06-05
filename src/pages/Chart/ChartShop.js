@@ -59,7 +59,7 @@ export const OrderRank = ({ data: originData = [] }) => {
             ]),
         [],
     );
-    console.log(data, 'data');
+    // console.log(data, 'data');
     return (
         <Card title="销售折线图">
             <Chart padding={[10, 20, 50, 50]} autoFit height={500} data={data}>

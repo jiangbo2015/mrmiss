@@ -22,10 +22,10 @@ const App = ({ currentShopOrderData, dispatch, currentOrder = {}, visible, onCan
     const handleSave = async orderDatas => {
         // const orderData = parseOrderData();
         // currentOrder
-        console.log('orderDatas', orderDatas)
+        // console.log('orderDatas', orderDatas)
         const orderListMap = lodash.groupBy(orderDatas, 'originId')
-        // console.log('orderDatas',orderDatas)
-        console.log('orderListMap',orderListMap)
+        // // console.log('orderDatas',orderDatas)
+        // console.log('orderListMap',orderListMap)
         const orderListKeys = Object.keys(orderListMap)
         // return;
         for(let i = 0; i< orderListKeys.length; i++) {

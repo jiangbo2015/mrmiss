@@ -11,7 +11,7 @@ const Login = ({ dispatch, setOpenLogin, isLogin }) => {
     const [pwd, setPwd] = useState('');
     const intl = useIntl();
     const handleLogin = async () => {
-        console.log('click');
+        // console.log('click');
         await dispatch({
             type: 'user/login',
             payload: {

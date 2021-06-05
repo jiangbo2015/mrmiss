@@ -20,7 +20,11 @@ export default props => {
         styleSize = 27,
         onClick,
     } = props;
-
+    const svgSrc = filterImageUrl(svgUrl)
+    if(!svgSrc) {
+        // console.log('style', style)
+        return null
+    }
     return (
         <div
             style={{
@@ -45,8 +49,10 @@ export default props => {
                     minWidth: '14px',
                     fill: '#fff',
                 }}
+                src={svgSrc}
                 afterInjection={(error, svg) => {
                     if (error) {
+                        console.log('svgSrc', svgSrc)
                         console.error(error);
                         return;
                     }
@@ -86,7 +92,7 @@ export default props => {
                     return 'loading';
                 }}
                 beforeInjection={svg => {
-                    // console.log("curStylesEditGroupIndex", curStylesEditGroupIndex)
+                    // // console.log("curStylesEditGroupIndex", curStylesEditGroupIndex)
                     svg.setAttribute('id', svgId || key);
                     let svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                     svg.appendChild(svgDefs);
@@ -100,7 +106,7 @@ export default props => {
                                 x: 0,
                                 y: 0,
                             };
-                            // console.log("imgVals", imgVals)
+                            // // console.log("imgVals", imgVals)
                             let svgPattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
 
                             svgPattern.setAttribute('id', `${styleId}-${color._id}-${i}`);
@@ -131,7 +137,7 @@ export default props => {
                     }
                 }}
                 evalScripts="always"
-                src={`${filterImageUrl(svgUrl)}`}
+                
             />
         </div>
     );

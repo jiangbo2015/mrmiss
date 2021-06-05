@@ -10,7 +10,7 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
     const [form] = Form.useForm();
     const [showChange, setShowChange] = useState(false);
     useEffect(() => {
-        console.log('data', data);
+        // console.log('data', data);
         if (data) {
             form.setFieldsValue({
                 ...data,
@@ -19,7 +19,7 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
     }, [data]);
     const onFinish = () => {
         form.validateFields().then(async (values, error) => {
-            console.log(values);
+            // console.log(values);
 
             if (onSumbit) {
                 if (data?._id) {

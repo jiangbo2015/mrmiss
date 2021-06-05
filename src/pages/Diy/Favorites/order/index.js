@@ -23,9 +23,9 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
             const row = res['true'][i];
             for (let j = 0; j < row.items.length; j++) {
                 const item = row.items[j];
-                console.log(item)
+                // console.log(item)
                 if (!item.total) {
-                    console.log(row);
+                    // console.log(row);
                     message.warn(`版型编号${row.styleNos}中有款式未填写数量`);
                     return;
                 }
@@ -97,7 +97,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
         // setShowChange(false);
     };
 
-    console.log('favoriteToOrderGroupList', favoriteToOrderGroupList)
+    // // console.log('favoriteToOrderGroupList', favoriteToOrderGroupList)
     return (      
         <OrderMark
             visible={visible}

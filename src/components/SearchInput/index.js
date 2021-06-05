@@ -8,7 +8,7 @@ export default ({ onSearch, placeholder = 'Search color', style = {}, mode = 'bl
         // <div style={{ background: '#fff' }}>
         <Input
             onPressEnter={onSearch}
-            enterButton={false}
+            // enterButton={false}
             style={{ textAlign: 'center', padding: '2px', fontSize: '12px !important', ...style }}
             className={mode === 'white' ? 'searchInputWhite' : 'searchInput'}
             placeholder={placeholder}

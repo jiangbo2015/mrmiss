@@ -24,7 +24,7 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
     }, []);
 
     const handleAssign = item => {
-        console.log('setEmpowerSingleCustomer(true)', item);
+        // console.log('setEmpowerSingleCustomer(true)', item);
         dispatch({
             type: 'business/setCurrentCustomer',
             payload: item,
@@ -157,7 +157,7 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
                         updateSelectedRowKeys(selectedRowKeys, selectedRows);
-                        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
+                        // // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
                         return {
@@ -172,7 +172,7 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
 };
 
 export default connect(({ business = {}, user }) => {
-    // console.log('props', props);
+    // // console.log('props', props);
     return {
         currentCustomer: business.currentCustomer,
         customerList: business.customerList,

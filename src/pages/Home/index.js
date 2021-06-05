@@ -12,7 +12,7 @@ import FeatureImage from './FeatureImage';
 
 const App = ({ dispatch, currentUser, location, systemDetail }) => {
     // const { currentUser } = props;
-    // console.log('location', location);
+    // // console.log('location', location);
     const [openLogin, setOpenLogin] = useState(false);
     useEffect(() => {
         dispatch({

@@ -16,7 +16,7 @@ export default ({ placeholder, style = {}, ...props }) => {
     };
 
     const handleAdd = info => {
-        console.log(info, 'info info info');
+        // console.log(info, 'info info info');
         setOnLoad(false);
         setImgUrl('');
         if (info.file.status === 'uploading') {

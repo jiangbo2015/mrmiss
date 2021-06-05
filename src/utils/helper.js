@@ -12,7 +12,7 @@ export const filterImageUrl = url => {
     // 本地数据
     if (arrs.length >= 3) {
         if (url.indexOf('.svg') >= 0) {
-            // console.log("svg-url", `/${url}`);
+            // // console.log("svg-url", `/${url}`);
 
             return `${baseUrl}${url}`;
         } else {

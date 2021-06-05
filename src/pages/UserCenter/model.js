@@ -156,7 +156,7 @@ export default {
                     }
                     break;
             }
-            console.log('createCurrentOrderToGroupList', res);
+            // console.log('createCurrentOrderToGroupList', res);
             let saveOrder = [];
             if (res?.data?.children?.length > 0) {
                 for (let i = 0; i < res.data.children.length; i++) {
@@ -182,7 +182,7 @@ export default {
             }
 
             // const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
-            // console.log('gourpByStyle', gourpByStyle);
+            // // console.log('gourpByStyle', gourpByStyle);
             // for (var key in gourpByStyle) {
             //     let price = lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.price);
             //     let size = gourpByStyle[key][0].styleAndColor[0].size;
@@ -207,7 +207,7 @@ export default {
                 let weight = lodash.sumBy(item.favorite.styleAndColor, sc =>
                     sc.style?._id ? sc.style?.weight : sc.styleId.weight,
                 );
-                console.log('weight', weight);
+                // console.log('weight', weight);
                 let sizeObjInit = {};
                 // let sizeArr = [];
                 // let size = Object.keys(item.sizeInfoObject);
@@ -216,10 +216,10 @@ export default {
                     sizeObjInit[s] = 0;
                 });
 
-                // console.log('sizeObjInit', sizeObjInit);
+                // // console.log('sizeObjInit', sizeObjInit);
                 return {
                     list: o.items.map(i => {
-                        console.log('i.sizeInfoObject', i.sizeInfoObject)
+                        // console.log('i.sizeInfoObject', i.sizeInfoObject)
                         return {
                         ...i.favorite,
                         parte: i.parte,
@@ -258,7 +258,7 @@ export default {
         *createCurrentShopOrderToGroupList({ payload }, { call, put, select }) {
             const res = yield call(businessApi.getShopOrderDetail, { _id: payload._id });
 
-            console.log('createCurrentShopOrderToGroupList', res);
+            // console.log('createCurrentShopOrderToGroupList', res);
             let saveOrder = [];
             if (res?.data?.children?.length > 0) {
                 for (let i = 0; i < res.data.children.length; i++) {
@@ -283,7 +283,7 @@ export default {
                 // res?.data?.children
             }
 
-            console.log('saveOrder', saveOrder);
+            // console.log('saveOrder', saveOrder);
             yield put({
                 type: 'setCurrentOrder',
                 payload: payload,

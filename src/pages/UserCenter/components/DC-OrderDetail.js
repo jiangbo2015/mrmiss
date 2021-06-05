@@ -13,10 +13,10 @@ const App = ({ editOrderGroupList, dispatch, currentOrder = {}, visible, onCance
     const handleSave = async orderDatas => {
         // const orderData = parseOrderData();
         // currentOrder
-        console.log('orderDatas', orderDatas)
+        // console.log('orderDatas', orderDatas)
         const orderListMap = lodash.groupBy(orderDatas, 'originId')
-        // console.log('orderDatas',orderDatas)
-        console.log('orderListMap',orderListMap)
+        // // console.log('orderDatas',orderDatas)
+        // console.log('orderListMap',orderListMap)
         const orderListKeys = Object.keys(orderListMap)
         // return;
         for(let i = 0; i< orderListKeys.length; i++) {
@@ -30,9 +30,9 @@ const App = ({ editOrderGroupList, dispatch, currentOrder = {}, visible, onCance
                 const row = orderData[i];
                 for (let j = 0; j < row.items.length; j++) {
                     const item = row.items[j];
-                    console.log(item)
+                    // console.log(item)
                     if (!item.total) {
-                        console.log(row);
+                        // console.log(row);
                         message.warn(`版型编号${row.styleNos}中有款式未填写数量`);
                         return;
                     }

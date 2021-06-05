@@ -74,7 +74,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
     }, []);
 
     const handleAddOrder = () => {
-        console.log('handleAddOrder');
+        // console.log('handleAddOrder');
         dispatch({
             type: 'capsule/addOrderMark',
         });

@@ -31,14 +31,14 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
     const [showShopDetailOrder, setShowShopDetailOrder] = useState(false);
 
     const handleDownload = async record => {
-        console.log(record);
+        // console.log(record);
         if (record.orderType === 'shop') {
             const req = await request('/api/shopOrder/postDownload', {
                 data: { _id: record._id },
                 method: 'post',
             });
             if (req) {
-                // console.log(req)
+                // // console.log(req)
                 window.open(`${process.env.DOWNLOAD_URL}/${req.data.url}`);
             }
         } else {
@@ -80,7 +80,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
             type: 'business/getOwnOrderList',
             payload,
         });
-        // console.log('timeRange', timeRange);
+        // // console.log('timeRange', timeRange);
     }, [dispatch, userId, selectedUsers, timeRange, queryKey, isMerge]);
 
     const data = [
@@ -90,7 +90,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
     ];
 
     const updateSelectedRowKeys = (selectedRowKeys, selectedRows) => {
-        // console.log('selectedRowKeys', selectedRowKeys);
+        // // console.log('selectedRowKeys', selectedRowKeys);
         setSelectedRowKeys(selectedRowKeys);
         setSelectedRows(selectedRows);
     };
@@ -122,7 +122,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
     };
 
     const handleMerge = async () => {
-        console.log('selectedRows', selectedRows);
+        // console.log('selectedRows', selectedRows);
 
         await dispatch({
             type: 'business/mergeOwnOrder',
@@ -372,7 +372,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
                     type: 'checkbox',
                     onChange: (selectedRowKeys, selectedRows) => {
                         updateSelectedRowKeys(selectedRowKeys, selectedRows);
-                        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
+                        // // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);
                     },
                     getCheckboxProps: record => {
                         return {
@@ -388,7 +388,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
 };
 
 export default connect(({ business }) => {
-    // console.log('props', props);
+    // // console.log('props', props);
     return {
         ownOrderList: business.ownOrderList,
         currentOrder: business.currentOrder,
