@@ -501,11 +501,13 @@ const OrderMark = ({
                                                                         ))}
                                                                         <Flex mb="30px">
                                                                             {el.sizes?.map((s) => {
+                                                                                const sizeKey = `${ind}-${index}-${favorite._id}-${s}`;
                                                                                 if(ind === 0 && index === 0){
+                                                                                    console.log('sizeKey`;', sizeKey)
                                                                                     console.log('el.sizes?.map(s', s)
                                                                                     console.log('favorite.sizeInfoObject[s]', favorite.sizeInfoObject[s])    
                                                                                 }
-                                                                                const sizeKey = `${ind}-${favorite._id}-${s}`;
+                                                                                
 
                                                                                 return (
                                                                                     <Flex
@@ -514,6 +516,7 @@ const OrderMark = ({
                                                                                         key={sizeKey}
                                                                                     >
                                                                                         {s}
+                                                                                        {favorite.sizeInfoObject[s]}
                                                                                         <InputNumber
                                                                                             value={favorite.sizeInfoObject[s]}
                                                                                             onChange={val => {
