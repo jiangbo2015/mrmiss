@@ -430,13 +430,6 @@ const OrderMark = ({
                                         >
                                             {el.list.map((favorite, index) => {
                                                 const favoriteKey = `${favorite._id}-${ind}`;
-                                                let currentCountInfo = currentRowCountInfo[favoriteKey]
-                                                    ? currentRowCountInfo[favoriteKey]
-                                                    : {};
-                                                let currentParteInfo = currentRowParteInfo[favoriteKey]
-                                                    ? currentRowParteInfo[favoriteKey]
-                                                    : 0;
-
                                                 return (
                                                     <Draggable
                                                         isDragDisabled={onSend ? false : true}
@@ -479,7 +472,7 @@ const OrderMark = ({
                                                                         ) : (
                                                                             favorite.styleAndColor.map(d => (
                                                                                 <StyleItem
-                                                                                    styleId={`${favorite._id}-${d._id}-item`}
+                                                                                    styleId={`${favoriteKey}-${d._id}-item`}
                                                                                     colors={d.colorIds}
                                                                                     width={`${(d.style?.styleSize * 100) / 27}px`}
                                                                                     key={`${favorite._id}-${
@@ -517,11 +510,7 @@ const OrderMark = ({
                                                                                     >
                                                                                         {s}
                                                                                         <InputNumber
-                                                                                            value={
-                                                                                                favorite.sizeInfoObject[s]
-                                                                                                    ? favorite.sizeInfoObject[s]
-                                                                                                    : 0
-                                                                                            }
+                                                                                            value={favorite.sizeInfoObject[s]}
                                                                                             onChange={val => {
                                                                                                 sourceData[ind].list[
                                                                                                     index
@@ -564,7 +553,7 @@ const OrderMark = ({
                                         <Select
                                             width="120px"
                                             mode="white"
-                                            value={typeof el.pickType != 'undefined' && el.pickType ? el.pickType.val : 0}
+                                            value={el.pickType.val}
                                             options={[
                                                 { label: '单色单码', value: 0 },
                                                 { label: '混色混码', value: 1 },
