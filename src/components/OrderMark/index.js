@@ -416,6 +416,7 @@ const OrderMark = ({
                                         position: 'absolute',
                                         top: '10px',
                                         right: '10px',
+                                        display: !readOnly ? 'initial' : 'none'
                                     }}
                                     onClick={() => {
                                         handleDelRow(ind);
@@ -514,6 +515,7 @@ const OrderMark = ({
                                                                                     >
                                                                                         {s}
                                                                                         <InputNumber
+                                                                                            readOnly={readOnly}
                                                                                             value={favorite.sizeInfoObject[s]}
                                                                                             onChange={val => {
                                                                                                 sourceData[ind].list[
@@ -557,6 +559,7 @@ const OrderMark = ({
                                         <Select
                                             width="120px"
                                             mode="white"
+                                            disabled={readOnly}
                                             value={el.pickType.val}
                                             options={[
                                                 { label: '单色单码', value: 0 },
@@ -579,6 +582,7 @@ const OrderMark = ({
                                             <Flex alignItems="center" p="0 10px">
                                                 每份
                                                 <InputBottomWhiteBorder
+                                                    readOnly={readOnly}
                                                     value={lodash.sum(
                                                         el.list.map(l => lodash.sum(Object.values(l.sizeInfoObject))),
                                                     )}
@@ -595,6 +599,7 @@ const OrderMark = ({
                                             >
                                                 共
                                                 <InputNumber
+                                                    readOnly={readOnly}
                                                     value={el.pickType.pieceCount}
                                                     type="number"
                                                     style={{ width: '60px' }}

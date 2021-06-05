@@ -187,20 +187,18 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                 }}
             >
                 {docs.map((d, index) => (
-                    <Tooltip title={d.code} key={`${d._id}-tooltip`}>
+                    <Tooltip title={<div style={{cursor: 'pointer'}} onClick={() => {
+                        handleShowBigPic(d);
+                    }}>{d.code}</div>} key={`${d._id}-tooltip`} 
+                    >
                         <ImgItem
                             key={d._id}
                             img={d.value}
                             isSelected={d.isSelected}
                             onClick={() => {
-                                window.flowerTimeId = setTimeout(() => {
-                                    handleSelectColor({ item: d, index });
-                                }, 200);
+                                handleSelectColor({ item: d, index });
                             }}
-                            onDoubleClick={() => {
-                                clearInterval(window.flowerTimeId);
-                                handleShowBigPic(d);
-                            }}
+                            // onDoubleClick={}
                         />
                     </Tooltip>
                 ))}
