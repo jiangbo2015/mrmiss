@@ -181,23 +181,23 @@ export default {
                 // res?.data?.children
             }
 
-            const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
-            console.log('gourpByStyle', gourpByStyle);
-            for (var key in gourpByStyle) {
-                let price = lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.price);
-                let size = gourpByStyle[key][0].styleAndColor[0].size;
-                let styleNos = gourpByStyle[key][0].styleAndColor.map(sc => sc.style.styleNo).join(',');
+            // const gourpByStyle = lodash.groupBy(selectFavoriteList, f => f.styleAndColor.map(sc => sc.style._id).join('-'));
+            // console.log('gourpByStyle', gourpByStyle);
+            // for (var key in gourpByStyle) {
+            //     let price = lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.price);
+            //     let size = gourpByStyle[key][0].styleAndColor[0].size;
+            //     let styleNos = gourpByStyle[key][0].styleAndColor.map(sc => sc.style.styleNo).join(',');
 
-                gourpByStyle[key] = {
-                    list: gourpByStyle[key].map(x => ({ ...x, price: _.sumBy(x.styleAndColor, sc => sc.style.price) })),
-                    key,
-                    sizes: gourpByStyle[key][0].styleAndColor[0].style.size?.split('/'),
-                    weight: lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.weight),
-                    styleNos,
-                    price,
-                    size,
-                };
-            }
+            //     gourpByStyle[key] = {
+            //         list: gourpByStyle[key].map(x => ({ ...x, price: _.sumBy(x.styleAndColor, sc => sc.style.price) })),
+            //         key,
+            //         sizes: gourpByStyle[key][0].styleAndColor[0].style.size?.split('/'),
+            //         weight: lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.weight),
+            //         styleNos,
+            //         price,
+            //         size,
+            //     };
+            // }
             const saveItems = saveOrder?.map((o, k) => {
                 let item = o.items[0];
                 let key = `${k}-${item.favorite.styleAndColor
@@ -218,7 +218,9 @@ export default {
 
                 // console.log('sizeObjInit', sizeObjInit);
                 return {
-                    list: o.items.map(i => ({
+                    list: o.items.map(i => {
+                        console.log('i.sizeInfoObject', i.sizeInfoObject)
+                        return {
                         ...i.favorite,
                         parte: i.parte,
                         price: _.sum(i.favorite.styleAndColor.map(sc => (sc?.style?.price ? sc.style.price : sc.styleId.price))),
@@ -228,7 +230,7 @@ export default {
                             styleId: sc.style ? sc.style._id : sc.styleId._id,
                             style: sc.style ? sc.style : sc.styleId,
                         })),
-                    })),
+                    }}),
                     key,
                     pickType: o.pickType,
                     rowRemarks: o.rowRemarks,
@@ -249,9 +251,10 @@ export default {
             });
             yield put({
                 type: 'setEditOrderGroupList',
-                payload: Object.values(gourpByStyle).concat(saveItems),
+                payload: saveItems,
             });
         },
+
         *createCurrentShopOrderToGroupList({ payload }, { call, put, select }) {
             const res = yield call(businessApi.getShopOrderDetail, { _id: payload._id });
 
