@@ -389,7 +389,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                             flexDirection: 'column',
                             alignItems: 'center',
                             justifyContent: 'space-around',
-                            background: '#DAD9D7',
+                            background: '#FFFFFF',
                             borderRadius: '5px',
                             height: favoriteBox[favoritePattern].h,
                         }}

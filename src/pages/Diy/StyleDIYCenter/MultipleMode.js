@@ -37,10 +37,11 @@ const App = ({
 }) => {
     // console.log('assign', assign);
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
+    const [currentGoodCategoryIsTop, setCurrentGoodCategoryIsTop] = useState(false);
     let docs = [];
     if (styleList[currentGoodCategoryMultiple]) {
         docs = styleList[currentGoodCategoryMultiple];
-        // // console.log('docs', docs);
+        // console.log('docs', docs);
     }
 
     const handleFetchMore = async () => {
@@ -60,7 +61,7 @@ const App = ({
 
     const handleToggleTime = async () => {
         window.timeOrder = !window.timeOrder;
-        // console.log('window.timeOrder', window.timeOrder);
+        console.log('window.timeOrder', window.timeOrder);
 
         styleList[currentGoodCategoryMultiple] = styleList[currentGoodCategoryMultiple].sort((a, b) => {
             return window.timeOrder
@@ -98,7 +99,7 @@ const App = ({
     const handleSelectAll = () => {
         if (docs.length > selectStyleList.length) {
             const payload = [...selectStyleList, ...docs.filter(x => selectStyleList.findIndex(s => s._id === x._id) < 0)];
-            // console.log('payload', payload);
+            console.log('payload', payload);
             dispatch({
                 type: 'diy/batchSetSelectStyleList',
                 payload,
@@ -131,17 +132,20 @@ const App = ({
         dispatch({
             type: 'diy/setStyleQueryKey',
             payload: '',
-        });
+        })
+        const finded = currentGood.category.find(x => x._id===currentGoodCategoryMultiple)
+        // [].includes()
+        setCurrentGoodCategoryIsTop(finded ? finded.name.includes('单衣') : false)
     }, [currentGood, currentGoodCategoryMultiple]);
 
     useEffect(() => {
         const { shopStyles = [] } = currentAdminChannel;
         setSelectAssignedStyleList(shopStyles);
-        // console.log('currentAdminChannel', shopStyles);
+        console.log('currentAdminChannel', shopStyles);
     }, [currentAdminChannel]);
 
     const handleEditPrice = ({ price, style }) => {
-        // console.log(selectStyleList);
+        console.log(selectStyleList);
         const findIndex = selectStyleList.findIndex(x => x._id === style);
         if (findIndex >= 0) {
             selectStyleList[findIndex].price = price;
@@ -158,7 +162,7 @@ const App = ({
             payload: category,
         });
     };
-    // console.log('selectStyleList.length < docs.length ', selectStyleList, docs.length);
+    console.log('selectStyleList.length < docs.length ', selectStyleList, docs.length);
     return (
         <div
             style={{
@@ -290,7 +294,7 @@ const App = ({
                                         flex: 1,
                                         display: 'flex',
                                         justifyContent: 'center',
-                                        alignItems: 'center',
+                                        alignItems: currentGoodCategoryIsTop ?'flex-start':'center',
                                     }}
                                     onClick={() => {
                                         handleSelectStyle({ item: d, index });
