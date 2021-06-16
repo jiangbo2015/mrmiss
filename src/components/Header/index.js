@@ -74,16 +74,12 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 //     history.push('/business');
                 // }}
             >
-                <Link to="/business" target="_blank">
-                    业务管理
-                </Link>
+                <Link to="/business">业务管理</Link>
             </Menu.Item>
         ) : null}
         {innerDataUserd ? (
             <Menu.Item className="menuItemH" icon={<ReactSVG style={{ width: '24px', height: '28px' }} src={ChartIcon} />}>
-                <Link to="/chart" target="_blank">
-                    数据分析
-                </Link>
+                <Link to="/chart">数据分析</Link>
             </Menu.Item>
         ) : null}
 
@@ -241,7 +237,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                     <span onClick={() => setLocale('zh-CN', false)}>CN</span>/
                     <span onClick={() => setLocale('en-US', false)}>EN</span>
                 </div>
-                <Link to="/#aboutas" target="_blank">
+                <Link to="/#aboutas">
                     <div
                         style={{
                             color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
@@ -257,7 +253,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                         })}
                     </div>
                 </Link>
-                <Link to="/contactus" target="_blank">
+                <Link to="/contactus">
                     <div
                         className="menuItem"
                         style={{
@@ -273,7 +269,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
             </div>
 
             <div>
-                <Link to="/" target="_blank">
+                <Link to="/">
                     <ReactSVG
                         src={WLogoIcon}
                         style={{
@@ -294,7 +290,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                 {currentUser._id ? (
                     <>
                         {currentUser?.goods?.length ? (
-                            <Link to="/diy" target="_blank">
+                            <Link to="/diy">
                                 <div
                                     className="menuItem"
                                     style={{
@@ -306,7 +302,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                             </Link>
                         ) : null}
                         {currentUser?.capsules?.length ? (
-                            <Link to="/capsule" target="_blank">
+                            <Link to="/capsule">
                                 <div
                                     className="menuItem"
                                     style={{
@@ -321,7 +317,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                             </Link>
                         ) : null}
                         {currentUser?.branchs?.length ? (
-                            <Link to="/shop" target="_blank">
+                            <Link to="/shop">
                                 <div
                                     className="menuItem"
                                     style={{
