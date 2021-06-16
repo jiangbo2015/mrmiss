@@ -244,6 +244,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                         }}
                         className="menuItem"
                         onClick={() => {
+                            console.log('Whitout _blank');
                             history.push('/#aboutas');
                         }}
                     >
