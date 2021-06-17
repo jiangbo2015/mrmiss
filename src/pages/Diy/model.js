@@ -210,18 +210,46 @@ export default {
     },
     effects: {
         *fetchStyleList({ payload }, { call, put, select }) {
-            // const { styleList = { docs: [] } } = yield select(state => state.diy);
-            // // console.log('originData', originData);
-            // if (!originData) return;
+            const { selectStyleList = [] } = yield select(state => state.diy);
+            const { currentAdminChannel } = yield select(state => state.channel);
+            const { styles, codename } = currentAdminChannel;
             const res = yield call(api.getUserStyleList, payload);
             if (res.data && Array.isArray(res.data.category)) {
                 let categoryStyles = {};
-                res.data.category.map(c => {
-                    categoryStyles[c._id] = c.styles;
-                });
+                let newValue = [];
+                if (codename !== 'A') {
+                    res.data.category.map(c => {
+                        categoryStyles[c._id] = c.styles.map(x => {
+                            const finded = styles.find(s => s.style === x._id);
+                            const res = { ...x };
+                            if (finded) {
+                                newValue.push(finded);
+                                res.isSelected = true;
+                            }
+                            return res;
+                        });
+                    });
+                } else {
+                    res.data.category.map(c => {
+                        categoryStyles[c._id] = c.styles.map(x => {
+                            const finded = selectStyleList.find(s => s._id === x._id);
+                            const res = { ...x };
+                            if (finded) {
+                                newValue.push(finded);
+                                res.isSelected = true;
+                            }
+                            return res;
+                        });
+                    });
+                }
+
                 yield put({
                     type: 'setStyleList',
                     payload: categoryStyles,
+                });
+                yield put({
+                    type: 'setSelectStyleList',
+                    payload: newValue,
                 });
             }
             // getUserStyleList
@@ -240,16 +268,43 @@ export default {
         },
         *fetchColorList({ payload }, { call, put, select }) {
             const res = yield call(api.getColorList, payload);
+            const { selectColorList = [] } = yield select(state => state.diy);
+            const { currentAdminChannel } = yield select(state => state.channel);
+            const { plainColors = [], flowerColors = [], codename } = currentAdminChannel;
+            // console.log('currentAdminChannel.codename', codename);
+            let newValue = [];
             if (res && res.data) {
+                const tmpColorList = res.data;
+                tmpColorList.docs.map((x, i) => {
+                    let findIndex = -1;
+                    if (codename === 'A') {
+                        findIndex = selectColorList.findIndex(c => c._id === x._id);
+                    } else {
+                        findIndex = [...plainColors, ...flowerColors].findIndex(c => c === x._id);
+                    }
+                    if (findIndex >= 0) {
+                        newValue.push(x);
+                        tmpColorList.docs[i].isSelected = true;
+                    } else {
+                        tmpColorList.docs[i].isSelected = false;
+                    }
+                });
                 if (payload.type === 0) {
                     yield put({
                         type: 'setColorList',
-                        payload: res.data,
+                        payload: tmpColorList,
                     });
                 } else {
                     yield put({
                         type: 'setFlowerList',
-                        payload: res.data,
+                        payload: tmpColorList,
+                    });
+                }
+                if (codename && codename != 'A') {
+                    // selectColorList;
+                    yield put({
+                        type: 'setSelectColorList',
+                        payload: [...selectColorList.filter(x => x.type != payload.type), ...newValue],
                     });
                 }
             }
@@ -656,20 +711,24 @@ export default {
                 let styleNos = gourpByStyle[key][0].styleAndColor.map(sc => sc.style.styleNo).join(',');
 
                 let sizeArr = size?.split('/');
-                    let sizeObjInit = {};
-                    sizeArr?.map(s => {
-                        sizeObjInit[s] = 0;
-                    });
+                let sizeObjInit = {};
+                sizeArr?.map(s => {
+                    sizeObjInit[s] = 0;
+                });
 
                 gourpByStyle[key] = {
-                    list: gourpByStyle[key].map(x => ({ ...x, price: _.sumBy(x.styleAndColor, sc => sc.style.price), sizeInfoObject: {...sizeObjInit}})),
+                    list: gourpByStyle[key].map(x => ({
+                        ...x,
+                        price: _.sumBy(x.styleAndColor, sc => sc.style.price),
+                        sizeInfoObject: { ...sizeObjInit },
+                    })),
                     key,
                     sizes: gourpByStyle[key][0].styleAndColor[0].style.size?.split('/'),
                     weight: lodash.sumBy(gourpByStyle[key][0].styleAndColor, sc => sc.style.weight),
                     styleNos,
                     price,
                     size,
-                    pickType: {pieceCount:0, val:1},
+                    pickType: { pieceCount: 0, val: 1 },
                 };
             }
             const saveItems = saveOrder
@@ -690,7 +749,7 @@ export default {
                             ...i.favorite,
                             parte: i.parte,
                             price: _.sum(i.favorite.styleAndColor.map(sc => sc.styleId.price)),
-                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : {...sizeObjInit},
+                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : { ...sizeObjInit },
                             styleAndColor: i.favorite.styleAndColor.map(sc => ({
                                 colorIds: sc.colorIds.filter(c => c),
                                 styleId: sc.styleId._id,

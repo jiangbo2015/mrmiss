@@ -39,8 +39,10 @@ const App = ({
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     const [currentGoodCategoryIsTop, setCurrentGoodCategoryIsTop] = useState(false);
     let docs = [];
+    let selectedNum = 0;
     if (styleList[currentGoodCategoryMultiple]) {
         docs = styleList[currentGoodCategoryMultiple];
+        selectedNum = docs.filter(x => x.isSelected).length;
         // console.log('docs', docs);
     }
 
@@ -97,7 +99,7 @@ const App = ({
         });
     };
     const handleSelectAll = () => {
-        if (docs.length > selectStyleList.length) {
+        if (docs.length > selectedNum) {
             const payload = [...selectStyleList, ...docs.filter(x => selectStyleList.findIndex(s => s._id === x._id) < 0)];
             console.log('payload', payload);
             dispatch({
@@ -132,10 +134,10 @@ const App = ({
         dispatch({
             type: 'diy/setStyleQueryKey',
             payload: '',
-        })
-        const finded = currentGood.category.find(x => x._id===currentGoodCategoryMultiple)
+        });
+        const finded = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
         // [].includes()
-        setCurrentGoodCategoryIsTop(finded ? finded.name.includes('单衣') : false)
+        setCurrentGoodCategoryIsTop(finded ? finded.name.includes('单衣') : false);
     }, [currentGood, currentGoodCategoryMultiple]);
 
     useEffect(() => {
@@ -162,7 +164,7 @@ const App = ({
             payload: category,
         });
     };
-    console.log('selectStyleList.length < docs.length ', selectStyleList, docs.length);
+    // console.log('selectStyleList.length < docs.length ', selectStyleList, docs.length);
     return (
         <div
             style={{
@@ -190,7 +192,9 @@ const App = ({
                         value={currentGoodCategoryMultiple}
                         style={{ marginRight: '20px' }}
                         width="98px"
-                        options={currentGood.category.filter(x => x.name.indexOf('分体')<0).map(c => ({ label: c.name, value: c._id }))}
+                        options={currentGood.category
+                            .filter(x => x.name.indexOf('分体') < 0)
+                            .map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
                     <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />
@@ -202,7 +206,7 @@ const App = ({
                             padding: '4px',
                             marginLeft: '24px',
                             marginBottom: '6px',
-                            opacity: selectStyleList.length < docs.length ? 0.3 : 1,
+                            opacity: selectedNum < docs.length ? 0.3 : 1,
                         }}
                         onClick={() => {
                             handleSelectAll();
@@ -269,6 +273,7 @@ const App = ({
                     }
                     return (
                         <div
+                            key={`${d._id}-${currentGoodCategoryMultiple}-${index}`}
                             style={{
                                 position: 'relative',
                                 justifySelf: 'stretch',
@@ -294,7 +299,7 @@ const App = ({
                                         flex: 1,
                                         display: 'flex',
                                         justifyContent: 'center',
-                                        alignItems: currentGoodCategoryIsTop ?'flex-start':'center',
+                                        alignItems: currentGoodCategoryIsTop ? 'flex-start' : 'center',
                                     }}
                                     onClick={() => {
                                         handleSelectStyle({ item: d, index });
