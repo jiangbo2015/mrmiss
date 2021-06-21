@@ -3,7 +3,7 @@ import { connect } from 'dva';
 
 import { filterImageUrl } from '@/utils/helper';
 import SearchInput from '@/components/SearchInput';
-import { Tooltip } from 'antd';
+import { Tooltip, Form } from 'antd';
 import { ReactSVG } from 'react-svg';
 import AllIcon from '@/public/icons/icon-all.svg';
 import Select from '@/components/Select';
@@ -51,11 +51,12 @@ export const ImgItem = ({ img, isSelected, size = '44px', ...props }) => (
     </div>
 );
 
-const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColorList, assign }) => {
+const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColorList, assign, currentAdminChannel }) => {
     const { docs = [] } = flowerList;
     const selectAll = docs.length === docs.filter(x => x.isSelected).length;
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
+    const [form] = Form.useForm();
     useEffect(() => {
         if (currentGood._id) {
             let payload = { goodsId: currentGood._id, limit: 10000, type: 1, sort };
@@ -68,6 +69,12 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
             });
         }
     }, [currentGood, queryKey, sort]);
+    useEffect(() => {
+        if (queryKey) {
+            setQueryKey('');
+            form.resetFields();
+        }
+    }, [currentAdminChannel]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -103,12 +110,17 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
             }}
         >
             <div style={{ marginBottom: '60px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <SearchInput
-                    placeholder="SEARCH PAINT"
-                    onSearch={e => {
-                        setQueryKey(e.target.value);
-                    }}
-                />
+                <Form form={form} name="control-search-paint">
+                    <Form.Item name="code" style={{ marginBottom: 0 }}>
+                        <SearchInput
+                            style={{ width: '100%' }}
+                            placeholder="SEARCH PAINT"
+                            onSearch={e => {
+                                setQueryKey(e.target.value);
+                            }}
+                        />
+                    </Form.Item>
+                </Form>
                 <ReactSVG
                     src={AllIcon}
                     style={{
@@ -187,9 +199,18 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                 }}
             >
                 {docs.map((d, index) => (
-                    <Tooltip title={<div style={{cursor: 'pointer'}} onClick={() => {
-                        handleShowBigPic(d);
-                    }}>{d.code}</div>} key={`${d._id}-tooltip`} 
+                    <Tooltip
+                        title={
+                            <div
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => {
+                                    handleShowBigPic(d);
+                                }}
+                            >
+                                {d.code}
+                            </div>
+                        }
+                        key={`${d._id}-tooltip`}
                     >
                         <ImgItem
                             key={d._id}
@@ -207,9 +228,10 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
     );
 };
 
-export default connect(({ diy = {} }) => ({
+export default connect(({ diy = {}, channel = {} }) => ({
     flowerList: diy.flowerList,
     currentGood: diy.currentGood,
     assign: diy.collocationPattern === 'assign',
     selectColorList: diy.selectColorList,
+    currentAdminChannel: channel.currentAdminChannel,
 }))(App);

@@ -300,8 +300,8 @@ export default {
                         payload: tmpColorList,
                     });
                 }
-                if (codename && codename != 'A') {
-                    // selectColorList;
+                if (!payload.code && codename != 'A') {
+                    console.log('setSelectColorList');
                     yield put({
                         type: 'setSelectColorList',
                         payload: [...selectColorList.filter(x => x.type != payload.type), ...newValue],
@@ -821,14 +821,19 @@ export default {
             if (!styleList[currentGoodCategory]) {
                 return;
             }
-            styleList[currentGoodCategory].map(s => {
+            const styleAllArr = [];
+
+            for (let k in styleList) {
+                styleAllArr.push(...styleList[k]);
+            }
+            styleAllArr.map(s => {
                 s.isSelected = false;
             });
 
             let newValue = payload.map(x => {
-                const findSelectIndex = styleList[currentGoodCategory].findIndex(s => s._id === x.style || s._id === x._id);
+                const findSelectIndex = styleAllArr.findIndex(s => s._id === x.style || s._id === x._id);
                 if (findSelectIndex >= 0) {
-                    styleList[currentGoodCategory][findSelectIndex].isSelected = true;
+                    styleAllArr[findSelectIndex].isSelected = true;
                 }
 
                 return {

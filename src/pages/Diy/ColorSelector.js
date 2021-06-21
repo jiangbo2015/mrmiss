@@ -3,7 +3,7 @@ import { connect } from 'dva';
 
 import { ReactSVG } from 'react-svg';
 import AllIcon from '@/public/icons/icon-all.svg';
-import { Tooltip } from 'antd';
+import { Tooltip, Form } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 
@@ -32,11 +32,20 @@ export const ColotItem = ({ color, isSelected, size = '44px', ...props }) => (
     </div>
 );
 
-const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood = {}, assign }) => {
+const App = ({
+    colorList = { docs: [] },
+    fetching,
+    selectColorList,
+    dispatch,
+    currentGood = {},
+    assign,
+    currentAdminChannel,
+}) => {
     let { docs = [] } = colorList;
     const selectAll = docs.length === docs.filter(x => x.isSelected).length;
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
+    const [form] = Form.useForm();
     useEffect(() => {
         // console.log('sort', sort);
         if (currentGood._id) {
@@ -50,6 +59,19 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
             });
         }
     }, [currentGood, queryKey, sort]);
+    useEffect(() => {
+        const { plainColors, flowerColors } = currentAdminChannel;
+
+        if (queryKey) {
+            setQueryKey('');
+            form.resetFields();
+        } else {
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors, flowerColors },
+            });
+        }
+    }, [currentAdminChannel]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -82,12 +104,17 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
                 }}
             >
                 <div style={{ marginBottom: '60px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <SearchInput
-                        placeholder="SEARCH COLOR"
-                        onSearch={e => {
-                            setQueryKey(e.target.value);
-                        }}
-                    />
+                    <Form form={form} name="control-hooks">
+                        <Form.Item name="code" style={{ marginBottom: 0 }}>
+                            <SearchInput
+                                style={{ width: '100%' }}
+                                placeholder="SEARCH COLOR"
+                                onSearch={e => {
+                                    setQueryKey(e.target.value);
+                                }}
+                            />
+                        </Form.Item>
+                    </Form>
                     <ReactSVG
                         src={AllIcon}
                         style={{
@@ -182,9 +209,11 @@ const App = ({ colorList = { docs: [] }, selectColorList, dispatch, currentGood 
     );
 };
 
-export default connect(({ diy = {} }) => ({
+export default connect(({ diy = {}, channel = {}, loading }) => ({
     colorList: diy.colorList,
     selectColorList: diy.selectColorList,
     currentGood: diy.currentGood,
     assign: diy.collocationPattern === 'assign',
+    currentAdminChannel: channel.currentAdminChannel,
+    fetching: loading.effects['diy/fetchColorList'],
 }))(App);

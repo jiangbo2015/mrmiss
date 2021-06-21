@@ -1,4 +1,4 @@
-import React, { useEffect, useRef,useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Flex, Box, Image } from 'rebass/styled-components';
 import { ReactSVG } from 'react-svg';
@@ -30,7 +30,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     const ref = useRef(null);
     const [curABC, setCurABC] = useState('A');
     const [remarkVal, setRemarkVal] = useState('');
-    
+
     const inputRef = useRef();
     useEffect(() => {
         dispatch({
@@ -42,7 +42,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
         // console.log('codename', codename)
         const { codename, styles = [], flowerColors = [], plainColors = [] } = currentAdminChannel;
         if (curABC !== 'A') {
-            setRemarkVal(currentAdminChannel.remark)
+            setRemarkVal(currentAdminChannel.remark);
             dispatch({
                 type: 'diy/setCollocationPattern',
                 payload: 'assign',
@@ -51,10 +51,10 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 type: 'diy/batchSetSelectStyleList',
                 payload: styles,
             });
-            dispatch({
-                type: 'diy/batchSetSelectColorList',
-                payload: { plainColors, flowerColors },
-            });
+            // dispatch({
+            //     type: 'diy/batchSetSelectColorList',
+            //     payload: { plainColors, flowerColors },
+            // });
         } else {
             dispatch({
                 type: 'diy/setCollocationPattern',
@@ -68,9 +68,8 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 type: 'diy/batchSetSelectStyleList',
                 payload: [],
             });
-           
         }
-    }, [currentAdminChannel,curABC]);
+    }, [currentAdminChannel, curABC]);
 
     useEffect(() => {
         if (goodsList.length > 0) {
@@ -106,7 +105,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     return (
         <Flex
             justifyContent="space-between"
-            alignItems='center'
+            alignItems="center"
             px="2.1%"
             sx={{
                 marginTop: '74px',
@@ -114,22 +113,20 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 // display: 'flex',
                 width: '100%',
                 height: '58px',
-                position: 'relative'
+                position: 'relative',
             }}
         >
             <Flex alignItems="center">
-
-                    <ReactSVG
-                        src={CirCleArrow}
-                        style={{
-                            width: '18px',
-                            height: '18px',
-                        }}
-                        onClick={() => {
-                            handleChangeStep(-1);
-                        }}
-                    />
-
+                <ReactSVG
+                    src={CirCleArrow}
+                    style={{
+                        width: '18px',
+                        height: '18px',
+                    }}
+                    onClick={() => {
+                        handleChangeStep(-1);
+                    }}
+                />
 
                 <Flex alignItems="center">
                     {goodsList.map(g => (
@@ -144,29 +141,31 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                     ))}
                 </Flex>
                 <ReactSVG
-                        src={CirCleArrow}
-                        style={{
-                            width: '18px',
-                            height: '18px',
-                            transform: 'rotateZ(180deg)',
-                        }}
-                        onClick={() => {
-                            handleChangeStep(1);
-                        }}
-                    />
+                    src={CirCleArrow}
+                    style={{
+                        width: '18px',
+                        height: '18px',
+                        transform: 'rotateZ(180deg)',
+                    }}
+                    onClick={() => {
+                        handleChangeStep(1);
+                    }}
+                />
             </Flex>
-            <Box style={{
-                            position: 'absolute',
-                            left: '50%',
-                            top: '50%',
-                            // color: headerBgColor !== '#fff' ? '#fff' :'#000',
-                            transform: 'translate(-50%, -50%)',
-                        }}>
-                <Switcher ref={ref} assigned={currentGood} setCurABC={setCurABC} curABC={curABC}/>
+            <Box
+                style={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: '50%',
+                    // color: headerBgColor !== '#fff' ? '#fff' :'#000',
+                    transform: 'translate(-50%, -50%)',
+                }}
+            >
+                <Switcher ref={ref} assigned={currentGood} setCurABC={setCurABC} curABC={curABC} />
             </Box>
             <Box>
                 {curABC !== 'A' ? (
-                    <Flex >
+                    <Flex>
                         <Flex bg="#BBBBBB" width="76px" fontSize="10px" p="6px 14px">
                             通道备注
                         </Flex>
@@ -176,8 +175,8 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                             // defaultVaule={}
                             ref={inputRef}
                             value={remarkVal}
-                            onChange={(e) => {
-                                setRemarkVal(e.target.value)
+                            onChange={e => {
+                                setRemarkVal(e.target.value);
                             }}
                             onBlur={e => {
                                 if (handleUpdateRemarks) {
