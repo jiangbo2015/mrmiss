@@ -88,7 +88,7 @@ const UserListTable = ({ customerList = [], currentCustomer, dispatch, currentUs
                 rowKey={record => record._id}
                 // selectRowKeys={selectRowKeys}
                 rowSelection={{
-                    type: isSingle?'radio':'checkbox',
+                    type: isSingle ? 'radio' : 'checkbox',
                     onChange: selectedRowKeys => {
                         setSelectRowKeys(selectedRowKeys);
                         // // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows:', selectedRows);

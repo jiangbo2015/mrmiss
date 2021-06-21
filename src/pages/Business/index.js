@@ -43,19 +43,20 @@ class Business extends React.Component {
         }
     };
 
-    handleDelete = () => {
+    handleDelete = async () => {
         // // console.log(this.state);
         const { dispatch } = this.props;
         const { selectedRowKeys } = this.state;
         if (selectedRowKeys.length < 1) {
             return;
         }
-        dispatch({
+        await dispatch({
             type: 'business/delMyCustomer',
             payload: {
                 ids: selectedRowKeys,
             },
         });
+        this.setState({ ...this.state, selectedRowKeys: [] });
     };
 
     handleSearch = e => {

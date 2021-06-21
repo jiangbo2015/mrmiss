@@ -10,7 +10,7 @@ import lodash from 'lodash';
 import request from '@/utils/request';
 import OrderDownload from '@/components/OrderDownload';
 
-const OrderTable = ({ orderList = [], dispatch,onShowDetail }) => {
+const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
     const [downloadOrder, setDownloadOrder] = useState(false);
     useEffect(() => {
         dispatch({
@@ -48,7 +48,7 @@ const OrderTable = ({ orderList = [], dispatch,onShowDetail }) => {
                 <a
                     style={{ textDecoration: 'underline' }}
                     onClick={() => {
-                        onShowDetail({...record,orderType:'order'})
+                        onShowDetail({ ...record, orderType: 'order' });
                         // setUserInfoModal(true) record
                     }}
                 >
@@ -87,22 +87,22 @@ const OrderTable = ({ orderList = [], dispatch,onShowDetail }) => {
                 </Flex>
             ),
         },
-        {
-            title: '删除',
-            dataIndex: 'delete',
-            key: 'delete',
-            render: (_, record) => (
-                <Flex p="20px" alignItems="center" justifyContent="center">
-                    <ReactSVG
-                        src={IconDelete}
-                        style={{ width: '18px' }}
-                        onClick={() => {
-                            handleDel(record._id);
-                        }}
-                    />
-                </Flex>
-            ),
-        },
+        // {
+        //     title: '删除',
+        //     dataIndex: 'delete',
+        //     key: 'delete',
+        //     render: (_, record) => (
+        //         <Flex p="20px" alignItems="center" justifyContent="center">
+        //             <ReactSVG
+        //                 src={IconDelete}
+        //                 style={{ width: '18px' }}
+        //                 onClick={() => {
+        //                     handleDel(record._id);
+        //                 }}
+        //             />
+        //         </Flex>
+        //     ),
+        // },
     ];
     return (
         <>

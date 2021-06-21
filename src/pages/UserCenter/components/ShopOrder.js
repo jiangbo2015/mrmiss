@@ -44,7 +44,7 @@ const OrderTable = ({ orderList = [], dispatch }) => {
                 <a
                     style={{ textDecoration: 'underline' }}
                     onClick={() => {
-                        onShowDetail(record)
+                        onShowDetail(record);
                         // setUserInfoModal(true) record
                     }}
                 >
@@ -83,18 +83,18 @@ const OrderTable = ({ orderList = [], dispatch }) => {
                 </Flex>
             ),
         },
-        {
-            title: '删除',
-            dataIndex: 'delete',
-            key: 'delete',
-            render: (_, record) => (
-                <Popconfirm title="确认要删除吗？" onConfirm={() => handleDel(record._id)}>
-                    <Flex p="20px" alignItems="center" justifyContent="center">
-                        <ReactSVG src={IconDelete} style={{ width: '18px' }} />
-                    </Flex>
-                </Popconfirm>
-            ),
-        },
+        // {
+        //     title: '删除',
+        //     dataIndex: 'delete',
+        //     key: 'delete',
+        //     render: (_, record) => (
+        //         <Popconfirm title="确认要删除吗？" onConfirm={() => handleDel(record._id)}>
+        //             <Flex p="20px" alignItems="center" justifyContent="center">
+        //                 <ReactSVG src={IconDelete} style={{ width: '18px' }} />
+        //             </Flex>
+        //         </Popconfirm>
+        //     ),
+        // },
     ];
     return <OrderTableComponent columns={columns} dataSource={orderList} />;
 };

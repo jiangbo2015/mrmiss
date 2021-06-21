@@ -334,7 +334,7 @@ const UserListTable = ({
                 }}
                 width="600px"
             >
-                <UserListMinTable isSingle />
+                <UserListMinTable />
             </Modal>
             <Flex p="16px" justifyContent="center" alignItems="center" flexDirection={batch ? 'column' : 'row'}>
                 <ReactSVG style={{ width: '40px', height: '40px' }} src={IconEmpower} />

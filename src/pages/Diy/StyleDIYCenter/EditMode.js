@@ -70,10 +70,11 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                     }}
                 />
             </div>
-            <div 
+            <div
                 onClick={() => {
+                    console.log('favoriteEditObj', favoriteEditObj);
                     favoriteEditObj.styleAndColor[0].currentStyleRegion = 0;
-                    if(favoriteEditObj.styleAndColor.length > 1) {
+                    if (favoriteEditObj.styleAndColor.length > 1) {
                         favoriteEditObj.styleAndColor[1].currentStyleRegion = 0;
                     }
                     dispatch({
@@ -98,7 +99,6 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             justifyContent: 'center',
                             flexDirection: 'column',
                             alignItems: 'center',
-                          
                         }}
                     >
                         {favoriteEditObj.styleAndColor.map((d, i) => (
@@ -110,13 +110,17 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                                 {...d.style}
                                 style={{
                                     cursor: 'pointer',
-                                    paddingBottom: i ? '0':'60px'
+                                    paddingBottom: i ? '0' : '60px',
                                 }}
                                 showGroupStroke={true}
                                 curStylesEditGroupIndex={d.currentStyleRegion - 1}
                                 onSetEditSvgGroupIndex={val => {
+                                    console.log('i', i, ',(i + 1) % 2', i);
                                     favoriteEditObj.styleAndColor[i].currentStyleRegion = val + 1;
-                                    favoriteEditObj.styleAndColor[(i + 1) % 2].currentStyleRegion = 0;
+                                    if (favoriteEditObj.styleAndColor[(i + 1) % 2]) {
+                                        favoriteEditObj.styleAndColor[(i + 1) % 2].currentStyleRegion = 0;
+                                    }
+
                                     dispatch({
                                         type: 'diy/setFavoriteEditObj',
                                         payload: {
@@ -134,7 +138,6 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                             justifyContent: 'center',
                             flexDirection: 'column',
                             alignItems: 'center',
-
                         }}
                     >
                         {favoriteEditObj.styleAndColor.map((d, i) => (
@@ -149,7 +152,7 @@ const App = ({ dispatch, favoriteEditObj = { styleAndColor: [] }, selectColorLis
                                 styleSize={d.style.styleBackSize}
                                 style={{
                                     cursor: 'pointer',
-                                    paddingBottom: i ? '0':'60px'
+                                    paddingBottom: i ? '0' : '60px',
                                 }}
                                 showGroupStroke={true}
                                 curStylesEditGroupIndex={d.currentStyleRegion - 1}
