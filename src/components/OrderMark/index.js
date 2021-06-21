@@ -157,7 +157,7 @@ const OrderMark = ({
             let sum = 0;
             // // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
             // if (rowPickTypes[row].val == 1) {
-            if (sourceData[row].pickType.pieceCount) {
+            if (sourceData[row].pickType?.pieceCount) {
                 sum = lodash.sum(sourceData[row].list.map(l => lodash.sum(Object.values(l.sizeInfoObject))));
                 sum = sum * sourceData[row].pickType.pieceCount;
             }
@@ -191,10 +191,10 @@ const OrderMark = ({
             sourceData[sInd].list = sourceClone;
 
             const newKey = removed.styleAndColor.map(sc => sc.styleId).join('-');
-            rowPickTypes[Object.keys(rowPickTypes).length] = {
-                val: 0,
-                pieceCount: 0,
-            };
+            // rowPickTypes[Object.keys(rowPickTypes).length] = {
+            //     val: 0,
+            //     pieceCount: 0,
+            // };
             // // console.log('removed', removed);
             setSourceData([
                 ...sourceData,
@@ -202,10 +202,11 @@ const OrderMark = ({
                     key: newKey,
                     list: [removed],
                     sizes: removed.styleAndColor[0].style.size ? removed.styleAndColor[0].style.size?.split('/') : '',
+                    pickType: { val: 1, pieceCount: 0 },
                 },
             ]);
 
-            setRowPickTypes({ ...rowPickTypes });
+            // setRowPickTypes({ ...rowPickTypes });
             return;
         }
         const dInd = parseInt(destination.droppableId, 10);
@@ -416,7 +417,7 @@ const OrderMark = ({
                                         position: 'absolute',
                                         top: '10px',
                                         right: '10px',
-                                        display: !readOnly ? 'initial' : 'none'
+                                        display: !readOnly ? 'initial' : 'none',
                                     }}
                                     onClick={() => {
                                         handleDelRow(ind);
@@ -501,11 +502,9 @@ const OrderMark = ({
                                                                             </Box>
                                                                         ))}
                                                                         <Flex mb="30px">
-                                                                            {el.sizes?.map((s) => {
+                                                                            {el.sizes?.map(s => {
                                                                                 // const sizeKey = `${ind}-${favorite._id}-${s}`;
                                                                                 const sizeKey = `${ind}-${index}-${favorite._id}-${s}`;
-                                                                                
-            
 
                                                                                 return (
                                                                                     <Flex
@@ -560,7 +559,7 @@ const OrderMark = ({
                                             width="120px"
                                             mode="white"
                                             disabled={readOnly}
-                                            value={el.pickType.val}
+                                            value={el.pickType?.val}
                                             options={[
                                                 { label: '单色单码', value: 0 },
                                                 { label: '混色混码', value: 1 },
@@ -600,7 +599,7 @@ const OrderMark = ({
                                                 共
                                                 <InputNumber
                                                     readOnly={readOnly}
-                                                    value={el.pickType.pieceCount}
+                                                    value={el.pickType?.pieceCount}
                                                     type="number"
                                                     style={{ width: '60px' }}
                                                     onChange={val => {
