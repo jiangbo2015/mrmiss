@@ -48,6 +48,9 @@ const App = ({
     const [form] = Form.useForm();
 
     const handleFetchList = async (fetchType, queryKey) => {
+        if (!currentGood || !currentGood._id) {
+            return;
+        }
         let payload = { goodsId: currentGood._id, limit: 10000, type: 0, sort };
         if (queryKey) {
             payload.code = queryKey;
@@ -62,7 +65,9 @@ const App = ({
     };
     useEffect(() => {
         // console.log('sort', sort);
+        // if (currentGood && currentGood._id) {
         handleFetchList('clear');
+        // }
     }, [currentGood]);
     useEffect(() => {
         // console.log('sort', sort);

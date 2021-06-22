@@ -58,6 +58,9 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
     const [sort, setSort] = useState('time');
     const [form] = Form.useForm();
     const handleFetchList = async (fetchType, queryKey) => {
+        if (!currentGood || !currentGood._id) {
+            return;
+        }
         let payload = { goodsId: currentGood._id, limit: 10000, type: 1, sort };
         if (queryKey) {
             payload.code = queryKey;
