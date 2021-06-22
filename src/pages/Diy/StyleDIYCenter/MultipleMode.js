@@ -131,7 +131,14 @@ const App = ({
     //     }
     // }, [styleQueryKey]);
     useEffect(() => {
-        handleFetchMore('keep');
+        const finded = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
+        // [].includes()
+        setCurrentGoodCategoryIsTop(finded ? finded.name.includes('单衣') : false);
+    }, [currentGood, currentGoodCategoryMultiple]);
+
+    useEffect(() => {
+        // if (styleQueryKey) {
+        handleFetchMore('clear');
         dispatch({
             type: 'diy/setStyleQueryChangeKey',
             payload: '',
@@ -140,13 +147,11 @@ const App = ({
             type: 'diy/setStyleQueryKey',
             payload: '',
         });
-        const finded = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
-        // [].includes()
-        setCurrentGoodCategoryIsTop(finded ? finded.name.includes('单衣') : false);
-    }, [currentGood, currentGoodCategoryMultiple]);
+        // }
+    }, [currentGood]);
 
     useEffect(() => {
-        if (styleQueryKey) {
+        if ((currentAdminChannel._id, currentGoodCategoryMultiple && styleQueryKey)) {
             handleFetchMore('clear');
             dispatch({
                 type: 'diy/setStyleQueryChangeKey',
@@ -157,7 +162,7 @@ const App = ({
                 payload: '',
             });
         }
-    }, [currentAdminChannel]);
+    }, [currentAdminChannel, currentGoodCategoryMultiple]);
 
     const handleEditPrice = ({ price, style }) => {
         console.log(selectStyleList);

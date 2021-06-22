@@ -214,6 +214,7 @@ export default {
             const { currentAdminChannel } = yield select(state => state.channel);
             const { styles, codename } = currentAdminChannel;
             const { fetchType = 'keep' } = payload;
+            console.log('codename', currentAdminChannel);
             const res = yield call(api.getUserStyleList, payload);
             if (res.data && Array.isArray(res.data.category)) {
                 let categoryStyles = {};
@@ -243,6 +244,8 @@ export default {
                         });
                     });
                 }
+
+                // console.log('categoryStyles', categoryStyles);
 
                 yield put({
                     type: 'setStyleList',
