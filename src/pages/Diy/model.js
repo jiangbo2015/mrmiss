@@ -249,6 +249,7 @@ export default {
                     payload: categoryStyles,
                 });
                 if (fetchType === 'clear') {
+                    console.log('fetchType === clear');
                     yield put({
                         type: 'setSelectStyleList',
                         payload: newValue,
@@ -634,6 +635,7 @@ export default {
             if (findSelectIndex >= 0) {
                 newValue = [...selectStyleList];
                 newValue.splice(findSelectIndex, 1);
+                console.log('findSelectIndex', findSelectIndex);
                 styleList[currentGoodCategoryMultiple][index].isSelected = false;
             } else {
                 newValue = [...selectStyleList, item];
