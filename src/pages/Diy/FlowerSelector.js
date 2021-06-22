@@ -57,22 +57,39 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
     const [form] = Form.useForm();
-    useEffect(() => {
-        if (currentGood._id) {
-            let payload = { goodsId: currentGood._id, limit: 10000, type: 1, sort };
-            if (queryKey) {
-                payload.code = queryKey;
-            }
-            dispatch({
-                type: 'diy/fetchColorList',
-                payload,
-            });
+    const handleFetchList = async (fetchType, queryKey) => {
+        let payload = { goodsId: currentGood._id, limit: 10000, type: 1, sort };
+        if (queryKey) {
+            payload.code = queryKey;
         }
-    }, [currentGood, queryKey, sort]);
+        if (fetchType) {
+            payload.fetchType = fetchType;
+        }
+        dispatch({
+            type: 'diy/fetchColorList',
+            payload,
+        });
+    };
     useEffect(() => {
+        // console.log('sort', sort);
+        handleFetchList('clear');
+    }, [currentGood]);
+    useEffect(() => {
+        // console.log('sort', sort);
+        handleFetchList('keep', queryKey);
+    }, [sort]);
+    useEffect(() => {
+        const { plainColors, flowerColors } = currentAdminChannel;
+
         if (queryKey) {
             setQueryKey('');
             form.resetFields();
+            handleFetchList('clear');
+        } else {
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors, flowerColors },
+            });
         }
     }, [currentAdminChannel]);
     const handleSelectColor = color => {
@@ -117,6 +134,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                             placeholder="SEARCH PAINT"
                             onSearch={e => {
                                 setQueryKey(e.target.value);
+                                handleFetchList('keep', e.target.value);
                             }}
                         />
                     </Form.Item>

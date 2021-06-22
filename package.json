@@ -1,5 +1,6 @@
 {
     "private": true,
+    "version": "1.0.2",
     "scripts": {
         "dev": "umi dev",
         "build-test": "UMI_ENV=test umi build",

@@ -33,10 +33,10 @@ const App = ({
     styleQueryChangeKey,
     currentAdminChannel,
     assign,
-    curChannslPrice,
+    // curChannslPrice,
 }) => {
     // console.log('assign', assign);
-    const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
+    // const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     const [currentGoodCategoryIsTop, setCurrentGoodCategoryIsTop] = useState(false);
     let docs = [];
     let selectedNum = 0;
@@ -46,13 +46,17 @@ const App = ({
         // console.log('docs', docs);
     }
 
-    const handleFetchMore = async () => {
+    const handleFetchMore = async (fetchType, styleNo) => {
         if (currentGood._id) {
             const payload = {
                 _id: currentGood._id,
+                fetchType,
             };
-            if (styleQueryKey) {
-                payload.styleNo = styleQueryKey;
+            if (fetchType) {
+                payload.fetchType = fetchType;
+            }
+            if (styleNo) {
+                payload.styleNo = styleNo;
             }
             dispatch({
                 type: 'diy/fetchStyleList',
@@ -116,17 +120,18 @@ const App = ({
     useEffect(() => {
         if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
             handleSetCurrentGoodCategory(currentGood.category[0]._id);
-            handleFetchMore();
+            handleFetchMore('clear');
         }
     }, [currentGood]);
 
+    // useEffect(() => {
+    //     if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
+    //         // handleSetCurrentGoodCategory(currentGood.category[0]._id);
+    //         handleFetchMore('keep', styleQueryKey);
+    //     }
+    // }, [styleQueryKey]);
     useEffect(() => {
-        if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
-            // handleSetCurrentGoodCategory(currentGood.category[0]._id);
-            handleFetchMore();
-        }
-    }, [styleQueryKey]);
-    useEffect(() => {
+        handleFetchMore('keep');
         dispatch({
             type: 'diy/setStyleQueryChangeKey',
             payload: '',
@@ -141,9 +146,17 @@ const App = ({
     }, [currentGood, currentGoodCategoryMultiple]);
 
     useEffect(() => {
-        const { shopStyles = [] } = currentAdminChannel;
-        setSelectAssignedStyleList(shopStyles);
-        console.log('currentAdminChannel', shopStyles);
+        if (styleQueryKey) {
+            handleFetchMore('clear');
+            dispatch({
+                type: 'diy/setStyleQueryChangeKey',
+                payload: '',
+            });
+            dispatch({
+                type: 'diy/setStyleQueryKey',
+                payload: '',
+            });
+        }
     }, [currentAdminChannel]);
 
     const handleEditPrice = ({ price, style }) => {
@@ -180,6 +193,7 @@ const App = ({
                     alignItems: 'center',
                     position: 'relative',
                 }}
+                id="multiple-mode"
             >
                 <div
                     style={{
@@ -222,6 +236,10 @@ const App = ({
                             type: 'diy/setStyleQueryKey',
                             payload: e.target.value,
                         });
+                        if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
+                            // handleSetCurrentGoodCategory(currentGood.category[0]._id);
+                            handleFetchMore('keep', e.target.value);
+                        }
                     }}
                     onChange={e => {
                         dispatch({
@@ -293,7 +311,19 @@ const App = ({
                                 }}
                                 src={SelectedIcon}
                             />
-                            <Tooltip title={d.styleNo} key={`${d._id}-tooltip`}>
+                            <Tooltip
+                                title={d.styleNo}
+                                key={`${d._id}-tooltip`}
+                                getPopupContainer={() => {
+                                    if (!window.multipleModeDiv) {
+                                        window.multipleModeDiv = document.getElementById('multiple-mode');
+                                    }
+                                    if (!window.multipleModeDiv) {
+                                        return document.body;
+                                    }
+                                    return window.multipleModeDiv;
+                                }}
+                            >
                                 <div
                                     style={{
                                         flex: 1,

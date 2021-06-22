@@ -54,10 +54,10 @@ const App = ({
     }
     if (categoryObj && categoryObj.name.indexOf('分体') >= 0) {
         // 分体
-        let categoryName = categoryObj.name.replace('分体', '')
+        let categoryName = categoryObj.name.replace('分体', '');
         // categoryName.replce('分体', '')
-        let categoryNameTop = `${categoryName}单衣`
-        let categoryNameBottom = `${categoryName}单裤`
+        let categoryNameTop = `${categoryName}单衣`;
+        let categoryNameBottom = `${categoryName}单裤`;
         const top = currentGood.category.find(x => x.name === categoryNameTop);
         if (top) {
             //选择的放在前面
@@ -74,12 +74,25 @@ const App = ({
                     : styleList[bottom._id];
         }
     }
-    const params = {
-        scrollbar: {
-            el: '.swiper-scrollbar',
-            hide: false,
-        },
+    const handleFetchMore = async (fetchType, styleNo) => {
+        if (currentGood._id) {
+            const payload = {
+                _id: currentGood._id,
+                fetchType,
+            };
+            if (fetchType) {
+                payload.fetchType = fetchType;
+            }
+            if (styleNo) {
+                payload.styleNo = styleNo;
+            }
+            dispatch({
+                type: 'diy/fetchStyleList',
+                payload,
+            });
+        }
     };
+
     useEffect(() => {
         if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
             handleSetCurrentGoodCategory(currentGood.category[0]._id);
@@ -270,6 +283,10 @@ const App = ({
                             type: 'diy/setStyleQueryKey',
                             payload: e.target.value,
                         });
+                        if (Array.isArray(currentGood.category) && currentGood.category.length > 0) {
+                            // handleSetCurrentGoodCategory(currentGood.category[0]._id);
+                            handleFetchMore('keep', e.target.value);
+                        }
                     }}
                     onChange={e => {
                         dispatch({
@@ -321,7 +338,6 @@ const App = ({
                                 key={`bar-${d._id}`}
                                 // isSelected={d.isSelected}
                                 color={d.value}
-                                
                             />
                         ))}
                 </div>
@@ -347,7 +363,7 @@ const App = ({
                 </div>
             </div>
 
-            {categoryObj && categoryObj.name.indexOf('分体')>=0 ? (
+            {categoryObj && categoryObj.name.indexOf('分体') >= 0 ? (
                 <MultipleStyleSelector
                     currentStyle={currentStyle}
                     selectColorList={singleSelectColorList}

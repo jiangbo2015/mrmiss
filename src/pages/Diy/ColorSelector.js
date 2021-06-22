@@ -46,25 +46,35 @@ const App = ({
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
     const [form] = Form.useForm();
+
+    const handleFetchList = async (fetchType, queryKey) => {
+        let payload = { goodsId: currentGood._id, limit: 10000, type: 0, sort };
+        if (queryKey) {
+            payload.code = queryKey;
+        }
+        if (fetchType) {
+            payload.fetchType = fetchType;
+        }
+        dispatch({
+            type: 'diy/fetchColorList',
+            payload,
+        });
+    };
     useEffect(() => {
         // console.log('sort', sort);
-        if (currentGood._id) {
-            let payload = { goodsId: currentGood._id, limit: 10000, type: 0, sort };
-            if (queryKey) {
-                payload.code = queryKey;
-            }
-            dispatch({
-                type: 'diy/fetchColorList',
-                payload,
-            });
-        }
-    }, [currentGood, queryKey, sort]);
+        handleFetchList('clear');
+    }, [currentGood]);
+    useEffect(() => {
+        // console.log('sort', sort);
+        handleFetchList('keep', queryKey);
+    }, [sort]);
     useEffect(() => {
         const { plainColors, flowerColors } = currentAdminChannel;
 
         if (queryKey) {
             setQueryKey('');
             form.resetFields();
+            handleFetchList('clear');
         } else {
             dispatch({
                 type: 'diy/batchSetSelectColorList',
@@ -111,6 +121,7 @@ const App = ({
                                 placeholder="SEARCH COLOR"
                                 onSearch={e => {
                                     setQueryKey(e.target.value);
+                                    handleFetchList('keep', e.target.value);
                                 }}
                             />
                         </Form.Item>

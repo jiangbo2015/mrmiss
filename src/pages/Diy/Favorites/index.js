@@ -24,12 +24,12 @@ import styles from './index.less';
 import OrderModal from './order/index';
 
 const favoriteBox = {
-    small: { h: '15.6vw', w: 'calc(16.52% - 16px)', size: 6},
+    small: { h: '15.6vw', w: 'calc(16.52% - 16px)', size: 6 },
     middle: { h: '23.4vw', w: 'calc(25% - 15px)', size: 9 },
     large: { h: '31.2vw', w: 'calc(33.3% - 13px)', size: 12 },
 };
 
-const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentAdminChannel }) => {
+const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {}, currentAdminChannel }) => {
     const selectAll = favoriteArr.length === favoriteArr.filter(x => x.isSelected).length;
     // console.log('favoritePattern', favoritePattern);
     const [orderVisible, setOrderVisible] = useState(false);
@@ -136,8 +136,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
 
     const renderCountsInfo = () => {
         let infos = lodash.groupBy(favoriteArr, x => (x.goodCategory ? x.goodCategory.name : ''));
-        return Object.keys(infos).map(k => (
-            <Flex flexDirection="column" alignItems="center" pl="10px">
+        return Object.keys(infos).map((k, gi) => (
+            <Flex key={`${k.goodCategory?.name}-${gi}-counts`} flexDirection="column" alignItems="center" pl="10px">
                 <div>{k}</div>
                 <div>{infos[k].length}</div>
             </Flex>
@@ -148,7 +148,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
             style={{
                 padding: '30px 2.1%',
                 background: '#4A4949',
-                display: currentAdminChannel.codename === 'A' ? 'block' : 'none'
+                display: currentAdminChannel.codename === 'A' ? 'block' : 'none',
             }}
         >
             <Modal
@@ -161,39 +161,47 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
             >
                 {bigerVisible ? (
                     <Box
-                    sx={{
-                        display: "grid",
-                        gridAutoFlow: "column",
-                        gridTemplateColumns: "50% 50%",
-                        gridTemplateRows:
-                            Array.isArray(bigerVisible.styleAndColor) && bigerVisible.styleAndColor.length > 1
-                                ? "50% 50%"
-                                : "",
-                    }}
-                    width="700px"
-                    color="#000"
-                >
-                        
-                            {bigerVisible.styleAndColor.map(d => (
-                                <Flex alignItems={d.style.vposition}
-								justifyContent="center" width='350px' py='40px'>
-                                    <StyleItem
-                                        width={`${(300 * d.style.styleSize) / 27}px`}
-                                        styleId={`${bigerVisible._id}-${d._id}-item`}
-                                        colors={d.colorIds}
-                                        key={`${bigerVisible._id}-${d._id}-${Math.random() * 1000000}`}
-                                        {...d.style}
-                                        style={{
-                                            cursor: 'pointer',
-                                        }}
-                                    />
-                                </Flex>
-                            ))}
-                     
-                    
-                            {bigerVisible.styleAndColor.map((d, i) => (
-                                 <Flex alignItems={d.style.vposition}
-                                 justifyContent="center" width='350px' py='40px'>
+                        sx={{
+                            display: 'grid',
+                            gridAutoFlow: 'column',
+                            gridTemplateColumns: '50% 50%',
+                            gridTemplateRows:
+                                Array.isArray(bigerVisible.styleAndColor) && bigerVisible.styleAndColor.length > 1
+                                    ? '50% 50%'
+                                    : '',
+                        }}
+                        width="700px"
+                        color="#000"
+                    >
+                        {bigerVisible.styleAndColor.map((d, bi) => (
+                            <Flex
+                                alignItems={d.style.vposition}
+                                key={`bigerVisible-${d._id}-${bi}`}
+                                justifyContent="center"
+                                width="350px"
+                                py="40px"
+                            >
+                                <StyleItem
+                                    width={`${(300 * d.style.styleSize) / 27}px`}
+                                    styleId={`${bigerVisible._id}-${d._id}-item`}
+                                    colors={d.colorIds}
+                                    key={`${bigerVisible._id}-${d._id}-${Math.random() * 1000000}`}
+                                    {...d.style}
+                                    style={{
+                                        cursor: 'pointer',
+                                    }}
+                                />
+                            </Flex>
+                        ))}
+
+                        {bigerVisible.styleAndColor.map((d, i) => (
+                            <Flex
+                                key={`bigerVisible-back-${d._id}-${i}`}
+                                alignItems={d.style.vposition}
+                                justifyContent="center"
+                                width="350px"
+                                py="40px"
+                            >
                                 <StyleItem
                                     width={`${(300 * d.style.styleBackSize) / 27}px`}
                                     styleId={`${bigerVisible._id}-${d._id}-${i}-big`}
@@ -207,9 +215,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                                         cursor: 'pointer',
                                     }}
                                 />
-                                </Flex>
-                            ))}
-                  
+                            </Flex>
+                        ))}
                     </Box>
                 ) : null}
             </Modal>
@@ -257,8 +264,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                     }}
                 >
                     <Select
-                        style={{ marginRight: '20px'}}
-                        width='110px'
+                        style={{ marginRight: '20px' }}
+                        width="110px"
                         onChange={val => {
                             handleToggleTime(val);
                         }}
@@ -299,7 +306,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
                         position: 'absolute',
                         left: '50%',
                         top: '50%',
-                        transform: 'translate(-50%, -50%)'
+                        transform: 'translate(-50%, -50%)',
                     }}
                 />
                 <Flex alignItems="center">
@@ -480,9 +487,9 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {},currentA
     );
 };
 
-export default connect(({ diy = {}, channel={} }) => ({
+export default connect(({ diy = {}, channel = {} }) => ({
     favoriteArr: diy.favoriteArr,
     favoritePattern: diy.favoritePattern,
     currentGood: diy.currentGood,
-    currentAdminChannel: channel.currentAdminChannel
+    currentAdminChannel: channel.currentAdminChannel,
 }))(App);

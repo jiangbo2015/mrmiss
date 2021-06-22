@@ -213,11 +213,12 @@ export default {
             const { selectStyleList = [] } = yield select(state => state.diy);
             const { currentAdminChannel } = yield select(state => state.channel);
             const { styles, codename } = currentAdminChannel;
+            const { fetchType = 'keep' } = payload;
             const res = yield call(api.getUserStyleList, payload);
             if (res.data && Array.isArray(res.data.category)) {
                 let categoryStyles = {};
                 let newValue = [];
-                if (codename !== 'A') {
+                if (codename !== 'A' && fetchType === 'clear') {
                     res.data.category.map(c => {
                         categoryStyles[c._id] = c.styles.map(x => {
                             const finded = styles.find(s => s.style === x._id);
@@ -247,10 +248,12 @@ export default {
                     type: 'setStyleList',
                     payload: categoryStyles,
                 });
-                yield put({
-                    type: 'setSelectStyleList',
-                    payload: newValue,
-                });
+                if (fetchType === 'clear') {
+                    yield put({
+                        type: 'setSelectStyleList',
+                        payload: newValue,
+                    });
+                }
             }
             // getUserStyleList
         },
@@ -271,13 +274,14 @@ export default {
             const { selectColorList = [] } = yield select(state => state.diy);
             const { currentAdminChannel } = yield select(state => state.channel);
             const { plainColors = [], flowerColors = [], codename } = currentAdminChannel;
+            const { fetchType = 'keep' } = payload;
             // console.log('currentAdminChannel.codename', codename);
             let newValue = [];
             if (res && res.data) {
                 const tmpColorList = res.data;
                 tmpColorList.docs.map((x, i) => {
                     let findIndex = -1;
-                    if (codename === 'A') {
+                    if (codename === 'A' || fetchType === 'keep') {
                         findIndex = selectColorList.findIndex(c => c._id === x._id);
                     } else {
                         findIndex = [...plainColors, ...flowerColors].findIndex(c => c === x._id);
@@ -300,8 +304,8 @@ export default {
                         payload: tmpColorList,
                     });
                 }
-                if (!payload.code && codename != 'A') {
-                    console.log('setSelectColorList');
+                if (codename != 'A' && fetchType === 'clear') {
+                    // console.log('setSelectColorList');
                     yield put({
                         type: 'setSelectColorList',
                         payload: [...selectColorList.filter(x => x.type != payload.type), ...newValue],
