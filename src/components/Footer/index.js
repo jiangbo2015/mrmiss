@@ -2,7 +2,7 @@
 import { Box, Flex, Text } from 'rebass/styled-components';
 
 export default ({ title, subtitle }) => {
-    console.log(process);
+    // console.log(process);
     return (
         <Flex
             width={1}
