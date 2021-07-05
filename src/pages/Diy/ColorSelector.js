@@ -6,8 +6,9 @@ import AllIcon from '@/public/icons/icon-all.svg';
 import { Tooltip, Form } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
+import ReactList from 'react-list';
 
-export const ColotItem = ({ color, isSelected, size = '44px', ...props }) => (
+export const ColotItem = ({ color, isSelected, size = '44px', style, ...props }) => (
     <div
         {...props}
         style={{
@@ -15,6 +16,7 @@ export const ColotItem = ({ color, isSelected, size = '44px', ...props }) => (
             justifyContent: 'center',
             alignItems: 'center',
             cursor: 'pointer',
+            ...style,
         }}
     >
         <div
@@ -108,6 +110,28 @@ const App = ({
         }
     };
 
+    const renderItem = (index, key) => {
+        const d = colorList.docs[index];
+        return (
+            <Tooltip title={d.code} key={`${d._id}-tooltip`}>
+                <ColotItem
+                    // className="square-item"
+                    key={d._id}
+                    isSelected={d.isSelected}
+                    color={d.value}
+                    onClick={() => {
+                        handleSelectColor({ item: d, index });
+                    }}
+                    style={{
+                        display: 'inline-flex',
+                        width: '33.3%',
+                        paddingBottom: '55px',
+                    }}
+                />
+            </Tooltip>
+        );
+    };
+
     return (
         <>
             <div
@@ -195,7 +219,7 @@ const App = ({
                         </div>
                     </div>
                 ) : null}
-                <div
+                {/* <div
                     style={{
                         padding: '0 21px',
                         width: '100%',
@@ -218,7 +242,18 @@ const App = ({
                                 }}
                             />
                         </Tooltip>
-                    ))}
+                    ))} 
+                    
+                </div> */}
+                <div
+                    style={{
+                        padding: '0 21px',
+                        width: '100%',
+                        overflowY: 'scroll',
+                        height: '600px',
+                    }}
+                >
+                    <ReactList itemRenderer={renderItem} length={colorList.docs.length} type="uniform" />
                 </div>
             </div>
         </>

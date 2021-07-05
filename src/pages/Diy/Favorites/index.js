@@ -10,6 +10,7 @@ import Select from '@/components/Select';
 import SelectAll from '@/components/SelectAll';
 import StyleItem from '@/components/StyleItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ReactList from 'react-list';
 
 import AllIcon from '@/public/icons/icon-all.svg';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
@@ -24,7 +25,7 @@ import styles from './index.less';
 import OrderModal from './order/index';
 
 const favoriteBox = {
-    small: { h: '15.6vw', w: 'calc(16.52% - 16px)', size: 6 },
+    small: { h: '16vw', w: 'calc(16.52% - 16px)', size: 6 },
     middle: { h: '23.4vw', w: 'calc(25% - 15px)', size: 9 },
     large: { h: '31.2vw', w: 'calc(33.3% - 13px)', size: 12 },
 };
@@ -142,6 +143,109 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {}, current
                 <div>{infos[k].length}</div>
             </Flex>
         ));
+    };
+
+    const renderItem = index => {
+        const favorite = favoriteArr[index];
+        return (
+            <div
+                key={`${favorite._id}-favorite-${Math.random() * 1000000}`}
+                style={{
+                    position: 'relative',
+                    justifySelf: 'stretch',
+                    alignSelf: 'stretch',
+                    display: 'inline-flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-around',
+                    background: '#FFFFFF',
+                    borderRadius: '5px',
+                    width: favoriteBox[favoritePattern].w,
+                    height: favoriteBox[favoritePattern].h,
+                    margin: '0 0 18px 18px',
+                }}
+                className="favoriteItem"
+                onClick={() => {
+                    handleSelectFavorite({ item: favorite, index });
+                }}
+            >
+                <ReactSVG
+                    style={{
+                        margin: '12px 0 0 14px',
+                        width: '14px',
+                        height: '14px',
+                        opacity: favorite.isSelected ? 1 : 0,
+                        alignSelf: 'flex-start',
+                    }}
+                    src={SelectedIcon}
+                />
+                <div
+                    style={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'space-around',
+                    }}
+                >
+                    {favorite.styleAndColor.map(d => (
+                        <StyleItem
+                            width={`${(favoriteBox[favoritePattern].size * d.style.styleSize) / 27}vw`}
+                            // width={favoriteBox[favoritePattern].size}
+                            styleId={`${favorite._id}-${d._id}-favorite`}
+                            colors={d.colorIds}
+                            key={`${favorite._id}-${d._id}-${Math.random() * 1000000}`}
+                            {...d.style}
+                            style={{
+                                cursor: 'pointer',
+                            }}
+                        />
+                    ))}
+                </div>
+                <div className="toolBar" style={{ display: 'flex', marginBottom: '10px' }}>
+                    <ReactSVG
+                        style={{
+                            width: '14px',
+                            height: '14px',
+                        }}
+                        src={EditIcon}
+                        onClick={e => {
+                            e.stopPropagation();
+                            handleEdit(favorite);
+                        }}
+                    />
+                    <ReactSVG
+                        style={{
+                            width: '14px',
+                            height: '14px',
+                            margin: '0 30px',
+                        }}
+                        src={BigIcon}
+                        onClick={e => {
+                            e.stopPropagation();
+                            handleBig(favorite);
+                        }}
+                    />
+                    <Popconfirm
+                        title="确认删除吗？"
+                        onConfirm={() => {
+                            handleDel(favorite);
+                        }}
+                    >
+                        <ReactSVG
+                            style={{
+                                width: '14px',
+                                height: '14px',
+                            }}
+                            src={DelIcon}
+                            onClick={e => {
+                                e.stopPropagation();
+                            }}
+                        />
+                    </Popconfirm>
+                </div>
+            </div>
+        );
     };
     return (
         <div

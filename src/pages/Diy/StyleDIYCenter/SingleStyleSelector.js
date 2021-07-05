@@ -9,7 +9,7 @@ const App = ({
     docs,
     handleSelectStyle,
     handleSetCurrentStyleRegion,
-    collocationBg
+    collocationBg,
 }) => {
     const params = {
         scrollbar: {
@@ -27,19 +27,16 @@ const App = ({
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    margin: '28px 0',
+                    padding: '28px 0',
                     backgroundColor: collocationBg ? '#ffffff' : '#222222',
-                    position: 'relative'
+                    position: 'relative',
                 }}
                 onClick={() => {
                     handleSetCurrentStyleRegion(-1);
                 }}
             >
-                 <div style={{color: '#fff', position: 'absolute' , top:'10px', right: 0}}>
-                        {currentStyle.styleNo}
-                    </div>
+                <div style={{ color: '#fff', position: 'absolute', top: '10px', right: 0 }}>{currentStyle.styleNo}</div>
                 <div style={{ width: '20vw' }}>
-                   
                     <Swiper
                         {...params}
                         style={{
@@ -51,7 +48,7 @@ const App = ({
                                 display: 'flex',
                                 justifyContent: 'center',
                                 alignItems: 'center',
-                                paddingBottom: '10px'
+                                paddingBottom: '10px',
                             }}
                             onClick={e => {
                                 e.stopPropagation();
@@ -73,9 +70,8 @@ const App = ({
                             style={{
                                 display: 'flex',
                                 justifyContent: 'center',
-                                paddingBottom: '10px'
+                                paddingBottom: '10px',
                             }}
-                            
                         >
                             <StyleItem
                                 width={`${(currentStyle.styleBackSize / 27) * 14}vw`}

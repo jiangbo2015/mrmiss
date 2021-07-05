@@ -5,8 +5,9 @@ import { InputNumber, Tooltip } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
-import InfiniteScroll from 'react-infinite-scroll-component';
-
+// import InfiniteScroll from 'react-infinite-scroll-component';
+import ReactList from 'react-list';
+// react-list
 import SelectedIcon from '@/public/icons/icon-selected.svg';
 import SingleIcon from '@/public/icons/icon-single.svg';
 import AllIcon from '@/public/icons/icon-all.svg';
@@ -181,6 +182,83 @@ const App = ({
             type: 'diy/setCurrentGoodCategoryMultiple',
             payload: category,
         });
+    };
+
+    const renderItem = (index, key) => {
+        const d = docs[index];
+        return (
+            <div
+                key={`${d._id}-${currentGoodCategoryMultiple}-${index}`}
+                style={{
+                    position: 'relative',
+                    justifySelf: 'stretch',
+                    alignSelf: 'stretch',
+                    display: 'inline-flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    color: '#ffffff',
+                    width: '20%',
+                    paddingBottom: '20px',
+                }}
+            >
+                <ReactSVG
+                    style={{
+                        width: '10px',
+                        height: '10px',
+                        opacity: d.isSelected ? 1 : 0,
+                    }}
+                    src={SelectedIcon}
+                />
+                <Tooltip
+                    title={d.styleNo}
+                    key={`${d._id}-tooltip`}
+                    getPopupContainer={() => {
+                        if (!window.multipleModeDiv) {
+                            window.multipleModeDiv = document.getElementById('multiple-mode');
+                        }
+                        if (!window.multipleModeDiv) {
+                            return document.body;
+                        }
+                        return window.multipleModeDiv;
+                    }}
+                >
+                    <div
+                        style={{
+                            flex: 1,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: currentGoodCategoryIsTop ? 'flex-start' : 'center',
+                        }}
+                        onClick={() => {
+                            handleSelectStyle({ item: d, index });
+                        }}
+                    >
+                        <StyleItem
+                            width={`${(d.styleSize / 27) * 7}vw`}
+                            styleId={`${d._id}-item`}
+                            colors={
+                                assign
+                                    ? []
+                                    : [
+                                          selectColorList[0],
+                                          selectColorList[0],
+                                          selectColorList[0],
+                                          selectColorList[0],
+                                          selectColorList[0],
+                                          selectColorList[0],
+                                      ]
+                            }
+                            key={`${d._id}-${index}-${Math.random() * 1000000}`}
+                            {...d}
+                            style={{
+                                cursor: 'pointer',
+                            }}
+                        />
+                    </div>
+                </Tooltip>
+            </div>
+        );
     };
     // console.log('selectStyleList.length < docs.length ', selectStyleList, docs.length);
     return (
@@ -363,31 +441,24 @@ const App = ({
                                     />
                                 </div>
                             </Tooltip>
-                            {/* <div
-                                style={{
-                                    display: assign ? 'flex' : 'none',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    padding: '0 20px',
-                                    width: '100%',
-                                    opacity: assign && d.isSelected ? 1 : 0,
-                                    pointerEvents: assign && d.isSelected ? '' : 'none',
-                                }}
-                            >
-                                <span>¥.{d.price}</span>
-                                <InputNumber
-                                    formatter={value => `¥${value}`}
-                                    style={{ width: '70px' }}
-                                    value={selected ? selected.price : d.price}
-                                    onChange={value => {
-                                        handleEditPrice({ style: d._id, price: value });
-                                    }}
-                                />
-                            </div> */}
                         </div>
                     );
                 })}
             </div>
+
+            {/* <div
+                style={{
+                    width: '100%',
+                    overflowY: 'scroll',
+                    height: '600px',
+                }}
+            >
+                <ReactList
+                    itemRenderer={renderItem}
+                    length={docs.length}
+                    type='uniform'
+                />
+            </div> */}
         </div>
     );
 };

@@ -7,8 +7,9 @@ import { Tooltip, Form } from 'antd';
 import { ReactSVG } from 'react-svg';
 import AllIcon from '@/public/icons/icon-all.svg';
 import Select from '@/components/Select';
+import ReactList from 'react-list';
 
-export const ImgItem = ({ img, isSelected, size = '44px', ...props }) => (
+export const ImgItem = ({ img, isSelected, style = {}, size = '44px', ...props }) => (
     <div
         {...props}
         style={{
@@ -16,6 +17,7 @@ export const ImgItem = ({ img, isSelected, size = '44px', ...props }) => (
             justifyContent: 'center',
             alignItems: 'center',
             cursor: 'pointer',
+            ...style,
         }}
     >
         {/* <div
@@ -120,6 +122,28 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
             });
         }
     };
+
+    const renderItem = (index, key) => {
+        const d = docs[index];
+        return (
+            <Tooltip title={d.code} key={`${d._id}-tooltip`}>
+                <ImgItem
+                    key={d._id}
+                    img={d.value}
+                    isSelected={d.isSelected}
+                    onClick={() => {
+                        handleSelectColor({ item: d, index });
+                    }}
+                    style={{
+                        display: 'inline-flex',
+                        width: '33.3%',
+                        paddingBottom: '55px',
+                    }}
+                    // onDoubleClick={}
+                />
+            </Tooltip>
+        );
+    };
     return (
         <div
             style={{
@@ -206,7 +230,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     </div>
                 </div>
             ) : null}
-            <div
+            {/* <div
                 style={{
                     padding: '0 21px',
                     width: '100%',
@@ -244,6 +268,16 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                         />
                     </Tooltip>
                 ))}
+                        </div> */}
+            <div
+                style={{
+                    padding: '0 21px',
+                    width: '100%',
+                    overflowY: 'scroll',
+                    height: '600px',
+                }}
+            >
+                <ReactList itemRenderer={renderItem} length={docs.length} type="uniform" />
             </div>
         </div>
     );
