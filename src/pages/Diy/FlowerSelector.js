@@ -126,7 +126,23 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
     const renderItem = (index, key) => {
         const d = docs[index];
         return (
-            <Tooltip title={d.code} key={`${d._id}-tooltip`}>
+            <Tooltip
+                title={
+                    <div
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            handleShowBigPic(d);
+                        }}
+                    >
+                        {d.code}
+                    </div>
+                }
+                key={`${d._id}-tooltip`}
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                    handleShowBigPic(d);
+                }}
+            >
                 <ImgItem
                     key={d._id}
                     img={d.value}
