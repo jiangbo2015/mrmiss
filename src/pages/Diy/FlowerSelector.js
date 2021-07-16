@@ -138,10 +138,6 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     </div>
                 }
                 key={`${d._id}-tooltip`}
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                    handleShowBigPic(d);
-                }}
             >
                 <ImgItem
                     key={d._id}
