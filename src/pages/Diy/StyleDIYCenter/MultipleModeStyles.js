@@ -27,113 +27,107 @@ const App = ({
     assign,
     styleList,
     handleStyle,
+    docs,
     // curChannslPrice,
-    currentGoodCategoryIsTop
+    currentGoodCategoryIsTop,
 }) => {
-    let docs = [];
-    // let selectedNum = 0;
-    if (styleList[currentGoodCategoryMultiple]) {
-        docs = styleList[currentGoodCategoryMultiple];
-        // selectedNum = docs.filter(x => x.isSelected).length;
-        // console.log('docs', docs);
-    }
-
     return (
-            <div
-                style={{
-                    width: '100%',
-                    height: '600px',
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
-                    justifyItems: 'center',
-                    alignItems: 'center',
-                    gridGap: '20px 0',
-                    justifyContent: 'center',
-                    alignContent: 'start',
-                    overflowY: 'scroll',
-                    gridTemplateRows: 'repeat(3, 1fr)',
-                }}
-                loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
-            >
-                {docs.map((d, index) => {
-                    return (
-                        <div
-                            key={`${d._id}-${currentGoodCategoryMultiple}-${index}`}
+        <div
+            style={{
+                width: '100%',
+                height: '600px',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr',
+                justifyItems: 'center',
+                alignItems: 'center',
+                gridGap: '20px 0',
+                justifyContent: 'center',
+                alignContent: 'start',
+                overflowY: 'scroll',
+                gridTemplateRows: 'repeat(3, 1fr)',
+            }}
+            loader={<h4 style={{ color: '#fff' }}>Loading...</h4>}
+        >
+            {docs.map((d, index) => {
+                return (
+                    <div
+                        key={`${d._id}-${currentGoodCategoryMultiple}-${index}`}
+                        style={{
+                            position: 'relative',
+                            justifySelf: 'stretch',
+                            alignSelf: 'stretch',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            color: '#ffffff',
+                        }}
+                    >
+                        <ReactSVG
                             style={{
-                                position: 'relative',
-                                justifySelf: 'stretch',
-                                alignSelf: 'stretch',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                color: '#ffffff',
+                                width: '10px',
+                                height: '10px',
+                                opacity: d.isSelected ? 1 : 0,
                             }}
+                            src={SelectedIcon}
+                        />
+                        <Tooltip
+                            title={d.styleNo}
+                            key={`${d._id}-tooltip`}
+                            // getPopupContainer={() => {
+                            //     if (!window.multipleModeDiv) {
+                            //         window.multipleModeDiv = document.getElementById('multiple-mode');
+                            //     }
+                            //     if (!window.multipleModeDiv) {
+                            //         return document.body;
+                            //     }
+                            //     console.log(window.multipleModeDiv);
+                            //     return window.multipleModeDiv;
+                            // }}
                         >
-                            <ReactSVG
+                            <div
                                 style={{
-                                    width: '10px',
-                                    height: '10px',
-                                    opacity: d.isSelected ? 1 : 0,
+                                    flex: 1,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: currentGoodCategoryIsTop ? 'flex-start' : 'center',
                                 }}
-                                src={SelectedIcon}
-                            />
-                            <Tooltip
-                                title={d.styleNo}
-                                key={`${d._id}-tooltip`}
-                                getPopupContainer={() => {
-                                    if (!window.multipleModeDiv) {
-                                        window.multipleModeDiv = document.getElementById('multiple-mode');
-                                    }
-                                    if (!window.multipleModeDiv) {
-                                        return document.body;
-                                    }
-                                    return window.multipleModeDiv;
+                                onClick={() => {
+                                    handleStyle({ item: d, index });
                                 }}
                             >
-                                <div
+                                <StyleItem
+                                    width={`${(d.styleSize / 27) * 7}vw`}
+                                    styleId={`${d._id}-item`}
+                                    colors={
+                                        assign
+                                            ? []
+                                            : [
+                                                  selectColorList[0],
+                                                  selectColorList[0],
+                                                  selectColorList[0],
+                                                  selectColorList[0],
+                                                  selectColorList[0],
+                                                  selectColorList[0],
+                                              ]
+                                    }
+                                    key={`${d._id}-${index}-${Math.random() * 1000000}`}
+                                    {...d}
                                     style={{
-                                        flex: 1,
-                                        display: 'flex',
-                                        justifyContent: 'center',
-                                        alignItems: currentGoodCategoryIsTop ? 'flex-start' : 'center',
+                                        cursor: 'pointer',
                                     }}
-                                    onClick={() => {
-                                        handleStyle({ item: d, index });
-                                    }}
-                                >
-                                    <StyleItem
-                                        width={`${(d.styleSize / 27) * 7}vw`}
-                                        styleId={`${d._id}-item`}
-                                        colors={
-                                            assign
-                                                ? []
-                                                : [
-                                                      selectColorList[0],
-                                                      selectColorList[0],
-                                                      selectColorList[0],
-                                                      selectColorList[0],
-                                                      selectColorList[0],
-                                                      selectColorList[0],
-                                                  ]
-                                        }
-                                        key={`${d._id}-${index}-${Math.random() * 1000000}`}
-                                        {...d}
-                                        style={{
-                                            cursor: 'pointer',
-                                        }}
-                                    />
-                                </div>
-                            </Tooltip>
-                        </div>
-                    );
-                })}
-            </div>
+                                />
+                            </div>
+                        </Tooltip>
+                    </div>
+                );
+            })}
+        </div>
     );
 };
 
-export default connect(({ diy = {}}) => ({
-    styleList: diy.styleList,
+export default connect(({ diy = {} }) => ({
+    // styleList: diy.styleList,
     selectColorList: diy.selectColorList,
     currentGoodCategoryMultiple: diy.currentGoodCategoryMultiple,
 }))(App);

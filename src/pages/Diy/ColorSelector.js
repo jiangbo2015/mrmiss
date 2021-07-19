@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
+import _, { filter } from 'lodash';
 
 import { ReactSVG } from 'react-svg';
 import AllIcon from '@/public/icons/icon-all.svg';
@@ -44,26 +45,57 @@ const App = ({
     currentAdminChannel,
 }) => {
     let { docs = [] } = colorList;
-    const selectAll = docs.length === docs.filter(x => x.isSelected).length;
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
     const [form] = Form.useForm();
+    const filterData = colorList.docs.filter(x => x.code.includes(queryKey));
 
-    const handleFetchList = async (fetchType, queryKey) => {
+    const selectAll = filterData.length === filterData.filter(x => x.isSelected).length;
+
+    const handleFetchList = async fetchType => {
         if (!currentGood || !currentGood._id) {
             return;
         }
-        let payload = { goodsId: currentGood._id, limit: 10000, type: 0, sort };
-        if (queryKey) {
-            payload.code = queryKey;
-        }
+        let payload = { goodsId: currentGood._id, limit: 10000, type: 0 };
+
         if (fetchType) {
             payload.fetchType = fetchType;
         }
         dispatch({
-            type: 'diy/fetchColorList',
+            type: 'diy/fetchPlainList',
             payload,
         });
+    };
+
+    const handSort = sortArg => {
+        console.log('handSort', sortArg);
+        if (sortArg === 'time') {
+            dispatch({
+                type: 'diy/setColorList',
+                payload: {
+                    ...colorList,
+                    docs: _.reverse(
+                        _.sortBy(docs, function(o) {
+                            if (o.createdAt) {
+                                return o.createdAt;
+                            } else {
+                                return '2020';
+                            }
+                        }),
+                    ),
+                },
+            });
+        } else {
+            dispatch({
+                type: 'diy/setColorList',
+                payload: {
+                    ...colorList,
+                    docs: _.sortBy(docs, function(o) {
+                        return -o.colorSystem;
+                    }),
+                },
+            });
+        }
     };
     useEffect(() => {
         // console.log('sort', sort);
@@ -71,10 +103,7 @@ const App = ({
         handleFetchList('clear');
         // }
     }, [currentGood]);
-    useEffect(() => {
-        // console.log('sort', sort);
-        handleFetchList('keep', queryKey);
-    }, [sort]);
+
     useEffect(() => {
         const { plainColors, flowerColors } = currentAdminChannel;
 
@@ -88,7 +117,7 @@ const App = ({
                 payload: { plainColors, flowerColors },
             });
         }
-    }, [currentAdminChannel]);
+    }, [currentAdminChannel._id]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -97,21 +126,35 @@ const App = ({
     };
 
     const handleSelectAll = () => {
+        // _.differenceWith(objects, [{ 'x': 1, 'y': 2 }], _.isEqual);
         if (selectAll) {
+            const resetData = _.difference(
+                selectColorList.filter(x => x.type == 0).map(x => x._id),
+                filterData.map(x => x._id),
+            );
             dispatch({
                 type: 'diy/batchSetSelectColorList',
-                payload: { plainColors: [], flowerColors: selectColorList.map(x => x._id) },
+                payload: {
+                    plainColors: resetData,
+                    flowerColors: selectColorList.filter(x => x.type == 1).map(x => x._id),
+                },
             });
         } else {
             dispatch({
                 type: 'diy/batchSetSelectColorList',
-                payload: { plainColors: docs.map(x => x._id), flowerColors: selectColorList.map(x => x._id) },
+                payload: {
+                    plainColors: _.uniq([
+                        ...filterData.map(x => x._id),
+                        ...selectColorList.filter(x => x.type == 0).map(x => x._id),
+                    ]),
+                    flowerColors: selectColorList.filter(x => x.type == 1).map(x => x._id),
+                },
             });
         }
     };
 
     const renderItem = (index, key) => {
-        const d = colorList.docs[index];
+        const d = filterData[index];
         return (
             <Tooltip title={d.code} key={`${d._id}-tooltip`}>
                 <ColotItem
@@ -150,7 +193,7 @@ const App = ({
                                 placeholder="SEARCH COLOR"
                                 onSearch={e => {
                                     setQueryKey(e.target.value);
-                                    handleFetchList('keep', e.target.value);
+                                    // handleFetchList('keep', e.target.value);
                                 }}
                             />
                         </Form.Item>
@@ -172,7 +215,10 @@ const App = ({
                     />
                     <Select
                         onSelect={val => {
-                            setSort(val);
+                            if (val != sort) {
+                                setSort(val);
+                                handSort(val);
+                            }
                         }}
                         value={sort}
                         options={[
@@ -253,7 +299,7 @@ const App = ({
                         height: '600px',
                     }}
                 >
-                    <ReactList itemRenderer={renderItem} length={colorList.docs.length} type="uniform" />
+                    <ReactList itemRenderer={renderItem} length={filterData.length} type="uniform" />
                 </div>
             </div>
         </>
@@ -266,5 +312,5 @@ export default connect(({ diy = {}, channel = {}, loading }) => ({
     currentGood: diy.currentGood,
     assign: diy.collocationPattern === 'assign',
     currentAdminChannel: channel.currentAdminChannel,
-    fetching: loading.effects['diy/fetchColorList'],
+    fetching: loading.effects['diy/fetchPlainList'],
 }))(App);

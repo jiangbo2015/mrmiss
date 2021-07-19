@@ -65,7 +65,7 @@ const App = ({
                 goodCategory: goodCategoryMultiple,
                 styleAndColor: [
                     {
-                        styleId: x._id,
+                        styleId: x.style,
                         colorIds: [colorIds[0], colorIds[0], colorIds[0], colorIds[0], colorIds[0], colorIds[0]],
                     },
                 ],
@@ -100,7 +100,7 @@ const App = ({
 
     const handleAssigned = async () => {
         if (collocationPattern === 'assign') {
-            const styles = selectStyleList.map(x => ({ style: x._id, price: x.price }));
+            const styles = selectStyleList.map(x => ({ style: x.style, price: x.price }));
             // console.log('styles', styles);
             await dispatch({
                 type: 'channel/update',

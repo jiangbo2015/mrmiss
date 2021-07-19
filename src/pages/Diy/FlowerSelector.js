@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
+import _ from 'lodash';
 
 import { filterImageUrl } from '@/utils/helper';
 import SearchInput from '@/components/SearchInput';
@@ -55,10 +56,13 @@ export const ImgItem = ({ img, isSelected, style = {}, size = '44px', ...props }
 
 const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColorList, assign, currentAdminChannel }) => {
     const { docs = [] } = flowerList;
-    const selectAll = docs.length === docs.filter(x => x.isSelected).length;
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
     const [form] = Form.useForm();
+
+    const filterData = docs.filter(x => x.code.includes(queryKey));
+    const selectAll = filterData.length === filterData.filter(x => x.isSelected).length;
+
     const handleFetchList = async (fetchType, queryKey) => {
         if (!currentGood || !currentGood._id) {
             return;
@@ -71,18 +75,45 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
             payload.fetchType = fetchType;
         }
         dispatch({
-            type: 'diy/fetchColorList',
+            type: 'diy/fetchFlowerList',
             payload,
         });
+    };
+
+    const handSort = sortArg => {
+        if (sortArg === 'time') {
+            dispatch({
+                type: 'diy/setFlowerList',
+                payload: {
+                    ...flowerList,
+                    docs: _.reverse(
+                        _.sortBy(docs, function(o) {
+                            if (o.createdAt) {
+                                return o.createdAt;
+                            } else {
+                                return '2020';
+                            }
+                        }),
+                    ),
+                },
+            });
+        } else {
+            dispatch({
+                type: 'diy/setFlowerList',
+                payload: {
+                    ...flowerList,
+                    docs: _.sortBy(docs, function(o) {
+                        return -o.colorSystem;
+                    }),
+                },
+            });
+        }
     };
     useEffect(() => {
         // console.log('sort', sort);
         handleFetchList('clear');
     }, [currentGood]);
-    useEffect(() => {
-        // console.log('sort', sort);
-        handleFetchList('keep', queryKey);
-    }, [sort]);
+
     useEffect(() => {
         const { plainColors, flowerColors } = currentAdminChannel;
 
@@ -96,7 +127,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                 payload: { plainColors, flowerColors },
             });
         }
-    }, [currentAdminChannel]);
+    }, [currentAdminChannel._id]);
     const handleSelectColor = color => {
         dispatch({
             type: 'diy/toogleSelectColor',
@@ -111,20 +142,30 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
     };
     const handleSelectAll = () => {
         if (selectAll) {
+            const resetData = _.difference(
+                selectColorList.filter(x => x.type == 1).map(x => x._id),
+                filterData.map(x => x._id),
+            );
             dispatch({
                 type: 'diy/batchSetSelectColorList',
-                payload: { plainColors: selectColorList.map(x => x._id), flowerColors: [] },
+                payload: { plainColors: selectColorList.filter(x => x.type == 0).map(x => x._id), flowerColors: resetData },
             });
         } else {
             dispatch({
                 type: 'diy/batchSetSelectColorList',
-                payload: { plainColors: selectColorList.map(x => x._id), flowerColors: docs.map(x => x._id) },
+                payload: {
+                    plainColors: selectColorList.filter(x => x.type == 0).map(x => x._id),
+                    flowerColors: _.uniq([
+                        ...filterData.map(x => x._id),
+                        ...selectColorList.filter(x => x.type == 1).map(x => x._id),
+                    ]),
+                },
             });
         }
     };
 
     const renderItem = (index, key) => {
-        const d = docs[index];
+        const d = filterData[index];
         return (
             <Tooltip
                 title={
@@ -172,8 +213,10 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                             style={{ width: '100%' }}
                             placeholder="SEARCH PAINT"
                             onSearch={e => {
-                                setQueryKey(e.target.value);
-                                handleFetchList('keep', e.target.value);
+                                if (queryKey != e.target.value) {
+                                    setQueryKey(e.target.value);
+                                    // handleFetchList('keep', e.target.value);
+                                }
                             }}
                         />
                     </Form.Item>
@@ -195,7 +238,10 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                 />
                 <Select
                     onSelect={val => {
-                        setSort(val);
+                        if (val != sort) {
+                            setSort(val);
+                            handSort(val);
+                        }
                     }}
                     value={sort}
                     options={[
@@ -283,22 +329,23 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                         </div> */}
             <div
                 style={{
-                    padding: '0 21px',
+                    padding: '0px 26px 0px 16px',
                     width: '100%',
                     overflowY: 'scroll',
                     height: '600px',
                 }}
             >
-                <ReactList itemRenderer={renderItem} length={docs.length} type="uniform" />
+                <ReactList itemRenderer={renderItem} length={filterData.length} type="uniform" />
             </div>
         </div>
     );
 };
 
-export default connect(({ diy = {}, channel = {} }) => ({
+export default connect(({ diy = {}, channel = {}, loading }) => ({
     flowerList: diy.flowerList,
     currentGood: diy.currentGood,
     assign: diy.collocationPattern === 'assign',
     selectColorList: diy.selectColorList,
     currentAdminChannel: channel.currentAdminChannel,
+    fetching: loading.effects['diy/fetchFlowerList'],
 }))(App);

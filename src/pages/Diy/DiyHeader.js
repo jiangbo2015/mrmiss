@@ -39,8 +39,8 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     }, []);
 
     useEffect(() => {
-        console.log('codename', codename)
-        console.log('curABC', curABC)
+        console.log('codename', codename);
+        console.log('curABC', curABC);
         const { codename, styles = [], flowerColors = [], plainColors = [] } = currentAdminChannel;
         if (curABC !== 'A') {
             setRemarkVal(currentAdminChannel.remark);
@@ -70,7 +70,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 payload: [],
             });
         }
-    }, [currentAdminChannel, curABC]);
+    }, [currentAdminChannel._id, curABC]);
 
     useEffect(() => {
         if (goodsList.length > 0) {

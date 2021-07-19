@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
-import { Form } from 'antd';
+import { Form, Spin } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
@@ -39,7 +39,7 @@ const App = ({
 
     selectStyleList,
     dispatch,
-    
+
     currentStyle = {},
     currentStyle1 = {},
 
@@ -50,43 +50,39 @@ const App = ({
     singleSelectColorList1 = [],
     currentGood = { category: [] },
     currentGoodCategoryMultiple = '',
-    styleQueryKey,
+    fetchingStyles,
     currentAdminChannel,
     assign,
     collocationBg,
     // curChannslPrice,
 
-    collocationPattern
+    collocationPattern,
 }) => {
     const [queryKey, setQueryKey] = useState('');
     const [form] = Form.useForm();
 
-    const currentGoodCategory = currentGoodCategoryMultiple
+    const currentGoodCategory = currentGoodCategoryMultiple;
     // console.log('assign', assign);
-    
+
     // const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     const [currentGoodCategoryIsTop, setCurrentGoodCategoryIsTop] = useState(false);
     let docs = [];
     let selectedNum = 0;
     if (styleList[currentGoodCategoryMultiple]) {
-        docs = styleList[currentGoodCategoryMultiple];
+        console.log('queryKey', queryKey);
+        docs = styleList[currentGoodCategoryMultiple].filter(x => x.styleNo.includes(queryKey));
         selectedNum = docs.filter(x => x.isSelected).length;
         // console.log('docs', docs);
     }
     let docs1 = [];
     let categoryObj = currentGood.category.find(x => x._id === currentGoodCategory);
 
-    if(collocationPattern === 'single' ) {
+    if (collocationPattern === 'single') {
         if (styleList[currentGoodCategory]) {
+            console.log('选择的放在前面');
             //选择的放在前面
-            docs =
-                selectStyleList.length > 0
-                    ? [
-                          ...styleList[currentGoodCategory].filter(x => x.isSelected),
-                          ...styleList[currentGoodCategory].filter(x => !x.isSelected),
-                      ]
-                    : styleList[currentGoodCategory];
-    
+            docs = selectStyleList.length > 0 ? [...docs.filter(x => x.isSelected), ...docs.filter(x => !x.isSelected)] : docs;
+
             // // console.log('docs', docs);
         }
         if (categoryObj && categoryObj.name.indexOf('分体') >= 0) {
@@ -102,19 +98,21 @@ const App = ({
                     selectStyleList.length > 0
                         ? [...styleList[top._id].filter(x => x.isSelected), ...styleList[top._id].filter(x => !x.isSelected)]
                         : styleList[top._id];
+                docs = docs.filter(x => x.styleNo.includes(queryKey));
             }
             const bottom = currentGood.category.find(x => x.name === categoryNameBottom);
             if (bottom) {
                 docs1 =
                     selectStyleList.length > 0
-                        ? [...styleList[bottom._id].filter(x => x.isSelected), ...styleList[bottom._id].filter(x => !x.isSelected)]
+                        ? [
+                              ...styleList[bottom._id].filter(x => x.isSelected),
+                              ...styleList[bottom._id].filter(x => !x.isSelected),
+                          ]
                         : styleList[bottom._id];
+                docs1 = docs1.filter(x => x.styleNo.includes(queryKey));
             }
         }
-
     }
-
-
 
     const handleFetchMore = async (fetchType, styleNo) => {
         if (currentGood._id) {
@@ -158,13 +156,27 @@ const App = ({
             type: 'diy/setCollocationPattern',
             payload: pattern,
         });
-        dispatch({
-            type: 'diy/batchSetSelectColorList',
-            payload: {
-                plainColors: [...singleSelectColorList.map(x => x._id), ...singleSelectColorList1.map(x => x._id)],
-                flowerColors: [...singleSelectColorList.map(x => x._id), ...singleSelectColorList1.map(x => x._id)],
-            },
-        });
+        if (pattern === 'single') {
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: {
+                    plainColors: [...singleSelectColorList.map(x => x._id), ...singleSelectColorList1.map(x => x._id)],
+                    flowerColors: [...singleSelectColorList.map(x => x._id), ...singleSelectColorList1.map(x => x._id)],
+                },
+            });
+        } else {
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors: [], flowerColors: [] },
+            });
+        }
+
+        if (pattern === 'multiple' && categoryObj.name.includes('分体')) {
+            const currentList = currentGood.category.filter(x => x.name.indexOf('分体') < 0);
+            if (currentList.length > 0) {
+                handleSetCurrentGoodCategory(currentList[0]._id);
+            }
+        }
     };
     const handleStyle = style => {
         dispatch({
@@ -241,16 +253,21 @@ const App = ({
 
     const handleSelectAll = () => {
         if (docs.length > selectedNum) {
-            const payload = [...selectStyleList, ...docs.filter(x => selectStyleList.findIndex(s => s._id === x._id) < 0)];
+            const payload = [
+                ...selectStyleList,
+                ...docs.filter(x => selectStyleList.findIndex(s => s.style === x._id) < 0).map(s => ({ style: s._id })),
+            ];
             console.log('payload', payload);
             dispatch({
                 type: 'diy/batchSetSelectStyleList',
                 payload,
             });
         } else {
+            const payload = selectStyleList.filter(x => docs.findIndex(s => s._id === x.style) < 0);
+            console.log('payload', payload);
             dispatch({
                 type: 'diy/batchSetSelectStyleList',
-                payload: [],
+                payload: payload,
             });
         }
     };
@@ -259,10 +276,16 @@ const App = ({
             handleSetCurrentGoodCategory(currentGood.category[0]._id);
             handleFetchMore('clear');
             form.resetFields();
+            setQueryKey('');
+        } else {
+            handleSetCurrentGoodCategory('');
         }
     }, [currentGood]);
 
     useEffect(() => {
+        if (collocationPattern !== 'single') {
+            return;
+        }
         if (docs && docs.length > 0) {
             dispatch({
                 type: 'diy/setCurrentStyle',
@@ -288,60 +311,82 @@ const App = ({
                 payload: {},
             });
         }
-    }, [styleList, currentGoodCategory]);
+    }, [styleList, currentGoodCategoryMultiple, collocationPattern]);
     useEffect(() => {
         const finded = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
         // [].includes()
         setCurrentGoodCategoryIsTop(finded ? finded.name.includes('单衣') : false);
     }, [currentGood, currentGoodCategoryMultiple]);
 
-    useEffect(() => {
-        // if (styleQueryKey) {
-        handleFetchMore('clear');
-        form.resetFields();
-        dispatch({
-            type: 'diy/setStyleQueryChangeKey',
-            payload: '',
-        });
-        dispatch({
-            type: 'diy/setStyleQueryKey',
-            payload: '',
-        });
-        // }
-    }, [currentGood]);
+    // useEffect(() => {
+    //     // if (styleQueryKey) {
+    //     handleFetchMore('clear');
+    //     form.resetFields();
+    //     setQueryKey('');
+    // }, [currentGood]);
 
     useEffect(() => {
-        if ((currentAdminChannel._id, currentGoodCategoryMultiple && styleQueryKey)) {
-            handleFetchMore('clear');
+        if (currentGoodCategoryMultiple && queryKey) {
+            // handleFetchMore('clear');
             form.resetFields();
+            setQueryKey('');
         }
-    }, [currentAdminChannel, currentGoodCategoryMultiple]);
-
+    }, [currentAdminChannel._id, currentGoodCategoryMultiple]);
 
     const handleSetCurrentGoodCategory = category => {
+        console.log('handleSetCurrentGoodCategory', category);
         dispatch({
             type: 'diy/setCurrentGoodCategoryMultiple',
             payload: category,
         });
+        if (collocationPattern === 'single') {
+            dispatch({
+                type: 'diy/setSingleSelectColorList',
+                payload: [],
+            });
+            dispatch({
+                type: 'diy/setSingleSelectColorList1',
+                payload: [],
+            });
+            dispatch({
+                type: 'diy/batchSetSelectColorList',
+                payload: { plainColors: [], flowerColors: [] },
+            });
+        }
     };
 
     // console.log('selectStyleList.length < docs.length ', selectStyleList, docs.length);
     return (
         <div
-            style={{
-                padding: '28px 0px',
-                background: '#222222',
-            }}
+            id="multiple-mode"
+            style={
+                collocationPattern === 'single'
+                    ? {
+                          padding: '28px 0px',
+                          background: '#222222',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          height: '100%',
+                          justifyContent: 'space-between',
+                          position: 'relative',
+                      }
+                    : {
+                          padding: '28px 0px',
+                          background: '#222222',
+                          position: 'relative',
+                      }
+            }
         >
             <div
                 style={{
-                    marginBottom: '60px',
+                    marginBottom: collocationPattern === 'single' ? 0 : '60px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     position: 'relative',
+                    width: '100%',
                 }}
-                id="multiple-mode"
             >
                 <div
                     style={{
@@ -355,164 +400,201 @@ const App = ({
                         style={{ marginRight: '20px' }}
                         width="98px"
                         options={currentGood.category
-                            .filter(x => x.name.indexOf('分体') < 0)
+                            .filter(x => (collocationPattern !== 'single' ? x.name.indexOf('分体') < 0 : true))
                             .map(c => ({ label: c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
                     <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />
-                    {collocationPattern === 'single' ? null : <ReactSVG
-                        src={AllIcon}
-                        style={{
-                            width: '20px',
-                            height: '20px',
-                            padding: '4px',
-                            marginLeft: '24px',
-                            marginBottom: '6px',
-                            opacity: selectedNum < docs.length ? 0.3 : 1,
-                        }}
-                        onClick={() => {
-                            handleSelectAll();
-                        }}
-                    />}
-                    
+                    {collocationPattern === 'single' ? null : (
+                        <ReactSVG
+                            src={AllIcon}
+                            style={{
+                                width: '20px',
+                                height: '20px',
+                                padding: '4px',
+                                marginLeft: '24px',
+                                marginBottom: '6px',
+                                opacity: selectedNum < docs.length ? 0.3 : 1,
+                            }}
+                            onClick={() => {
+                                handleSelectAll();
+                            }}
+                        />
+                    )}
                 </div>
-                
 
-<Form form={form} name="control-hooks">
-                        <Form.Item name="code" style={{ marginBottom: 0,width: '180px', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)'  }}>
+                <Form form={form} name="control-hooks">
+                    <Form.Item
+                        name="code"
+                        style={{
+                            marginBottom: 0,
+                            width: '180px',
+                            position: 'absolute',
+                            left: '50%',
+                            top: '50%',
+                            transform: 'translate(-50%, -50%)',
+                        }}
+                    >
                         <SearchInput
-                    style={{ width: '180px', position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
-                    placeholder="SEARCH STYLE"
-                    onSearch={e => {
-                        setQueryKey(e.target.value);
-                        handleFetchMore('keep', e.target.value);
-                    }}
-                />
-                        </Form.Item>
-                    </Form>
-                {collocationPattern === 'single' ?        <div style={{ display: 'flex' }}>
-                    <ReactSVG
-                        src={ExpandIcon}
-                        className="mode-icon"
-                        onClick={() => {
-                            handleChangeCollocationPattern('expand');
-                        }}
-                    />
-                    <ReactSVG
-                        src={SwitchBgIcon}
-                        className="mode-icon"
-                        style={{ margin: '0 12px' }}
-                        onClick={() => {
-                            // handleChangeCollocationBg(!collocationBg);
-                            dispatch({
-                                type: 'diy/setCollocationBg',
-                                payload: !collocationBg,
-                            });
-                        }}
-                    />
-                    <ReactSVG
-                        src={MultipleIcon}
-                        className="mode-icon"
-                        onClick={() => {
-                            handleChangeCollocationPattern('multiple');
-                        }}
-                    />
-                </div>     :     <div style={{ display: 'flex' }}>
-                    <ReactSVG
-                        src={SingleIcon}
-                        className="mode-icon"
-                        style={{
-                            opacity: assign ? 0 : 1,
-                            pointerEvents: assign ? 'none' : 'painted',
-                        }}
-                        onClick={() => {
-                            handleChangeCollocationPattern('single');
-                        }}
-                    />
-                </div> 
-                }
-
-               
-            </div>
-            {/* InfiniteScroll */}
-            {collocationPattern === 'single' ? <>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <div
-                        style={{
-                            display: 'flex',
-                            height: '45px',
-                            alignItems: 'center',
-                            padding: '0 10px',
-                            // opacity: selectColorList.filter(x => x?.type === 0).length > 0 ? 1 : 0,
-                        }}
-                    >
-                        {colorList.docs
-                            .filter(x => x.isSelected)
-                            .map((d, index) => (
-                                <ColotItem
-                                    size="12px"
-                                    key={`bar-${d._id}`}
-                                    // isSelected={d.isSelected}
-                                    color={d.value}
-                                />
-                            ))}
+                            style={{
+                                width: '180px',
+                                position: 'absolute',
+                                left: '50%',
+                                top: '50%',
+                                transform: 'translate(-50%, -50%)',
+                            }}
+                            placeholder="SEARCH STYLE"
+                            onSearch={e => {
+                                setQueryKey(e.target.value);
+                                // handleFetchMore('keep', e.target.value);
+                            }}
+                        />
+                    </Form.Item>
+                </Form>
+                {collocationPattern === 'single' ? (
+                    <div style={{ display: 'flex' }}>
+                        <ReactSVG
+                            src={ExpandIcon}
+                            className="mode-icon"
+                            onClick={() => {
+                                handleChangeCollocationPattern('expand');
+                            }}
+                        />
+                        <ReactSVG
+                            src={SwitchBgIcon}
+                            className="mode-icon"
+                            style={{ margin: '0 12px' }}
+                            onClick={() => {
+                                // handleChangeCollocationBg(!collocationBg);
+                                dispatch({
+                                    type: 'diy/setCollocationBg',
+                                    payload: !collocationBg,
+                                });
+                            }}
+                        />
+                        <ReactSVG
+                            src={MultipleIcon}
+                            className="mode-icon"
+                            onClick={() => {
+                                handleChangeCollocationPattern('multiple');
+                            }}
+                        />
                     </div>
-                    <div
-                        style={{
-                            display: 'flex',
-                            height: '45px',
-                            alignItems: 'center',
-                            padding: '0 10px',
-                            // opacity: selectColorList.filter(x => x?.type !== 0).length > 0 ? 1 : 0,
-                        }}
-                    >
-                        {flowerList.docs
-                            .filter(x => x.isSelected)
-                            .map((d, index) => (
-                                <ImgItem
-                                    size="12px"
-                                    key={`bar-${d._id}-${index}`}
-                                    // isSelected={d.isSelected}
-                                    img={d.value}
-                                />
-                            ))}
-                    </div>
-                </div>
-
-                {categoryObj && categoryObj.name.indexOf('分体') >= 0 ? (
-                    <MultipleStyleSelector
-                        currentStyle={currentStyle}
-                        selectColorList={singleSelectColorList}
-                        currentStyleRegion={currentStyleRegion}
-                        docs={docs}
-                        handleSelectStyle={handleSelectStyle}
-                        handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
-                        currentStyle2={currentStyle1}
-                        selectColorList2={singleSelectColorList1}
-                        currentStyleRegion2={currentStyleRegion1}
-                        docs2={docs1}
-                        handleSelectStyle2={handleSelectStyle1}
-                        handleSetCurrentStyleRegion2={handleSetCurrentStyleRegion1}
-                        collocationBg={collocationBg}
-                    />
                 ) : (
-                    <SingleStyleSelector
-                        currentStyle={currentStyle}
-                        selectColorList={singleSelectColorList}
-                        currentStyleRegion={currentStyleRegion}
-                        docs={docs}
-                        handleSelectStyle={handleSelectStyle}
-                        handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
-                        collocationBg={collocationBg}
-                    />
+                    <div style={{ display: 'flex' }}>
+                        <ReactSVG
+                            src={SingleIcon}
+                            className="mode-icon"
+                            style={{
+                                opacity: assign ? 0 : 1,
+                                pointerEvents: assign ? 'none' : 'painted',
+                            }}
+                            onClick={() => {
+                                handleChangeCollocationPattern('single');
+                            }}
+                        />
+                    </div>
                 )}
-            </> : <MultipleModeStyles handleStyle={handleStyle} assign={assign} currentGoodCategoryIsTop={currentGoodCategoryIsTop}/> }
-            
+            </div>
+            <div
+                style={{
+                    position: 'absolute',
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
+            >
+                <Spin size="large" spinning={fetchingStyles} />
+            </div>
+
+            {collocationPattern === 'single' ? (
+                <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <div
+                            style={{
+                                display: 'flex',
+                                height: '45px',
+                                alignItems: 'center',
+                                padding: '0 10px',
+                                // opacity: selectColorList.filter(x => x?.type === 0).length > 0 ? 1 : 0,
+                            }}
+                        >
+                            {colorList.docs
+                                .filter(x => x.isSelected)
+                                .map((d, index) => (
+                                    <ColotItem
+                                        size="12px"
+                                        key={`bar-${d._id}`}
+                                        // isSelected={d.isSelected}
+                                        color={d.value}
+                                    />
+                                ))}
+                        </div>
+                        <div
+                            style={{
+                                display: 'flex',
+                                height: '45px',
+                                alignItems: 'center',
+                                padding: '0 10px',
+                                // opacity: selectColorList.filter(x => x?.type !== 0).length > 0 ? 1 : 0,
+                            }}
+                        >
+                            {flowerList.docs
+                                .filter(x => x.isSelected)
+                                .map((d, index) => (
+                                    <ImgItem
+                                        size="12px"
+                                        key={`bar-${d._id}-${index}`}
+                                        // isSelected={d.isSelected}
+                                        img={d.value}
+                                    />
+                                ))}
+                        </div>
+                    </div>
+
+                    {categoryObj && categoryObj.name.indexOf('分体') >= 0 ? (
+                        <MultipleStyleSelector
+                            currentStyle={currentStyle}
+                            selectColorList={singleSelectColorList}
+                            currentStyleRegion={currentStyleRegion}
+                            docs={docs}
+                            handleSelectStyle={handleSelectStyle}
+                            handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
+                            currentStyle2={currentStyle1}
+                            selectColorList2={singleSelectColorList1}
+                            currentStyleRegion2={currentStyleRegion1}
+                            docs2={docs1}
+                            handleSelectStyle2={handleSelectStyle1}
+                            handleSetCurrentStyleRegion2={handleSetCurrentStyleRegion1}
+                            collocationBg={collocationBg}
+                        />
+                    ) : (
+                        <SingleStyleSelector
+                            currentStyle={currentStyle}
+                            selectColorList={singleSelectColorList}
+                            currentStyleRegion={currentStyleRegion}
+                            docs={docs}
+                            handleSelectStyle={handleSelectStyle}
+                            handleSetCurrentStyleRegion={handleSetCurrentStyleRegion}
+                            collocationBg={collocationBg}
+                        />
+                    )}
+                </>
+            ) : (
+                <MultipleModeStyles
+                    handleStyle={handleStyle}
+                    assign={assign}
+                    currentGoodCategoryIsTop={currentGoodCategoryIsTop}
+                    docs={docs}
+                />
+            )}
         </div>
     );
 };
 
-export default connect(({ diy = {}, channel = {} }) => ({
+export default connect(({ diy = {}, channel = {}, loading }) => ({
+    fetchingStyles: loading.effects['diy/fetchStyleList'],
     styleList: diy.styleList,
 
     flowerList: diy.flowerList,
@@ -527,7 +609,7 @@ export default connect(({ diy = {}, channel = {} }) => ({
     currentAdminChannel: channel.currentAdminChannel,
     singleSelectColorList: diy.singleSelectColorList,
     singleSelectColorList1: diy.singleSelectColorList1,
-    
+
     currentStyle: diy.currentStyle,
     currentStyle1: diy.currentStyle1,
     currentStyleRegion: diy.currentStyleRegion,

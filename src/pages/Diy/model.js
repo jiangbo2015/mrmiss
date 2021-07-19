@@ -158,7 +158,7 @@ export default {
         setSelectStyleList(state, action) {
             return {
                 ...state,
-                selectStyleList: action.payload.filter(x => x._id),
+                selectStyleList: action.payload.filter(x => x.style),
             };
         },
         setSelectFavoriteList(state, action) {
@@ -234,7 +234,7 @@ export default {
                 } else {
                     res.data.category.map(c => {
                         categoryStyles[c._id] = c.styles.map(x => {
-                            const finded = selectStyleList.find(s => s._id === x._id);
+                            const finded = selectStyleList.find(s => s.style === x._id);
                             const res = { ...x };
                             if (finded) {
                                 newValue.push(finded);
@@ -316,6 +316,18 @@ export default {
                     });
                 }
             }
+        },
+        *fetchPlainList({ payload }, { put }) {
+            yield put({
+                type: 'fetchColorList',
+                payload,
+            });
+        },
+        *fetchFlowerList({ payload }, { put }) {
+            yield put({
+                type: 'fetchColorList',
+                payload,
+            });
         },
         *fetchFavoriteList({ payload }, { call, put, select }) {
             const res = yield call(api.getFavoriteList, payload);
@@ -412,9 +424,15 @@ export default {
             // setStyleColorings
             let newValue = [];
             let newValue1 = [];
-            const { item, index } = payload;
+            const { item } = payload;
+            let index = -1;
             const findSelectIndex = selectColorList.findIndex(x => x && x._id == item._id);
 
+            if (item.type === 0) {
+                index = colorList.docs.findIndex(c => c._id === item._id);
+            } else {
+                index = flowerList.docs.findIndex(c => c._id === item._id);
+            }
             switch (collocationPattern) {
                 case 'edit':
                     {
@@ -631,17 +649,18 @@ export default {
         },
         *toogleSelectStyle({ payload }, { call, put, select }) {
             const { styleList, selectStyleList, currentGoodCategoryMultiple } = yield select(state => state.diy);
-            const { item, index } = payload;
+            const { item } = payload;
             let newValue = [];
 
-            const findSelectIndex = selectStyleList.findIndex(x => x._id == item._id);
+            const findSelectIndex = selectStyleList.findIndex(x => x.style == item._id);
+            const index = styleList[currentGoodCategoryMultiple].findIndex(x => x._id == item._id);
             if (findSelectIndex >= 0) {
                 newValue = [...selectStyleList];
                 newValue.splice(findSelectIndex, 1);
                 console.log('findSelectIndex', findSelectIndex);
                 styleList[currentGoodCategoryMultiple][index].isSelected = false;
             } else {
-                newValue = [...selectStyleList, item];
+                newValue = [...selectStyleList, { style: item._id }];
                 styleList[currentGoodCategoryMultiple][index].isSelected = true;
             }
 
@@ -831,38 +850,34 @@ export default {
             // if (!styleList[currentGoodCategoryMultiple]) {
             //     return;
             // }
-            
 
             for (let k in styleList) {
-                for(let i=0;i<styleList[k].length;i++){
-                    styleList[k][i].isSelected = false
+                for (let i = 0; i < styleList[k].length; i++) {
+                    styleList[k][i].isSelected = false;
                 }
             }
-            
-            let num = 1
 
-            // console.log('payload', payload)
+            let num = 1;
 
-            let newValue = payload.map(x => {
+            // console.log('batchSetSelectStyleList', payload);
 
-                for (let k in styleList) {                 
-                    for(let i=0;i<styleList[k].length;i++){
-                        if(styleList[k][i]._id== x.style){
-                            styleList[k][i].isSelected = true
-                            num++
-                            console.log('num',num)
+            // let newValue = [];
+
+            payload.map(x => {
+                for (let k in styleList) {
+                    for (let i = 0; i < styleList[k].length; i++) {
+                        if (styleList[k][i]._id == x.style) {
+                            styleList[k][i].isSelected = true;
+                            num++;
+                            console.log('num', num);
                         }
                     }
                 }
-                return {
-                    ...x,
-                    _id: x.style || x._id,
-                };
             });
 
             yield put({
                 type: 'setSelectStyleList',
-                payload: newValue,
+                payload: lodash.uniqBy(payload, 'style'),
             });
             yield put({
                 type: 'setStyleList',
@@ -872,14 +887,17 @@ export default {
             });
         },
         *batchSetSelectColorList({ payload = { plainColors: [], flowerColors: [] } }, { put, select }) {
-            const { colorList = { docs: [] }, flowerList = { docs: [] } } = yield select(state => state.diy);
+            const { colorList = { docs: [] }, flowerList = { docs: [] }, selectColorList } = yield select(state => state.diy);
             const { plainColors = [], flowerColors = [] } = payload;
+            console.log('payload', payload);
 
             if (!flowerList.docs || !colorList.docs) return;
             const newValue = [];
+            // const whitoutValue = [];
             colorList.docs.map((x, i) => {
                 const findIndex = plainColors.findIndex(c => c === x._id);
                 if (findIndex >= 0) {
+                    console.log('-----1----');
                     newValue.push(x);
                     colorList.docs[i].isSelected = true;
                 } else {
@@ -896,9 +914,18 @@ export default {
                     flowerList.docs[i].isSelected = false;
                 }
             });
+            selectColorList.map(x => {
+                if (
+                    plainColors.findIndex(c => x.type === 0 && c === x._id) >= 0 ||
+                    flowerColors.findIndex(c => x.type === 1 && c === x._id) >= 0
+                ) {
+                    console.log('-----2----', x.type);
+                    newValue.push(x);
+                }
+            });
             yield put({
                 type: 'setSelectColorList',
-                payload: newValue,
+                payload: lodash.uniqBy(newValue, '_id'),
             });
             yield put({
                 type: 'setColorAndFlowerList',
