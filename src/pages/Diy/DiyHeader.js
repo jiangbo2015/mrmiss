@@ -39,7 +39,8 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     }, []);
 
     useEffect(() => {
-        // console.log('codename', codename)
+        console.log('codename', codename)
+        console.log('curABC', curABC)
         const { codename, styles = [], flowerColors = [], plainColors = [] } = currentAdminChannel;
         if (curABC !== 'A') {
             setRemarkVal(currentAdminChannel.remark);

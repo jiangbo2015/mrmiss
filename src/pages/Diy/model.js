@@ -214,7 +214,7 @@ export default {
             const { currentAdminChannel } = yield select(state => state.channel);
             const { styles, codename } = currentAdminChannel;
             const { fetchType = 'keep' } = payload;
-            console.log('codename', currentAdminChannel);
+            // console.log('codename', currentAdminChannel);
             const res = yield call(api.getUserStyleList, payload);
             if (res.data && Array.isArray(res.data.category)) {
                 let categoryStyles = {};
@@ -825,26 +825,35 @@ export default {
             // { styleAndColor: params, goodId: goodId }
         },
         *batchSetSelectStyleList({ payload = [] }, { call, put, select }) {
-            const { styleList, currentGoodCategory } = yield select(state => state.diy);
+            const { styleList, currentGoodCategoryMultiple } = yield select(state => state.diy);
+            // console.log('batchSetSelectStyleList', styleList[currentGoodCategoryMultiple])
             // // console.log('styleList[currentGoodCategory]', styleList[currentGoodCategory]);
-            if (!styleList[currentGoodCategory]) {
-                return;
-            }
-            const styleAllArr = [];
+            // if (!styleList[currentGoodCategoryMultiple]) {
+            //     return;
+            // }
+            
 
             for (let k in styleList) {
-                styleAllArr.push(...styleList[k]);
+                for(let i=0;i<styleList[k].length;i++){
+                    styleList[k][i].isSelected = false
+                }
             }
-            styleAllArr.map(s => {
-                s.isSelected = false;
-            });
+            
+            let num = 1
+
+            // console.log('payload', payload)
 
             let newValue = payload.map(x => {
-                const findSelectIndex = styleAllArr.findIndex(s => s._id === x.style || s._id === x._id);
-                if (findSelectIndex >= 0) {
-                    styleAllArr[findSelectIndex].isSelected = true;
-                }
 
+                for (let k in styleList) {                 
+                    for(let i=0;i<styleList[k].length;i++){
+                        if(styleList[k][i]._id== x.style){
+                            styleList[k][i].isSelected = true
+                            num++
+                            console.log('num',num)
+                        }
+                    }
+                }
                 return {
                     ...x,
                     _id: x.style || x._id,

@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'dva';
 
-import MultipleMode from './MultipleMode';
-import SingleMode from './SingleMode';
+// import MultipleMode from './MultipleMode';
+import StyleModes from './StyleModes';
+// import SingleMode from './SingleMode';
 import ExpandMode from './ExpandMode';
 import BigPicColor from './BigPicColor';
 import EditMode from './EditMode';
@@ -25,21 +26,22 @@ const App = ({ dispatch, collocationPattern }) => {
             >
                 <ExpandMode />
             </div>
-            <div
+            {/* <div
                 style={{
                     width: '51.2%',
                     display: collocationPattern === 'single' ? 'initial' : 'none',
                 }}
             >
                 <SingleMode />
-            </div>
+            </div> */}
             <div
                 style={{
                     width: '51.2%',
-                    display: collocationPattern === 'multiple' || collocationPattern === 'assign' ? 'initial' : 'none',
+                    display: collocationPattern === 'multiple' || collocationPattern === 'assign' || collocationPattern === 'single' ? 'initial' : 'none',
                 }}
             >
-                <MultipleMode assign={collocationPattern === 'assign'} />
+                <StyleModes assign={collocationPattern === 'assign'} />
+                {/* <MultipleMode assign={collocationPattern === 'assign'} /> */}
             </div>
             <div
                 style={{
