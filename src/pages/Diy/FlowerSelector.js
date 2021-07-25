@@ -54,7 +54,7 @@ export const ImgItem = ({ img, isSelected, style = {}, size = '44px', ...props }
     </div>
 );
 
-const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColorList, assign, currentAdminChannel }) => {
+const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, currentColor= {},selectColorList, assign, currentAdminChannel }) => {
     const { docs = [] } = flowerList;
     const [queryKey, setQueryKey] = useState('');
     const [sort, setSort] = useState('time');
@@ -80,7 +80,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
         });
     };
 
-    const handSort = sortArg => {
+    const handSort = (sortArg, currentColor) => {
         if (sortArg === 'time') {
             dispatch({
                 type: 'diy/setFlowerList',
@@ -88,6 +88,10 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                     ...flowerList,
                     docs: _.reverse(
                         _.sortBy(docs, function(o) {
+                            if(currentColor && Array.isArray(currentColor.relatedColors) && currentColor.relatedColors.includes(o._id)){
+                                console.log('99999999999')
+                                return '99999999999'
+                            }
                             if (o.createdAt) {
                                 return o.createdAt;
                             } else {
@@ -103,6 +107,9 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
                 payload: {
                     ...flowerList,
                     docs: _.sortBy(docs, function(o) {
+                        if(currentColor && Array.isArray(currentColor.relatedColors) && currentColor.relatedColors.includes(o._id)){
+                            return -99
+                        }
                         return -o.colorSystem;
                     }),
                 },
@@ -113,6 +120,10 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
         // console.log('sort', sort);
         handleFetchList('clear');
     }, [currentGood]);
+
+    useEffect(() => {
+        handSort(sort, currentColor)
+    }, [currentColor]);
 
     useEffect(() => {
         const { plainColors, flowerColors } = currentAdminChannel;
@@ -344,6 +355,7 @@ const App = ({ flowerList = { docs: [] }, dispatch, currentGood = {}, selectColo
 export default connect(({ diy = {}, channel = {}, loading }) => ({
     flowerList: diy.flowerList,
     currentGood: diy.currentGood,
+    currentColor: diy.currentColor,
     assign: diy.collocationPattern === 'assign',
     selectColorList: diy.selectColorList,
     currentAdminChannel: channel.currentAdminChannel,

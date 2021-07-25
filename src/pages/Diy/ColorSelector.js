@@ -41,6 +41,7 @@ const App = ({
     selectColorList,
     dispatch,
     currentGood = {},
+    currentFlower = {},
     assign,
     currentAdminChannel,
 }) => {
@@ -67,8 +68,8 @@ const App = ({
         });
     };
 
-    const handSort = sortArg => {
-        console.log('handSort', sortArg);
+    const handSort = (sortArg, currentFlower) => {
+        // console.log('handSort', sortArg);
         if (sortArg === 'time') {
             dispatch({
                 type: 'diy/setColorList',
@@ -76,6 +77,9 @@ const App = ({
                     ...colorList,
                     docs: _.reverse(
                         _.sortBy(docs, function(o) {
+                            if(currentFlower && Array.isArray(currentFlower.relatedColors) && currentFlower.relatedColors.includes(o._id)){
+                                return '9999999999'
+                            }
                             if (o.createdAt) {
                                 return o.createdAt;
                             } else {
@@ -91,6 +95,9 @@ const App = ({
                 payload: {
                     ...colorList,
                     docs: _.sortBy(docs, function(o) {
+                        if(currentFlower && Array.isArray(currentFlower.relatedColors) && currentFlower.relatedColors.includes(o._id)){
+                            return -99
+                        }
                         return -o.colorSystem;
                     }),
                 },
@@ -103,6 +110,13 @@ const App = ({
         handleFetchList('clear');
         // }
     }, [currentGood]);
+
+    useEffect(() => {
+        if(currentFlower && Array.isArray(currentFlower.relatedColors)) {
+            handSort(sort,currentFlower)
+        }
+        
+    }, [currentFlower])
 
     useEffect(() => {
         const { plainColors, flowerColors } = currentAdminChannel;
@@ -310,6 +324,7 @@ export default connect(({ diy = {}, channel = {}, loading }) => ({
     colorList: diy.colorList,
     selectColorList: diy.selectColorList,
     currentGood: diy.currentGood,
+    currentFlower: diy.currentFlower,
     assign: diy.collocationPattern === 'assign',
     currentAdminChannel: channel.currentAdminChannel,
     fetching: loading.effects['diy/fetchPlainList'],

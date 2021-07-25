@@ -6,6 +6,8 @@ export default {
     namespace: 'diy',
     state: {
         editOrderSaveId: '',
+        currentColor: {},
+        currentFlower: {},
         currentStyle: {},
         currentStyle1: {},
         colorList: { docs: [] },
@@ -36,6 +38,18 @@ export default {
             return {
                 ...state,
                 editOrderSaveId: action.payload,
+            };
+        },
+        setCurrentColor(state, action) {
+            return {
+                ...state,
+                currentColor: action.payload,
+            };
+        },
+        setCurrentFlower(state, action) {
+            return {
+                ...state,
+                currentFlower: action.payload,
             };
         },
         setCurrentStyle(state, action) {
@@ -424,6 +438,7 @@ export default {
             // setStyleColorings
             let newValue = [];
             let newValue1 = [];
+            let itemColor = {}
             const { item } = payload;
             let index = -1;
             const findSelectIndex = selectColorList.findIndex(x => x && x._id == item._id);
@@ -458,12 +473,14 @@ export default {
                                 let tempId = tempValue[tempRegion - 1]._id;
                                 let tempType = tempValue[tempRegion - 1].type;
                                 let isEixised = false;
+                                
                                 // 点击了选中区域的相同颜色 则取消该区域的选中
                                 if (tempValue[tempRegion - 1]._id === item._id) {
                                     tempValue[tempRegion - 1] = {};
                                     isEixised = tempValue.find(nv => nv && nv._id === item._id);
                                 } else {
                                     //否则换一种颜色
+                                    itemColor = {...item}
                                     tempValue[tempRegion - 1] = item;
                                     isEixised = tempValue.find(nv => nv && nv._id === tempId);
                                     if (item.type) {
@@ -484,6 +501,7 @@ export default {
                                 }
                             } else {
                                 tempValue[tempRegion - 1] = item;
+                                itemColor = {...item}
                                 if (item.type) {
                                     flowerList.docs[index].isSelected = true;
                                 } else {
@@ -519,6 +537,7 @@ export default {
                                 } else {
                                     //否则换一种颜色
                                     tempValue[tempRegion - 1] = item;
+                                    itemColor = {...item}
                                     let vfinded = newValue.find(nv => nv && nv._id === tempId);
                                     let v1finded = newValue1.find(nv => nv && nv._id === tempId);
                                     isEixised = vfinded || v1finded;
@@ -540,6 +559,7 @@ export default {
                                     }
                                 }
                             } else {
+                                itemColor = {...item}
                                 tempValue[tempRegion - 1] = item;
                                 if (item.type) {
                                     flowerList.docs[index].isSelected = true;
@@ -591,19 +611,30 @@ export default {
                             newValue.splice(findSelectIndex, 1);
                             if (item.type) {
                                 let curIndex = flowerList.docs.findIndex(x => x && x._id == item._id);
-                                flowerList.docs[curIndex].isSelected = false;
+                                if(curIndex >= 0) {
+                                    flowerList.docs[curIndex].isSelected = false;
+                                }
+                                
                             } else {
                                 let curIndex = colorList.docs.findIndex(x => x && x._id == item._id);
-                                colorList.docs[curIndex].isSelected = false;
+                                if(curIndex >= 0) {
+                                    colorList.docs[curIndex].isSelected = false;
+                                }
+                                
                             }
                         } else {
                             newValue = [...selectColorList, item];
                             if (item.type) {
                                 let curIndex = flowerList.docs.findIndex(x => x && x._id == item._id);
-                                flowerList.docs[curIndex].isSelected = true;
+                                if(curIndex >= 0) {
+                                    flowerList.docs[curIndex].isSelected = true;
+                                }
+                                
                             } else {
                                 let curIndex = colorList.docs.findIndex(x => x && x._id == item._id);
-                                colorList.docs[curIndex].isSelected = true;
+                                if(curIndex >= 0) {
+                                    colorList.docs[curIndex].isSelected = true;
+                                }
                             }
                         }
                     }
@@ -638,7 +669,18 @@ export default {
                     payload: newValue,
                 });
             }
-
+            if(itemColor.type === 1) {
+                yield put({
+                    type: 'setCurrentFlower',
+                    payload: itemColor
+                })
+            } else if(item.type === 0){
+                yield put({
+                    type: 'setCurrentColor',
+                    payload: itemColor
+                })
+            }
+            
             yield put({
                 type: 'setColorAndFlowerList',
                 payload: {
@@ -664,6 +706,7 @@ export default {
                 styleList[currentGoodCategoryMultiple][index].isSelected = true;
             }
 
+            
             yield put({
                 type: 'setSelectStyleList',
                 payload: newValue,
