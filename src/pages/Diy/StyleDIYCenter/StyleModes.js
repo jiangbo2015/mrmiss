@@ -334,6 +334,7 @@ const App = ({
     }, [currentAdminChannel._id, currentGoodCategoryMultiple]);
 
     const handleSetCurrentGoodCategory = category => {
+        if(!category) return;
         console.log('handleSetCurrentGoodCategory', category);
         dispatch({
             type: 'diy/setCurrentGoodCategoryMultiple',
