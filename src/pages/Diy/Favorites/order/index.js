@@ -29,6 +29,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, currentGood = {}, visible, on
                     message.warn(`版型编号${row.styleNos}中有款式未填写数量`);
                     return;
                 }
+                item.type = 1
                 
             }
             sumCount += row.rowTotal

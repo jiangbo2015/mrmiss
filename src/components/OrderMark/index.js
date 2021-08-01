@@ -473,14 +473,12 @@ const OrderMark = ({
                                                                                 {/* </Swiper> */}
                                                                             </Box>
                                                                         ) : (
-                                                                            favorite.styleAndColor.map((d) => (
+                                                                            favorite.styleAndColor.map((d) => ( d.favoriteImgUrl ? <Image sx={{cursor: 'pointer'}} key={`${favorite._id}-${d._id}-order`} width={`${(d.style?.styleSize * 100) / 27}px`} src={filterImageUrl(d.favoriteImgUrl)}/> :
                                                                                 <StyleItem
                                                                                     styleId={`${favoriteKey}-${d._id}-item`}
                                                                                     colors={d.colorIds}
                                                                                     width={`${(d.style?.styleSize * 100) / 27}px`}
-                                                                                    key={`${favorite._id}-${d._id}-${
-                                                                                        Math.random() * 1000000
-                                                                                    }`}
+                                                                                    key={`${favorite._id}-${d._id}-order`}
                                                                                     {...d.style}
                                                                                     style={{
                                                                                         cursor: 'pointer',

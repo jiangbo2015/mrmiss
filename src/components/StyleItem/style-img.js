@@ -2,6 +2,7 @@ import React from 'react';
 import { ReactSVG } from 'react-svg';
 import { Box, Flex, Image } from 'rebass/styled-components';
 import { filterImageUrl } from '@/utils/helper';
+// import getDataUrl from 'get-dataurl';
 
 export default props => {
     const {

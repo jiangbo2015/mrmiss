@@ -1,17 +1,25 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import ColorSelector from './ColorSelector';
+import StyleImgDownload from '@/components/StyleItem/style-img-download';
 import FlowerSelector from './FlowerSelector';
 import StyleDIYCenter from './StyleDIYCenter/index';
 import { ReactSVG } from 'react-svg';
 import { message } from 'antd';
+import { Box, Flex, Image } from 'rebass/styled-components';
 
 import IconUnHeart from '@/public/icons/icon-unheart.svg';
 import IconConfirm from '@/public/icons/icon-confirm.svg';
 import { connect } from 'dva';
+
+import svg2pngFile from '@/utils/new.svg2pngFile';
+import request from '@/utils/request';
+let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 const App = ({
     dispatch,
     currentGood,
     currentGoodCategory,
+    currentGoodCategoryMultiple,
     currentStyle,
     currentStyle1,
     selectStyleList,
@@ -22,36 +30,88 @@ const App = ({
     favoriteEditObj,
     singleSelectColorList,
     singleSelectColorList1,
-    currentGoodCategoryMultiple = '',
+    styleList
 }) => {
+
+    const [favoriteStyleList, setFavoriteStyleList] = useState([])
+    const [styleColorUrls, setStyleColorUrls] = useState([])
+    
+    // const onPngLoaded = ({ colorUrl }) => {
+    //     window.favoriteLoadedNums++
+    //     setStyleColorUrls([...styleColorUrls, colorUrl])
+    // }
+
+
+    const uploadStyleImage = async (svgString, imgUrl) => {
+        console.log('uploadStyleImage');
+        const { file } = await svg2pngFile(svgString, imgUrl);
+        console.log('file');
+        // /api/common/uploadkit
+
+        var postData = new FormData();
+        postData.append('file', file);
+        const res = await request('/api/common/uploadkit', {
+            data: postData,
+            method: 'post',
+        });
+        console.log('res', res);
+        return { url: res.data.url };
+    };
     // // console.log('currentGoodCategoryMultiple',currentGoodCategoryMultiple)
     const handleAddFavorite = async () => {
-        let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
+        window.favoriteLoadedNums = 0
+
+        console.log('currentGoodCategory', currentGoodCategory)
+        console.log('currentGoodCategoryMultiple', currentGoodCategoryMultiple)
+        // let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
         let goodCategoryMultiple = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
 
         if (collocationPattern === 'single' || collocationPattern === 'expand') {
             let payload = {
                 goodId: currentGood._id,
-                goodCategory,
+                goodCategory: goodCategoryMultiple,
                 styleAndColor: [],
             };
             if (currentStyle._id) {
                 payload.styleAndColor.push({
                     styleId: currentStyle._id,
+                    style: currentStyle,
                     colorIds: singleSelectColorList.map(x => x._id),
+                    colors: singleSelectColorList,
                 });
+                console.log('addFavorite', currentStyle)
             }
             if (currentStyle1._id) {
                 payload.styleAndColor.push({
                     styleId: currentStyle1._id,
+                    style: currentStyle1,
                     colorIds: singleSelectColorList1.map(x => x._id),
+                    colors: singleSelectColorList1,
                 });
+            }
+            const hide = message.loading('收藏中，请稍等...', 0);
+            setFavoriteStyleList([payload.styleAndColor])
+            await wait(3000)
+            for(let i=0;i<payload.styleAndColor.length; i++){
+                let item = payload.styleAndColor[i]
+                let svgId = `${item.styleId}-diy-front`
+                let svgDom = document.getElementById(svgId);
+                console.log('svgDom', svgDom)
+                if (svgDom) {
+                    let svgString = document.getElementById(svgId).outerHTML;
+                    // // console.log('svgString', svgString);
+                    const res = await uploadStyleImage(svgString, item.style.shadowUrl);
+                    item.favoriteImgUrl = res.url
+                    console.log(res.url)
+                }
             }
             await dispatch({
                 type: 'diy/addFavorite',
                 payload,
             });
+            hide()
             message.info('收藏成功');
+            
         } else if (collocationPattern === 'multiple') {
             if (selectStyleList.length === 0) {
                 message.info('请选择');
@@ -59,38 +119,85 @@ const App = ({
             }
 
             const colorIds = selectColorList.map(x => x._id);
-            const favorites = selectStyleList.map(x => ({
+            const docs = styleList[currentGoodCategoryMultiple]
+            const selectedStyle = docs.filter(x => x.isSelected)
+            console.log('selectedStyle')
+            const favorites = selectedStyle.map(x => ({
                 user: currentUser._id,
                 goodId: currentGood._id,
                 goodCategory: goodCategoryMultiple,
                 styleAndColor: [
                     {
-                        styleId: x.style,
+                        styleId: x._id,
+                        style: x,
                         colorIds: [colorIds[0], colorIds[0], colorIds[0], colorIds[0], colorIds[0], colorIds[0]],
+                        colors: [selectColorList[0],selectColorList[0],selectColorList[0],selectColorList[0],selectColorList[0],selectColorList[0]],
                     },
                 ],
             }));
+            
+            const hide = message.loading('收藏中，请稍等...', 0);
+            setFavoriteStyleList(favorites.map(x => x.styleAndColor))
+            await wait(3000)
+            for(let j=0;j<favorites.length;j++){
+                let favorite = favorites[j]
+                for(let i=0;i<favorite.styleAndColor.length; i++){
+                    let item = favorite.styleAndColor[i]
+                    let svgId = `${item.styleId}-diy-front`
+                    let svgDom = document.getElementById(svgId);
+                    console.log('svgDom', svgDom)
+                    if (svgDom) {
+                        let svgString = document.getElementById(svgId).outerHTML;
+                        // // console.log('svgString', svgString);
+                        const res = await uploadStyleImage(svgString, item.style.shadowUrl);
+                        item.favoriteImgUrl = res.url
+                        console.log(res.url)
+                    }
+                }
+
+            }
+
             await dispatch({
                 type: 'diy/addFavorites',
                 payload: favorites,
             });
+            hide()
         } else if (collocationPattern === 'edit') {
             let payload = {
                 _id: favoriteEditObj._id,
                 goodId: currentGood._id,
-                goodCategory,
+                goodCategory: goodCategoryMultiple,
                 styleAndColor: [],
-            };
-            if (favoriteEditObj._id) {
+            }
+            // | favoriteStyleList | favoriteStyleList
+            if (favoriteEditObj._id) { 
                 payload.styleAndColor = favoriteEditObj.styleAndColor.map(x => ({
+                    style: x.style,
                     styleId: x.style._id,
                     colorIds: x.colorIds.map(x => x._id),
+                    colors: x.colorIds,
                 }));
-
+                const hide = message.loading('收藏修改中，请稍等...', 0);
+                setFavoriteStyleList([payload.styleAndColor])
+                await wait(3000)
+                for(let i=0;i<payload.styleAndColor.length; i++){
+                    let item = payload.styleAndColor[i]
+                    let svgId = `${item.styleId}-diy-front`
+                    let svgDom = document.getElementById(svgId);
+                    console.log('svgDom', svgDom)
+                    if (svgDom) {
+                        let svgString = document.getElementById(svgId).outerHTML;
+                        // // console.log('svgString', svgString);
+                        const res = await uploadStyleImage(svgString, item.style.shadowUrl);
+                        item.favoriteImgUrl = res.url
+                        console.log(res.url)
+                    }
+                }
                 await dispatch({
                     type: 'diy/updateFavorite',
                     payload,
                 });
+                hide()
                 message.info('修改成功');
             }
 
@@ -163,7 +270,7 @@ const App = ({
                         <ReactSVG
                             src={IconUnHeart}
                             onClick={() => {
-                                handleAddFavorite();
+                                handleAddFavorite()
                             }}
                             style={{
                                 width: '18px',
@@ -174,6 +281,56 @@ const App = ({
                     )}
                 </div>
             </div>
+
+            {/* const { styleList, favoriteId, margin, width, onPngLoaded } = this.props; */}
+        {/* return ( */}
+        <div style={{
+            display: 'none'
+        }}>
+        {favoriteStyleList.map(styleList => {
+            return (
+            <Flex
+                flexDirection="column"
+                // alignItems="center"
+                justifyContent="space-evenly"
+                margin={'auto'}
+                // width={width ? width : "150px"}
+            >
+                {Array.isArray(styleList) &&
+                    styleList.map((style, index) => {
+                        const { styleBackSize = 27, styleSize = 27, scale = 58 } = style.style;
+                        return (
+                            <Box p="13px">
+                                <StyleImgDownload
+                                    marginTemp="0.04rem"
+                                    key={`style-img-${index}`}
+                                    width={`${styleSize * 20}px`}
+                                    backWidth={`${styleBackSize * 2}px`}
+                                    onPngLoaded={()=>{}}
+                                    vposition={style.style.vposition}
+                                    styleSize={style.style.styleSize}
+                                    styleBackSize={style.style.styleBackSize}
+                                    svgUrl={style.style.svgUrl}
+                                    svgUrlBack={style.style.svgUrlBack}
+                                    shadowUrlBack={style.style.shadowUrlBack}
+                                    id={style.style._id}
+                                    styleId={style.style._id}
+                                    shadowUrl={style.style.shadowUrl}
+                                    imgValsAttrs={style.style.attrs}
+                                    colors={style.colors}
+                                    svgId={`${style.style._id}-diy-front`}
+                                />
+                            </Box>
+                        );
+                    })}
+            </Flex>
+        
+            )
+
+        })}
+        </div>
+
+            );
         </div>
     );
 };
@@ -181,6 +338,7 @@ const App = ({
 export default connect(({ diy = {}, channel, user }) => ({
     collocationPattern: diy.collocationPattern,
     currentGoodCategory: diy.currentGoodCategory,
+    currentGoodCategoryMultiple: diy.currentGoodCategoryMultiple,
     currentGood: diy.currentGood,
     currentStyle: diy.currentStyle,
     currentStyle1: diy.currentStyle1,
@@ -191,4 +349,5 @@ export default connect(({ diy = {}, channel, user }) => ({
     currentUser: user.info,
     singleSelectColorList: diy.singleSelectColorList,
     singleSelectColorList1: diy.singleSelectColorList1,
+    styleList: diy.styleList,
 }))(App);

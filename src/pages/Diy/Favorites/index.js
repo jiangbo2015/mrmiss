@@ -3,12 +3,13 @@ import { message, Popconfirm } from 'antd';
 import { connect } from 'dva';
 import { ReactSVG } from 'react-svg';
 import lodash from 'lodash';
-import { Flex, Box } from 'rebass/styled-components';
+import { Flex, Box, Image } from 'rebass/styled-components';
 import Propmt from '@/components/Propmt';
 import Modal from '@/components/Modal';
 import Select from '@/components/Select';
 import SelectAll from '@/components/SelectAll';
 import StyleItem from '@/components/StyleItem';
+import {filterImageUrl} from '@/utils/helper'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ReactList from 'react-list';
 
@@ -527,13 +528,13 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                                 justifyContent: 'space-around',
                             }}
                         >
-                            {favorite.styleAndColor.map(d => (
+                            {favorite.styleAndColor.map(d => ( d.favoriteImgUrl ? <Image key={`${favorite._id}-${d._id}-math`} width={`${(favoriteBox[favoritePattern].size * d.style.styleSize) / 27}vw`} src={filterImageUrl(d.favoriteImgUrl)}/> :
                                 <StyleItem
                                     width={`${(favoriteBox[favoritePattern].size * d.style.styleSize) / 27}vw`}
                                     // width={favoriteBox[favoritePattern].size}
                                     styleId={`${favorite._id}-${d._id}-favorite`}
                                     colors={d.colorIds}
-                                    key={`${favorite._id}-${d._id}-${Math.random() * 1000000}`}
+                                    key={`${favorite._id}-${d._id}-math`}
                                     {...d.style}
                                     style={{
                                         cursor: 'pointer',

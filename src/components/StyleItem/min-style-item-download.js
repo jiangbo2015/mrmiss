@@ -32,7 +32,7 @@ export default class A extends React.Component {
                                     key={`style-img-${index}`}
                                     width={width ? `${(styleSize * 3.2) / 200}rem` : `${styleSize * 4}px`}
                                     backWidth={width ? `${(styleBackSize * 3.2) / 100}rem` : `${styleBackSize * 2}px`}
-                                    onPngLoaded={onPngLoaded}
+                                    onPngLoaded={style.favoriteImgUrl ? null : onPngLoaded}
                                     vposition={style.style.vposition}
                                     styleSize={style.style.styleSize}
                                     styleBackSize={style.style.styleBackSize}
@@ -40,6 +40,7 @@ export default class A extends React.Component {
                                     svgUrlBack={style.style.svgUrlBack}
                                     shadowUrlBack={style.style.shadowUrlBack}
                                     id={style.style._id}
+                                    svgId={`${favoriteId}-${style.style._id}-front`}
                                     styleId={style.style._id}
                                     shadowUrl={style.style.shadowUrl}
                                     imgValsAttrs={style.style.attrs}

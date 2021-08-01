@@ -27,8 +27,10 @@ const dataURL2File = (dataurl, filename) => {
     return new File([u8arr], filename, { type: mime });
 };
 
-export default (svg, shadowUrl) => {
+export default (svg, shadowUrl, width = 540) => {
+    console.log('svg to file 0')
     let promise = new Promise(resolve => {
+        console.log('svg to file 1')
         var canvas = document.createElement('canvas');
         var c = canvas.getContext('2d');
         const string = svg2String(svg);
@@ -39,27 +41,27 @@ export default (svg, shadowUrl) => {
 
         //svg内容
         img.src = url; //svg内容中可以有中文字符
-
+        console.log('svg to file 2')
         //图片初始化完成后调用
         img.onload = function() {
-            // // console.log('svg onload');
+            console.log('svg onload');
             // document.body.appendChild(img)
 
             //将canvas的宽高设置为图像的宽高
-            canvas.width = 120;
-            canvas.height = (120 * img.height) / img.width;
+            canvas.width = width;
+            canvas.height = (width * img.height) / img.width;
 
             //canvas画图片
-            c.drawImage(img, 0, 0, 120, (120 * img.height) / img.width);
+            c.drawImage(img, 0, 0, width, (width * img.height) / img.width);
 
             //将图片添加到body中
             var img2 = new Image();
             img2.setAttribute('crossOrigin', 'anonymous');
-            // // console.log('filterImageUrl(shadowUrl);', shadowUrl, filterImageUrl(shadowUrl));
+            console.log('filterImageUrl(shadowUrl);', shadowUrl, filterImageUrl(shadowUrl));
             img2.src = filterImageUrl(shadowUrl);
             img2.onload = function() {
                 // // console.log('showurl onload');
-                c.drawImage(img2, 0, 0, 120, (120 * img.height) / img.width);
+                c.drawImage(img2, 0, 0, width, (width * img.height) / img.width);
                 var dataurl = canvas.toDataURL('image/png');
                 let file = dataURL2File(dataurl);
                 // let imgBlob = dataURL2Blob(dataurl) file

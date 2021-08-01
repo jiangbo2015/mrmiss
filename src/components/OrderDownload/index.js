@@ -18,7 +18,7 @@ const downloadUrl = process.env.DOWNLOAD_URL;
 // }
 
 export default ({ order, onGetDownloadUrlAndOpen }) => {
-    const { orderData = [], _id } = order;
+    const { orderData = [], _id,orderNo } = order;
     const [isDownloading, setIsDownloading] = useState(true);
     const [styleSvgIdMap, setStyleSvgIdMap] = useState([]);
     const [styleSvgIdMapCount, setStyleSvgIdMapCount] = useState({});
@@ -26,35 +26,41 @@ export default ({ order, onGetDownloadUrlAndOpen }) => {
         let tempStyleSvgIdMapCount = {};
         orderData.map(group => {
             group.items.map((item, index) => {
-                if (item.type === 1) {
+                console.log('item.type ', item.type )
+                if (item.type !== 0) {
                     item.favorite.styleAndColor.map(x => {
+                        // console.log(x.styleId)
                         if (!x.styleId) return;
-
-                        x.colorIds.map((color, index) => {
-                            if (color.type) {
-                                let colorUrl = `${item.favorite._id}-${x.styleId}-${color.value}`;
-                                if (!tempStyleSvgIdMapCount[colorUrl]) {
-                                    tempStyleSvgIdMapCount[colorUrl] = 1;
-                                } else {
-                                    tempStyleSvgIdMapCount[colorUrl]++;
+                        // console.log('x.favoriteImgUrl')
+                        if(!x.favoriteImgUrl){
+                            x.colorIds.map((color, index) => {
+                                if (color.type) {
+                                    let colorUrl = `${item.favorite._id}-${x.styleId}-${color.value}`;
+                                    if (!tempStyleSvgIdMapCount[colorUrl]) {
+                                        tempStyleSvgIdMapCount[colorUrl] = 1;
+                                    } else {
+                                        tempStyleSvgIdMapCount[colorUrl]++;
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
+                        
                     });
                 }
             });
         });
         window.pngNum = 0;
         setStyleSvgIdMapCount(tempStyleSvgIdMapCount);
+        console.log('tempStyleSvgIdMapCount', tempStyleSvgIdMapCount)
     }, [orderData]);
     const handlePngLoaded = ({ colorUrl }) => {
-        // // console.log(window.pngNum++);
+        window.pngNum++
         setStyleSvgIdMap([...styleSvgIdMap, colorUrl]);
     };
 
     const uploadStyleImage = async (svgString, imgUrl) => {
         // // console.log('uploadStyleImage');
-        const { file } = await svg2pngFile(svgString, imgUrl);
+        const { file } = await svg2pngFile(svgString, imgUrl, 120);
         // /api/common/uploadkit
 
         var postData = new FormData();
@@ -99,15 +105,21 @@ export default ({ order, onGetDownloadUrlAndOpen }) => {
                     for (let k = 0; k < item.favorite.styleAndColor.length; k++) {
                         // // console.log(`----${i}----${j}`, k);
                         const x = item.favorite.styleAndColor[k];
-                        let fsId = `${item.favorite._id}-${x.styleId._id}`;
-                        let shadowUrl = x.styleId.shadowUrl;
-                        let svgDom = document.getElementById(`${fsId}-front`);
-                        if (svgDom) {
-                            let svgString = document.getElementById(`${fsId}-front`).outerHTML;
-                            // // console.log('svgString', svgString);
-                            const res = await uploadStyleImage(svgString, shadowUrl);
-                            styleImgs.push(res.url);
+                        if(x.favoriteImgUrl) {
+                            styleImgs.push(x.favoriteImgUrl);
+                        } else {
+                            console.log('合成图片')
+                            let fsId = `${item.favorite._id}-${x.styleId._id}`;
+                            let shadowUrl = x.styleId.shadowUrl;
+                            let svgDom = document.getElementById(`${fsId}-front`);
+                            if (svgDom) {
+                                let svgString = document.getElementById(`${fsId}-front`).outerHTML;
+                                // // console.log('svgString', svgString);
+                                const res = await uploadStyleImage(svgString, shadowUrl);
+                                styleImgs.push(res.url);
+                            }
                         }
+                        
                     }
                 }
                 rowImages.push(styleImgs);

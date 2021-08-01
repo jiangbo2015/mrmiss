@@ -60,7 +60,6 @@ const App = ({
                                 styleId={`single-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
-                                // styleId={currentStyle._id}
                                 showGroupStroke={true}
                                 curStylesEditGroupIndex={currentStyleRegion - 1}
                                 onSetEditSvgGroupIndex={handleSetCurrentStyleRegion}
