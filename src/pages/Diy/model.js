@@ -392,13 +392,39 @@ export default {
         *deleteFavorite({ payload }, { call, put, select }) {
             const res = yield call(api.deleteFavorite, payload);
             if (res && res.data) {
-                const { currentGood } = yield select(state => state.diy);
+                const { favoriteArr } = yield select(state => state.diy);
+                const delIndex = favoriteArr.findIndex(x => x._id === payload._id)
+                favoriteArr.splice(delIndex, 1)
                 yield put({
-                    type: 'fetchFavoriteList',
-                    payload: {
-                        goodsId: currentGood._id,
-                    },
+                    type: 'setFavoriteArr',
+                    payload: [...favoriteArr],
                 });
+            }
+            // { styleAndColor: params, goodId: goodId }
+        },
+        *deleteFavorites(_, { call, put, select }) {
+            const { selectFavoriteList } = yield select(state => state.diy);
+            if(!Array.isArray(selectFavoriteList) || selectFavoriteList.length<1){
+                message.warn('请选择要删除的收藏')
+                return;
+            }
+            const ids = selectFavoriteList.map(x => x._id)
+            const res = yield call(api.deleteFavorite, {ids});
+            if (res && res.data) {
+                const { favoriteArr } = yield select(state => state.diy);
+                ids.forEach(_id => {
+                    const delIndex = favoriteArr.findIndex(x => x._id === _id)
+                    favoriteArr.splice(delIndex, 1)
+                })
+                
+                yield put({
+                    type: 'setFavoriteArr',
+                    payload: [...favoriteArr],
+                });
+                yield put({
+                    type: 'setSelectFavoriteList',
+                    payload: []
+                })
             }
             // { styleAndColor: params, goodId: goodId }
         },
@@ -758,6 +784,7 @@ export default {
         },
         *toDoOrder({ payload }, { call, put, select }) {
             const { selectFavoriteList, currentGood } = yield select(state => state.diy);
+
             const res = yield call(api.getMyOrderList, { isSend: 0, goodsId: currentGood._id });
             let saveOrder = [];
             if (res && Array.isArray(res.data) && res.data.length > 0) {

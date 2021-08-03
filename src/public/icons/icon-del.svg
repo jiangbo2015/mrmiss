@@ -1,7 +1,7 @@
 <svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22.25 29">
     <defs>
         <style>
-            .icon-del-1 {
+            .icon-del-w {
                 fill: none;
                 stroke: #000;
                 stroke-miterlimit: 10;
@@ -9,9 +9,9 @@
             }
         </style>
     </defs>
-    <path class="icon-del-1" d="M19.24,6.35,18,28H4.21L3,6.35" />
-    <path class="icon-del-1" d="M11.12,1h0a2.69,2.69,0,0,0-2.7,2.71V6.35h5.41V3.71A2.69,2.69,0,0,0,11.12,1Z" />
-    <line class="icon-del-1" y1="6.47" x2="22.25" y2="6.47" />
-    <line class="icon-del-1" x1="8.42" y1="11.76" x2="8.42" y2="22.59" />
-    <line class="icon-del-1" x1="13.83" y1="11.76" x2="13.83" y2="22.59" />
+    <path class="icon-del-w" d="M19.24,6.35,18,28H4.21L3,6.35" />
+    <path class="icon-del-w" d="M11.12,1h0a2.69,2.69,0,0,0-2.7,2.71V6.35h5.41V3.71A2.69,2.69,0,0,0,11.12,1Z" />
+    <line class="icon-del-w" y1="6.47" x2="22.25" y2="6.47" />
+    <line class="icon-del-w" x1="8.42" y1="11.76" x2="8.42" y2="22.59" />
+    <line class="icon-del-w" x1="13.83" y1="11.76" x2="13.83" y2="22.59" />
 </svg>

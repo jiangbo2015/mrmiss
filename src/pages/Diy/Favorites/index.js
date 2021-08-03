@@ -19,6 +19,7 @@ import OrderIcon from '@/public/icons/icon-order.svg';
 import CapsuleIcon from '@/public/icons/icon-capsule.svg';
 import EditIcon from '@/public/icons/icon-edit.svg';
 import DelIcon from '@/public/icons/icon-del.svg';
+import DelIconWhite from '@/public/icons/icon-del-white.svg';
 import BigIcon from '@/public/icons/icon-big+.svg';
 import ComputerIcon from '@/public/icons/icon-computer.svg';
 
@@ -146,108 +147,6 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
         ));
     };
 
-    const renderItem = index => {
-        const favorite = favoriteArr[index];
-        return (
-            <div
-                key={`${favorite._id}-favorite-${Math.random() * 1000000}`}
-                style={{
-                    position: 'relative',
-                    justifySelf: 'stretch',
-                    alignSelf: 'stretch',
-                    display: 'inline-flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'space-around',
-                    background: '#FFFFFF',
-                    borderRadius: '5px',
-                    width: favoriteBox[favoritePattern].w,
-                    height: favoriteBox[favoritePattern].h,
-                    margin: '0 0 18px 18px',
-                }}
-                className="favoriteItem"
-                onClick={() => {
-                    handleSelectFavorite({ item: favorite, index });
-                }}
-            >
-                <ReactSVG
-                    style={{
-                        margin: '12px 0 0 14px',
-                        width: '14px',
-                        height: '14px',
-                        opacity: favorite.isSelected ? 1 : 0,
-                        alignSelf: 'flex-start',
-                    }}
-                    src={SelectedIcon}
-                />
-                <div
-                    style={{
-                        flex: 1,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'space-around',
-                    }}
-                >
-                    {favorite.styleAndColor.map(d => (
-                        <StyleItem
-                            width={`${(favoriteBox[favoritePattern].size * d.style.styleSize) / 27}vw`}
-                            // width={favoriteBox[favoritePattern].size}
-                            styleId={`${favorite._id}-${d._id}-favorite`}
-                            colors={d.colorIds}
-                            key={`${favorite._id}-${d._id}-${Math.random() * 1000000}`}
-                            {...d.style}
-                            style={{
-                                cursor: 'pointer',
-                            }}
-                        />
-                    ))}
-                </div>
-                <div className="toolBar" style={{ display: 'flex', marginBottom: '10px' }}>
-                    <ReactSVG
-                        style={{
-                            width: '14px',
-                            height: '14px',
-                        }}
-                        src={EditIcon}
-                        onClick={e => {
-                            e.stopPropagation();
-                            handleEdit(favorite);
-                        }}
-                    />
-                    <ReactSVG
-                        style={{
-                            width: '14px',
-                            height: '14px',
-                            margin: '0 30px',
-                        }}
-                        src={BigIcon}
-                        onClick={e => {
-                            e.stopPropagation();
-                            handleBig(favorite);
-                        }}
-                    />
-                    <Popconfirm
-                        title="确认删除吗？"
-                        onConfirm={() => {
-                            handleDel(favorite);
-                        }}
-                    >
-                        <ReactSVG
-                            style={{
-                                width: '14px',
-                                height: '14px',
-                            }}
-                            src={DelIcon}
-                            onClick={e => {
-                                e.stopPropagation();
-                            }}
-                        />
-                    </Popconfirm>
-                </div>
-            </div>
-        );
-    };
     return (
         <div
             style={{
@@ -421,6 +320,31 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                             <div>{favoriteArr.length}</div>
                         </Flex>
                     </Flex>
+                    <Popconfirm
+                                title="确认删除所选项吗？"
+                                onConfirm={(e) => {
+                                    e.stopPropagation();
+                                    dispatch({ type: 'diy/deleteFavorites' });
+                                }}
+                            >
+                                
+                                <ReactSVG
+                        style={{
+                            padding: '7px',
+                            width: '32px',
+                            height: '32px',
+                            backgroundColor: '#161616',
+                            borderRadius: '50%',
+                            marginRight: '16px',
+                        }}
+                        src={DelIconWhite}
+                        onClick={() => {
+                            // setOrderVisible(true);
+                            
+                        }}
+                    />
+                            </Popconfirm>
+                    
                     <ReactSVG
                         style={{
                             padding: '8px',
@@ -449,6 +373,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                             dispatch({ type: 'diy/toDoOrder' });
                         }}
                     />
+                    
+                    
                 </Flex>
             </div>
             {/* <InfiniteScroll
@@ -568,7 +494,8 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                             />
                             <Popconfirm
                                 title="确认删除吗？"
-                                onConfirm={() => {
+                                onConfirm={(e) => {
+                                    e.stopPropagation();
                                     handleDel(favorite);
                                 }}
                             >

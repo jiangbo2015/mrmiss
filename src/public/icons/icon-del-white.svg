@@ -1,0 +1,17 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22.25 20">
+    <defs>
+        <style>
+            .icon-del-white {
+                fill: none;
+                stroke: #ffffff;
+                stroke-miterlimit: 10;
+                stroke-width: 1.5px;
+            }
+        </style>
+    </defs>
+    <path class="icon-del-white" d="M19.24,4.35,18,20H4.21L3,4.35" />
+    <path class="icon-del-white" d="M11.12,1h0a2.69,2.69,0,0,0-2.7,2.71V4.35h5.41V3.71A2.69,2.69,0,0,0,11.12,1Z" />
+    <line class="icon-del-white" y1="4.47" x2="22.25" y2="4.47" />
+    <line class="icon-del-white" x1="8.42" y1="6.76" x2="8.42" y2="16.59" />
+    <line class="icon-del-white" x1="13.83" y1="6.76" x2="13.83" y2="16.59" />
+</svg>
