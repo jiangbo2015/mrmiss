@@ -5,11 +5,11 @@ const data = ['Beach Shorts', 'SWIMUITE ALL', 'SWIABC', 'DEFG'];
 export default ({ data = [], selectedItem = {}, onSelect }) => {
     // const active = 1;
     return (
-        <Box css={{ position: 'absolute', left: 20, top: 0 }}>
+        // <Box css={{ position: 'absolute', left: 20, top: 0 }}>
+        <ul>
             {data.map((item, i) => (
-                <Box>
+                <li key={`${i}-${item._id}`}>
                     <Text
-                        key={i}
                         css={{
                             fontSize: selectedItem._id === item._id ? '20px' : '18px',
                             color: selectedItem._id === item._id ? '#000' : '#5c5c5c99',
@@ -25,7 +25,7 @@ export default ({ data = [], selectedItem = {}, onSelect }) => {
                     {selectedItem._id === item._id || (selectedItem.branch === item._id && Array.isArray(item.children))
                         ? item.children.map(c => (
                               <Text
-                                  key={i}
+                                  key={c._id}
                                   css={{
                                       fontSize: selectedItem._id === c._id ? '16px' : '14px',
                                       color: selectedItem._id === c._id ? '#000' : '#5c5c5c99',
@@ -37,12 +37,12 @@ export default ({ data = [], selectedItem = {}, onSelect }) => {
                                       onSelect(item, c);
                                   }}
                               >
-                                  {item.namecn}-{c.namecn}
+                                  -{c.namecn}
                               </Text>
                           ))
                         : null}
-                </Box>
+                </li>
             ))}
-        </Box>
+        </ul>
     );
 };

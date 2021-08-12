@@ -10,7 +10,7 @@ import { filterImageUrl } from '@/utils/helper';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 
 // 胶囊组件
-export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect , onSelect = () => {}}) => {
+export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect, onSelect = () => {} }) => {
     const { colorWithStyleImgs = [], code, price } = item;
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -29,7 +29,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect , onS
                 '&:hover': {
                     borderColor: '#4B4B4B',
                 },
-                position: 'relative'
+                position: 'relative',
             }}
         >
             <Box p="30px" bg="#FFFFFF" css={{ borderRadius: '10px' }}>
@@ -48,32 +48,39 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect , onS
                         onSelect(item);
                     }}
                 />
-                <Flex justifyContent="center" mb="40px" sx={{
-                    minHeight: '320px'
-                }} alignItems="center" flexDirection="column">
+                <Flex
+                    justifyContent="center"
+                    mb="40px"
+                    sx={{
+                        minHeight: '320px',
+                    }}
+                    alignItems="center"
+                    flexDirection="column"
+                >
                     {colorWithStyleImgs[current].type ? (
-                        colorWithStyleImgs[current].favorite.styleAndColor.map((d,i) => (
+                        colorWithStyleImgs[current].favorite.styleAndColor.map((d, i) => (
                             <StyleItem
-                                width='164px'
+                                width="164px"
                                 styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
                                 colors={d.colorIds}
-                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() * 1000000}`}
+                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}`}
                                 {...d.styleId}
                                 style={{
                                     cursor: 'pointer',
-                                    marginTop: i ? '30px' : 0
+                                    marginTop: i ? '30px' : 0,
                                 }}
                             />
                         ))
                     ) : (
-                        <Image sx={{width: '95%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
+                        <Image
+                            sx={{ width: '95%', height: 'auto' }}
+                            src={filterImageUrl(colorWithStyleImgs[current].imgs[0])}
+                            mx="auto"
+                        />
                     )}
                 </Flex>
 
-                <Box
-                    css={{ fontSize: '12px' }}
-                    
-                >
+                <Box css={{ fontSize: '12px' }}>
                     <Text>Ref.{item.code}</Text>
                     <Text mt="5px">Size.{item.size}</Text>
                     <Flex css={{ position: 'relative' }} mt="14px" justifyContent="center" alignItems="center">

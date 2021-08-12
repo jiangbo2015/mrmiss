@@ -10,7 +10,7 @@ import Switcher from '@/components/Capsule/Switcher';
 import Container from '@/components/Container';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
-import banner from '@/public/banner.jpeg';
+import lodash from 'lodash';
 // import carousel1 from '@/public/carousel1.jpg';
 import React, { useRef, useState, useEffect } from 'react';
 import { Box, Flex, Image } from 'rebass/styled-components';
@@ -46,9 +46,12 @@ const Capsule = ({
 
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     const [haveTopAndBottom, setHaveTopAndBottom] = useState(false);
+    const [isTopOrBottom, setIsTopOrBottom] = useState(false);
     const [visibleComplex, setVisibleComplex] = useState(false);
 
     const [orderVisible, setOrderVisible] = useState(false);
+
+    const { capsuleStyles = [] } = currentAdminChannel;
 
     useEffect(() => {
         dispatch({
@@ -62,6 +65,7 @@ const Capsule = ({
 
     useEffect(() => {
         if (haveTopAndBottom) {
+            console.log('haveTopAndBottom');
             dispatch({
                 type: 'capsule/fetchCapsuleStyleTopAndList',
                 payload: haveTopAndBottom,
@@ -97,8 +101,7 @@ const Capsule = ({
     };
 
     useEffect(() => {
-        const { capsuleStyles = [] } = currentAdminChannel;
-        setSelectAssignedStyleList(capsuleStyles);
+        setSelectAssignedStyleList([...capsuleStyles]);
     }, [currentAdminChannel]);
 
     const handleSelectCapsule = (capsule, select) => {
@@ -123,7 +126,11 @@ const Capsule = ({
                     haveBottom = x;
                 }
             });
-
+            if (haveBottom || haveTop) {
+                setIsTopOrBottom(true);
+            } else {
+                setIsTopOrBottom(false);
+            }
             if (haveTop && haveBottom) {
                 setHaveTopAndBottom({ top: haveTop, bottom: haveBottom });
             } else {
@@ -137,21 +144,31 @@ const Capsule = ({
             if (haveTopAndBottom && capsule.goodCategory) {
                 let index = 0;
                 if (capsule.goodCategory.name === haveTopAndBottom.top.namecn) {
-                    // console.log('--top--');
-                    index = capsuleStyleTopAndBottomList.top.findIndex(x => x.namecn === capsule.goodCategory.name);
+                    // console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList)
+
+                    index = capsuleStyleTopAndBottomList.top.findIndex(x => x._id === capsule._id);
+                    console.log('--top--', index); //currentCapsuleTopStyleIndex
                     dispatch({
-                        type: 'capsule/setCurrentShopTopStyleIndex',
+                        type: 'capsule/setCurrentCapsuleTopStyleIndex',
                         payload: index > 0 ? index : 0,
+                    });
+                    dispatch({
+                        type: 'capsule/setCurrentCapsuleBottomStyleIndex',
+                        payload: lodash.random(capsuleStyleTopAndBottomList.bottom.length - 1),
                     });
                     setVisibleComplex(true);
                     return;
                 } else if (capsule.goodCategory.name === haveTopAndBottom.bottom.namecn) {
-                    // console.log('--bottom--');
-                    index = capsuleStyleTopAndBottomList.bottom.findIndex(x => x.namecn === capsule.goodCategory.name);
+                    index = capsuleStyleTopAndBottomList.bottom.findIndex(x => x._id === capsule._id);
                     dispatch({
-                        type: 'capsule/setCurrentShopBottomStyleIndex',
+                        type: 'capsule/setCurrentCapsuleBottomStyleIndex',
                         payload: index > 0 ? index : 0,
                     });
+                    dispatch({
+                        type: 'capsule/setCurrentCapsuleTopStyleIndex',
+                        payload: lodash.random(capsuleStyleTopAndBottomList.top.length - 1),
+                    });
+                    console.log('--bottom--', index);
                     setVisibleComplex(true);
                     return;
                 }
@@ -169,7 +186,15 @@ const Capsule = ({
             if (findIndex < 0) {
                 // // console.log({ style: capsule._id, price: capsule.price });x
                 // console.log('selectAssignedStyleList', selectAssignedStyleList);
-                setSelectAssignedStyleList([...selectAssignedStyleList, { style: capsule._id, price: capsule.price }]);
+
+                const findAssignIndex = capsuleStyles.findIndex(x => x.style === capsule._id);
+                console.log('capsuleStyles[findAssignIndex]', findAssignIndex);
+                console.log(currentAdminChannel);
+                console.log(currentAdminChannel.capsuleStyles);
+                setSelectAssignedStyleList([
+                    ...selectAssignedStyleList,
+                    { style: capsule._id, price: findAssignIndex < 0 ? capsule.price : capsuleStyles[findAssignIndex].price },
+                ]);
             } else {
                 selectAssignedStyleList.splice(findIndex, 1);
                 setSelectAssignedStyleList([...selectAssignedStyleList]);
@@ -222,9 +247,9 @@ const Capsule = ({
         const findIndex = selectedList.findIndex(x => x._id === capsule._id);
         if (findIndex < 0) {
             dispatch({
-                type:'capsule/setSelectCapsuleList',
-                payload: [...selectCapsuleList, capsule]
-            })
+                type: 'capsule/setSelectCapsuleList',
+                payload: [...selectCapsuleList, capsule],
+            });
             // setSelectCapsuleList
             // setSelectedList([...selectedList, { style: capsule._id, price: capsule.price }]);
         } else {
@@ -240,80 +265,93 @@ const Capsule = ({
                     title="Our capsule"
                     subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
                 /> */}
-                {/* <ExbImage imgsInfo={currentCapsule} /> */}
-                {/* <Carousel carousels={capsuleList.map(c => c.covermap)} /> */}
+            {/* <ExbImage imgsInfo={currentCapsule} /> */}
+            {/* <Carousel carousels={capsuleList.map(c => c.covermap)} /> */}
             {/* </Box> */}
             <section>
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
                 </Box>
-                <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">
+
+                <Flex css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
                     <SidebarStyles data={capsuleList} selectedItem={currentSelectedBar} onSelect={handleSelectCapsule} />
                     <Container>
-                        <Flex pt="30px" pb="79px" justifyContent="space-between">
+                        <Flex pt="30px" pb="79px" px="8px" justifyContent="space-between">
                             <Search
                                 onSearch={handleOnSearch}
                                 mode="white"
                                 style={{ width: '200px' }}
                                 placeholder="SEARCH STYLE"
                             />
-                            {currentAdminChannel.codename === 'A' ? null : (
-                                <Flex alignItems="center">
-                                    <Box bg="#DFDFDF" p="4px" mr="30px" width="24px" height="24px" sx={{ borderRadius: '4px' }}>
-                                        <ReactSVG
-                                            src={SelectedIcon}
-                                            style={{
-                                                width: '16px',
-                                                height: '16px',
-                                                opacity: selectedAll ? '1' : '0.3',
-                                            }}
-                                            onClick={handleSelectAll}
-                                        />
-                                    </Box>
-
-                                    <EditOutlined
-                                        size="30px"
-                                        style={{ fontSize: '32px', cursor: 'pointer' }}
-                                        onClick={handleAssigned}
-                                    />
-                                </Flex>
-                            )}
+                            {/* {currentAdminChannel.codename === 'A' ? null : } */}
 
                             <Switcher assigned={currentCapsule} ref={ref}></Switcher>
-                            {currentAdminChannel.codename === 'A' ? ( //通道A才能下单
-                                <Button
-                                    onClick={() => {
-                                        setOrderVisible(true);
-                                    }}
-                                    shape="circle"
-                                    size="large"
-                                    icon={
-                                        <ReactSVG
-                                            style={{ width: '20px', height: '20px', margin: 'auto' }}
-                                            src={IconCapsuleCar}
+                            <Flex width="200px" justifyContent="flex-end">
+                                {currentAdminChannel.codename === 'A' ? ( //通道A才能下单
+                                    <Button
+                                        onClick={() => {
+                                            setOrderVisible(true);
+                                        }}
+                                        shape="circle"
+                                        size="large"
+                                        icon={
+                                            <ReactSVG
+                                                style={{ width: '20px', height: '20px', margin: 'auto' }}
+                                                src={IconCapsuleCar}
+                                            />
+                                        }
+                                        style={{ backgroundColor: '#D2D2D2' }}
+                                    />
+                                ) : (
+                                    <Flex alignItems="center">
+                                        <Box
+                                            bg="#DFDFDF"
+                                            p="4px"
+                                            mr="30px"
+                                            width="24px"
+                                            height="24px"
+                                            sx={{ borderRadius: '4px' }}
+                                        >
+                                            <ReactSVG
+                                                src={SelectedIcon}
+                                                style={{
+                                                    width: '16px',
+                                                    height: '16px',
+                                                    opacity: selectedAll ? '1' : '0.3',
+                                                }}
+                                                onClick={handleSelectAll}
+                                            />
+                                        </Box>
+
+                                        <EditOutlined
+                                            size="30px"
+                                            style={{ fontSize: '32px', cursor: 'pointer' }}
+                                            onClick={handleAssigned}
                                         />
-                                    }
-                                    style={{ backgroundColor: '#D2D2D2', position: 'absolute', right: '20px' }}
-                                />
-                            ) : null}
+                                    </Flex>
+                                )}
+                            </Flex>
                         </Flex>
+
                         <Box
                             sx={{
                                 display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, 32%)',
+                                gridTemplateColumns: 'repeat(auto-fill, 32.2%)',
                                 placeItems: 'center',
                                 gap: '20px',
                             }}
                         >
                             {capsuleStyleList.docs.map((item, index) => {
-                                const selected = currentAdminChannel.codename === 'A'
-                                        ? selectCapsuleList.find(x => x._id === item._id) : selectAssignedStyleList.find(x => x.style === item._id);
+                                const selected =
+                                    currentAdminChannel.codename === 'A'
+                                        ? selectCapsuleList.find(x => x._id === item._id)
+                                        : selectAssignedStyleList.find(x => x.style === item._id);
                                 return (
                                     <CapsItem
                                         item={item}
                                         key={item._id}
                                         onSelect={handleSelect}
-                                        handleOpen={() => handleOpenDetail(item)}
+                                        handleOpen={() => handleOpenDetail(item, index)}
                                         curChannelPrice={selected ? selected.price : item.price}
                                         isSelect={!!selected}
                                         onEditPrice={currentAdminChannel.codename === 'A' || !selected ? null : handleEditPrice}
@@ -328,9 +366,9 @@ const Capsule = ({
                             hasMore={capsuleStyleList.page < capsuleStyleList.pages}
                         />
                     </Container>
-                </Box>
+                </Flex>
             </section>
-            {visible && <ModalSimple visible={visible} onClose={() => setVisible(false)} />}
+            {visible && <ModalSimple visible={visible} onClose={() => setVisible(false)} isTopOrBottom={isTopOrBottom} />}
             {visibleComplex && <ModalComplex visible={visibleComplex} onClose={() => setVisibleComplex(false)} />}
             {orderVisible && <OrderMarkModal visible={orderVisible} onCancel={() => setOrderVisible(false)} />}
         </Layout>
@@ -344,5 +382,5 @@ export default connect(({ capsule = {}, channel = {}, user = {} }) => ({
     currentSelectedBar: capsule.currentSelectedBar,
     currentAdminChannel: channel.currentAdminChannel,
     capsuleStyleTopAndBottomList: capsule.capsuleStyleTopAndBottomList,
-    selectCapsuleList: capsule.selectCapsuleList
+    selectCapsuleList: capsule.selectCapsuleList,
 }))(Capsule);

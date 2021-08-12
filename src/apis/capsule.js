@@ -23,6 +23,13 @@ export const addOrder = data =>
         method: 'post',
         data,
     });
+
+export const addStyleToOrder = data =>
+    request('/api/capsuleOrder/addStyleToOrder', {
+        method: 'post',
+        data,
+    });
+
 export const updateOrder = data =>
     request('/api/capsuleOrder/update', {
         method: 'post',

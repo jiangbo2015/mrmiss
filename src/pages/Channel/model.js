@@ -11,7 +11,7 @@ export default {
             shopStyles: [],
             plainColors: [],
             flowerColors: [],
-            codename: 'A'
+            codename: 'A',
         },
         myAdminChannelList: [], //我管理的通道列表
         myChannelList: [], //我被分配的通道列表
@@ -34,7 +34,7 @@ export default {
     },
     effects: {
         *update({ payload }, { call, put }) {
-            // console.log(' channel update');
+            console.log(' channel update', payload);
             const { data } = yield call(api.update, payload);
             if (data) {
                 message.info('更新成功');

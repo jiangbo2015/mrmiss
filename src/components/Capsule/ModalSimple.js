@@ -68,6 +68,24 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
 const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutList = [], dispatch }) => {
     const { colorWithStyleImgs = [], code, price, size } = currentCapsuleStyle;
     const [current, setCurrent] = useState(0);
+    let isTopOrBottom = false;
+    if (
+        (currentCapsuleStyle.goodCategory.nameen && currentCapsuleStyle.goodCategory.nameen.toUpperCase()) === 'TOP' ||
+        currentCapsuleStyle.goodCategory.namecn === '单衣'
+    ) {
+        isTopOrBottom = true;
+    } else if (
+        (currentCapsuleStyle.goodCategory.nameen && currentCapsuleStyle.goodCategory.nameen.toUpperCase()) === 'BOTTOM' ||
+        currentCapsuleStyle.goodCategory.namecn === '单裤'
+    ) {
+        isTopOrBottom = true;
+    } else if (
+        (currentCapsuleStyle.goodCategory.name && currentCapsuleStyle.goodCategory.name.toUpperCase()) === 'BOTTOM' ||
+        currentCapsuleStyle.goodCategory.name === '单裤' ||
+        currentCapsuleStyle.goodCategory.name === '单衣'
+    ) {
+        isTopOrBottom = true;
+    }
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
         Modal.setAppElement('body');
@@ -92,43 +110,46 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     width: '1120px',
                     margin: 'auto',
                     maxHeight: '98%',
-                    padding: 0
+                    padding: 0,
                 },
             }}
         >
             <Flex flexDirection="column" alignItems="center" alignItems="center" bg="#f7f7f7" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
                 <Flex justifyContent="center">
-                    <Box mr="10px" height="375px" css={{ overflowY: 'auto' }}>
-                        <Flex flexDirection="column">
-                            {colorWithStyleImgs.map((item, i) => (
-                                <Box
-                                    mb="8px"
-                                    p="20px 30px"
-                                    bg="#FFFFFF"
-                                    onClick={() => {
-                                        setCurrent(i);
-                                    }}
-                                >
-                                    {item.type ? (
-                                        item.favorite.styleAndColor.map((d, i) => (
-                                            <StyleItem
-                                                styleId={`${item.favorite._id}-${d._id}-item`}
-                                                colors={d.colorIds}
-                                                key={`${item.favorite._id}-${d._id}-${Math.random() * 1000000}`}
-                                                {...d.styleId}
-                                                style={{
-                                                    cursor: 'pointer',
-                                                    marginTop: i ?  '20px' : 0
-                                                }}
-                                            />
-                                        ))
-                                    ) : (
-                                        <Image width="100px" src={filterImageUrl(item.imgs[0])} mx="auto" />
-                                    )}
-                                </Box>
-                            ))}
-                        </Flex>
+                    <Box height="375px" mr="10px" css={{ overflowY: 'auto' }}>
+                        {colorWithStyleImgs.map((item, i) => (
+                            <Flex
+                                flexDirection="column"
+                                alignItems="center"
+                                justifyContent="center"
+                                mb="8px"
+                                p="0px 30px"
+                                bg="#FFFFFF"
+                                height={isTopOrBottom ? '119px' : '183.5px'}
+                                onClick={() => {
+                                    setCurrent(i);
+                                }}
+                            >
+                                {item.type ? (
+                                    item.favorite.styleAndColor.map((d, i) => (
+                                        <StyleItem
+                                            width="80px"
+                                            styleId={`${item.favorite._id}-${d._id}-item`}
+                                            colors={d.colorIds}
+                                            key={`${item.favorite._id}-${d._id}-${Math.random() * 1000000}`}
+                                            {...d.styleId}
+                                            style={{
+                                                cursor: 'pointer',
+                                                marginTop: i ? '20px' : 0,
+                                            }}
+                                        />
+                                    ))
+                                ) : (
+                                    <Image width="80px" src={filterImageUrl(item.imgs[0])} mx="auto" />
+                                )}
+                            </Flex>
+                        ))}
                     </Box>
                     <Box>
                         <Box
@@ -140,7 +161,6 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                     height: '100%',
                                 },
                             }}
-                            p='10px'
                         >
                             {colorWithStyleImgs[current].type ? (
                                 <Swiper
@@ -149,42 +169,42 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                         hide: false,
                                     }}
                                 >
-                                    <Flex alignItems="center" flexDirection='column' minHeight='375px' justifyContent='center'>
-                                        {colorWithStyleImgs[current].favorite.styleAndColor.map((d,i) => (
+                                    <Flex alignItems="center" flexDirection="column" minHeight="375px" justifyContent="center">
+                                        {colorWithStyleImgs[current].favorite.styleAndColor.map((d, i) => (
                                             // <Flex >
-                                                <StyleItem
-                                                    width="220px"
-                                                    styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
-                                                    colors={d.colorIds}
-                                                    key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
-                                                        1000000}`}
-                                                    {...d.styleId}
-                                                    style={{
-                                                        cursor: 'pointer',
-                                                        marginTop: i ?  '40px' : 0
-                                                    }}
-                                                />
+                                            <StyleItem
+                                                width="170px"
+                                                styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                                colors={d.colorIds}
+                                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                    1000000}`}
+                                                {...d.styleId}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    marginTop: i ? '40px' : 0,
+                                                }}
+                                            />
                                             // </Flex>
                                         ))}
                                     </Flex>
-                                    <Flex alignItems="center" flexDirection='column' minHeight='375px' justifyContent='center'>
-                                        {colorWithStyleImgs[current].favorite.styleAndColor.map((d,i) => (
+                                    <Flex alignItems="center" flexDirection="column" minHeight="375px" justifyContent="center">
+                                        {colorWithStyleImgs[current].favorite.styleAndColor.map((d, i) => (
                                             // <Flex justifyContent="center" alignItems="center" height="100%">
-                                                <StyleItem
-                                                    width="220px"
-                                                    styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
-                                                    colors={d.colorIds}
-                                                    key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
-                                                        1000000}`}
-                                                    {...d.styleId}
-                                                    svgUrl={d.styleId.svgUrlBack}
-                                                    shadowUrl={d.styleId.shadowUrlBack}
-                                                    styleSize={d.styleId.styleBackSize}
-                                                    style={{
-                                                        cursor: 'pointer',
-                                                        marginTop: i ?  '40px' : 0
-                                                    }}
-                                                />
+                                            <StyleItem
+                                                width="170px"
+                                                styleId={`${colorWithStyleImgs[current].favorite._id}-${d._id}-item`}
+                                                colors={d.colorIds}
+                                                key={`${colorWithStyleImgs[current].favorite._id}-${d._id}-${Math.random() *
+                                                    1000000}`}
+                                                {...d.styleId}
+                                                svgUrl={d.styleId.svgUrlBack}
+                                                shadowUrl={d.styleId.shadowUrlBack}
+                                                styleSize={d.styleId.styleBackSize}
+                                                style={{
+                                                    cursor: 'pointer',
+                                                    marginTop: i ? '40px' : 0,
+                                                }}
+                                            />
                                         ))}
                                     </Flex>
                                 </Swiper>

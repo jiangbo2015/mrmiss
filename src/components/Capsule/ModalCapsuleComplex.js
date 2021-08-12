@@ -93,19 +93,21 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
         Modal.setAppElement('body');
     }, []);
 
-    useEffect(() =>{
-        setCurrent(0)
-    }, [currentCapsuleStyle])
+    useEffect(() => {
+        setCurrent(0);
+    }, [currentCapsuleStyle]);
 
     return (
-        <Flex justifyContent='flex-start' width="1000px" p="0 50px">
+        <Flex justifyContent="flex-start" width="1000px" p="0 50px">
             <Box mr="10px" height="355px" css={{ overflowY: 'auto' }}>
-                <Flex flexDirection="column">
+                <Box>
                     {colorWithStyleImgs.map((item, i) => (
-                        <Box
+                        <Flex
+                            alignItems="center"
                             mb="8px"
-                            p="20px 30px"
+                            p="0px 30px"
                             bg="#FFFFFF"
+                            height="113px"
                             onClick={() => {
                                 setCurrent(i);
                             }}
@@ -113,6 +115,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                             {item.type ? (
                                 item.favorite.styleAndColor.map(d => (
                                     <StyleItem
+                                        width="80px"
                                         styleId={`${item.favorite._id}-${d._id}-item`}
                                         colors={d.colorIds}
                                         key={`${item.favorite._id}-${d._id}-${Math.random() * 1000000}`}
@@ -125,9 +128,9 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                             ) : (
                                 <Image width="100px" src={filterImageUrl(item.imgs[0])} mx="auto" />
                             )}
-                        </Box>
+                        </Flex>
                     ))}
-                </Flex>
+                </Box>
             </Box>
             <Box>
                 <Box
@@ -179,7 +182,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                         <Swiper>
                             {colorWithStyleImgs[current].imgs.map((item, i) => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
-                                    <Image src={filterImageUrl(item)} width='280px'></Image>
+                                    <Image src={filterImageUrl(item)} width="280px"></Image>
                                 </Flex>
                             ))}
                         </Swiper>
@@ -241,7 +244,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                 <Text fontSize="16px" mt="20px">
                     尺码/中包
                 </Text>
-                <Flex mt="10px">
+                <Flex mt="10px" minHeight="54px">
                     {size?.split('/').map((item, i) => (
                         <Box key={i} mr="15px">
                             <Text textAlign="center">{item}</Text>
@@ -251,7 +254,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                 </Flex>
                 <Box
                     bg="#000"
-                    width="100%"
+                    width="150px"
                     py="12px"
                     mt="40px"
                     css={{ cursor: 'pointer' }}
@@ -278,8 +281,8 @@ const ModalSimple = ({
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
     // // console.log('currentCapsuleStyle', currentCapsuleStyle);
-    // // console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList);
-    // // console.log('currentCapsuleTopStyleIndex', currentCapsuleTopStyleIndex);
+    console.log('currentCapsuleBottomStyleIndex', currentCapsuleBottomStyleIndex);
+    console.log('currentCapsuleTopStyleIndex', currentCapsuleTopStyleIndex);
     // const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
@@ -325,61 +328,47 @@ const ModalSimple = ({
                     margin: 'auto',
                     inset: 'auto',
                     maxHeight: '98%',
-                    padding: 0
+                    padding: 0,
                 },
             }}
         >
             <Flex flexDirection="column" alignItems="center" bg="#F7F7F7" pb="50px">
                 <CloseBtn onClick={onClose}></CloseBtn>
-                
-                <Flex
-                    justifyContent='space-between'
-                    alignItems='center'
-                    pt="6px"
-                    width="1060px"
-                >
-                 
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeTopIndex(currentCapsuleTopStyleIndex - 1);
-                            }}
-                        ></ArrowBtn>
+
+                <Flex justifyContent="space-between" alignItems="center" pt="6px" width="1060px">
+                    <ArrowBtn
+                        onClick={() => {
+                            handleChangeTopIndex(currentCapsuleTopStyleIndex - 1);
+                        }}
+                    ></ArrowBtn>
                     <ItemBox
-                    onAddtoCart={handleAddtoCart}
-                    currentCapsuleStyle={capsuleStyleTopAndBottomList.top[currentCapsuleTopStyleIndex]}
-                />
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeTopIndex(currentCapsuleTopStyleIndex + 1);
-                            }}
-                            right
-                        ></ArrowBtn>
-                  
+                        onAddtoCart={handleAddtoCart}
+                        currentCapsuleStyle={capsuleStyleTopAndBottomList.top[currentCapsuleTopStyleIndex]}
+                    />
+                    <ArrowBtn
+                        onClick={() => {
+                            handleChangeTopIndex(currentCapsuleTopStyleIndex + 1);
+                        }}
+                        right
+                    ></ArrowBtn>
                 </Flex>
-               
-                <Flex
-                     justifyContent='space-between'
-                     alignItems='center'
-                        pt="6px"
-                        width="1060px"
-                >
-                 
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeBottomIndex(currentCapsuleBottomStyleIndex - 1);
-                            }}
-                        ></ArrowBtn>
-                        <ItemBox
-                            onAddtoCart={handleAddtoCart}
-                            currentCapsuleStyle={capsuleStyleTopAndBottomList.bottom[currentCapsuleBottomStyleIndex]}
-                        />
-                        <ArrowBtn
-                            onClick={() => {
-                                handleChangeBottomIndex(currentCapsuleBottomStyleIndex + 1);
-                            }}
-                            right
-                        ></ArrowBtn>
-                    
+
+                <Flex justifyContent="space-between" alignItems="center" pt="6px" width="1060px">
+                    <ArrowBtn
+                        onClick={() => {
+                            handleChangeBottomIndex(currentCapsuleBottomStyleIndex - 1);
+                        }}
+                    ></ArrowBtn>
+                    <ItemBox
+                        onAddtoCart={handleAddtoCart}
+                        currentCapsuleStyle={capsuleStyleTopAndBottomList.bottom[currentCapsuleBottomStyleIndex]}
+                    />
+                    <ArrowBtn
+                        onClick={() => {
+                            handleChangeBottomIndex(currentCapsuleBottomStyleIndex + 1);
+                        }}
+                        right
+                    ></ArrowBtn>
                 </Flex>
             </Flex>
         </Modal>

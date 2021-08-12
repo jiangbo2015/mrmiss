@@ -176,46 +176,34 @@ export default {
             // { styleAndColor: params, goodId: goodId }
         },
         *updateOrder({ payload }, { call, put, select }) {
+            const hide = message.loading('保存中...', 0);
             const res = yield call(api.updateOrder, payload);
+            hide();
             if (res && res.data) {
                 message.info('保存成功');
+            } else {
+                message.error('保存失败，请稍后再试');
             }
+
             // { styleAndColor: params, goodId: goodId }
         },
         *addOrderMark({ payload }, { call, put, select }) {
-            // // console.log('capsule/addOrder');
+            const hide = message.loading('添加中...', 0);
+
             let { currentCapsule, currentCapsuleStyle } = yield select(state => state.capsule);
             if (payload) {
                 currentCapsuleStyle = payload;
             }
-            const resOrder = yield call(api.getMyOrderList, { isSend: 0, capsuleId: currentCapsule._id });
-            // // console.log('currentCapsuleStyle', currentCapsuleStyle);
-            let saveOrderData = {
+            const res = yield call(api.addStyleToOrder, {
                 capsuleId: currentCapsule._id,
-                orderData: [],
-            };
-            let editOrderSaveId = '';
-            if (resOrder && Array.isArray(resOrder.data) && resOrder.data.length > 0) {
-                editOrderSaveId = resOrder.data[0]._id;
-                saveOrderData = resOrder.data[0];
-            }
-
-            saveOrderData.orderData = saveOrderData.orderData.concat([
-                {
+                style: {
                     styleNos: currentCapsuleStyle.code,
                     price: currentCapsuleStyle.price,
                     size: currentCapsuleStyle.size,
                     items: currentCapsuleStyle.colorWithStyleImgs,
                 },
-            ]);
-            // return;
-            let apiFun = api.addOrder;
-            // let data = payload;
-            if (editOrderSaveId) {
-                apiFun = api.updateOrder;
-                saveOrderData._id = editOrderSaveId;
-            }
-            const res = yield call(apiFun, saveOrderData);
+            });
+            hide();
             if (res && res.data) {
                 message.info('添加成功');
             }
@@ -246,18 +234,15 @@ export default {
                     let key = `${now.getTime()}-${o.styleNos}`;
                     let sizeArr = [];
                     let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
-                    if (item.type) {
-                        sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
-                            ? item.favorite.styleAndColor[0].styleId.size?.split('/')
-                            : [];
-                    } else {
-                        sizeArr = o.size ? o.size?.split('/') : [];
-                    }
+                    sizeArr = o.size ? o.size?.split('/') : [];
 
                     let sizeObjInit = {};
                     sizeArr?.map(s => {
                         sizeObjInit[s] = 0;
                     });
+
+                    console.log('size', o.size);
+                    console.log('sizeObjInit', sizeObjInit);
                     return {
                         list: o.items.map(i => ({
                             _id: i._id,
@@ -293,26 +278,17 @@ export default {
                     };
                 });
 
+            console.log(selectCapsuleList);
             saveItems = saveItems.concat(
                 selectCapsuleList.map(c => {
-                    let item = c.colorWithStyleImgs[0];
                     let now = new Date();
                     let key = `${now.getTime()}-${c.styleNos}`;
-                    let sizeArr = [];
-                    // let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
-                    if (item.type) {
-                        sizeArr = item.favorite.styleAndColor[0].styleId.size?.split('/')
-                            ? item.favorite.styleAndColor[0].styleId.size?.split('/')
-                            : [];
-                    } else {
-                        sizeArr = c.size ? c.size?.split('/') : [];
-                    }
+                    let sizeArr = c.size ? c.size?.split('/') : [];
 
                     let sizeObjInit = {};
                     sizeArr?.map(s => {
                         sizeObjInit[s] = 0;
                     });
-
                     return {
                         styleNos: c.code,
                         price: c.price,
@@ -330,7 +306,7 @@ export default {
                             type: i.type ? 'favorite' : 'img',
                             imgs: i.imgs,
                             price: c.price,
-                            sizeInfoObject: i.sizeInfoObject ? i.sizeInfoObject : sizeObjInit,
+                            sizeInfoObject: sizeObjInit,
                             styleAndColor: i.type
                                 ? i.favorite.styleAndColor.map(sc => ({
                                       colorIds: sc.colorIds,
