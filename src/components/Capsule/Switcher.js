@@ -36,6 +36,8 @@ const SwitcherComponent = ({
     assigned = {},
     currentUser,
     refInstance,
+    noRelative,
+    children,
 }) => {
     const ref = refInstance;
     const [curABC, setCurABC] = useState('A');
@@ -102,53 +104,66 @@ const SwitcherComponent = ({
 
     if (!currentUser.channelEmpowerUserd) return <Flex width="256px" />;
     return (
-        <Flex className="switcher">
-            <Arrow onClick={goPrev} />
+        <Flex flexDirection="column" alignItems="center">
+            <Flex className="switcher" style={{ margin: '0 20px', position: noRelative ? 'static' : 'relative' }}>
+                <Arrow onClick={goPrev} />
 
-            <div
-                style={{ margin: '0 20px', position: 'relative' }}
-                onClick={() => {
-                    setEditChannelMark(true);
-                }}
-            >
-                <Swiper
-                    {...settings}
-                    ref={ref}
-                    onChange={(...args) => {
-                        // // console.log('Swiper onChange', args);
+                <div
+                    style={{ margin: '0 20px', position: noRelative ? 'static' : 'relative' }}
+                    onClick={() => {
+                        setEditChannelMark(true);
                     }}
                 >
-                    {ABC.map((item, i) => (
-                        <Text key={i}>{item}</Text>
-                    ))}
-                </Swiper>
-                {curABC !== 'A' ? (
-                    <Flex sx={{ position: 'absolute', right: 0, borderRadius: '6px', overflow: 'hidden', zIndex: 999 }} mt="20px">
-                        <Flex bg="#BBBBBB" width="76px" fontSize="10px" p="6px 14px">
-                            通道备注
+                    <Swiper
+                        {...settings}
+                        ref={ref}
+                        onChange={(...args) => {
+                            // // console.log('Swiper onChange', args);
+                        }}
+                    >
+                        {ABC.map((item, i) => (
+                            <Text key={i}>{item}</Text>
+                        ))}
+                    </Swiper>
+                    {curABC !== 'A' ? (
+                        <Flex
+                            sx={{
+                                position: 'absolute',
+                                right: noRelative ? '40px' : 0,
+                                top: noRelative ? '30px' : 'initial',
+                                borderRadius: '6px',
+                                overflow: 'hidden',
+                                zIndex: 999,
+                            }}
+                            mt={noRelative ? 0 : '20px'}
+                        >
+                            <Flex bg="#BBBBBB" width="76px" fontSize="10px" p="6px 14px">
+                                通道备注
+                            </Flex>
+                            <InputGray
+                                style={{ width: '200px', color: '#767676' }}
+                                placeholder="10字以内"
+                                // defaultVaule={}
+                                value={currentAdminChannel.remark}
+                                onChange={e => {
+                                    dispatch({
+                                        type: 'channel/setCurrentChannel',
+                                        payload: { ...currentAdminChannel, remark: e.target.value },
+                                    });
+                                }}
+                                onBlur={e => {
+                                    if (handleUpdateRemarks) {
+                                        handleUpdateRemarks(e.target.value);
+                                    }
+                                }}
+                                maxLength={10}
+                            />
                         </Flex>
-                        <InputGray
-                            style={{ width: '200px', color: '#767676' }}
-                            placeholder="10字以内"
-                            // defaultVaule={}
-                            value={currentAdminChannel.remark}
-                            onChange={e => {
-                                dispatch({
-                                    type: 'channel/setCurrentChannel',
-                                    payload: { ...currentAdminChannel, remark: e.target.value },
-                                });
-                            }}
-                            onBlur={e => {
-                                if (handleUpdateRemarks) {
-                                    handleUpdateRemarks(e.target.value);
-                                }
-                            }}
-                            maxLength={10}
-                        />
-                    </Flex>
-                ) : null}
-            </div>
-            <Arrow right onClick={goNext} />
+                    ) : null}
+                </div>
+                <Arrow right onClick={goNext} />
+            </Flex>
+            {children ? children : null}
         </Flex>
     );
 };

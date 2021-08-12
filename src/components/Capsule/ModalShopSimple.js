@@ -115,7 +115,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                     margin: 'auto',
                     maxHeight: '98%',
                     padding: 0,
-                    background: '#f7f7f7'
+                    backgroundColor: '#f7f7f7',
                 },
             }}
         >

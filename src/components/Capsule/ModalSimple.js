@@ -111,6 +111,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     margin: 'auto',
                     maxHeight: '98%',
                     padding: 0,
+                    backgroundColor: '#f7f7f7',
                 },
             }}
         >

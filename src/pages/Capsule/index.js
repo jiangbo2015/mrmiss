@@ -19,7 +19,7 @@ import { Box, Flex, Image } from 'rebass/styled-components';
 import OrderMarkModal from './OrderMarkModal';
 import { connect } from 'dva';
 import { Button } from 'antd';
-import { EditOutlined } from '@ant-design/icons';
+import { SaveOutlined } from '@ant-design/icons';
 import Search from '@/components/SearchInput';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 
@@ -126,11 +126,7 @@ const Capsule = ({
                     haveBottom = x;
                 }
             });
-            if (haveBottom || haveTop) {
-                setIsTopOrBottom(true);
-            } else {
-                setIsTopOrBottom(false);
-            }
+
             if (haveTop && haveBottom) {
                 setHaveTopAndBottom({ top: haveTop, bottom: haveBottom });
             } else {
@@ -147,7 +143,7 @@ const Capsule = ({
                     // console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList)
 
                     index = capsuleStyleTopAndBottomList.top.findIndex(x => x._id === capsule._id);
-                    console.log('--top--', index); //currentCapsuleTopStyleIndex
+                    // console.log('--top--',index);// currentCapsuleTopStyleIndex
                     dispatch({
                         type: 'capsule/setCurrentCapsuleTopStyleIndex',
                         payload: index > 0 ? index : 0,
@@ -168,7 +164,7 @@ const Capsule = ({
                         type: 'capsule/setCurrentCapsuleTopStyleIndex',
                         payload: lodash.random(capsuleStyleTopAndBottomList.top.length - 1),
                     });
-                    console.log('--bottom--', index);
+                    // console.log('--bottom--',index);
                     setVisibleComplex(true);
                     return;
                 }
@@ -260,14 +256,6 @@ const Capsule = ({
 
     return (
         <Layout pt="74px" bg="#F7F7F7">
-            {/* <Box maxWidth="1480px" margin="auto" py="90px" px="40px">
-                <Title
-                    title="Our capsule"
-                    subtitle="This season's capsule is launched by mrmiss 2021 limited capsule series-parent-child family series. I hope you can find your favorite products here.."
-                /> */}
-            {/* <ExbImage imgsInfo={currentCapsule} /> */}
-            {/* <Carousel carousels={capsuleList.map(c => c.covermap)} /> */}
-            {/* </Box> */}
             <section>
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
@@ -276,7 +264,7 @@ const Capsule = ({
                 <Flex css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
                     <SidebarStyles data={capsuleList} selectedItem={currentSelectedBar} onSelect={handleSelectCapsule} />
                     <Container>
-                        <Flex pt="30px" pb="79px" px="8px" justifyContent="space-between">
+                        <Flex pt="30px" pb="20px" px="8px" justifyContent="space-between" sx={{ position: 'relative' }}>
                             <Search
                                 onSearch={handleOnSearch}
                                 mode="white"
@@ -285,8 +273,30 @@ const Capsule = ({
                             />
                             {/* {currentAdminChannel.codename === 'A' ? null : } */}
 
-                            <Switcher assigned={currentCapsule} ref={ref}></Switcher>
-                            <Flex width="200px" justifyContent="flex-end">
+                            <Switcher assigned={currentCapsule} ref={ref} noRelative>
+                                <Box
+                                    bg="#DFDFDF"
+                                    p="4px"
+                                    mt="20px"
+                                    width="24px"
+                                    height="24px"
+                                    sx={{
+                                        borderRadius: '4px',
+                                        visibility: currentAdminChannel.codename === 'A' ? 'hidden' : 'visible',
+                                    }}
+                                >
+                                    <ReactSVG
+                                        src={SelectedIcon}
+                                        style={{
+                                            width: '16px',
+                                            height: '16px',
+                                            opacity: selectedAll ? '1' : '0.3',
+                                        }}
+                                        onClick={handleSelectAll}
+                                    />
+                                </Box>
+                            </Switcher>
+                            <Flex width="200px" justifyContent="flex-end" alignItems="flex-start">
                                 {currentAdminChannel.codename === 'A' ? ( //通道A才能下单
                                     <Button
                                         onClick={() => {
@@ -304,28 +314,9 @@ const Capsule = ({
                                     />
                                 ) : (
                                     <Flex alignItems="center">
-                                        <Box
-                                            bg="#DFDFDF"
-                                            p="4px"
-                                            mr="30px"
-                                            width="24px"
-                                            height="24px"
-                                            sx={{ borderRadius: '4px' }}
-                                        >
-                                            <ReactSVG
-                                                src={SelectedIcon}
-                                                style={{
-                                                    width: '16px',
-                                                    height: '16px',
-                                                    opacity: selectedAll ? '1' : '0.3',
-                                                }}
-                                                onClick={handleSelectAll}
-                                            />
-                                        </Box>
-
-                                        <EditOutlined
-                                            size="30px"
-                                            style={{ fontSize: '32px', cursor: 'pointer' }}
+                                        <SaveOutlined
+                                            size="24px"
+                                            style={{ fontSize: '24px', cursor: 'pointer', margin: '4px 0' }}
                                             onClick={handleAssigned}
                                         />
                                     </Flex>
