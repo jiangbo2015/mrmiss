@@ -13,6 +13,11 @@ import IconShopOrder from '@/public/icons/icon-shop.svg';
 import IconUserSign from '@/public/icons/icon-usersign.svg';
 import { Button, Dropdown, Form, Menu, message } from 'antd';
 import { connect } from 'dva';
+import { AlignLeftOutlined } from '@ant-design/icons';
+
+{
+    /* <AlignLeftOutlined /> */
+}
 import 'normalize.css';
 import { useEffect, useState } from 'react';
 import { ReactSVG } from 'react-svg';
@@ -109,6 +114,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
     const intl = useIntl();
     const [headBg, setHeadBg] = useState(false);
     const [myCenter, setMyCenter] = useState(false);
+    const [showMore, setShowMore] = useState(false);
     const [activeKey, setActiveKey] = useState(1);
     const [changePassword, setChangePassword] = useState(false);
     useEffect(() => {
@@ -232,61 +238,62 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                     </Form.Item>
                 </Form>
             </Modal>
-            <div style={{ display: 'flex' }}>
-                <div className="menuItem">
-                    <span onClick={() => setLocale('zh-CN', false)}>CN</span>/
-                    <span onClick={() => setLocale('en-US', false)}>EN</span>
-                </div>
-                <Link to="/#aboutas">
-                    <div
-                        style={{
-                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
-                        }}
-                        className="menuItem"
-                        onClick={() => {
-                            console.log('Whitout _blank');
-                            history.push('/#aboutas');
-                        }}
-                    >
-                        {intl.formatMessage({
-                            id: 'about_us',
-                            defaultMessage: '关于我们',
-                        })}
-                    </div>
-                </Link>
-                <Link to="/contactus">
-                    <div
-                        className="menuItem"
-                        style={{
-                            color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
-                        }}
-                    >
-                        {intl.formatMessage({
-                            id: 'concat_us',
-                            defaultMessage: '联系我们',
-                        })}
-                    </div>
-                </Link>
-            </div>
 
-            <div>
+            <div style={{ position: 'relative', width: '240px', display: 'flex', marginLeft: '50px' }}>
+                <AlignLeftOutlined
+                    style={{ fontSize: '24px', marginRight: '30px' }}
+                    onClick={() => {
+                        setShowMore(!showMore);
+                    }}
+                />
                 <Link to="/">
                     <ReactSVG
                         src={WLogoIcon}
                         style={{
                             width: '96px',
-                            position: 'absolute',
-                            left: '50%',
-                            top: '50%',
+                            position: 'relative',
                             color: headerBgColor !== '#fff' ? '#fff' : '#000',
-                            transform: 'translate(-50%, -50%)',
                         }}
-                        // onClick={() => {
-                        //     history.push('/');
-                        // }}
                     />
                 </Link>
+                <div style={{ position: 'absolute', left: 0, top: '40px', display: showMore ? 'initial' : 'none' }}>
+                    <div className="menuItemH2">
+                        <span onClick={() => setLocale('zh-CN', false)}>CN</span>/
+                        <span onClick={() => setLocale('en-US', false)}>EN</span>
+                    </div>
+                    <Link to="/#aboutas">
+                        <div
+                            style={{
+                                color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                            }}
+                            className="menuItemH2"
+                            onClick={() => {
+                                console.log('Whitout _blank');
+                                history.push('/#aboutas');
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'about_us',
+                                defaultMessage: '关于我们',
+                            })}
+                        </div>
+                    </Link>
+                    <Link to="/contactus">
+                        <div
+                            className="menuItemH2"
+                            style={{
+                                color: headerBgColor !== '#fff' ? '#fff' : 'inherit',
+                            }}
+                        >
+                            {intl.formatMessage({
+                                id: 'concat_us',
+                                defaultMessage: '联系我们',
+                            })}
+                        </div>
+                    </Link>
+                </div>
             </div>
+
             <div style={{ display: 'flex' }}>
                 {currentUser._id ? (
                     <>
