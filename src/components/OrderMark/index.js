@@ -9,7 +9,7 @@ import IconSave from '@/public/icons/icon-save.svg';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import IconSend from '@/public/icons/icon-send.svg';
 import { filterImageUrl } from '@/utils/helper';
-import { Badge, Input, Popover } from 'antd';
+import { Badge, Input, Popover, Skeleton } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import lodash from 'lodash';
 import React, { useEffect, useState } from 'react';
@@ -57,7 +57,7 @@ const getItemStyle = (isDragging, draggableStyle) => ({
     ...draggableStyle,
 });
 
-const getListStyle = (isDraggingOver) => ({
+const getListStyle = isDraggingOver => ({
     background: isDraggingOver ? 'lightblue' : 'lightgrey',
     padding: grid,
     width: '100%',
@@ -68,16 +68,7 @@ const getListStyle = (isDraggingOver) => ({
     border: '1px solid #161616',
 });
 
-const OrderMark = ({
-    commodityToOrderGroupList,
-    readOnly,
-    visible,
-    onCancel,
-    currentGood = {},
-    onSave,
-    onSend,
-    onDelRow = () => {},
-}) => {
+const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loading, onSave, onSend, onDelRow = () => {} }) => {
     const [showChange, setShowChange] = useState(false);
     // const [selectRow, setSelectRow] = useState([]);
     const [sourceData, setSourceData] = useState([]);
@@ -158,7 +149,7 @@ const OrderMark = ({
             // // console.log('rowPickTypes[row].val ', rowPickTypes[row].val);
             // if (rowPickTypes[row].val == 1) {
             if (sourceData[row].pickType?.pieceCount) {
-                sum = lodash.sum(sourceData[row].list.map((l) => lodash.sum(Object.values(l.sizeInfoObject))));
+                sum = lodash.sum(sourceData[row].list.map(l => lodash.sum(Object.values(l.sizeInfoObject))));
                 sum = sum * sourceData[row].pickType.pieceCount;
             }
             // } else {
@@ -176,7 +167,7 @@ const OrderMark = ({
         setSingleTotalPriceInfos({ ...singleTotalPriceInfos });
     }, [sourceData]);
 
-    const onDragEnd = (result) => {
+    const onDragEnd = result => {
         const { source, destination } = result;
         const sInd = parseInt(source.droppableId, 10);
 
@@ -190,7 +181,7 @@ const OrderMark = ({
             const [removed] = sourceClone.splice(source.index, 1);
             sourceData[sInd].list = sourceClone;
 
-            const newKey = removed.styleAndColor.map((sc) => sc.styleId).join('-');
+            const newKey = removed.styleAndColor.map(sc => sc.styleId).join('-');
             // rowPickTypes[Object.keys(rowPickTypes).length] = {
             //     val: 0,
             //     pieceCount: 0,
@@ -225,7 +216,7 @@ const OrderMark = ({
             const newState = [...sourceData];
             newState[sInd].list = result[sInd];
             newState[dInd].list = result[dInd];
-            setSourceData(newState.filter((group) => group.list.length));
+            setSourceData(newState.filter(group => group.list.length));
         }
     };
 
@@ -234,7 +225,7 @@ const OrderMark = ({
             const { list, sizes, key, size, price, styleNos, originId, originNo, rowRemarks, pickType } = row;
             // let currentRowCountInfo = countInfos[ri] ? countInfos[ri] : {};
             // let currentRowParteInfo = parteInfos[ri] ? parteInfos[ri] : {};
-            const items = list.map((favorite) => {
+            const items = list.map(favorite => {
                 const favoriteKey = `${favorite._id}-${ri}`;
                 // let currentCountInfo = favorite;
 
@@ -256,7 +247,7 @@ const OrderMark = ({
                     item.type = 0;
                     item.colorObj = favorite.styleAndColor[0].colorIds[0];
                 } else {
-                    let colorCodes = favorite.styleAndColor.map((x) => x.colorIds.map((c) => c.code));
+                    let colorCodes = favorite.styleAndColor.map(x => x.colorIds.map(c => c.code));
                     colorCodes = lodash.difference(lodash.flattenDeep(colorCodes));
                     item.type = 1;
                     item.favoriteId = favorite._id;
@@ -285,7 +276,7 @@ const OrderMark = ({
         return orderData;
     };
 
-    const handleDelRow = (row) => {
+    const handleDelRow = row => {
         sourceData.splice(row, 1);
         setSourceData([...sourceData]);
     };
@@ -302,18 +293,18 @@ const OrderMark = ({
         setShowChange(false);
     };
 
-    const handleSelectAll = (bool) => {
-        setSourceData(sourceData.map((x) => ({ ...x, isSelect: bool })));
+    const handleSelectAll = bool => {
+        setSourceData(sourceData.map(x => ({ ...x, isSelect: bool })));
     };
 
     const renderCountsInfo = () => {
         let infosList = [];
         for (let i = 0; i < sourceData.length; i++) {
-            infosList.push(...sourceData[i].list.filter((x) => x.goodCategory));
+            infosList.push(...sourceData[i].list.filter(x => x.goodCategory));
         }
 
-        let infos = lodash.groupBy(infosList, (x) => x.goodCategory.name);
-        return Object.keys(infos).map((k) => (
+        let infos = lodash.groupBy(infosList, x => x.goodCategory.name);
+        return Object.keys(infos).map(k => (
             <Flex flexDirection="column" alignItems="center" pl="10px">
                 <div>{k}</div>
                 <div>{infos[k].length}</div>
@@ -342,8 +333,8 @@ const OrderMark = ({
             <Flex justifyContent="space-between" alignItems="center" ml="54px" mr="34px">
                 {onSend ? (
                     <SelectAll
-                        selectAll={sourceData.length === sourceData.filter((x) => x.isSelect).length}
-                        onSelectAll={(bool) => {
+                        selectAll={sourceData.length === sourceData.filter(x => x.isSelect).length}
+                        onSelectAll={bool => {
                             handleSelectAll(bool);
                         }}
                     />
@@ -355,10 +346,12 @@ const OrderMark = ({
                     {renderCountsInfo()}
                     <Flex flexDirection="column" alignItems="center" pl="20px">
                         <div>ALL</div>
-                        <div>{lodash.sumBy(sourceData, (x) => x.list.length)}</div>
+                        <div>{lodash.sumBy(sourceData, x => x.list.length)}</div>
                     </Flex>
                 </Flex>
             </Flex>
+            {loading ? <Skeleton active /> : null}
+
             <DragDropContext onDragEnd={onDragEnd}>
                 {sourceData.map((el, ind) => {
                     // let currentRowCountInfo = countInfos[ind] ? countInfos[ind] : {};
@@ -385,7 +378,7 @@ const OrderMark = ({
                                             <Input.TextArea
                                                 rows={3}
                                                 value={el.rowRemarks}
-                                                onChange={(e) => {
+                                                onChange={e => {
                                                     // rowRemarks[ind] = e.target.value;
                                                     // setRowRemarks({
                                                     //     ...rowRemarks,
@@ -473,34 +466,45 @@ const OrderMark = ({
                                                                                 {/* </Swiper> */}
                                                                             </Box>
                                                                         ) : (
-                                                                            favorite.styleAndColor.map((d) => ( d.favoriteImgUrl ? <Image sx={{cursor: 'pointer'}} key={`${favorite._id}-${d._id}-order`} width={`${(d.style?.styleSize * 100) / 27}px`} src={filterImageUrl(d.favoriteImgUrl)}/> :
-                                                                                <StyleItem
-                                                                                    styleId={`${favoriteKey}-${d._id}-item`}
-                                                                                    colors={d.colorIds}
-                                                                                    width={`${(d.style?.styleSize * 100) / 27}px`}
-                                                                                    key={`${favorite._id}-${d._id}-order`}
-                                                                                    {...d.style}
-                                                                                    style={{
-                                                                                        cursor: 'pointer',
-                                                                                    }}
-                                                                                />
-                                                                            ))
+                                                                            favorite.styleAndColor.map(d =>
+                                                                                d.favoriteImgUrl ? (
+                                                                                    <Image
+                                                                                        sx={{ cursor: 'pointer' }}
+                                                                                        key={`${favorite._id}-${d._id}-order`}
+                                                                                        width={`${(d.style?.styleSize * 100) /
+                                                                                            27}px`}
+                                                                                        src={filterImageUrl(d.favoriteImgUrl)}
+                                                                                    />
+                                                                                ) : (
+                                                                                    <StyleItem
+                                                                                        styleId={`${favoriteKey}-${d._id}-item`}
+                                                                                        colors={d.colorIds}
+                                                                                        width={`${(d.style?.styleSize * 100) /
+                                                                                            27}px`}
+                                                                                        key={`${favorite._id}-${d._id}-order`}
+                                                                                        {...d.style}
+                                                                                        style={{
+                                                                                            cursor: 'pointer',
+                                                                                        }}
+                                                                                    />
+                                                                                ),
+                                                                            )
                                                                         )}
                                                                     </Flex>
                                                                     <Box pl="8px">
-                                                                        {favorite.styleAndColor.map((sc) => (
+                                                                        {favorite.styleAndColor.map(sc => (
                                                                             <Box p="8px 0">
                                                                                 <Info label="编号" value={sc.style.styleNo} />
                                                                                 <Info
                                                                                     label="颜色"
                                                                                     value={lodash
-                                                                                        .union(sc.colorIds.map((c) => c.code))
+                                                                                        .union(sc.colorIds.map(c => c.code))
                                                                                         .join(',')}
                                                                                 />
                                                                             </Box>
                                                                         ))}
                                                                         <Flex mb="30px">
-                                                                            {el.sizes?.map((s) => {
+                                                                            {el.sizes?.map(s => {
                                                                                 // const sizeKey = `${ind}-${favorite._id}-${s}`;
                                                                                 const sizeKey = `${ind}-${index}-${favorite._id}-${s}`;
 
@@ -514,7 +518,7 @@ const OrderMark = ({
                                                                                         <InputNumber
                                                                                             readOnly={readOnly}
                                                                                             value={favorite.sizeInfoObject[s]}
-                                                                                            onChange={(val) => {
+                                                                                            onChange={val => {
                                                                                                 sourceData[ind].list[
                                                                                                     index
                                                                                                 ].sizeInfoObject[s] = val;
@@ -564,7 +568,7 @@ const OrderMark = ({
                                                 { label: '单色混码混箱', value: 2 },
                                                 { label: '单色混码单箱', value: 3 },
                                             ]}
-                                            onSelect={(val) => {
+                                            onSelect={val => {
                                                 // // console.log(val);
                                                 sourceData[ind].pickType = { ...sourceData[ind].pickType, val };
                                                 setSourceData([...sourceData]);
@@ -581,7 +585,7 @@ const OrderMark = ({
                                                 <InputBottomWhiteBorder
                                                     readOnly={readOnly}
                                                     value={lodash.sum(
-                                                        el.list.map((l) => lodash.sum(Object.values(l.sizeInfoObject))),
+                                                        el.list.map(l => lodash.sum(Object.values(l.sizeInfoObject))),
                                                     )}
                                                 />
                                                 件
@@ -600,7 +604,7 @@ const OrderMark = ({
                                                     value={el.pickType?.pieceCount}
                                                     type="number"
                                                     style={{ width: '60px' }}
-                                                    onChange={(val) => {
+                                                    onChange={val => {
                                                         // rowPickTypes[ind] = { ...rowPickTypes[ind], pieceCount: val };
                                                         // setRowPickTypes({
                                                         //     ...rowPickTypes,

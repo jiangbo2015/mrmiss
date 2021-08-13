@@ -8,7 +8,7 @@ import { Flex, Box } from 'rebass/styled-components';
 
 import OrderMark from '@/components/OrderMark';
 
-const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, currentCapsule }) => {
+const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, currentCapsule, loading }) => {
     useEffect(() => {
         // toDoOrder
         dispatch({
@@ -17,7 +17,7 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
 
         dispatch({
             type: 'capsule/setSelectCapsuleList',
-            payload: []
+            payload: [],
         });
     }, []);
     const handleSend = async orderData => {
@@ -38,11 +38,11 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
                     orderData: res['true'],
                     isSend: 1,
                     capsuleId: currentCapsule._id,
-                    successMsg: '发送成功'
+                    successMsg: '发送成功',
                 },
             });
         }
-        onCancel()
+        onCancel();
 
         // setShowChange(false);
     };
@@ -54,16 +54,16 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
             payload: {
                 orderData,
                 capsuleId: currentCapsule._id,
-                successMsg: '保存成功'
+                successMsg: '保存成功',
             },
         });
-        onCancel()
+        onCancel();
         // setShowChange(false);
     };
 
     const handleClose = async orderData => {
         // const orderData = parseOrderData();
-        onCancel()
+        onCancel();
         await dispatch({
             type: 'capsule/addOrder',
             payload: {
@@ -71,7 +71,7 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
                 capsuleId: currentCapsule._id,
             },
         });
-      
+
         // setShowChange(false);
     };
     return (
@@ -82,13 +82,15 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
                 onCancel={handleClose}
                 onSave={handleSave}
                 onSend={handleSend}
+                loading={loading}
             />
         </>
     );
 };
 
-export default connect(({ capsule = {}, user = {} }) => ({
+export default connect(({ capsule = {}, user = {}, loading }) => ({
     currentUser: user.info,
     currentCapsule: capsule.currentCapsule,
     capsuleToOrderGroupList: capsule.capsuleToOrderGroupList,
+    loading: loading.effects['capsule/toDoOrder'],
 }))(App);
