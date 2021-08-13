@@ -297,7 +297,7 @@ const Capsule = ({
                                 </Box>
                             </Switcher>
                             <Flex width="200px" justifyContent="flex-end" alignItems="flex-start">
-                                {currentAdminChannel.codename === 'A' ? ( //通道A才能下单
+                                {currentAdminChannel.codename === 'A' ? ( // 通道A才能下单
                                     <Button
                                         onClick={() => {
                                             setOrderVisible(true);
