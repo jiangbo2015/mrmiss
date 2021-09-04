@@ -71,7 +71,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
         window.scrollTo(0, 0);
         dispatch({
             type: 'diy/setFavoriteEditObj',
-            payload: favorite,
+            payload: {...favorite},
         });
 
         let selectedColorsArr = favorite.styleAndColor.map(x => x.colorIds);
@@ -328,7 +328,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
                                 }}
                             >
                                 
-                                <ReactSVG
+                    <ReactSVG
                         style={{
                             padding: '7px',
                             width: '32px',

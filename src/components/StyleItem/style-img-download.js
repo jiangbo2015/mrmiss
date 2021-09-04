@@ -89,10 +89,13 @@ export default props => {
                                     block.style.strokeWidth = '16px';
                                 }
                             }
+                            // let block = svg.children[i];
                             // svg.children[i].setAttribute('index', j);
                             if (colors && colors.length > 0 && j < colors.length && colors[j]) {
-                                let block = svg.children[i];
+                                
                                 block.style.fill = colors[j].type ? `url("#${styleId}-${colors[j]._id}-${j}-download")` : colors[j].value;
+                            }else {
+                                block.style.fill='#ffffff'
                             }
                             j++;
                         }
