@@ -13,6 +13,7 @@ import { connect } from 'dva';
 
 import svg2pngFile from '@/utils/new.svg2pngFile';
 import request from '@/utils/request';
+import lodash from 'lodash'
 let wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const App = ({
@@ -30,12 +31,13 @@ const App = ({
     favoriteEditObj,
     singleSelectColorList,
     singleSelectColorList1,
-    styleList
+    styleList,
 }) => {
-
+    
+    
     const [favoriteStyleList, setFavoriteStyleList] = useState([])
     const [styleColorUrls, setStyleColorUrls] = useState([])
-    
+    const [adding, setAdding] = useState(false)
     // const onPngLoaded = ({ colorUrl }) => {
     //     window.favoriteLoadedNums++
     //     setStyleColorUrls([...styleColorUrls, colorUrl])
@@ -59,10 +61,12 @@ const App = ({
     };
     // // console.log('currentGoodCategoryMultiple',currentGoodCategoryMultiple)
     const handleAddFavorite = async () => {
+        if(adding) return;
+        setAdding(true)
         window.favoriteLoadedNums = 0
 
-        console.log('currentGoodCategory', currentGoodCategory)
-        console.log('currentGoodCategoryMultiple', currentGoodCategoryMultiple)
+        // console.log('currentGoodCategory', currentGoodCategory)
+        // console.log('currentGoodCategoryMultiple', currentGoodCategoryMultiple)
         // let goodCategory = currentGood.category.find(x => x._id === currentGoodCategory);
         let goodCategoryMultiple = currentGood.category.find(x => x._id === currentGoodCategoryMultiple);
 
@@ -203,7 +207,12 @@ const App = ({
 
             // updateFavorite
         }
+        setAdding(false)
     };
+
+    // const throttleAddFavorite = lodash.throttle(handleAddFavorite, 2000)
+
+
 
     const handleAssigned = async () => {
         if (collocationPattern === 'assign') {
@@ -269,9 +278,7 @@ const App = ({
                     ) : collocationPattern === 'bigPicColor' ? null : (
                         <ReactSVG
                             src={IconUnHeart}
-                            onClick={() => {
-                                handleAddFavorite()
-                            }}
+                            onClick={adding ? null : () => {handleAddFavorite() }}
                             style={{
                                 width: '18px',
                                 height: '18px',
