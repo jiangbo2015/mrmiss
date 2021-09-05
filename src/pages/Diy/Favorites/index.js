@@ -71,7 +71,7 @@ const App = ({ favoriteArr, dispatch, favoritePattern, currentGood = {} }) => {
         window.scrollTo(0, 0);
         dispatch({
             type: 'diy/setFavoriteEditObj',
-            payload: {...favorite},
+            payload: JSON.parse(JSON.stringify(favorite)),
         });
 
         let selectedColorsArr = favorite.styleAndColor.map(x => x.colorIds);
