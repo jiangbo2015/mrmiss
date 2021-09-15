@@ -12,7 +12,7 @@ export default defineConfig({
     define: {
         'process.env.API_URL': 'http://8.209.64.159:3001',
         // 'process.env.API_URL': 'https://we-idesign.com',
-        'process.env.VERSION': '1.1.11',
+        'process.env.VERSION': '1.1.13',
         // 'process.env.API_URL': 'http://localhost:3001',
         // 'process.env.DOWNLOAD_URL': 'http://localhost:3001',
         'process.env.DOWNLOAD_URL': 'http://8.209.64.159:3001',
