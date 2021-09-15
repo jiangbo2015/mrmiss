@@ -22,6 +22,7 @@ import { Button } from 'antd';
 import { SaveOutlined } from '@ant-design/icons';
 import Search from '@/components/SearchInput';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
+import SaveIcon from '@/public/icons/icon-save2.svg';
 
 import { ReactSVG } from 'react-svg';
 import IconCapsuleCar from '@/public/icons/icon-capsule-car.svg';
@@ -117,18 +118,34 @@ const Capsule = ({
 
     useEffect(() => {
         if (currentAdminChannel.codename === 'A' && currentCapsule.children) {
-            let haveTop = false;
-            let haveBottom = false;
+            let haveTopMap = {}
             currentCapsule.children.map(x => {
-                if ((x.nameen && x.nameen.toUpperCase()) === 'TOP' || x.namecn === '单衣') {
-                    haveTop = x;
-                } else if ((x.nameen && x.nameen.toUpperCase()) === 'BOTTOM' || x.namecn === '单裤') {
-                    haveBottom = x;
+                if ((x.nameen && x.nameen.toUpperCase()) === 'TOP' || x.namecn.includes('单衣')) {
+                    let key = x.namecn.replace('单衣','')
+                    if(!haveTopMap[key]) {
+                        haveTopMap[key] = {}
+                    }
+                    
+                    haveTopMap[key].top = x
+                } else if ((x.nameen && x.nameen.toUpperCase()) === 'BOTTOM' || x.namecn.includes('单裤')) {
+                    let key = x.namecn.replace('单裤','')
+                    if(!haveTopMap[key]) {
+                        haveTopMap[key] = {}
+                    }
+                    haveTopMap[key].bottom = x
                 }
             });
 
-            if (haveTop && haveBottom) {
-                setHaveTopAndBottom({ top: haveTop, bottom: haveBottom });
+            console.log('haveTopMap', haveTopMap)
+
+            for (const key in haveTopMap) {
+                if(!haveTopMap[key].top || !haveTopMap[key].bottom) {
+                    delete haveTopMap[key]
+                }
+            }
+
+            if (Object.keys(haveTopMap).length) {
+                setHaveTopAndBottom(haveTopMap);
             } else {
                 setHaveTopAndBottom(false);
             }
@@ -137,37 +154,48 @@ const Capsule = ({
 
     const handleOpenDetail = capsule => {
         if (currentAdminChannel.codename === 'A') {
+            console.log('haveTopAndBottom', haveTopAndBottom)
             if (haveTopAndBottom && capsule.goodCategory) {
+               
                 let index = 0;
-                if (capsule.goodCategory.name === haveTopAndBottom.top.namecn) {
-                    // console.log('capsuleStyleTopAndBottomList', capsuleStyleTopAndBottomList)
-
-                    index = capsuleStyleTopAndBottomList.top.findIndex(x => x._id === capsule._id);
-                    // console.log('--top--',index);// currentCapsuleTopStyleIndex
-                    dispatch({
-                        type: 'capsule/setCurrentCapsuleTopStyleIndex',
-                        payload: index > 0 ? index : 0,
-                    });
-                    dispatch({
-                        type: 'capsule/setCurrentCapsuleBottomStyleIndex',
-                        payload: lodash.random(capsuleStyleTopAndBottomList.bottom.length - 1),
-                    });
-                    setVisibleComplex(true);
-                    return;
-                } else if (capsule.goodCategory.name === haveTopAndBottom.bottom.namecn) {
-                    index = capsuleStyleTopAndBottomList.bottom.findIndex(x => x._id === capsule._id);
-                    dispatch({
-                        type: 'capsule/setCurrentCapsuleBottomStyleIndex',
-                        payload: index > 0 ? index : 0,
-                    });
-                    dispatch({
-                        type: 'capsule/setCurrentCapsuleTopStyleIndex',
-                        payload: lodash.random(capsuleStyleTopAndBottomList.top.length - 1),
-                    });
-                    // console.log('--bottom--',index);
-                    setVisibleComplex(true);
-                    return;
+                for (const key in haveTopAndBottom) {
+                    const element = haveTopAndBottom[key];
+                    if(capsule.goodCategory.name === element.top.namecn){
+                        index = capsuleStyleTopAndBottomList[key].top.findIndex(x => x._id === capsule._id);
+                        dispatch({
+                            type: 'capsule/setCurrentCapsuleKey',
+                            payload: key,
+                        });
+                        dispatch({
+                            type: 'capsule/setCurrentCapsuleTopStyleIndex',
+                            payload: index > 0 ? index : 0,
+                        });
+                        dispatch({
+                            type: 'capsule/setCurrentCapsuleBottomStyleIndex',
+                            payload: lodash.random(capsuleStyleTopAndBottomList[key].bottom.length - 1),
+                        });
+                        setVisibleComplex(true);
+                        return;
+                    } else if(capsule.goodCategory.name === element.bottom.namecn) {
+                        index = capsuleStyleTopAndBottomList[key].bottom.findIndex(x => x._id === capsule._id);
+                        dispatch({
+                            type: 'capsule/setCurrentCapsuleKey',
+                            payload: key,
+                        });
+                        dispatch({
+                            type: 'capsule/setCurrentCapsuleBottomStyleIndex',
+                            payload: index > 0 ? index : 0,
+                        });
+                        dispatch({
+                            type: 'capsule/setCurrentCapsuleTopStyleIndex',
+                            payload: lodash.random(capsuleStyleTopAndBottomList[key].top.length - 1),
+                        });
+                        // console.log('--bottom--',index);
+                        setVisibleComplex(true);
+                        return;
+                    }
                 }
+                
             }
 
             dispatch({
@@ -184,9 +212,6 @@ const Capsule = ({
                 // console.log('selectAssignedStyleList', selectAssignedStyleList);
 
                 const findAssignIndex = capsuleStyles.findIndex(x => x.style === capsule._id);
-                console.log('capsuleStyles[findAssignIndex]', findAssignIndex);
-                console.log(currentAdminChannel);
-                console.log(currentAdminChannel.capsuleStyles);
                 setSelectAssignedStyleList([
                     ...selectAssignedStyleList,
                     { style: capsule._id, price: findAssignIndex < 0 ? capsule.price : capsuleStyles[findAssignIndex].price },
@@ -260,11 +285,7 @@ const Capsule = ({
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
                 </Box>
-
-                <Flex css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
-                    <SidebarStyles data={capsuleList} selectedItem={currentSelectedBar} onSelect={handleSelectCapsule} />
-                    <Container>
-                        <Flex pt="30px" pb="20px" px="8px" justifyContent="space-between" sx={{ position: 'relative' }}>
+                <Flex mx="auto" pt="30px" pb="20px" px="8px" maxWidth="1480px"  justifyContent="space-between" sx={{ position: 'relative' }}>
                             <Search
                                 onSearch={handleOnSearch}
                                 mode="white"
@@ -313,16 +334,35 @@ const Capsule = ({
                                         style={{ backgroundColor: '#D2D2D2' }}
                                     />
                                 ) : (
-                                    <Flex alignItems="center">
-                                        <SaveOutlined
-                                            size="24px"
-                                            style={{ fontSize: '24px', cursor: 'pointer', margin: '4px 0' }}
-                                            onClick={handleAssigned}
+                                    // <Flex alignItems="center">
+                                    //     <SaveOutlined
+                                    //         size="24px"
+                                    //         style={{ fontSize: '24px', cursor: 'pointer', margin: '4px 0' }}
+                                    //         onClick={handleAssigned}
+                                    //     />
+                                    // </Flex>
+                                    <Button
+                                    onClick={handleAssigned}
+                                    shape="circle"
+                                    size='middle'
+                
+                                    icon={
+                                        <ReactSVG
+                                            style={{ width: '18px', height: '18px', margin: 'auto' }}
+                                            src={SaveIcon}
                                         />
-                                    </Flex>
+                                    }
+                                    style={{ backgroundColor: '#D2D2D2'}}
+                                />
+                                    
                                 )}
                             </Flex>
                         </Flex>
+
+                <Flex css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
+
+                    <SidebarStyles data={capsuleList} selectedItem={currentSelectedBar} onSelect={handleSelectCapsule} />
+                    <Container>
 
                         <Box
                             sx={{

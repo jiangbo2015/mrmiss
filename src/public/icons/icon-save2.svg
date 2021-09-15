@@ -1,0 +1,21 @@
+<svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47 38">
+    <defs>
+        <style>
+            .cls-save2 {
+                fill: none;
+                stroke: #000;
+                stroke-linecap: round;
+                stroke-linejoin: round;
+                stroke-width: 2px;
+            }
+        </style>
+    </defs>
+    <polyline class="cls-save2" points="28 1 28 1 28 10 10 10 10 1" />
+    <polyline class="cls-save2" points="10 37 10 19 28 19 28 37" />
+    <circle class="cls-save2" cx="37" cy="28" r="9" />
+    <path class="cls-save2"
+        d="M28,28a9,9,0,0,1,9-9V9a8,8,0,0,0-8-8H4A3,3,0,0,0,1,4V34a3,3,0,0,0,3,3H34a4.25,4.25,0,0,0,1.1-.2A9,9,0,0,1,28,28Z" />
+    <!-- <circle cx="32.6" cy="28.1" r="1.5" /> -->
+    <!-- <circle cx="37.4" cy="28.1" r="1.5" /> -->
+    <!-- <circle cx="42.2" cy="28.1" r="1.5" /> -->
+</svg>

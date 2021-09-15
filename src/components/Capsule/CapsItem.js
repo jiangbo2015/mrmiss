@@ -85,12 +85,17 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect, onSe
                     <Text mt="5px">Size.{item.size}</Text>
                     <Flex css={{ position: 'relative' }} mt="14px" justifyContent="center" alignItems="center">
                         {onEditPrice ? (
+                            <div onClick={e => {
+                                e.stopPropagation();
+                            }}
+                            style={{
+                                position: 'absolute',
+                                left: 0,
+                            }}
+                            >
                             <InputNumber
                                 formatter={value => `¥${value}`}
-                                style={{
-                                    position: 'absolute',
-                                    left: 0,
-                                }}
+                                
                                 value={curChannelPrice}
                                 onChange={value => {
                                     onEditPrice({ style: item._id, price: value });
@@ -99,6 +104,8 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect, onSe
                                     e.stopPropagation();
                                 }}
                             />
+                            </div>
+                            
                         ) : (
                             <Text
                                 css={{

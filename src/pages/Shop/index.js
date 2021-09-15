@@ -231,9 +231,7 @@ const Shop = ({
                     />
                 </Box>
                 <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">
-                    <SidebarStyles data={branchList} selectedItem={currentSelectedBar} onSelect={handleSelectBranch} />
-                    <Container>
-                        <Flex pt="30px" pb="79px" justifyContent="space-between">
+                <Flex mx="auto" pt="30px" pb="20px" px="8px" maxWidth="1480px"  justifyContent="space-between" sx={{ position: 'relative' }}>
                             <Search
                                 mode="white"
                                 style={{ width: '200px' }}
@@ -262,13 +260,10 @@ const Shop = ({
                                 </Flex>
                             )}
 
-                            <Switcher assigned={currentBranch} ref={ref}></Switcher>
+                            <Switcher assigned={currentBranch} ref={ref} noRelative/>
                             {currentAdminChannel.codename === 'A' ? ( //通道A才能下单
                                 <Cart
-                                    triggleStyle={{
-                                        position: 'absolute',
-                                        right: '20px',
-                                    }}
+                                    
                                     triggle={
                                         <Button
                                             shape="circle"
@@ -289,6 +284,10 @@ const Shop = ({
                                 />
                             ) : null}
                         </Flex>
+                        
+                    
+                    <Flex css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
+                    <SidebarStyles data={branchList} selectedItem={currentSelectedBar} onSelect={handleSelectBranch} />
                         <Box
                             sx={{
                                 display: 'grid',
@@ -324,7 +323,7 @@ const Shop = ({
                             }}
                             hasMore={shopStyleList.page < shopStyleList.pages}
                         />
-                    </Container>
+                    </Flex>
                 </Box>
             </section>
             {visible && <ModalShopSimple visible={visible} onClose={() => setVisible(false)} />}

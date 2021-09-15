@@ -83,6 +83,12 @@ export default {
                 capsuleStyleTopAndBottomList: action.payload,
             };
         },
+        setCurrentCapsuleKey(state, action) {
+            return {
+                ...state,
+                currentCapsuleKey: action.payload,
+            };
+        },
         setCapsuleStyleAboutList(state, action) {
             return {
                 ...state,
@@ -140,24 +146,33 @@ export default {
             }
         },
         *fetchCapsuleStyleTopAndList({ payload }, { call, put, select }) {
-            const { top, bottom } = payload;
-            const resTop = yield call(api.getCapsuleStyleList, {
-                capsule: top._id.split('-')[1],
-                goodCategray: top.namecn,
-                limit: 1000,
-            });
-            const resBottom = yield call(api.getCapsuleStyleList, {
-                capsule: bottom._id.split('-')[1],
-                goodCategray: bottom.namecn,
-                limit: 1000,
-            });
-            if (resTop.data && resBottom.data) {
-                yield put({
-                    type: 'setCapsuleStyleTopAndBottomList',
-                    payload: {
+            const topAndBottomMap = payload;
+            const topAndBottomData = {};
+            for (const key in topAndBottomMap) {
+                const {top, bottom} = topAndBottomMap[key]
+                if(top && bottom) {
+                    const resTop = yield call(api.getCapsuleStyleList, {
+                        capsule: top._id.split('-')[1],
+                        goodCategray: top.namecn,
+                        limit: 1000,
+                    });
+                    const resBottom = yield call(api.getCapsuleStyleList, {
+                        capsule: bottom._id.split('-')[1],
+                        goodCategray: bottom.namecn,
+                        limit: 1000,
+                    });
+
+                    topAndBottomData[key] = {
                         top: resTop.data.docs,
                         bottom: resBottom.data.docs,
-                    },
+                    }
+                }
+            }
+
+            if (Object.keys(topAndBottomData).length > 0) {
+                yield put({
+                    type: 'setCapsuleStyleTopAndBottomList',
+                    payload: topAndBottomData,
                 });
             }
         },

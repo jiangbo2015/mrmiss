@@ -84,9 +84,9 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 );
 
 const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
-    // // console.log('currentCapsuleStyle', currentCapsuleStyle);
-    const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
-    // // console.log('currentCapsuleStyle', currentCapsuleStyle);
+    // console.log('currentCapsuleStyle', currentCapsuleStyle);
+    const { colorWithStyleImgs = [], code, price, size, goodCategory } = currentCapsuleStyle;
+    console.log('goodCategory', goodCategory);
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
@@ -191,7 +191,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
             </Box>
 
             <Box pl="30px">
-                <Text>2021 swimwear series</Text>
+                <Text>{goodCategory.name}</Text>
                 <Text color="#313131" fontSize="28px" fontWeight="bold" my="6px">
                     ¥{price}
                 </Text>
@@ -277,7 +277,8 @@ const ModalSimple = ({
     dispatch,
     currentCapsuleTopStyleIndex,
     currentCapsuleBottomStyleIndex,
-    capsuleStyleTopAndBottomList = { top: [], bottom: [] },
+    capsuleStyleTopAndBottomList = { '': {top: [], bottom: []} },
+    currentCapsuleKey = ''
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
     // // console.log('currentCapsuleStyle', currentCapsuleStyle);
@@ -380,5 +381,6 @@ export default connect(({ capsule = {} }) => ({
     currentCapsuleStyle: capsule.currentCapsuleStyle,
     currentCapsuleTopStyleIndex: capsule.currentCapsuleTopStyleIndex,
     currentCapsuleBottomStyleIndex: capsule.currentCapsuleBottomStyleIndex,
-    capsuleStyleTopAndBottomList: capsule.capsuleStyleTopAndBottomList,
+    capsuleStyleTopAndBottomList: capsule.capsuleStyleTopAndBottomList[capsule.currentCapsuleKey],
+    currentCapsuleKey: capsule.currentCapsuleKey
 }))(ModalSimple);
