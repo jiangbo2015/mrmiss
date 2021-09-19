@@ -212,9 +212,9 @@ const Cart = ({
     };
     return (
         <>
-            <span onClick={() => setVisible(true)} style={triggleStyle}>
+            <Flex width="200px" justifyContent='flex-end' onClick={() => setVisible(true)} style={triggleStyle}>
                 {triggle}
-            </span>
+            </Flex>
             <Modal
                 footer={null}
                 visible={visible}

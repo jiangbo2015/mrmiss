@@ -129,7 +129,7 @@ const SwitcherComponent = ({
                         <Flex
                             sx={{
                                 position: 'absolute',
-                                right: noRelative ? '40px' : 0,
+                                right: noRelative ? '56px' : 0,
                                 top: noRelative ? '30px' : 'initial',
                                 borderRadius: '6px',
                                 overflow: 'hidden',

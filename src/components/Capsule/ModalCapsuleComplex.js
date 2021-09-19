@@ -278,7 +278,6 @@ const ModalSimple = ({
     currentCapsuleTopStyleIndex,
     currentCapsuleBottomStyleIndex,
     capsuleStyleTopAndBottomList = { '': {top: [], bottom: []} },
-    currentCapsuleKey = ''
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
     // // console.log('currentCapsuleStyle', currentCapsuleStyle);
@@ -382,5 +381,4 @@ export default connect(({ capsule = {} }) => ({
     currentCapsuleTopStyleIndex: capsule.currentCapsuleTopStyleIndex,
     currentCapsuleBottomStyleIndex: capsule.currentCapsuleBottomStyleIndex,
     capsuleStyleTopAndBottomList: capsule.capsuleStyleTopAndBottomList[capsule.currentCapsuleKey],
-    currentCapsuleKey: capsule.currentCapsuleKey
 }))(ModalSimple);

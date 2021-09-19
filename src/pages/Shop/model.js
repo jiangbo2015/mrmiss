@@ -64,6 +64,12 @@ export default {
                 myShopCartList: action.payload,
             };
         },
+        setCurrentShopKey(state, action) {
+            return {
+                ...state,
+                currentShopKey: action.payload,
+            };
+        },
         setCurrentShopTopStyleIndex(state, action) {
             return {
                 ...state,
@@ -126,16 +132,26 @@ export default {
             }
         },
         *fetchShopStyleTopAndList({ payload }, { call, put, select }) {
-            const { top, bottom } = payload;
-            const resTop = yield call(api.getShopStyleList, { branch: top.branch, branchKind: top._id, limit: 1000 });
-            const resBottom = yield call(api.getShopStyleList, { branch: bottom.branch, branchKind: bottom._id, limit: 1000 });
-            if (resTop.data && resBottom.data) {
-                yield put({
-                    type: 'setShopStyleTopAndBottomList',
-                    payload: {
+            const topAndBottomMap = payload;
+            const topAndBottomData = {};
+            for (const key in topAndBottomMap) {
+                const {top, bottom} = topAndBottomMap[key]
+                if(top && bottom) {
+                    const resTop = yield call(api.getShopStyleList, { branch: top.branch, branchKind: top._id, limit: 1000 });
+                    const resBottom = yield call(api.getShopStyleList, { branch: bottom.branch, branchKind: bottom._id, limit: 1000 });
+            
+
+                    topAndBottomData[key] = {
                         top: resTop.data.docs,
                         bottom: resBottom.data.docs,
-                    },
+                    }
+                }
+            }
+
+            if (Object.keys(topAndBottomData).length > 0) {
+                yield put({
+                    type: 'setShopStyleTopAndBottomList',
+                    payload: topAndBottomData,
                 });
             }
         },

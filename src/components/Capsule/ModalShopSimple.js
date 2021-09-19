@@ -83,8 +83,14 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
     </Flex>
 );
 
-const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = [], dispatch }) => {
-    const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
+const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = [], dispatch,currentBranch}) => {
+    const { colorWithStyleImgs = [], code, price, size, _id,branchKind } = currentShopStyle;
+
+    const curBranchKind = currentBranch.children.find(x => x._id === branchKind)
+    let isTopOrBottom = false
+    if(curBranchKind.namecn.includes('单衣') || curBranchKind.namecn.includes('单裤') ){
+        isTopOrBottom = true
+    }
     // // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
     useEffect(() => {
@@ -129,6 +135,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                                     mb="8px"
                                     p="10px 15px"
                                     bg="#FFFFFF"
+                                    height={isTopOrBottom ? '119px' : '183.5px'}
                                     onClick={() => {
                                         setCurrent(i);
                                     }}
@@ -180,7 +187,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                         </Flex> */}
                     </Box>
                     <Box pl="30px">
-                        <Text>2021 swimwear series</Text>
+                        <Text>{curBranchKind.namecn}</Text>
                         <Text color="#313131" fontSize="28px" fontWeight="bold" my="4px">
                             ¥{price}
                         </Text>
@@ -277,7 +284,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
 
 export default connect(({ shop = {} }) => ({
     shopList: shop.shopList,
-    currentShop: shop.currentShop,
+    currentBranch: shop.currentBranch,
     currentShopStyle: shop.currentShopStyle,
     shopStyleAboutList: shop.shopStyleAboutList,
 }))(ModalSimple);

@@ -83,7 +83,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
     </Flex>
 );
 
-const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
+const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
     if (!currentShopStyle) return null;
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
     // // console.log('currentShopStyle', currentShopStyle);
@@ -107,8 +107,9 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                         {colorWithStyleImgs.map((item, i) => (
                             <Box
                                 mb="8px"
-                                p="20px 30px"
+                                p="0px 30px"
                                 bg="#FFFFFF"
+                                height="113px"
                                 onClick={() => {
                                     setCurrent(i);
                                 }}
@@ -116,6 +117,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                                 {item.type ? (
                                     item.favorite.styleAndColor.map(d => (
                                         <StyleItem
+                                            width="80px"
                                             styleId={`${item.favorite._id}-${d._id}-item`}
                                             colors={d.colorIds}
                                             key={`${item.favorite._id}-${d._id}-${Math.random() * 1000000}`}
@@ -154,7 +156,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart }) => {
                 </Box>
             </Flex>
             <Box pl="30px">
-                <Text>2021 swimwear series</Text>
+                <Text>{curBranchKind}</Text>
                 <Text color="#313131" fontSize="28px" fontWeight="bold" my="4px">
                     ¥{price}
                 </Text>
@@ -217,14 +219,18 @@ const ModalSimple = ({
     visible,
     onClose,
     dispatch,
+    currentBranch,
     currentShopTopStyleIndex,
     currentShopBottomStyleIndex,
     shopStyleTopAndBottomList = { top: [], bottom: [] },
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
-    console.log('currentShopTopStyleIndex', currentShopTopStyleIndex);
-    console.log('currentShopBottomStyleIndex', currentShopBottomStyleIndex);
-    const [current, setCurrent] = useState(0);
+    // console.log('currentBranch', currentBranch);
+    // console.log('shopStyleTopAndBottomList', shopStyleTopAndBottomList)
+    // console.log('currentShopBottomStyleIndex', currentShopBottomStyleIndex);
+    // const [current, setCurrent] = useState(0);
+    const curTopBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.top[0].branchKind)
+    const curBomBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.bottom[0].branchKind)
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
         Modal.setAppElement('body');
@@ -286,6 +292,7 @@ const ModalSimple = ({
                             <ItemBox
                                 onAddtoCart={handleAddtoCart}
                                 currentShopStyle={shopStyleTopAndBottomList.top[currentShopTopStyleIndex]}
+                                curBranchKind={curTopBranchKind.namecn}
                             />
                             <ArrowBtn
                                 onClick={() => {
@@ -305,6 +312,7 @@ const ModalSimple = ({
                                 }}
                             ></ArrowBtn>
                             <ItemBox
+                                curBranchKind={curBomBranchKind.namecn}
                                 onAddtoCart={handleAddtoCart}
                                 currentShopStyle={shopStyleTopAndBottomList.bottom[currentShopBottomStyleIndex]}
                             />
@@ -323,9 +331,9 @@ const ModalSimple = ({
 };
 
 export default connect(({ shop = {} }) => ({
-    currentShop: shop.currentShop,
+    currentBranch: shop.currentBranch,
     currentShopStyle: shop.currentShopStyle,
     currentShopTopStyleIndex: shop.currentShopTopStyleIndex,
     currentShopBottomStyleIndex: shop.currentShopBottomStyleIndex,
-    shopStyleTopAndBottomList: shop.shopStyleTopAndBottomList,
+    shopStyleTopAndBottomList: shop.shopStyleTopAndBottomList[shop.currentShopKey],
 }))(ModalSimple);

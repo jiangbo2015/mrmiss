@@ -19,7 +19,7 @@ import { Box, Flex, Image } from 'rebass/styled-components';
 import OrderMarkModal from './OrderMarkModal';
 import { connect } from 'dva';
 import { Button } from 'antd';
-import { SaveOutlined } from '@ant-design/icons';
+// import { SaveOutlined } from '@ant-design/icons';
 import Search from '@/components/SearchInput';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import SaveIcon from '@/public/icons/icon-save2.svg';
@@ -119,6 +119,7 @@ const Capsule = ({
     useEffect(() => {
         if (currentAdminChannel.codename === 'A' && currentCapsule.children) {
             let haveTopMap = {}
+            let haveTopOrBottom = false
             currentCapsule.children.map(x => {
                 if ((x.nameen && x.nameen.toUpperCase()) === 'TOP' || x.namecn.includes('单衣')) {
                     let key = x.namecn.replace('单衣','')
@@ -127,22 +128,24 @@ const Capsule = ({
                     }
                     
                     haveTopMap[key].top = x
+                    haveTopOrBottom=true
                 } else if ((x.nameen && x.nameen.toUpperCase()) === 'BOTTOM' || x.namecn.includes('单裤')) {
                     let key = x.namecn.replace('单裤','')
                     if(!haveTopMap[key]) {
                         haveTopMap[key] = {}
                     }
                     haveTopMap[key].bottom = x
+                    haveTopOrBottom=true
                 }
             });
-
-            console.log('haveTopMap', haveTopMap)
 
             for (const key in haveTopMap) {
                 if(!haveTopMap[key].top || !haveTopMap[key].bottom) {
                     delete haveTopMap[key]
                 }
             }
+
+            // setIsTopOrBottom(haveTopOrBottom)
 
             if (Object.keys(haveTopMap).length) {
                 setHaveTopAndBottom(haveTopMap);
@@ -331,7 +334,7 @@ const Capsule = ({
                                                 src={IconCapsuleCar}
                                             />
                                         }
-                                        style={{ backgroundColor: '#D2D2D2' }}
+                                        style={{ backgroundColor: '#D2D2D2', marginTop: '-4px' }}
                                     />
                                 ) : (
                                     // <Flex alignItems="center">
@@ -344,15 +347,14 @@ const Capsule = ({
                                     <Button
                                     onClick={handleAssigned}
                                     shape="circle"
-                                    size='middle'
-                
+                                    size="large"
                                     icon={
                                         <ReactSVG
-                                            style={{ width: '18px', height: '18px', margin: 'auto' }}
+                                            style={{ width: '20px', height: '20px', margin: '4px 11px 10px 11px' }}
                                             src={SaveIcon}
                                         />
                                     }
-                                    style={{ backgroundColor: '#D2D2D2'}}
+                                    style={{ backgroundColor: '#D2D2D2', marginTop: '-4px'}}
                                 />
                                     
                                 )}

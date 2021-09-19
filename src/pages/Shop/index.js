@@ -3,6 +3,7 @@ import { Box, Flex, Image } from 'rebass/styled-components';
 import { Button } from 'antd';
 import { ReactSVG } from 'react-svg';
 import { connect } from 'dva';
+import lodash from 'lodash'
 
 import CapsItem from '@/components/Capsule/ShopItem';
 import ModalShopSimple from '@/components/Capsule/ModalShopSimple';
@@ -13,7 +14,7 @@ import Switcher from '@/components/Capsule/Switcher';
 import Container from '@/components/Container';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
-import banner from '@/public/shop.jpeg';
+import SaveIcon from '@/public/icons/icon-save2.svg';
 import { EditOutlined } from '@ant-design/icons';
 import Search from '@/components/SearchInput';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
@@ -52,19 +53,37 @@ const Shop = ({
     }, [queryKey, currentSelectedBar]);
 
     useEffect(() => {
-        if (currentAdminChannel.codename === 'A') {
-            let haveTop = false;
-            let haveBottom = false;
+        if (currentAdminChannel.codename === 'A' && currentBranch) {
+            let haveTopMap = {}
             currentBranch.children.map(x => {
-                if (x.nameen.toUpperCase() === 'TOP' || x.namecn.toUpperCase() === '单衣') {
-                    haveTop = x;
-                } else if (x.nameen.toUpperCase() === 'BOTTOM' || x.namecn.toUpperCase() === '单裤') {
-                    haveBottom = x;
+                if ((x.nameen && x.nameen.toUpperCase()) === 'TOP' || x.namecn.includes('单衣')) {
+                    let key = x.namecn.replace('单衣','')
+                    if(!haveTopMap[key]) {
+                        haveTopMap[key] = {}
+                    }
+                    
+                    haveTopMap[key].top = x
+                } else if ((x.nameen && x.nameen.toUpperCase()) === 'BOTTOM' || x.namecn.includes('单裤')) {
+                    let key = x.namecn.replace('单裤','')
+                    if(!haveTopMap[key]) {
+                        haveTopMap[key] = {}
+                    }
+                    haveTopMap[key].bottom = x
                 }
             });
 
-            if (haveTop && haveBottom) {
-                setHaveTopAndBottom({ top: haveTop, bottom: haveBottom });
+            console.log('haveTopMap', haveTopMap)
+
+            for (const key in haveTopMap) {
+                if(!haveTopMap[key].top || !haveTopMap[key].bottom) {
+                    delete haveTopMap[key]
+                }
+            }
+
+            if (Object.keys(haveTopMap).length) {
+                setHaveTopAndBottom(haveTopMap);
+            } else {
+                setHaveTopAndBottom(false);
             }
         } else {
             setHaveTopAndBottom(false);
@@ -132,23 +151,38 @@ const Shop = ({
 
     const handleOpenDetail = capsule => {
         if (currentAdminChannel.codename === 'A') {
-            if (haveTopAndBottom) {
-                let index = 0;
-                if (capsule.branchKind === haveTopAndBottom.top._id) {
-                    // console.log('--top--');
-                    index = shopStyleTopAndBottomList.top.findIndex(x => x._id === capsule._id);
+            for (const key in haveTopAndBottom) {
+                const element = haveTopAndBottom[key];
+                if(capsule.branchKind === element.top._id){
+                    const index = shopStyleTopAndBottomList[key].top.findIndex(x => x._id === capsule._id);
+                    dispatch({
+                        type: 'shop/setCurrentShopKey',
+                        payload: key,
+                    });
                     dispatch({
                         type: 'shop/setCurrentShopTopStyleIndex',
                         payload: index > 0 ? index : 0,
                     });
+                    dispatch({
+                        type: 'shop/setCurrentShopBottomStyleIndex',
+                        payload: lodash.random(shopStyleTopAndBottomList[key].bottom.length - 1),
+                    });
                     setVisibleComplex(true);
                     return;
-                } else if (capsule.branchKind === haveTopAndBottom.bottom._id) {
+                }else if (capsule.branchKind === element.bottom._id) {
                     // console.log('--bottom--');
-                    index = shopStyleTopAndBottomList.bottom.findIndex(x => x._id === capsule._id);
+                    const index = shopStyleTopAndBottomList[key].bottom.findIndex(x => x._id === capsule._id);
+                    dispatch({
+                        type: 'shop/setCurrentShopKey',
+                        payload: key,
+                    });
                     dispatch({
                         type: 'shop/setCurrentShopBottomStyleIndex',
                         payload: index > 0 ? index : 0,
+                    });
+                    dispatch({
+                        type: 'shop/setCurrentShopTopStyleIndex',
+                        payload: lodash.random(shopStyleTopAndBottomList[key].top.length - 1),
                     });
                     setVisibleComplex(true);
                     return;
@@ -238,32 +272,35 @@ const Shop = ({
                                 placeholder="SEARCH STYLE"
                                 onSearch={handleOnSearch}
                             />
-                            {currentAdminChannel.codename === 'A' ? null : (
-                                <Flex alignItems="center">
-                                    <Box bg="#DFDFDF" p="4px" mr="30px" width="24px" height="24px" sx={{ borderRadius: '4px' }}>
-                                        <ReactSVG
-                                            src={SelectedIcon}
-                                            style={{
-                                                width: '16px',
-                                                height: '16px',
-                                                opacity: selectedAll ? '1' : '0.3',
-                                            }}
-                                            onClick={handleSelectAll}
-                                        />
-                                    </Box>
+                            
 
-                                    <EditOutlined
-                                        size="30px"
-                                        style={{ fontSize: '32px', cursor: 'pointer' }}
-                                        onClick={handleAssigned}
+                            <Switcher assigned={currentBranch} ref={ref} noRelative>
+                                <Box
+                                    bg="#DFDFDF"
+                                    p="4px"
+                                    mt="20px"
+                                    width="24px"
+                                    height="24px"
+                                    sx={{
+                                        borderRadius: '4px',
+                                        visibility: currentAdminChannel.codename === 'A' ? 'hidden' : 'visible',
+                                    }}
+                                >
+                                    <ReactSVG
+                                        src={SelectedIcon}
+                                        style={{
+                                            width: '16px',
+                                            height: '16px',
+                                            opacity: selectedAll ? '1' : '0.3',
+                                        }}
+                                        onClick={handleSelectAll}
                                     />
-                                </Flex>
-                            )}
+                                </Box>
+                            </Switcher>
 
-                            <Switcher assigned={currentBranch} ref={ref} noRelative/>
+                            <Flex width="200px" justifyContent="flex-end" alignItems="flex-start">
                             {currentAdminChannel.codename === 'A' ? ( //通道A才能下单
                                 <Cart
-                                    
                                     triggle={
                                         <Button
                                             shape="circle"
@@ -282,12 +319,25 @@ const Shop = ({
                                         setSelectedList([]);
                                     }}
                                 />
-                            ) : null}
+                            ) : <Button
+                            onClick={handleAssigned}
+                            shape="circle"
+                            size="large"
+                            icon={
+                                <ReactSVG
+                                    style={{ width: '20px', height: '20px', margin: '4px 11px 10px 11px' }}
+                                    src={SaveIcon}
+                                />
+                            }
+                            style={{ backgroundColor: '#D2D2D2', marginTop: '-4px'}}
+                        />}
+                                </Flex>
                         </Flex>
                         
                     
-                    <Flex css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
-                    <SidebarStyles data={branchList} selectedItem={currentSelectedBar} onSelect={handleSelectBranch} />
+                    <Flex py='80px' css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
+                        <SidebarStyles data={branchList} selectedItem={currentSelectedBar} onSelect={handleSelectBranch} />
+                        <Container>
                         <Box
                             sx={{
                                 display: 'grid',
@@ -317,7 +367,10 @@ const Shop = ({
                                 );
                             })}
                         </Box>
-                        <More
+                        
+
+                        </Container>
+<More
                             onLoadMore={() => {
                                 handleLoadMore();
                             }}
