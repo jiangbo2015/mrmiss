@@ -48,8 +48,13 @@ const Shop = ({
         });
     }, []);
     useEffect(() => {
-        // console.log('currentSelectedBar', currentSelectedBar);
-        handleLoadMore(1);
+        // console.log('queryKey', queryKey);
+        
+        if(currentSelectedBar._id) {
+            // console.log('currentSelectedBar', currentSelectedBar);
+            handleLoadMore(1);
+        }
+        
     }, [queryKey, currentSelectedBar]);
 
     useEffect(() => {
@@ -111,7 +116,7 @@ const Shop = ({
     }, [currentShopStyle]);
 
     const handleLoadMore = page => {
-        // console.log('handleLoadMore', page);
+        console.log('handleLoadMore', page);
         if (currentBranch._id) {
             let payload = { branch: currentBranch._id, page: page ? page : shopStyleList.page + 1 };
             if (queryKey) {
@@ -258,10 +263,8 @@ const Shop = ({
             <section>
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title
-                        title="SHOP"
-                        subtitle="This season's capsule is launched by mrmiss 2021 limited capsule
-            series-parent-child family series. I hope you can find your favorite
-            products here..."
+                        title={currentBranch.namecn}
+                        subtitle={currentBranch.description}
                     />
                 </Box>
                 <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">

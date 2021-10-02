@@ -189,7 +189,11 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                     {colorWithStyleImgs.map((item, index) => (
                         <Flex>
                             <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                {item.colorObj.code}
+                            <Dot type={item.colorObj.type}
+                                            bg={item.colorObj.type ? false : item.colorObj.value}
+                                            src = { item.colorObj.type ? filterImageUrl(item.colorObj.value) : '' }
+                                            code={item.colorObj.code}
+                                            text={item.colorObj.namecn} size='14px' />
                             </SizeBox>
                             {size?.split('/').map((s, i) => (
                                 <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">

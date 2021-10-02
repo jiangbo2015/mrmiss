@@ -28,10 +28,10 @@ const RoundBtn = props => (
     />
 );
 
-const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
+const LineItem = ({ data, showNum, onUpdate,readOnly,branchKindObj, userRole }) => {
     // // console.log('showNum', showNum);
     const { shopStyle, count, _id } = data;
-    const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum } = shopStyle;
+    const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum, bagsNum } = shopStyle;
     const [current, setCurrent] = useState(0);
     return (
         <Box p="50px" mb="25px" sx={{ background: '#fff', borderRadius: '6px' }}>
@@ -56,7 +56,7 @@ const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
                 </Box>
                 <Box width="200px" mx="30px">
                     <Text fontSize="20px" fontWeight="bold" mb="10px">
-                        2021 swimwear series
+                        {branchKindObj ? branchKindObj.namecn : ' '}
                     </Text>
                     <Text>Ref.{code}</Text>
                     <Text>SIZE.{size}</Text>
@@ -91,7 +91,11 @@ const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
                         {colorWithStyleImgs.map((item, index) => (
                             <Flex>
                                 <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                    {item.colorObj.code}
+                                <Dot type={item.colorObj.type}
+                                            bg={item.colorObj.type ? false : item.colorObj.value}
+                                            src = { item.colorObj.type ? filterImageUrl(item.colorObj.value) : '' }
+                                            code={item.colorObj.code}
+                                            text={item.colorObj.namecn} size='14px' />
                                 </SizeBox>
                                 {size?.split('/').map((s, i) => (
                                     <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
@@ -101,6 +105,7 @@ const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
                             </Flex>
                         ))}
                     </Box>
+                    <Text>{userRole === 4 ? `${numInBag}pcs`:`${numInBag}pcs*${bagsNum}`}</Text>
                 </Box>
                 <Text>¥.{price}</Text>
                 <Box mx="30px">
@@ -148,12 +153,15 @@ const Cart = ({
     triggleStyle,
     currentUser,
     selectedList = [],
+    currentBranch,
     clearSelected = () => {},
     readOnly
 }) => {
+    // console.log('currentBranch', currentBranch)
     const [visible, setVisible] = useState(false);
     let sumCount = 0;
     let sumPrice = 0;
+    // let branchKindObjArr = []
     myShopCartList.map(sc => {
         // // console.log('sc.count', sc.count);
         let { shopStyle = { caseNum: 0, numInBag: 0, price: 0 } } = sc;
@@ -233,7 +241,9 @@ const Cart = ({
                         readOnly={readOnly}
                         key={`shop-cart-${index}-${item._id}`}
                         showNum={currentUser.role == 1 ? item.shopStyle.caseNum : item.shopStyle.numInBag}
+                        userRole={currentUser.role}
                         data={item}
+                        branchKindObj={currentBranch.children.find(x => x._id === item.shopStyle.branchKind)}
                         onUpdate={handleUpdate}
                     />
                 ))}
@@ -263,4 +273,5 @@ const Cart = ({
 export default connect(({ shop = {}, user }) => ({
     myShopCartList: shop.myShopCartList,
     currentUser: user.info,
+    currentBranch: shop.currentBranch
 }))(Cart);
