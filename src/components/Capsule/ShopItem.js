@@ -59,20 +59,26 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                     <Text mt="5px">Size.{item.size}</Text>
                     <Flex css={{ position: 'relative' }} mt="14px" justifyContent="center" alignItems="center">
                         {onEditPrice ? (
-                            <InputNumber
-                                formatter={value => `¥${value}`}
-                                style={{
-                                    position: 'absolute',
-                                    left: 0,
-                                }}
-                                value={curChannelPrice}
-                                onChange={value => {
-                                    onEditPrice({ style: item._id, price: value });
-                                }}
-                                onClick={e => {
-                                    e.stopPropagation();
-                                }}
-                            />
+                              <div onClick={e => {
+                                e.stopPropagation();
+                            }}
+                            style={{
+                                position: 'absolute',
+                                left: 0,
+                            }}
+                            >
+                                <InputNumber
+                                    formatter={value => `¥${value}`}
+                                    value={curChannelPrice}
+                                    onChange={value => {
+                                        onEditPrice({ style: item._id, price: value });
+                                    }}
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                    }}
+                                />
+                            </div>
+                            
                         ) : (
                             <Text
                                 css={{

@@ -66,23 +66,23 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
 );
 
 const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutList = [], dispatch }) => {
-    const { colorWithStyleImgs = [], code, price, size } = currentCapsuleStyle;
+    const { colorWithStyleImgs = [], code, price, size, goodCategory = {} } = currentCapsuleStyle;
     const [current, setCurrent] = useState(0);
     let isTopOrBottom = false;
     if (
-        (currentCapsuleStyle.goodCategory.nameen && currentCapsuleStyle.goodCategory.nameen.toUpperCase()) === 'TOP' ||
-        currentCapsuleStyle.goodCategory.namecn === '单衣'
+        (goodCategory.nameen && goodCategory.nameen.toUpperCase()) === 'TOP' ||
+        goodCategory.namecn === '单衣'
     ) {
         isTopOrBottom = true;
     } else if (
-        (currentCapsuleStyle.goodCategory.nameen && currentCapsuleStyle.goodCategory.nameen.toUpperCase()) === 'BOTTOM' ||
-        currentCapsuleStyle.goodCategory.namecn === '单裤'
+        (goodCategory.nameen && goodCategory.nameen.toUpperCase()) === 'BOTTOM' ||
+        goodCategory.namecn === '单裤'
     ) {
         isTopOrBottom = true;
     } else if (
-        (currentCapsuleStyle.goodCategory.name && currentCapsuleStyle.goodCategory.name.toUpperCase()) === 'BOTTOM' ||
-        currentCapsuleStyle.goodCategory.name === '单裤' ||
-        currentCapsuleStyle.goodCategory.name === '单衣'
+        (goodCategory.name && goodCategory.name.toUpperCase()) === 'BOTTOM' ||
+        goodCategory.name === '单裤' ||
+        goodCategory.name === '单衣'
     ) {
         isTopOrBottom = true;
     }
@@ -223,7 +223,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     </Box>
 
                     <Box pl="30px">
-                        <Text>{currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name}</Text>
+                        <Text>{currentCapsuleStyle.goodCategory ? currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name : ''}</Text>
                         <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
                             ¥{price}
                         </Text>

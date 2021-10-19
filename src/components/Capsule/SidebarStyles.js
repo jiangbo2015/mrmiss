@@ -11,9 +11,9 @@ export default ({ data = [], selectedItem = {}, onSelect }) => {
                 <li key={`${i}-${item._id}`}>
                     <Text
                         css={{
-                            fontSize: selectedItem._id === item._id ? '20px' : '18px',
+                            fontSize: '18px',
                             color: selectedItem._id === item._id ? '#000' : '#5c5c5c99',
-                            padding: selectedItem._id === item._id ? '10px 0' : '4px 0',
+                            padding: '4px 0',
                             cursor: 'pointer',
                         }}
                         onClick={() => {
@@ -27,9 +27,9 @@ export default ({ data = [], selectedItem = {}, onSelect }) => {
                               <Text
                                   key={c._id}
                                   css={{
-                                      fontSize: selectedItem._id === c._id ? '16px' : '14px',
+                                      fontSize: '14px',
                                       color: selectedItem._id === c._id ? '#000' : '#5c5c5c99',
-                                      padding: selectedItem._id === c._id ? '10px 0' : '4px 0',
+                                      padding:  '4px 0',
                                       paddingLeft: '10px',
                                       cursor: 'pointer',
                                   }}

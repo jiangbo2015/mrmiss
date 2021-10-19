@@ -1,8 +1,10 @@
 import { connect } from 'dva';
 import { useEffect } from 'react';
 import { Box, Flex } from 'rebass/styled-components';
-import { OrderRank, StyleRank, UserRank } from './ChartShop';
+import { OrderRank, StyleRank, UserRank, CapsuleRank } from './ChartLibary';
 import Search from './Search';
+
+
 
 const ChartCom = ({ dispatch, capsuleData }) => {
     useEffect(() => {
@@ -24,6 +26,10 @@ const ChartCom = ({ dispatch, capsuleData }) => {
             <Flex>
                 <Box width={1 / 2}>
                     <OrderRank data={capsuleData.orderRank}></OrderRank>
+                    <Box py='10px'>
+                        <CapsuleRank data={capsuleData.capsuleRank}></CapsuleRank>
+                    </Box>
+                    
                 </Box>
 
                 <Box width={1 / 4} pl="20px">

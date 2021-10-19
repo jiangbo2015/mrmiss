@@ -69,16 +69,16 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
     >
         <Dot bg={type ? false : bg} src={type ? bg : ''} size={`${size}px`} isSelect={isSelect} />
         <Flex className="intro" mt="10px" css={{ visibility: 'hidden' }}>
-            <Box
+            <Flex
                 css={{
                     position: 'absolute',
-                    top: '48px',
+                    top: '28px',
                     width: 'max-content',
                 }}
             >
                 <Text>{code}</Text>
                 <Text>{text}</Text>
-            </Box>
+            </Flex>
         </Flex>
     </Flex>
 );
@@ -162,7 +162,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                 </Text>
                 <Text>Ref {code} </Text>
 
-                <Flex mt="8px">
+                <Flex mt="8px" pb='12px'>
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}

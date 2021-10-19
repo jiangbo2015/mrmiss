@@ -17,6 +17,7 @@ export default {
             orderRank: [],
             styleRank: [],
             userRank: [],
+            colorRank: {color:[], img: []},
         },
     },
     reducers: {
@@ -31,10 +32,11 @@ export default {
     },
     effects: {
         *getCapsuleData({ payload }, { call, put }) {
-            const [order, style, user] = yield [
+            const [order, style, user, capsule] = yield [
                 call(api.capsuleOrderRank, payload),
                 call(api.capsuleStyleRank, payload),
                 call(api.capsuleUserRank, payload),
+                call(api.capsuleCapsuleRank, payload),
             ];
             yield put({
                 type: 'setData',
@@ -43,6 +45,7 @@ export default {
                     orderRank: order.data || [],
                     styleRank: style.data || [],
                     userRank: user.data || [],
+                    capsuleRank: capsule.data || [],
                 },
             });
         },
@@ -63,10 +66,11 @@ export default {
             });
         },
         *getDiyData({ payload }, { call, put }) {
-            const [order, style, user] = yield [
+            const [order, style, user, color] = yield [
                 call(api.diyOrderRank, payload),
                 call(api.diyStyleRank, payload),
                 call(api.diyUserRank, payload),
+                call(api.diyColorRank, payload),
             ];
             yield put({
                 type: 'setData',
@@ -75,6 +79,7 @@ export default {
                     orderRank: order.data || [],
                     styleRank: style.data || [],
                     userRank: user.data || [],
+                    colorRank: color.data || [],
                 },
             });
         },

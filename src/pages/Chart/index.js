@@ -46,7 +46,7 @@ export default class Business extends React.Component {
                         onChange={this.callback}
                         tabBarStyle={{ background: '#FDDB3A', justifyContent: 'space-around' }}
                     >
-                        <TabPane tab="网店销售数据" key="1" style={{ padding: '40px' }}>
+                        <TabPane tab="网店销售数据" key="1">
                             <ChartShop />
                         </TabPane>
                         <TabPane tab="胶囊销售数据" key="2">

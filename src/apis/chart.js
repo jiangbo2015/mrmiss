@@ -18,6 +18,12 @@ export const capsuleUserRank = data =>
         params: data,
     });
 
+export const capsuleCapsuleRank = data =>
+    request('/api/capsuleOrder/capsuleRank', {
+        method: 'get',
+        params: data,
+    });
+    
 export const shopOrderRank = data =>
     request('/api/shopOrder/orderRank', {
         method: 'get',
@@ -49,6 +55,12 @@ export const diyStyleRank = data =>
 
 export const diyUserRank = data =>
     request('/api/order/userRank', {
+        method: 'get',
+        params: data,
+    });
+
+    export const diyColorRank = data =>
+    request('/api/order/colorRank', {
         method: 'get',
         params: data,
     });

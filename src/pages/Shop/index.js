@@ -25,9 +25,9 @@ import IconShopCar from '@/public/icons/icon-shop.svg';
 const Shop = ({
     branchList,
     dispatch,
-    currentBranch,
+    currentBranch = { children: []},
     currentShopStyle = {},
-    currentSelectedBar,
+    currentSelectedBar = {},
     shopStyleList,
     currentAdminChannel = {},
     shopStyleTopAndBottomList,

@@ -32,11 +32,31 @@ const App = ({ capsuleToOrderGroupList = [], dispatch, visible, onCancel, curren
             },
         });
         if (res['true']) {
+            let sumCount = 0;
+            let sumPrice = 0;
+            for (let i = 0; i < res['true'].length; i++) {
+                const row = res['true'][i];
+                for (let j = 0; j < row.items.length; j++) {
+                    const item = row.items[j];
+                    // console.log(item)
+                    if (!item.total) {
+                        // console.log(row);
+                        message.warn(`版型编号${row.styleNos}中有款式未填写数量`);
+                        return;
+                    }
+                    item.type = 1
+                    
+                }
+                sumCount += row.rowTotal
+                sumPrice += row.rowTotalPrice
+            }
             await dispatch({
                 type: 'capsule/addOrder',
                 payload: {
                     orderData: res['true'],
                     isSend: 1,
+                    sumCount,
+                    sumPrice,
                     capsuleId: currentCapsule._id,
                     successMsg: '发送成功',
                 },
