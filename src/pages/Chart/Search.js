@@ -47,10 +47,11 @@ export default ({ handleSearch }) => {
     });
 
     const onSearch = () => {
+        console.log('onSearch,', search.range);
         if (!search.range) {
             return;
         }
-
+        console.log('onSearch,', search.range);
         handleSearch({
             startDate: moment(search.range[0]).format('YYYY-MM-DD'),
             endDate: moment(search.range[1]).format('YYYY-MM-DD'),
@@ -58,6 +59,7 @@ export default ({ handleSearch }) => {
     };
 
     const onRangePickerChange = value => {
+        console.log('onRangePickerChange');
         setSearch({
             ...search,
             range: value,
@@ -76,9 +78,9 @@ export default ({ handleSearch }) => {
             <Box>
                 <RangePicker onChange={onRangePickerChange} />
             </Box>
-            <Box mx="10px">
+            {/* <Box mx="10px">
                 <Cascader options={options} onChange={onCascadeChange} placeholder="Please select" />
-            </Box>
+            </Box> */}
             <Button onClick={onSearch}>搜索</Button>
         </Flex>
     );

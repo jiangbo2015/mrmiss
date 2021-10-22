@@ -1,23 +1,21 @@
 import { connect } from 'dva';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { Box, Flex } from 'rebass/styled-components';
 import { OrderRank, StyleRank, UserRank, CapsuleRank } from './ChartLibary';
 import Search from './Search';
-
-
 
 const ChartCom = ({ dispatch, capsuleData }) => {
     useEffect(() => {
         handleSearch();
     }, []);
 
-    const handleSearch = value => {
+    const handleSearch = useCallback(value => {
         // console.log(value);
         dispatch({
             type: 'chart/getCapsuleData',
             payload: value,
         });
-    };
+    }, []);
 
     return (
         <Box>
@@ -26,10 +24,9 @@ const ChartCom = ({ dispatch, capsuleData }) => {
             <Flex>
                 <Box width={1 / 2}>
                     <OrderRank data={capsuleData.orderRank}></OrderRank>
-                    <Box py='10px'>
+                    <Box py="10px">
                         <CapsuleRank data={capsuleData.capsuleRank}></CapsuleRank>
                     </Box>
-                    
                 </Box>
 
                 <Box width={1 / 4} pl="20px">

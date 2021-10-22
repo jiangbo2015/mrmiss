@@ -1,7 +1,7 @@
 import { connect } from 'dva';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { Box, Flex } from 'rebass/styled-components';
-import { OrderRank, StyleRank, UserRank,ColorRank,ImgRank } from './ChartLibary';
+import { OrderRank, StyleRank, UserRank, ColorRank, ImgRank } from './ChartLibary';
 import Search from './Search';
 
 const ChartDiy = ({ dispatch, diyData }) => {
@@ -9,23 +9,27 @@ const ChartDiy = ({ dispatch, diyData }) => {
         handleSearch();
     }, []);
 
-    const handleSearch = value => {
-        // console.log(value);
+    const handleSearch = useCallback(value => {
+        console.log(value);
         dispatch({
             type: 'chart/getDiyData',
             payload: value,
         });
-    };
+    }, []);
 
     return (
         <Box>
-            <Search handleSearch={handleSearch}></Search>
+            <Search
+                handleSearch={val => {
+                    handleSearch(val);
+                }}
+            ></Search>
             <Flex>
                 <Box width={1 / 2}>
                     <OrderRank data={diyData.orderRank}></OrderRank>
                 </Box>
             </Flex>
-            <Flex py='10px'>
+            <Flex py="10px">
                 <Box width={1 / 4} pl="20px">
                     <StyleRank data={diyData.styleRank}></StyleRank>
                 </Box>
