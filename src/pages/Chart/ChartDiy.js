@@ -18,14 +18,14 @@ const ChartDiy = ({ dispatch, diyData }) => {
     }, []);
 
     return (
-        <Box>
+        <Box px='24px' py='10px'>
             <Search
                 handleSearch={val => {
                     handleSearch(val);
                 }}
             ></Search>
             <Flex>
-                <Box width={1 / 2}>
+                <Box width={1}>
                     <OrderRank data={diyData.orderRank}></OrderRank>
                 </Box>
             </Flex>

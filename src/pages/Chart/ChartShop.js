@@ -22,7 +22,7 @@ const ChartShop = ({ dispatch, shopData }) => {
     }, []);
 
     return (
-        <Box>
+        <Box px='24px' py='10px'>
             <Search handleSearch={handleSearch}></Search>
             <Box>
                 <Box width={1}>

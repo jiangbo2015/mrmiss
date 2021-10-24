@@ -213,6 +213,7 @@ export const CapsuleRank = ({ data }) => {
             }
         >
             <Chart height={300} autoFit data={data}>
+            <Coordinate transpose />
                 <Interval size={30} position={`capsuleNamecn*${userType}`} />
                 {/* <Tooltip shared/> */}
             </Chart>

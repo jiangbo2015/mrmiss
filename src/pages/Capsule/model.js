@@ -216,6 +216,7 @@ export default {
                     price: currentCapsuleStyle.price,
                     size: currentCapsuleStyle.size,
                     items: currentCapsuleStyle.colorWithStyleImgs,
+                    pickType: { pieceCount: 0, val: 1 },
                 },
             });
             hide();

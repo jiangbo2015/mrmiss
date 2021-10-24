@@ -18,24 +18,27 @@ const ChartCom = ({ dispatch, capsuleData }) => {
     }, []);
 
     return (
-        <Box>
+        <Box px='24px' py='10px'>
             <Search handleSearch={handleSearch}></Search>
 
             <Flex>
-                <Box width={1 / 2}>
+                <Box width={1}>
                     <OrderRank data={capsuleData.orderRank}></OrderRank>
-                    <Box py="10px">
-                        <CapsuleRank data={capsuleData.capsuleRank}></CapsuleRank>
-                    </Box>
-                </Box>
-
-                <Box width={1 / 4} pl="20px">
-                    <StyleRank data={capsuleData.styleRank}></StyleRank>
-                </Box>
-                <Box width={1 / 4} pl="20px">
-                    <UserRank data={capsuleData.userRank}></UserRank>
+                    
                 </Box>
             </Flex>
+            <Flex pt='20px'>
+            <Box width={1 / 3} pr="10px">
+                    <StyleRank data={capsuleData.styleRank}></StyleRank>
+                </Box>
+                <Box width={1 / 3} pr="10px">
+                    <UserRank data={capsuleData.userRank}></UserRank>
+                </Box>
+                <Box width={1 / 3} >
+                        <CapsuleRank data={capsuleData.capsuleRank}></CapsuleRank>
+                    </Box>
+            </Flex>
+
         </Box>
     );
 };
