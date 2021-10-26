@@ -8,7 +8,7 @@ import { ReactSVG } from 'react-svg';
 import { Flex } from 'rebass/styled-components';
 import OrderTableComponent from './OrderTableComponent';
 
-const OrderTable = ({ orderList = [], dispatch }) => {
+const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
     useEffect(() => {
         dispatch({
             type: 'usercenter/getUserShopOrder',

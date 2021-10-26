@@ -186,7 +186,7 @@ export const UserRank = ({ data }) => {
                 </Radio.Group>
             }
         >
-            <Chart height={data.length * 60} data={data} autoFit>
+            <Chart height={data.length * 60 + 80} data={data} autoFit>
                 <Coordinate transpose />
                 <Interval size={30} position={`user*${userType}`} />
             </Chart>
@@ -212,8 +212,8 @@ export const CapsuleRank = ({ data }) => {
                 </Radio.Group>
             }
         >
-            <Chart height={300} autoFit data={data}>
-            <Coordinate transpose />
+            <Chart height={data.length * 60 + 80} autoFit data={data}>
+                <Coordinate transpose />
                 <Interval size={30} position={`capsuleNamecn*${userType}`} />
                 {/* <Tooltip shared/> */}
             </Chart>
@@ -239,7 +239,7 @@ export const ColorRank = ({ data }) => {
                 </Radio.Group>
             }
         >
-            <Chart height={300} autoFit data={data}>
+            <Chart height={data.length * 60 + 80} autoFit data={data}>
                 <Coordinate transpose />
                 <Interval
                     size={30}
