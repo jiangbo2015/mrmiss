@@ -7,6 +7,7 @@ export default {
             orderRank: [],
             styleRank: [],
             userRank: [],
+            capsuleRank: [],
         },
         shopData: {
             orderRank: [],
@@ -17,7 +18,7 @@ export default {
             orderRank: [],
             styleRank: [],
             userRank: [],
-            colorRank: {color:[], img: []},
+            colorRank: { color: [], img: [] },
         },
     },
     reducers: {
