@@ -16,8 +16,10 @@ import Select from '@/components/Select';
 import IconUserSign from '@/public/icons/icon-usersign.svg';
 import request from '@/utils/request';
 import OrderDownload from '@/components/OrderDownload';
+import { useIntl } from 'umi';
 
 const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReaded }) => {
+    const intl = useIntl();
     const [selectUserModal, setSelectUserModal] = useState(false);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -162,22 +164,24 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
         setShowShopDetailOrder(true);
     };
 
-
     const columns = [
         {
-            title: '订单编号',
+            title: intl.formatMessage({
+                id: 'orders_number',
+                defaultMessage: '订单编号',
+            }),
             dataIndex: 'orderNo',
             key: 'orderNo',
             render: (value, record) => (
                 <a
                     style={{ textDecoration: 'underline' }}
                     onClick={() => {
-                        if(record.orderType === 'shop'){
-                            handleShowShopOrderDetail(record)
-                        }else {
+                        if (record.orderType === 'shop') {
+                            handleShowShopOrderDetail(record);
+                        } else {
                             handleShowOrderDetail(record);
                         }
-                        
+
                         // setUserInfoModal(true)
                     }}
                 >
@@ -186,28 +190,57 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
             ),
         },
         {
-            title: '日期',
+            title: intl.formatMessage({
+                id: 'date',
+                defaultMessage: '日期',
+            }),
             dataIndex: 'date',
             key: 'date',
         },
         {
-            title: '总数量',
+            title: intl.formatMessage({
+                id: 'total_quantity',
+                defaultMessage: '总数量',
+            }),
             dataIndex: 'sumCount',
             key: 'sumCount',
         },
         {
-            title: '总金额',
+            title: intl.formatMessage({
+                id: 'total_amount',
+                defaultMessage: '总金额',
+            }),
             dataIndex: 'sumPrice',
             key: 'sumPrice',
         },
         {
-            title: '是否合并提交',
+            title: intl.formatMessage({
+                id: 'submission',
+                defaultMessage: '是否合并提交',
+            }),
             dataIndex: 'isMerge',
             key: 'isMerge',
-            render: text => (text ? '已提交' : <Box color="#FDDB3A"> 未提交</Box>),
+            render: text =>
+                text ? (
+                    intl.formatMessage({
+                        id: 'submitted',
+                        defaultMessage: '已提交',
+                    })
+                ) : (
+                    <Box color="#FDDB3A">
+                        {' '}
+                        {intl.formatMessage({
+                            id: 'unsubmitted',
+                            defaultMessage: '未提交',
+                        })}
+                    </Box>
+                ),
         },
         {
-            title: '下载',
+            title: intl.formatMessage({
+                id: 'download',
+                defaultMessage: '下载',
+            }),
             dataIndex: 'download',
             key: 'download',
             render: (_, record) => (
@@ -223,7 +256,10 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
             ),
         },
         {
-            title: '删除',
+            title: intl.formatMessage({
+                id: 'delete',
+                defaultMessage: '删除',
+            }),
             dataIndex: 'delete',
             key: 'delete',
             render: (_, record) => (
@@ -246,7 +282,7 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
             <SOrderEditor
                 visible={showShopDetailOrder}
                 onCancel={() => {
-                    setShowShopDetailOrder(false)
+                    setShowShopDetailOrder(false);
                 }}
             />
             <Modal
@@ -300,7 +336,10 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
                             setSelectUserModal(true);
                         }}
                     >
-                        按客户进行分类{' '}
+                        {intl.formatMessage({
+                            id: 'sort_by_clients',
+                            defaultMessage: '按客户进行分类',
+                        })}{' '}
                         <Box
                             ml="12px"
                             bg={selectedUsers.length <= 0 ? '#323232' : '#FF4814'}
@@ -311,21 +350,30 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
                     </Flex>
                 )}
                 <Select
-                    width="100px"
+                    width="140px"
                     style={{ margin: '0 8px' }}
                     onChange={val => setIsMerge(val)}
                     value={isMerge}
                     options={[
                         {
-                            label: '所有',
+                            label: intl.formatMessage({
+                                id: 'all',
+                                defaultMessage: '所有',
+                            }),
                             value: 'all',
                         },
                         {
-                            label: '已合并提交',
+                            label: intl.formatMessage({
+                                id: 'orders_submitted',
+                                defaultMessage: '已合并提交',
+                            }),
                             value: 1,
                         },
                         {
-                            label: '未合并提交',
+                            label: intl.formatMessage({
+                                id: 'orders_pending',
+                                defaultMessage: '未合并提交',
+                            }),
                             value: 0,
                         },
                     ]}
@@ -341,7 +389,10 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
                             handleMerge();
                         }}
                     >
-                        合并提交所选订单
+                        {intl.formatMessage({
+                            id: 'merge_submission_orders',
+                            defaultMessage: '合并提交所选订单',
+                        })}
                     </Flex>
                 ) : null}
             </Flex>

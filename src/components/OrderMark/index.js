@@ -12,6 +12,7 @@ import { filterImageUrl } from '@/utils/helper';
 import { Badge, Input, Popover, Skeleton } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
 import lodash from 'lodash';
+import { useIntl } from 'umi';
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd';
 import { ReactSVG } from 'react-svg';
@@ -69,6 +70,7 @@ const getListStyle = isDraggingOver => ({
 });
 
 const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loading, onSave, onSend, onDelRow = () => {} }) => {
+    const intl = useIntl();
     const [showChange, setShowChange] = useState(false);
     // const [selectRow, setSelectRow] = useState([]);
     const [sourceData, setSourceData] = useState([]);
@@ -328,7 +330,10 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
             style={{ padding: 0 }}
             bodyStyle={{ padding: 0, paddingTop: '24px', paddingBottom: '80px' }}
             footer={null}
-            title="订单制作器"
+            title={intl.formatMessage({
+                id: 'order_editor',
+                defaultMessage: '订单制作器',
+            })}
         >
             <Flex justifyContent="space-between" alignItems="center" ml="54px" mr="34px">
                 {onSend ? (
@@ -494,9 +499,18 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                                                     <Box pl="8px">
                                                                         {favorite.styleAndColor.map(sc => (
                                                                             <Box p="8px 0">
-                                                                                <Info label="编号" value={sc.style.styleNo} />
                                                                                 <Info
-                                                                                    label="颜色"
+                                                                                    label={intl.formatMessage({
+                                                                                        id: 'style_ref',
+                                                                                        defaultMessage: '编号',
+                                                                                    })}
+                                                                                    value={sc.style.styleNo}
+                                                                                />
+                                                                                <Info
+                                                                                    label={intl.formatMessage({
+                                                                                        id: 'color',
+                                                                                        defaultMessage: '颜色',
+                                                                                    })}
                                                                                     value={lodash
                                                                                         .union(sc.colorIds.map(c => c.code))
                                                                                         .join(',')}
@@ -530,7 +544,13 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                                                                 );
                                                                             })}
                                                                         </Flex>
-                                                                        <Info label="单价" value={favorite.price} />
+                                                                        <Info
+                                                                            label={intl.formatMessage({
+                                                                                id: 'unit_price',
+                                                                                defaultMessage: '单价',
+                                                                            })}
+                                                                            value={favorite.price}
+                                                                        />
                                                                         <Flex
                                                                             justifyContent="space-between"
                                                                             alignItems="center"
@@ -538,7 +558,10 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                                                             minWidth="240px"
                                                                         >
                                                                             <Info
-                                                                                label="小计"
+                                                                                label={intl.formatMessage({
+                                                                                    id: 'subtotal',
+                                                                                    defaultMessage: '小计',
+                                                                                })}
                                                                                 value={lodash.sum(
                                                                                     Object.values(favorite.sizeInfoObject),
                                                                                 )}

@@ -3,11 +3,13 @@ import SelectGrayRaduis from '@/components/Select/SelectGrayRaduis';
 import { Badge, Button, Col, Form, Radio, Row, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Box } from 'rebass/styled-components';
+import { useIntl } from 'umi';
 
 const { TabPane } = Tabs;
 
 const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
     const [form] = Form.useForm();
+    const intl = useIntl();
     const [showChange, setShowChange] = useState(false);
     useEffect(() => {
         // console.log('data', data);
@@ -44,47 +46,107 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
         >
             <Row gutter={24}>
                 <Col span={7}>
-                    <Form.Item label="账号" name="account">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'account',
+                            defaultMessage: '账号',
+                        })}
+                        name="account"
+                    >
                         <InputBlackRaduis disabled={!isAdd} />
                     </Form.Item>
-                    <Form.Item label="名称" name="name">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'name',
+                            defaultMessage: '名称',
+                        })}
+                        name="name"
+                    >
                         <InputBlackRaduis />
                     </Form.Item>
-                    <Form.Item label="增值税号码" name="VATNo">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'tax_number',
+                            defaultMessage: '增值税号码',
+                        })}
+                        name="VATNo"
+                    >
                         <InputBlackRaduis />
                     </Form.Item>
-                    {isAdd || role===1 ?null: <Form.Item label={role === 4 ? "所属商业代理": "所属产品经理"} name="businessAgent">
-                        <InputBlackRaduis />
-                    </Form.Item> }
+                    {isAdd || role === 1 ? null : (
+                        <Form.Item label={role === 4 ? '所属商业代理' : '所属产品经理'} name="businessAgent">
+                            <InputBlackRaduis />
+                        </Form.Item>
+                    )}
                 </Col>
                 <Col span={8}>
-                    {role===1 ? null :<Form.Item label="公司全名" name="companyFullName">
-                        <InputGray />
-                    </Form.Item>}                   
-                    <Form.Item label="联系人" name="contact">
+                    {role === 1 ? null : (
+                        <Form.Item
+                            label={intl.formatMessage({
+                                id: 'account',
+                                defaultMessage: '公司全名',
+                            })}
+                            name="companyFullName"
+                        >
+                            <InputGray />
+                        </Form.Item>
+                    )}
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'contact_person',
+                            defaultMessage: '联系人',
+                        })}
+                        name="contact"
+                    >
                         <InputGray />
                     </Form.Item>
-                    <Form.Item label="联系电话" name="phone">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'tel_number',
+                            defaultMessage: '联系电话',
+                        })}
+                        name="phone"
+                    >
                         <InputGray />
                     </Form.Item>
-                    <Form.Item label="手机号码" name="telephone">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'cel_number',
+                            defaultMessage: '手机号码',
+                        })}
+                        name="telephone"
+                    >
                         <InputGray />
                     </Form.Item>
-                    <Form.Item label="电子邮件地址" name="email">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'email',
+                            defaultMessage: '电子邮件地址',
+                        })}
+                        name="email"
+                    >
                         <InputGray />
                     </Form.Item>
-                    <Form.Item label="网站" name="webside">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'website',
+                            defaultMessage: '网站',
+                        })}
+                        name="webside"
+                    >
                         <InputGray />
                     </Form.Item>
-                    {role===4 ? <Form.Item name="type">
-                        <Radio.Group>
-                            <Radio value={1}>零售店</Radio>
-                            <Radio value={2}>百货</Radio>
-                            <Radio value={3}>连锁店</Radio>
-                            <Radio value={4}>网店</Radio>
-                            <Radio value={5}>其它</Radio>
-                        </Radio.Group>
-                    </Form.Item> : null }  
+                    {role === 4 ? (
+                        <Form.Item name="type">
+                            <Radio.Group>
+                                <Radio value={1}>零售店</Radio>
+                                <Radio value={2}>百货</Radio>
+                                <Radio value={3}>连锁店</Radio>
+                                <Radio value={4}>网店</Radio>
+                                <Radio value={5}>其它</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    ) : null}
                 </Col>
                 <Col span={9}>
                     <Box
@@ -113,37 +175,111 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
                             style={{ background: '#C8C8C8' }}
                             tabBarStyle={{ background: '#323232', color: 'white' }}
                         >
-                            <TabPane tab="公司地址" key="1" forceRender={true}>
-                                <Form.Item label="地址1" name="companyAddress1">
+                            <TabPane
+                                tab={intl.formatMessage({
+                                    id: 'company_address',
+                                    defaultMessage: '公司地址',
+                                })}
+                                key="1"
+                                forceRender={true}
+                            >
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'address1',
+                                        defaultMessage: '地址1',
+                                    })}
+                                    name="companyAddress1"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="地址2" name="companyAddress2">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'address2',
+                                        defaultMessage: '地址2',
+                                    })}
+                                    name="companyAddress2"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="市" name="companyCity">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'city',
+                                        defaultMessage: '市',
+                                    })}
+                                    name="companyCity"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="邮编" name="companyPostcode">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'post_code',
+                                        defaultMessage: '邮编',
+                                    })}
+                                    name="companyPostcode"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="国家" name="companyCountry">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'conutry',
+                                        defaultMessage: '国家',
+                                    })}
+                                    name="companyCountry"
+                                >
                                     <Input />
                                 </Form.Item>
                             </TabPane>
-                            <TabPane tab="托运地址" key="2" forceRender={true}>
-                                <Form.Item label="地址1" name="shippingAddress1">
+                            <TabPane
+                                tab={intl.formatMessage({
+                                    id: 'delivery_address',
+                                    defaultMessage: '托运地址',
+                                })}
+                                key="2"
+                                forceRender={true}
+                            >
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'address1',
+                                        defaultMessage: '地址1',
+                                    })}
+                                    name="shippingAddress1"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="地址2" name="shippingAddress2">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'address2',
+                                        defaultMessage: '地址2',
+                                    })}
+                                    name="shippingAddress2"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="市" name="shippingCity">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'city',
+                                        defaultMessage: '市',
+                                    })}
+                                    name="shippingCity"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="邮编" name="shippingPostcode">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'post_code',
+                                        defaultMessage: '邮编',
+                                    })}
+                                    name="shippingPostcode"
+                                >
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="国家" name="shippingCountry">
+                                <Form.Item
+                                    label={intl.formatMessage({
+                                        id: 'conutry',
+                                        defaultMessage: '国家',
+                                    })}
+                                    name="shippingCountry"
+                                >
                                     <Input />
                                 </Form.Item>
                             </TabPane>
@@ -154,7 +290,13 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
 
             <Row gutter={24}>
                 <Col span={6}>
-                    <Form.Item label="货币类型" name="currency">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'currency',
+                            defaultMessage: '货币类型',
+                        })}
+                        name="currency"
+                    >
                         <SelectGrayRaduis
                             options={[
                                 { label: '人民币', value: 0 },
@@ -163,17 +305,35 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
                             ]}
                         />
                     </Form.Item>
-                    <Form.Item label="支付方式" name="payType">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'account',
+                            defaultMessage: '支付方式',
+                        })}
+                        name="payType"
+                    >
                         <InputGrayRaduis />
                     </Form.Item>
                 </Col>
                 <Col span={1}></Col>
 
                 <Col span={17}>
-                    <Form.Item label="银行账号" name="bankAccount">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'account',
+                            defaultMessage: '银行账号',
+                        })}
+                        name="bankAccount"
+                    >
                         <InputGrayRaduis />
                     </Form.Item>
-                    <Form.Item label="备注" name="remark">
+                    <Form.Item
+                        label={intl.formatMessage({
+                            id: 'account',
+                            defaultMessage: '备注',
+                        })}
+                        name="remark"
+                    >
                         <InputGrayRaduis />
                     </Form.Item>
                 </Col>
@@ -182,7 +342,10 @@ const UserInfoForm = ({ data, onSumbit, isAdd, role }) => {
                 <Form.Item>
                     <Badge dot={showChange}>
                         <Button type="primary" htmlType="submit">
-                            保存设置
+                            {intl.formatMessage({
+                                id: 'save_setting',
+                                defaultMessage: '保存设置',
+                            })}
                         </Button>
                     </Badge>
                 </Form.Item>

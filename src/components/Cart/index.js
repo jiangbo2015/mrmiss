@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import { Box, Flex, Image, Text } from 'rebass/styled-components';
 
-import temp from '@/public/temp.jpg';
+import { useIntl } from 'umi';
 
 import Dot from '../Capsule/Dot';
 import { StyleSwitcher, SizeBox } from '../Capsule/ModalShopSimple';
@@ -28,7 +28,7 @@ const RoundBtn = props => (
     />
 );
 
-const LineItem = ({ data, showNum, onUpdate,readOnly,branchKindObj, userRole }) => {
+const LineItem = ({ data, showNum, onUpdate, readOnly, branchKindObj, userRole }) => {
     // // console.log('showNum', showNum);
     const { shopStyle, count, _id } = data;
     const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum, bagsNum } = shopStyle;
@@ -36,14 +36,16 @@ const LineItem = ({ data, showNum, onUpdate,readOnly,branchKindObj, userRole }) 
     return (
         <Box p="50px" mb="25px" sx={{ background: '#fff', borderRadius: '6px' }}>
             <Flex alignItems="center" justifyContent="space-between">
-                {readOnly ? null :                  <RoundBtn
-                    mr="10px"
-                    onClick={() => {
-                        onUpdate({ _id, isDel: 1 });
-                    }}
-                >
-                    x
-                </RoundBtn>}
+                {readOnly ? null : (
+                    <RoundBtn
+                        mr="10px"
+                        onClick={() => {
+                            onUpdate({ _id, isDel: 1 });
+                        }}
+                    >
+                        x
+                    </RoundBtn>
+                )}
 
                 <Box width="120px" m="0 58px">
                     {/* <Swiper> */}
@@ -91,11 +93,14 @@ const LineItem = ({ data, showNum, onUpdate,readOnly,branchKindObj, userRole }) 
                         {colorWithStyleImgs.map((item, index) => (
                             <Flex>
                                 <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                <Dot type={item.colorObj.type}
-                                            bg={item.colorObj.type ? false : item.colorObj.value}
-                                            src = { item.colorObj.type ? filterImageUrl(item.colorObj.value) : '' }
-                                            code={item.colorObj.code}
-                                            text={item.colorObj.namecn} size='14px' />
+                                    <Dot
+                                        type={item.colorObj.type}
+                                        bg={item.colorObj.type ? false : item.colorObj.value}
+                                        src={item.colorObj.type ? filterImageUrl(item.colorObj.value) : ''}
+                                        code={item.colorObj.code}
+                                        text={item.colorObj.namecn}
+                                        size="14px"
+                                    />
                                 </SizeBox>
                                 {size?.split('/').map((s, i) => (
                                     <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
@@ -105,7 +110,7 @@ const LineItem = ({ data, showNum, onUpdate,readOnly,branchKindObj, userRole }) 
                             </Flex>
                         ))}
                     </Box>
-                    <Text>{userRole === 4 ? `${numInBag}pcs`:`${numInBag}pcs*${bagsNum}`}</Text>
+                    <Text>{userRole === 4 ? `${numInBag}pcs` : `${numInBag}pcs*${bagsNum}`}</Text>
                 </Box>
                 <Text>¥.{price}</Text>
                 <Box mx="30px">
@@ -155,8 +160,9 @@ const Cart = ({
     selectedList = [],
     currentBranch,
     clearSelected = () => {},
-    readOnly
+    readOnly,
 }) => {
+    const intl = useIntl();
     // console.log('currentBranch', currentBranch)
     const [visible, setVisible] = useState(false);
     let sumCount = 0;
@@ -220,7 +226,7 @@ const Cart = ({
     };
     return (
         <>
-            <Flex width="200px" justifyContent='flex-end' onClick={() => setVisible(true)} style={triggleStyle}>
+            <Flex width="200px" justifyContent="flex-end" onClick={() => setVisible(true)} style={triggleStyle}>
                 {triggle}
             </Flex>
             <Modal
@@ -233,9 +239,16 @@ const Cart = ({
                     background: '#E6E2E7',
                 }}
             >
-                {readOnly ? null : <Flex justifyContent="center" fontSize="18px" pb="20px">
-                    <b>购物车</b>
-                </Flex>}
+                {readOnly ? null : (
+                    <Flex justifyContent="center" fontSize="18px" pb="20px">
+                        <b>
+                            {intl.formatMessage({
+                                id: 'cart',
+                                defaultMessage: '购物车',
+                            })}
+                        </b>
+                    </Flex>
+                )}
                 {myShopCartList.map((item, index) => (
                     <LineItem
                         readOnly={readOnly}
@@ -248,23 +261,39 @@ const Cart = ({
                     />
                 ))}
                 <Flex>
-                    <Text mr="18px">总数:{sumCount}</Text>
-                    <Text>总金额:¥{sumPrice}</Text>
+                    <Text mr="18px">
+                        {intl.formatMessage({
+                            id: 'total_quantity',
+                            defaultMessage: '总数',
+                        })}
+                        :{sumCount}
+                    </Text>
+                    <Text>
+                        {intl.formatMessage({
+                            id: 'total_amount',
+                            defaultMessage: '总金额',
+                        })}
+                        :¥{sumPrice}
+                    </Text>
                 </Flex>
-                {readOnly ? null : <Flex justifyContent="flex-end">
-                    <Button
-                        type="primary"
-                        style={{
-                            padding: '0 50px',
-                            height: '45px',
-                            lineHeight: 1,
-                        }}
-                        onClick={handleOrder}
-                    >
-                        确认购买
-                    </Button>
-                </Flex>}
-                
+                {readOnly ? null : (
+                    <Flex justifyContent="flex-end">
+                        <Button
+                            type="primary"
+                            style={{
+                                padding: '0 50px',
+                                height: '45px',
+                                lineHeight: 1,
+                            }}
+                            onClick={handleOrder}
+                        >
+                            {intl.formatMessage({
+                                id: 'buy_now',
+                                defaultMessage: '确认购买',
+                            })}
+                        </Button>
+                    </Flex>
+                )}
             </Modal>
         </>
     );
@@ -273,5 +302,5 @@ const Cart = ({
 export default connect(({ shop = {}, user }) => ({
     myShopCartList: shop.myShopCartList,
     currentUser: user.info,
-    currentBranch: shop.currentBranch
+    currentBranch: shop.currentBranch,
 }))(Cart);

@@ -1,10 +1,11 @@
 import Banner from '@/components/Banner';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
-import Footer from '@/components/Footer';
+// import Footer from '@/components/Footer';
 import map from '@/public/map.png';
 // import mp4 from '@/public/imgs/08.mp4';
 import { connect } from 'dva';
+import { useIntl } from 'umi';
 import { useEffect, useState } from 'react';
 import { Box } from 'rebass/styled-components';
 import Carousel from './Carousel';
@@ -13,6 +14,7 @@ import FeatureImage from './FeatureImage';
 const App = ({ dispatch, currentUser, location, systemDetail }) => {
     // const { currentUser } = props;
     // // console.log('location', location);
+    const intl = useIntl();
     const [openLogin, setOpenLogin] = useState(false);
     useEffect(() => {
         dispatch({
@@ -31,8 +33,15 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
             <Box p="40px" maxWidth="1480px" m="auto">
                 <Box mb="40px">
                     <Title
-                        title="我们的胶囊"
-                        subtitle="本季胶囊由mrmiss 2021限量胶囊系列-亲子家庭系列推出。 希望您可以在这里找到自己喜欢的产品。"
+                        title={intl.formatMessage({
+                            id: 'our_capsule',
+                            defaultMessage: '我们的胶囊',
+                        })}
+                        subtitle={intl.formatMessage({
+                            id: 'our_capsule_desc',
+                            defaultMessage:
+                                '本季胶囊由mrmiss 2021限量胶囊系列-亲子家庭系列推出。 希望您可以在这里找到自己喜欢的产品。',
+                        })}
                     />
                 </Box>
                 <FeatureImage imgsInfo={systemDetail}></FeatureImage>
@@ -42,8 +51,15 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
                 <Box bg="#fff" maxWidth="1480px" m="auto">
                     {/* <div id="aboutas">aboutas</div> */}
                     <Title
-                        title="关于我们"
-                        subtitle=" 我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。"
+                        title={intl.formatMessage({
+                            id: 'about_us',
+                            defaultMessage: '关于我们',
+                        })}
+                        subtitle={intl.formatMessage({
+                            id: 'about_us_desc',
+                            defaultMessage:
+                                '我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。',
+                        })}
                     />
                     <Box
                         mt="40px"

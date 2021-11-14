@@ -6,16 +6,18 @@ import UserInfoFrom from '@/components/UserInfoFrom';
 import { Badge } from 'antd';
 // import IconDelete from '@/public/icons/icon-delete.svg';
 import { connect } from 'dva';
+import { useIntl } from 'umi';
 import React, { useEffect, useState } from 'react';
 import UserEmpower from './UserEmpower';
 import UserOrder from './UserOrder';
 
 const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispatch, updateSelectedRowKeys, ...props }) => {
+    const intl = useIntl();
     const [empowerSingleCustomer, setEmpowerSingleCustomer] = useState(false);
     const [userOrderModal, setUserOrderModal] = useState(false);
     const [userInfoModal, setUserInfoModal] = useState(false);
     const [unOrderReader, setUnOrderReader] = useState(false);
-    
+
     const { lastLevel } = currentUser;
     useEffect(() => {
         dispatch({
@@ -41,7 +43,10 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
 
     const columns = [
         {
-            title: `${lastLevel}名称`,
+            title: intl.formatMessage({
+                id: lastLevel === '产品代理' ? 'name_of_agent' : 'name_of_customer',
+                defaultMessage: `${lastLevel}名称`,
+            }),
             dataIndex: 'name',
             key: 'name',
             render: (value, record) => (
@@ -52,7 +57,7 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                             type: 'business/setCurrentCustomer',
                             payload: record,
                         });
-                        setUserInfoModal(true)
+                        setUserInfoModal(true);
                     }}
                 >
                     {value}
@@ -60,12 +65,19 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
             ),
         },
         {
-            title: `${lastLevel}税号`,
+            title: intl.formatMessage({
+                id: 'tax_number',
+                defaultMessage: `${lastLevel}税号`,
+            }),
             dataIndex: 'VATNo',
             key: 'VATNo',
         },
         {
-            title: `${lastLevel}权限`,
+            title: intl.formatMessage({
+                id: 'permission',
+                defaultMessage: `${lastLevel}权限`,
+            }),
+
             dataIndex: 'totalCount',
             key: 'totalCount',
             render: (value, record) => (
@@ -75,16 +87,22 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                         handleAssign(record);
                     }}
                 >
-                    授权
+                    {intl.formatMessage({
+                        id: 'authorize',
+                        defaultMessage: '授权',
+                    })}
                 </a>
             ),
         },
         {
-            title: `${lastLevel}订单`,
+            title: intl.formatMessage({
+                id: 'orders',
+                defaultMessage: `${lastLevel}订单`,
+            }),
             dataIndex: 'unReadedNum',
             key: 'unReadedNum',
             render: (value, record) => (
-                <div style={{display:'flex', alignItems: 'center', justifyContent:'center'}}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <a
                         style={{ textDecoration: 'underline' }}
                         onClick={() => {
@@ -96,20 +114,26 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                             });
                         }}
                     >
-                        查看
+                        {intl.formatMessage({
+                            id: 'review',
+                            defaultMessage: '查看',
+                        })}
                     </a>
-                    {value ? <Badge count={value} style={{marginLeft: '8px'}} 
-                                onClick={() => {
-                                        setUserOrderModal(true);
-                                        setUnOrderReader(true);
-                                        dispatch({
-                                            type: 'business/setCurrentCustomer',
-                                            payload: record,
-                                        });
-                                    }}
-                            />:null}
+                    {value ? (
+                        <Badge
+                            count={value}
+                            style={{ marginLeft: '8px' }}
+                            onClick={() => {
+                                setUserOrderModal(true);
+                                setUnOrderReader(true);
+                                dispatch({
+                                    type: 'business/setCurrentCustomer',
+                                    payload: record,
+                                });
+                            }}
+                        />
+                    ) : null}
                 </div>
-
             ),
         },
     ];
@@ -126,7 +150,7 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                 <UserEmpower />
             </Modal>
             <Modal
-                title={`${currentCustomer.name}的订单${unOrderReader?'(未阅读)':''}`}
+                title={`${currentCustomer.name}的订单${unOrderReader ? '(未阅读)' : ''}`}
                 visible={userOrderModal}
                 footer={false}
                 width="1200px"
@@ -146,9 +170,9 @@ const UserListTable = ({ customerList = [], currentCustomer, currentUser, dispat
                     setUserInfoModal(false);
                 }}
             >
-                <UserInfoFrom data={currentCustomer} onSumbit={handleSubmit} role={currentCustomer.role}/>
+                <UserInfoFrom data={currentCustomer} onSumbit={handleSubmit} role={currentCustomer.role} />
             </Modal>
-        
+
             <Table
                 columns={columns}
                 dataSource={customerList}

@@ -25,7 +25,7 @@ import { Flex } from 'rebass/styled-components';
 import { history, setLocale, useIntl, Link } from 'umi';
 import './index.less';
 
-const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd, innerDataUserd }) => (
+const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd, innerDataUserd, intl }) => (
     <Menu>
         <Menu.Item
             onClick={() => {
@@ -35,7 +35,10 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '24px' }} src={IconUser} />}
         >
             <a target="_blank" rel="noopener noreferrer">
-                我的用户信息
+                {intl.formatMessage({
+                    id: 'my_data',
+                    defaultMessage: '我的用户信息',
+                })}
             </a>
         </Menu.Item>
         <Menu.Item
@@ -46,7 +49,10 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '22.5px' }} src={IconDIYOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
-                我的定制订单
+                {intl.formatMessage({
+                    id: 'my_diy_order',
+                    defaultMessage: '我的定制订单',
+                })}
             </a>
         </Menu.Item>
         <Menu.Item
@@ -57,7 +63,10 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '26px' }} src={IconCapOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
-                我的胶囊订单
+                {intl.formatMessage({
+                    id: 'my_capsule_order',
+                    defaultMessage: '我的胶囊订单',
+                })}
             </a>
         </Menu.Item>
         <Menu.Item
@@ -68,7 +77,10 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '24px' }} src={IconShopOrder} />}
         >
             <a target="_blank" rel="noopener noreferrer">
-                我的网店订单
+                {intl.formatMessage({
+                    id: 'my_shop_order',
+                    defaultMessage: '我的网店订单',
+                })}
             </a>
         </Menu.Item>
         {businessUserd ? (
@@ -79,12 +91,22 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
                 //     history.push('/business');
                 // }}
             >
-                <Link to="/business">业务管理</Link>
+                <Link to="/business">
+                    {intl.formatMessage({
+                        id: 'business_management',
+                        defaultMessage: '业务管理',
+                    })}
+                </Link>
             </Menu.Item>
         ) : null}
         {innerDataUserd ? (
             <Menu.Item className="menuItemH" icon={<ReactSVG style={{ width: '24px', height: '28px' }} src={ChartIcon} />}>
-                <Link to="/chart">数据分析</Link>
+                <Link to="/chart">
+                    {intl.formatMessage({
+                        id: 'data_analysis',
+                        defaultMessage: '数据分析',
+                    })}
+                </Link>
             </Menu.Item>
         ) : null}
 
@@ -94,7 +116,10 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
             icon={<ReactSVG style={{ display: 'inline-block', width: '24px', height: '27px' }} src={IconBack} />}
         >
             <a target="_blank" rel="noopener noreferrer">
-                退出登录
+                {intl.formatMessage({
+                    id: 'log_out',
+                    defaultMessage: '退出登录',
+                })}
             </a>
         </Menu.Item>
         <Menu.Item
@@ -104,7 +129,10 @@ const MyMenu = ({ onOpenMyCenter, onChangePassword, handleLogout, businessUserd,
             }}
         >
             <a target="_blank" rel="noopener noreferrer">
-                修改密码
+                {intl.formatMessage({
+                    id: 'change_password',
+                    defaultMessage: '修改密码',
+                })}
             </a>
         </Menu.Item>
     </Menu>
@@ -258,8 +286,8 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                 </Link>
                 <div style={{ position: 'absolute', left: 0, top: '40px', display: showMore ? 'initial' : 'none' }}>
                     <div className="menuItemH2">
-                        <span onClick={() => setLocale('zh-CN', false)}>CN</span>/
-                        <span onClick={() => setLocale('en-US', false)}>EN</span>
+                        <span onClick={() => setLocale('zh-CN', true)}>CN</span>/
+                        <span onClick={() => setLocale('en-US', true)}>EN</span>
                     </div>
                     <Link to="/#aboutas">
                         <div
@@ -371,6 +399,7 @@ const Header = ({ currentUser, setOpenLogin, headerBgColor = '#fff', dispatch })
                                 onChangePassword={() => {
                                     setChangePassword(true);
                                 }}
+                                intl={intl}
                                 handleLogout={handleLogout}
                                 businessUserd={currentUser.businessUserd}
                                 innerDataUserd={currentUser.innerDataUserd}
