@@ -382,7 +382,6 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                                                             </Box>
                                                                         ))}
                                                                         <Flex mb="30px">
-                                                                            {// console.log('el.sizes', el.sizes)}
                                                                             {el.sizes?.map(s => {
                                                                                 const sizeKey = `${ind}-${favorite._id}-${s}`;
                                                                                 return (
@@ -494,7 +493,7 @@ const App = ({ favoriteToOrderGroupList, dispatch, visible, onCancel, currentGoo
                                             options={[
                                                 { label: '单色单码', value: 0 },
                                                 { label: '混色混码', value: 1 },
-                                                { label: '单色混码混箱', value: 2 },
+                                                { label: '单色混码', value: 2 },
                                                 { label: '单色混码单箱', value: 3 },
                                             ]}
                                             onSelect={val => {

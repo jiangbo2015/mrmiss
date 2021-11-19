@@ -393,8 +393,8 @@ export default {
             const res = yield call(api.deleteFavorite, payload);
             if (res && res.data) {
                 const { favoriteArr } = yield select(state => state.diy);
-                const delIndex = favoriteArr.findIndex(x => x._id === payload._id)
-                favoriteArr.splice(delIndex, 1)
+                const delIndex = favoriteArr.findIndex(x => x._id === payload._id);
+                favoriteArr.splice(delIndex, 1);
                 yield put({
                     type: 'setFavoriteArr',
                     payload: [...favoriteArr],
@@ -404,27 +404,27 @@ export default {
         },
         *deleteFavorites(_, { call, put, select }) {
             const { selectFavoriteList } = yield select(state => state.diy);
-            if(!Array.isArray(selectFavoriteList) || selectFavoriteList.length<1){
-                message.warn('请选择要删除的收藏')
+            if (!Array.isArray(selectFavoriteList) || selectFavoriteList.length < 1) {
+                message.warn('请选择要删除的收藏');
                 return;
             }
-            const ids = selectFavoriteList.map(x => x._id)
-            const res = yield call(api.deleteFavorite, {ids});
+            const ids = selectFavoriteList.map(x => x._id);
+            const res = yield call(api.deleteFavorite, { ids });
             if (res && res.data) {
                 const { favoriteArr } = yield select(state => state.diy);
                 ids.forEach(_id => {
-                    const delIndex = favoriteArr.findIndex(x => x._id === _id)
-                    favoriteArr.splice(delIndex, 1)
-                })
-                
+                    const delIndex = favoriteArr.findIndex(x => x._id === _id);
+                    favoriteArr.splice(delIndex, 1);
+                });
+
                 yield put({
                     type: 'setFavoriteArr',
                     payload: [...favoriteArr],
                 });
                 yield put({
                     type: 'setSelectFavoriteList',
-                    payload: []
-                })
+                    payload: [],
+                });
             }
             // { styleAndColor: params, goodId: goodId }
         },
@@ -464,7 +464,7 @@ export default {
             // setStyleColorings
             let newValue = [];
             let newValue1 = [];
-            let itemColor = {}
+            let itemColor = {};
             const { item } = payload;
             let index = -1;
             const findSelectIndex = selectColorList.findIndex(x => x && x._id == item._id);
@@ -499,14 +499,14 @@ export default {
                                 let tempId = tempValue[tempRegion - 1]._id;
                                 let tempType = tempValue[tempRegion - 1].type;
                                 let isEixised = false;
-                                
+
                                 // 点击了选中区域的相同颜色 则取消该区域的选中
                                 if (tempValue[tempRegion - 1]._id === item._id) {
                                     tempValue[tempRegion - 1] = {};
                                     isEixised = tempValue.find(nv => nv && nv._id === item._id);
                                 } else {
                                     //否则换一种颜色
-                                    itemColor = {...item}
+                                    itemColor = { ...item };
                                     tempValue[tempRegion - 1] = item;
                                     isEixised = tempValue.find(nv => nv && nv._id === tempId);
                                     if (item.type) {
@@ -527,7 +527,7 @@ export default {
                                 }
                             } else {
                                 tempValue[tempRegion - 1] = item;
-                                itemColor = {...item}
+                                itemColor = { ...item };
                                 if (item.type) {
                                     flowerList.docs[index].isSelected = true;
                                 } else {
@@ -563,7 +563,7 @@ export default {
                                 } else {
                                     //否则换一种颜色
                                     tempValue[tempRegion - 1] = item;
-                                    itemColor = {...item}
+                                    itemColor = { ...item };
                                     let vfinded = newValue.find(nv => nv && nv._id === tempId);
                                     let v1finded = newValue1.find(nv => nv && nv._id === tempId);
                                     isEixised = vfinded || v1finded;
@@ -585,7 +585,7 @@ export default {
                                     }
                                 }
                             } else {
-                                itemColor = {...item}
+                                itemColor = { ...item };
                                 tempValue[tempRegion - 1] = item;
                                 if (item.type) {
                                     flowerList.docs[index].isSelected = true;
@@ -637,28 +637,25 @@ export default {
                             newValue.splice(findSelectIndex, 1);
                             if (item.type) {
                                 let curIndex = flowerList.docs.findIndex(x => x && x._id == item._id);
-                                if(curIndex >= 0) {
+                                if (curIndex >= 0) {
                                     flowerList.docs[curIndex].isSelected = false;
                                 }
-                                
                             } else {
                                 let curIndex = colorList.docs.findIndex(x => x && x._id == item._id);
-                                if(curIndex >= 0) {
+                                if (curIndex >= 0) {
                                     colorList.docs[curIndex].isSelected = false;
                                 }
-                                
                             }
                         } else {
                             newValue = [...selectColorList, item];
                             if (item.type) {
                                 let curIndex = flowerList.docs.findIndex(x => x && x._id == item._id);
-                                if(curIndex >= 0) {
+                                if (curIndex >= 0) {
                                     flowerList.docs[curIndex].isSelected = true;
                                 }
-                                
                             } else {
                                 let curIndex = colorList.docs.findIndex(x => x && x._id == item._id);
-                                if(curIndex >= 0) {
+                                if (curIndex >= 0) {
                                     colorList.docs[curIndex].isSelected = true;
                                 }
                             }
@@ -695,18 +692,18 @@ export default {
                     payload: newValue,
                 });
             }
-            if(itemColor.type === 1) {
+            if (itemColor.type === 1) {
                 yield put({
                     type: 'setCurrentFlower',
-                    payload: itemColor
-                })
-            } else if(item.type === 0){
+                    payload: itemColor,
+                });
+            } else if (item.type === 0) {
                 yield put({
                     type: 'setCurrentColor',
-                    payload: itemColor
-                })
+                    payload: itemColor,
+                });
             }
-            
+
             yield put({
                 type: 'setColorAndFlowerList',
                 payload: {
@@ -732,7 +729,6 @@ export default {
                 styleList[currentGoodCategoryMultiple][index].isSelected = true;
             }
 
-            
             yield put({
                 type: 'setSelectStyleList',
                 payload: newValue,
@@ -826,7 +822,7 @@ export default {
                     styleNos,
                     price,
                     size,
-                    pickType: { pieceCount: 0, val: 1 },
+                    pickType: { pieceCount: 0 },
                 };
             }
             const saveItems = saveOrder

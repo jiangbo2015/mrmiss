@@ -57,6 +57,16 @@ export default {
     unit_price: 'Unit Price',
     color: 'Color',
     subtotal: 'Subtotal',
+    order_pick_type0: 'Single Color and Size',
+    order_pick_type1: 'Mixed Color and Size',
+    order_pick_type2: 'Single Color Mixed Size',
+    order_pick_type3: 'Single Color Mixed Size (Mixed Box)',
+    choose_package_method: 'Choose Package Method',
+    per_package: 'Per package',
+    pcs: 'PCS',
+    total: 'Total',
+    packages: 'Packages',
+    box: 'Box',
 
     hello: 'Hello',
     diy: 'DIY',
@@ -78,4 +88,5 @@ export default {
     about_us_desc:
         'We reorganize the production process in the most efficient way considering the needs of our clients about each product. We consider the balance between general fashion trend on market and local style. We focus on manufacture',
     concat_us: 'Concat us',
+    none: ' ',
 };

@@ -581,15 +581,43 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                 <Flex height="36px" bg="#000000" p="0 22px" alignItems="center" justifyContent="space-between">
                                     <Flex alignItems="center">
                                         <Select
-                                            width="120px"
+                                            width="260px"
                                             mode="white"
                                             disabled={readOnly}
                                             value={el.pickType?.val}
+                                            placeholder={intl.formatMessage({
+                                                id: 'choose_package_method',
+                                                defaultMessage: '请选择包装方式',
+                                            })}
                                             options={[
-                                                { label: '单色单码', value: 0 },
-                                                { label: '混色混码', value: 1 },
-                                                { label: '单色混码混箱', value: 2 },
-                                                { label: '单色混码单箱', value: 3 },
+                                                {
+                                                    label: intl.formatMessage({
+                                                        id: 'order_pick_type0',
+                                                        defaultMessage: '单色单码',
+                                                    }),
+                                                    value: 0,
+                                                },
+                                                {
+                                                    label: intl.formatMessage({
+                                                        id: 'order_pick_type1',
+                                                        defaultMessage: '混色混码',
+                                                    }),
+                                                    value: 1,
+                                                },
+                                                {
+                                                    label: intl.formatMessage({
+                                                        id: 'order_pick_type2',
+                                                        defaultMessage: '单色混码',
+                                                    }),
+                                                    value: 2,
+                                                },
+                                                {
+                                                    label: intl.formatMessage({
+                                                        id: 'order_pick_type3',
+                                                        defaultMessage: '单色混码混箱',
+                                                    }),
+                                                    value: 3,
+                                                },
                                             ]}
                                             onSelect={val => {
                                                 // // console.log(val);
@@ -602,16 +630,29 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                             }}
                                         />
 
-                                        <Flex color="#ffffff" fontSize="12px" alignItems="center">
+                                        <Flex
+                                            color="#ffffff"
+                                            fontSize="12px"
+                                            alignItems="center"
+                                            style={{
+                                                visibility: el.pickType?.val || el.pickType?.val === 0 ? 'visible' : 'hidden',
+                                            }}
+                                        >
                                             <Flex alignItems="center" p="0 10px">
-                                                每份
+                                                {intl.formatMessage({
+                                                    id: 'per_package',
+                                                    defaultMessage: '每份',
+                                                })}
                                                 <InputBottomWhiteBorder
                                                     readOnly={readOnly}
                                                     value={lodash.sum(
                                                         el.list.map(l => lodash.sum(Object.values(l.sizeInfoObject))),
                                                     )}
                                                 />
-                                                件
+                                                {intl.formatMessage({
+                                                    id: 'pcs',
+                                                    defaultMessage: '件',
+                                                })}
                                             </Flex>
                                             <Flex
                                                 alignItems="center"
@@ -621,7 +662,11 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                                     },
                                                 }}
                                             >
-                                                共
+                                                {intl.formatMessage({
+                                                    id: 'total',
+                                                    defaultMessage: '共',
+                                                })}
+
                                                 <InputNumber
                                                     readOnly={readOnly}
                                                     value={el.pickType?.pieceCount}
@@ -644,26 +689,42 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                                         setShowChange(true);
                                                     }}
                                                 />
-                                                份
+                                                {intl.formatMessage({
+                                                    id: 'packages',
+                                                    defaultMessage: '份',
+                                                })}
                                             </Flex>
                                         </Flex>
                                     </Flex>
 
                                     <Flex color="#ffffff">
                                         <Box>
-                                            总金额:
-                                            {singleTotalPriceInfos[ind] ? singleTotalPriceInfos[ind] : 0}
+                                            {intl.formatMessage({
+                                                id: 'total_amount',
+                                                defaultMessage: '总金额',
+                                            })}
+                                            :{singleTotalPriceInfos[ind] ? singleTotalPriceInfos[ind] : 0}
                                         </Box>
                                         <Box p="0 16px">
-                                            总数量:
-                                            {singleTotalInfos[ind] ? singleTotalInfos[ind] : 0}
+                                            {intl.formatMessage({
+                                                id: 'total_quantity',
+                                                defaultMessage: '总数量',
+                                            })}
+                                            :{singleTotalInfos[ind] ? singleTotalInfos[ind] : 0}
                                         </Box>
                                         <Box>
-                                            大约
+                                            {intl.formatMessage({
+                                                id: 'box',
+                                                defaultMessage: '大约',
+                                            })}
+                                            :
                                             {singleTotalInfos[ind] && el.weight
                                                 ? Math.ceil((singleTotalInfos[ind] * el.weight) / 35000)
                                                 : 0}
-                                            箱
+                                            {intl.formatMessage({
+                                                id: 'none',
+                                                defaultMessage: '箱',
+                                            })}
                                         </Box>
                                     </Flex>
                                 </Flex>
