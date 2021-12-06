@@ -7,8 +7,10 @@ import React, { useEffect } from 'react';
 import { ReactSVG } from 'react-svg';
 import { Flex } from 'rebass/styled-components';
 import OrderTableComponent from './OrderTableComponent';
+import { useIntl } from 'umi';
 
 const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
+    const intl = useIntl()
     useEffect(() => {
         dispatch({
             type: 'usercenter/getUserShopOrder',
@@ -37,7 +39,10 @@ const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
 
     const columns = [
         {
-            title: '订单编号',
+            title: intl.formatMessage({
+                id: 'orders_number',
+                defaultMessage: '订单编号',
+            }),
             dataIndex: 'orderNo',
             key: 'orderNo',
             render: (value, record) => (
@@ -53,22 +58,34 @@ const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
             ),
         },
         {
-            title: '日期',
+            title: intl.formatMessage({
+                id: 'date',
+                defaultMessage: '日期',
+            }),
             dataIndex: 'date',
             key: 'date',
         },
         {
-            title: '总数量',
+            title: intl.formatMessage({
+                id: 'total_quantity',
+                defaultMessage: '总数量',
+            }),
             dataIndex: 'sumCount',
             key: 'sumPrice',
         },
         {
-            title: '总金额',
+            title: intl.formatMessage({
+                id: 'total_amount',
+                defaultMessage: '总金额',
+            }),
             dataIndex: 'sumPrice',
             key: 'sumPrice',
         },
         {
-            title: '下载',
+            title: intl.formatMessage({
+                id: 'download',
+                defaultMessage: '下载',
+            }),
             dataIndex: '_id',
             key: '_id',
             render: id => (

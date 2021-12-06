@@ -246,7 +246,7 @@ const ModalSimple = ({
     // console.log('currentBranch', currentBranch);
     // console.log('shopStyleTopAndBottomList', shopStyleTopAndBottomList)
     // console.log('currentShopBottomStyleIndex', currentShopBottomStyleIndex);
-    const { formatMessage } = useIntl();
+    const { locale } = useIntl();
     const curTopBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.top[0].branchKind)
     const curBomBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.bottom[0].branchKind)
     useEffect(() => {
@@ -330,7 +330,7 @@ const ModalSimple = ({
                                 }}
                             ></ArrowBtn>
                             <ItemBox
-                                curBranchKind={curBomBranchKind.namecn}
+                                curBranchKind={locale==='zh-US' ? curBomBranchKind.nameen : curBomBranchKind.namecn}
                                 onAddtoCart={handleAddtoCart}
                                 currentShopStyle={shopStyleTopAndBottomList.bottom[currentShopBottomStyleIndex]}
                             />

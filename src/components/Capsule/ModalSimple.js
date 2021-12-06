@@ -67,7 +67,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
 );
 
 const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutList = [], dispatch }) => {
-    const { formatMessage } = useIntl()
+    const { locale, formatMessage } = useIntl()
     const { colorWithStyleImgs = [], code, price, size, goodCategory = {} } = currentCapsuleStyle;
     const [current, setCurrent] = useState(0);
     let isTopOrBottom = false;
@@ -225,7 +225,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     </Box>
 
                     <Box pl="30px">
-                        <Text>{currentCapsuleStyle.goodCategory ? currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name : ''}</Text>
+                        <Text>{locale==='en-US' ? currentCapsuleStyle.goodCategory.enname : currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name}</Text>
                         <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
                             ¥{price}
                         </Text>

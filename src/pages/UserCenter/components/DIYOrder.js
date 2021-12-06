@@ -9,8 +9,9 @@ import { message } from 'antd';
 import lodash from 'lodash';
 import request from '@/utils/request';
 import OrderDownload from '@/components/OrderDownload';
-
+import {useIntl} from 'umi'
 const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
+    const intl = useIntl()
     const [downloadOrder, setDownloadOrder] = useState(false);
     useEffect(() => {
         dispatch({
@@ -41,7 +42,10 @@ const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
     };
     const columns = [
         {
-            title: '订单编号',
+            title: intl.formatMessage({
+                id: 'orders_number',
+                defaultMessage: '订单编号',
+            }),
             dataIndex: 'orderNo',
             key: 'orderNo',
             render: (value, record) => (
@@ -57,22 +61,34 @@ const OrderTable = ({ orderList = [], dispatch, onShowDetail }) => {
             ),
         },
         {
-            title: '日期',
+            title: intl.formatMessage({
+                id: 'date',
+                defaultMessage: '日期',
+            }),
             dataIndex: 'date',
             key: 'date',
         },
         {
-            title: '总数量',
+            title: intl.formatMessage({
+                id: 'total_quantity',
+                defaultMessage: '总数量',
+            }),
             dataIndex: 'sumCount',
             key: 'sumPrice',
         },
         {
-            title: '总金额',
+            title: intl.formatMessage({
+                id: 'total_amount',
+                defaultMessage: '总金额',
+            }),
             dataIndex: 'sumPrice',
             key: 'sumPrice',
         },
         {
-            title: '下载',
+            title: intl.formatMessage({
+                id: 'download',
+                defaultMessage: '下载',
+            }),
             dataIndex: 'download',
             key: 'download',
             render: (_, record) => (

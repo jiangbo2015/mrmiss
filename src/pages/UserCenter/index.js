@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { Box } from 'rebass/styled-components';
 import { Tabs } from 'antd';
 import UserInfo from './components/UserInfo';
@@ -9,32 +9,26 @@ import DIYOrder from './components/DIYOrder';
 import CapsuleOrder from './components/CapsuleOrder';
 import ShopOrder from './components/ShopOrder';
 import { connect } from 'dva';
+import { useIntl } from 'umi';
 
 const { TabPane } = Tabs;
 
-class UserCenter extends React.Component {
-    state = {
-        downloadOrder: {},
-        showDetailOrder: false,
-        showShopDetailOrder: false,
-    };
-    callback() {}
-    static getDerivedStateFromError(error) {
-        // Update state so the next render will show the fallback UI.
-        // console.log('getDerivedStateFromError', error);
-        return { hasError: true };
-    }
+const UserCenter = function(props) {
+    const [downloadOrder, setDownloadOrder] = useState({})
+    const [showDetailOrder, setShowDetailOrder] = useState(false)
+    const [showShopDetailOrder, setShowShopDetailOrder] = useState(false)
+    const intl = useIntl()
 
-    handleDownloadOrder(order) {
-        this.props.dispatch({
+    const handleDownloadOrder = (order) => {
+        props.dispatch({
             type: 'usercenter/downloadOrder',
             payload: order,
         });
     }
 
 
-    async handleShowOrderDetail (record){
-        await this.props.dispatch({
+    const handleShowOrderDetail = async (record) => {
+        await props.dispatch({
             type: 'usercenter/createCurrentOrderToGroupList',
             payload: record,
         });
@@ -44,8 +38,8 @@ class UserCenter extends React.Component {
         })
     };
 
-    async handleShowShopOrderDetail (record){
-        await this.props.dispatch({
+    const handleShowShopOrderDetail = async (record) => {
+        await props.dispatch({
             type: 'usercenter/createCurrentShopOrderToGroupList',
             payload: record,
         });
@@ -54,95 +48,93 @@ class UserCenter extends React.Component {
             showShopDetailOrder: true
         })
     };
-    render() {
-        const {
-            showDetailOrder,
-            showShopDetailOrder,
-        } = this.state
-        return (
-            <Box
-                width={1}
-                sx={{
-                    '.ant-tabs-nav-list': {
-                        width: '100%',
-                    },
-                    '.ant-tabs-tab': {
-                        width: '50%',
-                        textAlign: 'center',
-                        margin: 0,
-                        justifyContent: 'center',
-                    },
-                    '.ant-tabs-content-holder': {
-                        padding: '0 12px',
-                    },
+
+    return (
+        <Box
+            width={1}
+            sx={{
+                '.ant-tabs-nav-list': {
+                    width: '100%',
+                },
+                '.ant-tabs-tab': {
+                    width: '50%',
+                    textAlign: 'center',
+                    margin: 0,
+                    justifyContent: 'center',
+                },
+                '.ant-tabs-content-holder': {
+                    padding: '0 12px',
+                },
+            }}
+        >
+            <DCOrderEditor
+                visible={showDetailOrder}
+                onCancel={() => {
+                    setShowDetailOrder(false)
                 }}
+            />
+            <SOrderEditor
+                visible={showShopDetailOrder}
+                onCancel={() => {
+                    // setShowShopDetailOrder(false)
+                    setShowShopDetailOrder(false)
+                }}
+            />
+            {downloadOrder._id ? (
+                <OrderDownload
+                    onClose={() => {
+                        setDownloadOrder({})
+                    }}
+                />
+            ) : null}
+            <Tabs
+                activeKey={`${props.activeKey}`}
+                onChange={key => {
+                    props.changeActiveKey(key);
+                }}
+                tabBarStyle={{ background: '#FDDB3A', justifyContent: 'space-around' }}
             >
-                <DCOrderEditor
-                    visible={showDetailOrder}
-                    onCancel={() => {
-                        // setShowDetailOrder(false);
-                        this.setState({
-                            ...this.state,
-                            showDetailOrder: false
-                        })
-                    }}
-                />
-                <SOrderEditor
-                    visible={showShopDetailOrder}
-                    onCancel={() => {
-                        // setShowShopDetailOrder(false)
-                        this.setState({
-                            ...this.state,
-                            showShopDetailOrder: false
-                        })
-                    }}
-                />
-                {this.state.downloadOrder._id ? (
-                    <OrderDownload
-                        onClose={() => {
-                            this.setState({
-                                downloadOrder: {},
-                            });
-                        }}
-                    />
-                ) : null}
-                <Tabs
-                    activeKey={`${this.props.activeKey}`}
-                    onChange={key => {
-                        this.props.changeActiveKey(key);
-                    }}
-                    tabBarStyle={{ background: '#FDDB3A', justifyContent: 'space-around' }}
+                <TabPane
+                    tab={intl.formatMessage({
+                        id: 'my_data',
+                        defaultMessage: '我的信息',
+                    })}
+                    key={1}
+                    style={{ padding: '40px' }}
                 >
-                    <TabPane
-                        tab="我的信息
-                "
-                        key={1}
-                        style={{ padding: '40px' }}
-                    >
-                        <UserInfo />
-                    </TabPane>
-                    <TabPane tab="我的定制订单" key={2}>
-                        <DIYOrder 
-                            onDownloadOrder={this.handleDownloadOrder.bind(this)} 
-                            onShowDetail={this.handleShowOrderDetail.bind(this)}
-                        />
-                    </TabPane>
-                    <TabPane tab="我的胶囊订单" key={3}>
-                        <CapsuleOrder 
-                            onDownloadOrder={this.handleDownloadOrder.bind(this)} 
-                            onShowDetail={this.handleShowOrderDetail.bind(this)}
-                        />
-                    </TabPane>
-                    <TabPane tab="我的网店订单" key={4}>
-                        <ShopOrder 
-                            onDownloadOrder={this.handleDownloadOrder.bind(this)}
-                            onShowDetail={this.handleShowShopOrderDetail.bind(this)}
-                        />
-                    </TabPane>
-                </Tabs>
-            </Box>
-        );
-    }
+                    <UserInfo />
+                </TabPane>
+                <TabPane tab={intl.formatMessage({
+                id: 'my_diy_order',
+                defaultMessage: '我的定制订单',
+            })} key={2}>
+                    <DIYOrder 
+                        onDownloadOrder={handleDownloadOrder} 
+                        onShowDetail={handleShowOrderDetail}
+                    />
+                </TabPane>
+                <TabPane tab={intl.formatMessage({
+                id: 'my_capsule_order',
+                defaultMessage: '我的胶囊订单',
+            })} key={3}>
+                    <CapsuleOrder 
+                        onDownloadOrder={handleDownloadOrder} 
+                        onShowDetail={handleShowOrderDetail}
+                    />
+                </TabPane>
+                <TabPane tab={intl.formatMessage({
+                    id: 'my_shop_order',
+                    defaultMessage: '我的网店订单',
+                })} key={4}>
+                    <ShopOrder 
+                        onDownloadOrder={handleDownloadOrder}
+                        onShowDetail={handleShowShopOrderDetail}
+                    />
+                </TabPane>
+            </Tabs>
+        </Box>
+    );
+    
 }
 
 // export default UserCenter;

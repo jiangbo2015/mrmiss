@@ -91,7 +91,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
     if(curBranchKind.namecn.includes('单衣') || curBranchKind.namecn.includes('单裤') ){
         isTopOrBottom = true
     }
-    const { formatMessage } = useIntl()
+    const { locale, formatMessage } = useIntl()
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
@@ -187,7 +187,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                         </Flex> */}
                     </Box>
                     <Box pl="30px">
-                        <Text>{curBranchKind.namecn}</Text>
+                        <Text>{locale === 'en-US' ? curBranchKind.nameen : curBranchKind.namecn}</Text>
                         <Text color="#313131" fontSize="28px" fontWeight="bold" my="4px">
                             ¥{price}
                         </Text>

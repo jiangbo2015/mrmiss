@@ -86,7 +86,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 
 const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
     // console.log('currentCapsuleStyle', currentCapsuleStyle);
-    const { formatMessage } = useIntl()
+    const { locale,formatMessage } = useIntl()
     const { colorWithStyleImgs = [], code, price, size, goodCategory } = currentCapsuleStyle;
     console.log('goodCategory', goodCategory);
     const [current, setCurrent] = useState(0);
@@ -193,7 +193,8 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
             </Box>
 
             <Box pl="30px">
-                <Text>{goodCategory.name}</Text>
+                <Text>{locale==='en-US' ? currentCapsuleStyle.goodCategory.enname : currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name}</Text>
+
                 <Text color="#313131" fontSize="28px" fontWeight="bold" my="6px">
                     ¥{price}
                 </Text>
