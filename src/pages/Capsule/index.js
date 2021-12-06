@@ -13,13 +13,13 @@ import Title from '@/components/Title';
 import lodash from 'lodash';
 // import carousel1 from '@/public/carousel1.jpg';
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Flex, Image } from 'rebass/styled-components';
+import { Box, Flex } from 'rebass/styled-components';
 // import Carousel from '../Home/Carousel';
 // import ExbImage from './ExbImage';
 import OrderMarkModal from './OrderMarkModal';
 import { connect } from 'dva';
 import { Button } from 'antd';
-// import { SaveOutlined } from '@ant-design/icons';
+import { useIntl } from 'umi';
 import Search from '@/components/SearchInput';
 import SelectedIcon from '@/public/icons/icon-selected-black.svg';
 import SaveIcon from '@/public/icons/icon-save2.svg';
@@ -53,6 +53,8 @@ const Capsule = ({
     const [orderVisible, setOrderVisible] = useState(false);
 
     const { capsuleStyles = [] } = currentAdminChannel;
+
+    const {locale,formatMessage } = useIntl()
 
     useEffect(() => {
         dispatch({
@@ -286,7 +288,7 @@ const Capsule = ({
         <Layout pt="74px" bg="#F7F7F7">
             <section>
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
-                    <Title title={currentCapsule.namecn} subtitle={currentCapsule.description} />
+                    <Title title={locale === 'en-US' ?  currentCapsule.nameen : currentCapsule.namecn} subtitle={currentCapsule.description} />
                 </Box>
                 <Flex mx="auto" pt="30px" pb="20px" px="8px" maxWidth="1480px"  justifyContent="space-between" sx={{ position: 'relative' }}>
                             <Search

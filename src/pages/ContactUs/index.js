@@ -1,14 +1,13 @@
 import { InputBottomBorder, TextAreaBottomBorder } from '@/components/Input';
 import Layout from '@/components/Layout';
-import Title from '@/components/Title';
-import Footer from '@/components/Footer';
-import map from '@/public/map.png';
 import { Form, Button, Col, Row, message } from 'antd';
 import { connect } from 'dva';
-import { useEffect } from 'react';
+import { useIntl } from 'umi';
+
 import { Box } from 'rebass/styled-components';
 
 const App = ({ dispatch, currentUser }) => {
+    const intl = useIntl()
     // const { currentUser } = props;
     const [form] = Form.useForm();
 
@@ -38,7 +37,10 @@ const App = ({ dispatch, currentUser }) => {
                                     },
                                 ]}
                             >
-                                <InputBottomBorder placeholder="Your name *" />
+                                <InputBottomBorder placeholder={intl.formatMessage({
+                            id: 'your_name',
+                            defaultMessage: '您的姓名',
+                        })} />
                             </Form.Item>
                         </Col>
                         <Col span={2}></Col>
@@ -52,7 +54,10 @@ const App = ({ dispatch, currentUser }) => {
                                     },
                                 ]}
                             >
-                                <InputBottomBorder placeholder="Your email *" />
+                                <InputBottomBorder placeholder={intl.formatMessage({
+                            id: 'your_email',
+                            defaultMessage: '您的邮箱',
+                        })} />
                             </Form.Item>
                         </Col>
                     </Row>
@@ -66,7 +71,10 @@ const App = ({ dispatch, currentUser }) => {
                             },
                         ]}
                     >
-                        <InputBottomBorder placeholder="Subject *" />
+                        <InputBottomBorder placeholder={intl.formatMessage({
+                            id: 'subject',
+                            defaultMessage: '主题',
+                        })} />
                     </Form.Item>
                     <Form.Item
                         name="mensaje"
@@ -77,16 +85,30 @@ const App = ({ dispatch, currentUser }) => {
                             },
                         ]}
                     >
-                        <TextAreaBottomBorder rows={8} placeholder="Mensaje *" />
+                        <TextAreaBottomBorder rows={8} placeholder={intl.formatMessage({
+                            id: 'mensaje',
+                            defaultMessage: '请描述您的问题',
+                        })} />
                     </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit" style={{ width: '200px' }}>
-                            Send
+                            
+                            {intl.formatMessage({
+                            id: 'send',
+                            defaultMessage: '发送',
+                        })}
                         </Button>
                     </Form.Item>
                     <p>
-                        CAN I HELP YOU? <br />
-                        From here we will solve all the doubts you have about us and our services.
+                    {intl.formatMessage({
+                            id: 'can_help_you',
+                            defaultMessage: '需要帮助吗？',
+                        })}
+                        <br />
+                        {intl.formatMessage({
+                            id: 'from_here_we',
+                            defaultMessage: '请填写以上表格，让我们来解答您的疑问。',
+                        })}
                     </p>
                 </Form>
             </Box>

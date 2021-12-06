@@ -1,9 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Box, Flex, Image } from 'rebass/styled-components';
+import { Box, Flex } from 'rebass/styled-components';
 import { Button } from 'antd';
 import { ReactSVG } from 'react-svg';
 import { connect } from 'dva';
 import lodash from 'lodash'
+import { useIntl } from 'umi'
 
 import CapsItem from '@/components/Capsule/ShopItem';
 import ModalShopSimple from '@/components/Capsule/ModalShopSimple';
@@ -42,6 +43,8 @@ const Shop = ({
     const [selectedAll, setSelectedAll] = useState(false);
     const [selectedList, setSelectedList] = useState([]);
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
+
+    const {locale,formatMessage } = useIntl()
     useEffect(() => {
         dispatch({
             type: 'shop/fetchBranchList',
@@ -263,7 +266,7 @@ const Shop = ({
             <section>
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title
-                        title={currentBranch.namecn}
+                        title={locale==='en-US' ? currentBranch.nameen : currentBranch.namecn}
                         subtitle={currentBranch.description}
                     />
                 </Box>

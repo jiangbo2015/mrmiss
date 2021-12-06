@@ -1,7 +1,7 @@
 import InputNumber from '@/components/InputNumber';
 import StyleItem from '@/components/StyleItem';
 import { filterImageUrl } from '@/utils/helper';
-import temp from '@/public/temp.jpg';
+// import temp from '@/public/temp.jpg';
 import { useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
@@ -9,6 +9,7 @@ import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
+import { useIntl } from 'umi'
 export const CloseBtn = props => (
     <Flex alignSelf="flex-end" pt="12px" pb="12px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
@@ -85,6 +86,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 
 const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
     // console.log('currentCapsuleStyle', currentCapsuleStyle);
+    const { formatMessage } = useIntl()
     const { colorWithStyleImgs = [], code, price, size, goodCategory } = currentCapsuleStyle;
     console.log('goodCategory', goodCategory);
     const [current, setCurrent] = useState(0);
@@ -242,7 +244,10 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     ))}
                 </Flex>
                 <Text fontSize="16px" mt="20px">
-                    尺码/中包
+                        {formatMessage({
+                                id: 'size_pkg',
+                                defaultMessage:  '尺码/中包',
+                        })}
                 </Text>
                 <Flex mt="10px" minHeight="54px">
                     {size?.split('/').map((item, i) => (
@@ -263,7 +268,10 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     }}
                 >
                     <Text color="#fff" textAlign="center">
-                        加入订单编辑器
+                        {formatMessage({
+                            id: 'add_to_order_editor',
+                            defaultMessage:  '加入订单编辑器',
+                        })}    
                     </Text>
                 </Box>
             </Box>

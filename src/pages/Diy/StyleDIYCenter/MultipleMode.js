@@ -6,7 +6,7 @@ import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 // import InfiniteScroll from 'react-infinite-scroll-component';
-import ReactList from 'react-list';
+import {useIntl} from 'umi';
 // react-list
 import SelectedIcon from '@/public/icons/icon-selected.svg';
 import SingleIcon from '@/public/icons/icon-single.svg';

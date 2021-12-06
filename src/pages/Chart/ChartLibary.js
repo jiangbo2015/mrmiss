@@ -11,30 +11,44 @@ import Tooltip from 'bizcharts/lib/components/Tooltip';
 import { filterImageUrl } from '../../utils/helper';
 
 import { useState } from 'react';
+import { useIntl } from 'umi';
 const colors = ['#6394f9', '#62daaa'];
 
 export const OrderRank = ({ data: originData = [] }) => {
+    const { formatMessage } = useIntl()
     let chartIns = null;
     const scale = {
         // tickCount控制双轴的对齐
         amount: {
-            alias: '金额',
+            alias:  formatMessage({
+                id: 'amount',
+                defaultMessage:  '金额',
+            }),
             min: 0,
             type: 'linear-strict', // (⚠️需要更新至4.1.x版本才能使用)
         },
         number: {
             min: 0,
-            alias: '数量',
+            alias:  formatMessage({
+                id: 'quantity',
+                defaultMessage:  '数量',
+            }),
             type: 'linear-strict',
         },
         date: {
-            alias: '日期',
+            alias:  formatMessage({
+                id: 'date',
+                defaultMessage:  '日期',
+            }),
             // type: 'timeCat',
             // mask: 'YYYY-MM-DD HH:mm:ss'
         },
     };
     return (
-        <Card title="销售折线图">
+        <Card title={formatMessage({
+            id: 'sales_graph_overview',
+            defaultMessage:  '销售折线图',
+        })}>
             <Chart
                 scale={scale}
                 onGetG2Instance={chart => {
@@ -88,7 +102,10 @@ export const OrderRank = ({ data: originData = [] }) => {
                     items={[
                         {
                             value: 'amount',
-                            name: '金额',
+                            name: formatMessage({
+                                id: 'amount',
+                                defaultMessage:  '金额',
+                            }),
                             marker: {
                                 symbol: 'circle',
                                 style: { fill: colors[0], r: 5 },
@@ -96,7 +113,10 @@ export const OrderRank = ({ data: originData = [] }) => {
                         },
                         {
                             value: 'number',
-                            name: '数量',
+                            name: formatMessage({
+                                id: 'quantity',
+                                defaultMessage:  '数量',
+                            }),
                             marker: {
                                 symbol: 'hyphen',
                                 style: { stroke: colors[1], r: 5, lineWidth: 3 },
@@ -143,10 +163,14 @@ export const OrderRank = ({ data: originData = [] }) => {
 };
 
 export const StyleRank = ({ data }) => {
+    const { formatMessage } = useIntl()
     const [styleType, setStyleType] = useState('amount');
     return (
         <Card
-            title="款式销售排行"
+            title={formatMessage({
+                id: 'style_ranking',
+                defaultMessage:  '款式销售排行',
+            })}
             extra={
                 <Radio.Group
                     style={{ color: '#00000073' }}
@@ -155,8 +179,18 @@ export const StyleRank = ({ data }) => {
                         setStyleType(e.target.value);
                     }}
                 >
-                    <Radio.Button value="amount">按金额</Radio.Button>
-                    <Radio.Button value="number">按数量</Radio.Button>
+                    <Radio.Button value="amount">
+                        {formatMessage({
+                            id: 'sort_by_amount',
+                            defaultMessage:  '按金额',
+                        })}
+                    </Radio.Button>
+                    <Radio.Button value="number">
+                        {formatMessage({
+                            id: 'sort_by_quantity',
+                            defaultMessage:  '按数量',
+                        })}    
+                    </Radio.Button>
                 </Radio.Group>
             }
         >
@@ -169,10 +203,14 @@ export const StyleRank = ({ data }) => {
 };
 
 export const UserRank = ({ data }) => {
+    const { formatMessage } = useIntl()
     const [userType, setUserType] = useState('amount');
     return (
         <Card
-            title="客户排行"
+            title={formatMessage({
+                id: 'clients_ranking',
+                defaultMessage:  '客户排行',
+            })}
             extra={
                 <Radio.Group
                     style={{ color: '#00000073' }}
@@ -181,8 +219,16 @@ export const UserRank = ({ data }) => {
                         setUserType(e.target.value);
                     }}
                 >
-                    <Radio.Button value="amount">按金额</Radio.Button>
-                    <Radio.Button value="number">按数量</Radio.Button>
+                    <Radio.Button value="amount">{formatMessage({
+                            id: 'sort_by_amount',
+                            defaultMessage:  '按金额',
+                        })}</Radio.Button>
+                                        <Radio.Button value="number">                        
+                        {formatMessage({
+                            id: 'sort_by_quantity',
+                            defaultMessage:  '按数量',
+                        })} 
+                    </Radio.Button>
                 </Radio.Group>
             }
         >
@@ -195,10 +241,14 @@ export const UserRank = ({ data }) => {
 };
 
 export const CapsuleRank = ({ data }) => {
+    const { formatMessage,locale } = useIntl()
     const [userType, setUserType] = useState('amount');
     return (
         <Card
-            title="胶囊系列排行"
+            title={formatMessage({
+                id: 'capsule_ranking',
+                defaultMessage:  '胶囊系列排行',
+            })}
             extra={
                 <Radio.Group
                     style={{ color: '#00000073' }}
@@ -207,14 +257,22 @@ export const CapsuleRank = ({ data }) => {
                         setUserType(e.target.value);
                     }}
                 >
-                    <Radio.Button value="amount">按金额</Radio.Button>
-                    <Radio.Button value="number">按数量</Radio.Button>
+                    <Radio.Button value="amount">{formatMessage({
+                            id: 'sort_by_amount',
+                            defaultMessage:  '按金额',
+                        })}</Radio.Button>
+                    <Radio.Button value="number">                        
+                        {formatMessage({
+                            id: 'sort_by_quantity',
+                            defaultMessage:  '按数量',
+                        })} 
+                    </Radio.Button>
                 </Radio.Group>
             }
         >
             <Chart height={data.length * 60 + 80} autoFit data={data}>
                 <Coordinate transpose />
-                <Interval size={30} position={`capsuleNamecn*${userType}`} />
+                <Interval size={30} position={locale === 'en-US' ? `capsuleNameen*${userType}` : `capsuleNamecn*${userType}`} />
                 {/* <Tooltip shared/> */}
             </Chart>
         </Card>
@@ -223,9 +281,13 @@ export const CapsuleRank = ({ data }) => {
 
 export const ColorRank = ({ data }) => {
     const [userType, setUserType] = useState('amount');
+    const { formatMessage } = useIntl()
     return (
         <Card
-            title="颜色排行"
+            title={formatMessage({
+                id: 'color_ranking',
+                defaultMessage:  '颜色排行',
+            })}
             extra={
                 <Radio.Group
                     style={{ color: '#00000073' }}
@@ -234,8 +296,16 @@ export const ColorRank = ({ data }) => {
                         setUserType(e.target.value);
                     }}
                 >
-                    <Radio.Button value="amount">按金额</Radio.Button>
-                    <Radio.Button value="number">按数量</Radio.Button>
+                    <Radio.Button value="amount">{formatMessage({
+                            id: 'sort_by_amount',
+                            defaultMessage:  '按金额',
+                        })}</Radio.Button>
+                    <Radio.Button value="number">                        
+                        {formatMessage({
+                            id: 'sort_by_quantity',
+                            defaultMessage:  '按数量',
+                        })} 
+                    </Radio.Button>
                 </Radio.Group>
             }
         >
@@ -260,9 +330,13 @@ export const ColorRank = ({ data }) => {
 
 export const ImgRank = ({ data }) => {
     const [userType, setUserType] = useState('amount');
+    const { formatMessage } = useIntl()
     return (
         <Card
-            title="花布排行"
+            title={formatMessage({
+                id: 'pattern_ranking',
+                defaultMessage:  '花布排行',
+            })}
             extra={
                 <Radio.Group
                     style={{ color: '#00000073' }}
@@ -271,8 +345,16 @@ export const ImgRank = ({ data }) => {
                         setUserType(e.target.value);
                     }}
                 >
-                    <Radio.Button value="amount">按金额</Radio.Button>
-                    <Radio.Button value="number">按数量</Radio.Button>
+                    <Radio.Button value="amount">{formatMessage({
+                            id: 'sort_by_amount',
+                            defaultMessage:  '按金额',
+                        })}</Radio.Button>
+                                        <Radio.Button value="number">                        
+                        {formatMessage({
+                            id: 'sort_by_quantity',
+                            defaultMessage:  '按数量',
+                        })} 
+                    </Radio.Button>
                 </Radio.Group>
             }
         >

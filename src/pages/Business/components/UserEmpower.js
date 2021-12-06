@@ -4,6 +4,7 @@ import { ReactSVG } from 'react-svg';
 import { LockOutlined, UnlockOutlined, SaveOutlined, CopyOutlined } from '@ant-design/icons';
 import { Flex, Box } from 'rebass/styled-components';
 import { connect } from 'dva';
+import { useIntl } from 'umi';
 
 import Table from '@/components/Table';
 import Switch from '@/components/Switch';
@@ -35,6 +36,7 @@ const UserListTable = ({
     batch,
     currentUser,
 }) => {
+    const {locale, formatMessage} = useIntl()
     const [copiedUserModal, setCopiedUserModal] = useState(false);
     const [clocked, setClocked] = useState(true);
     const [tableData, setTableData] = useState([]);
@@ -56,16 +58,25 @@ const UserListTable = ({
     useEffect(() => {
         let baseData = [
             {
-                name: 'DIY 搭配',
+                name: formatMessage({
+                    id: 'diy',
+                    defaultMessage: 'DIY 搭配',
+                }),
                 key: 'diy',
             },
             {
                 key: 'capsule',
-                name: '胶囊产品系列',
+                name: formatMessage({
+                    id: 'capsules',
+                    defaultMessage: '胶囊产品系列',
+                }),
             },
             {
                 key: 'shop',
-                name: '现货购买',
+                name: formatMessage({
+                    id: 'e_shop',
+                    defaultMessage: '现货购买',
+                }),
             },
         ];
 
@@ -74,15 +85,24 @@ const UserListTable = ({
                 ...baseData,
                 {
                     key: 'channelEmpowerUserd',
-                    name: '通道分配器的使用授权',
+                    name: formatMessage({
+                        id: 'authorize_to_use_access_splitter',
+                        defaultMessage: '通道分配器的使用授权',
+                    }),
                     empowered: currentCustomer.channelEmpowerUserd,
                 },
                 {
                     key: 'innerDataUserd',
-                    name: '内部数据分析的使用权限',
+                    name: formatMessage({
+                        id: 'authorize_to_use_internal_data_analysis',
+                        defaultMessage:  '内部数据分析的使用权限',
+                    }),
                     empowered: currentCustomer.innerDataUserd,
                 },
-                { key: 'businessUserd', name: '业务管理的使用权限', empowered: currentCustomer.businessUserd },
+                { key: 'businessUserd', name: formatMessage({
+                    id: 'authorize_to_use_business_management',
+                    defaultMessage:  '业务管理的使用权限',
+                }), empowered: currentCustomer.businessUserd },
             ];
         }
         baseData[0].goodsInfo = goodsList.map((g, i) => {
@@ -91,7 +111,7 @@ const UserListTable = ({
             return {
                 _id: g._id,
                 row: i,
-                name: g.name,
+                name: locale === 'en-US' ? g.aliasName : g.name,
                 aliasName: g.aliasName,
                 channel: findChannel ? findChannel.codename : '',
                 channelInfo: getChannelInfo(findChannel ? findChannel : {}),
@@ -104,7 +124,7 @@ const UserListTable = ({
             return {
                 _id: g._id,
                 row: i,
-                name: g.namecn,
+                name: locale === 'en-US' ? g.nameen : g.namecn,
                 aliasName: g.aliasName,
                 channel: findChannel ? findChannel.codename : '',
                 channelInfo: getChannelInfo(findChannel ? findChannel : {}),
@@ -117,7 +137,7 @@ const UserListTable = ({
             return {
                 _id: g._id,
                 row: i,
-                name: g.namecn,
+                name: locale === 'en-US' ? g.nameen : g.namecn,
                 aliasName: g.aliasName,
                 channel: findChannel ? findChannel.codename : '',
                 channelInfo: getChannelInfo(findChannel ? findChannel : {}),
@@ -216,19 +236,28 @@ const UserListTable = ({
 
     const columns = [
         {
-            title: '产品类别',
+            title:  formatMessage({
+                id: 'category',
+                defaultMessage:  '产品类别',
+            }),
             dataIndex: 'name',
             key: 'name',
             width: 200,
         },
         {
-            title: '所在通道',
+            title: formatMessage({
+                id: 'access',
+                defaultMessage:  '所在通道',
+            }),
             dataIndex: 'channel',
             key: 'channel',
             width: 200,
         },
         {
-            title: '授权',
+            title: formatMessage({
+                id: 'authorize',
+                defaultMessage:  '授权',
+            }),
             dataIndex: 'empowered',
             key: 'empowered',
             width: 200,
@@ -245,7 +274,10 @@ const UserListTable = ({
             },
         },
         {
-            title: '通道备注',
+            title:  formatMessage({
+                id: 'note',
+                defaultMessage:  '通道备注',
+            }),
             dataIndex: 'channelInfo',
             key: 'channelInfo',
         },
@@ -258,6 +290,7 @@ const UserListTable = ({
                 dataIndex: 'name',
                 key: 'name',
                 width: 200,
+                
             },
             {
                 title: '所在通道',
@@ -340,12 +373,19 @@ const UserListTable = ({
                 <ReactSVG style={{ width: '40px', height: '40px' }} src={IconEmpower} />
 
                 <Box p="0 20px">
-                    {lastLevel}名称：
+                {formatMessage({
+                    id: role === 1 ? 'name_of_product_agent' : 'name_of_customer',
+                    defaultMessage: `${lastLevel}名称：`,
+                })}
+                    
                     {batch ? selectedRows.map(x => x.name).join('、') : currentCustomer.name}
                 </Box>
                 {batch ? null : (
                     <Box>
-                        {lastLevel}税号：{currentCustomer.VATNo}
+                        {formatMessage({
+                            id: 'nif_cif',
+                            defaultMessage: `${lastLevel}税号：${currentCustomer.VATNo? currentCustomer.VATNo: ''}`,
+                        })}        
                     </Box>
                 )}
             </Flex>

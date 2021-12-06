@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Flex, Box, Image } from 'rebass/styled-components';
 import { ReactSVG } from 'react-svg';
 import CirCleArrow from '@/public/icons/circle_arrow.svg';
-import IconPng from '@/public/icon.png';
+import { useIntl } from 'umi';
 // import styles from './index.less';
 import { InputGray } from '@/components/Input';
 
@@ -30,7 +30,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
     const ref = useRef(null);
     const [curABC, setCurABC] = useState('A');
     const [remarkVal, setRemarkVal] = useState('');
-
+    const {locale,formatMessage } = useIntl()
     const inputRef = useRef();
     useEffect(() => {
         dispatch({
@@ -137,7 +137,7 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                                 handleSelectGood(g);
                             }}
                         >
-                            {g.name}
+                            {locale === 'en-US' ? g.aliasName :  g.name }
                         </ClassifyItem>
                     ))}
                 </Flex>
@@ -168,7 +168,10 @@ const DiyHeader = ({ dispatch, goodsList = [], currentGood = {}, currentAdminCha
                 {curABC !== 'A' ? (
                     <Flex>
                         <Flex bg="#BBBBBB" width="76px" fontSize="10px" p="6px 14px">
-                            通道备注
+                            {formatMessage({
+                                    id: 'note',
+                                    defaultMessage:  '通道备注',
+                                })}
                         </Flex>
                         <InputGray
                             style={{ width: '200px', color: '#767676' }}

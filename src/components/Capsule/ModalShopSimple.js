@@ -2,7 +2,7 @@ import InputNumber from '@/components/InputNumber';
 import StyleItem from '@/components/StyleItem';
 import ShopItem from './ShopItem';
 import { filterImageUrl } from '@/utils/helper';
-import temp from '@/public/temp.jpg';
+import { useIntl } from 'umi';
 import { useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
@@ -91,7 +91,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
     if(curBranchKind.namecn.includes('单衣') || curBranchKind.namecn.includes('单裤') ){
         isTopOrBottom = true
     }
-    // // console.log('currentShopStyle', currentShopStyle);
+    const { formatMessage } = useIntl()
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
@@ -236,14 +236,27 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             ))}
                         </Box>
                         <Flex mt="4px">
-                            <strong>中包:</strong>
+                            <strong>
+                                {formatMessage({
+                                    id: 'pkg',
+                                    defaultMessage:  '中包',
+                                })}:
+                            </strong>
                             <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
-                            <strong>装箱:</strong>
+                            <strong>
+                                {formatMessage({
+                                    id: 'ctn',
+                                    defaultMessage:  '装箱',
+                                })}:
+                            </strong>
                             <Text>{currentShopStyle.caseNum}pcs</Text>
                         </Flex>
                         <Box bg="#000" width="100%" py="10px" mt="4px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
                             <Text color="#fff" textAlign="center">
-                                加入购物车
+                                {formatMessage({
+                                    id: 'add_to_cart',
+                                    defaultMessage:  '加入购物车',
+                                })}
                             </Text>
                         </Box>
                     </Box>

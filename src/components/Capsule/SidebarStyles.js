@@ -1,8 +1,9 @@
 import { Box, Text } from 'rebass/styled-components';
-
+import {useIntl} from 'umi'
 const data = ['Beach Shorts', 'SWIMUITE ALL', 'SWIABC', 'DEFG'];
 
 export default ({ data = [], selectedItem = {}, onSelect }) => {
+    const {locale,formatMessage } = useIntl()
     // const active = 1;
     return (
         // <Box css={{ position: 'absolute', left: 20, top: 0 }}>
@@ -20,7 +21,7 @@ export default ({ data = [], selectedItem = {}, onSelect }) => {
                             onSelect(item, item);
                         }}
                     >
-                        {item.namecn}
+                        {locale === 'en-US'? item.nameen : item.namecn}
                     </Text>
                     {selectedItem._id === item._id || (selectedItem.branch === item._id && Array.isArray(item.children))
                         ? item.children.map(c => (
@@ -37,7 +38,7 @@ export default ({ data = [], selectedItem = {}, onSelect }) => {
                                       onSelect(item, c);
                                   }}
                               >
-                                  -{c.namecn}
+                                  -{locale === 'en-US'? c.nameen : c.namecn}
                               </Text>
                           ))
                         : null}

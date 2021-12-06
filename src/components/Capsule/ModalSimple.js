@@ -9,6 +9,7 @@ import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
+import { useIntl } from 'umi'
 export const CloseBtn = props => (
     <Flex alignSelf="flex-end" pt="20px" pb="40px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
@@ -66,6 +67,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
 );
 
 const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutList = [], dispatch }) => {
+    const { formatMessage } = useIntl()
     const { colorWithStyleImgs = [], code, price, size, goodCategory = {} } = currentCapsuleStyle;
     const [current, setCurrent] = useState(0);
     let isTopOrBottom = false;
@@ -276,7 +278,10 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             ))}
                         </Flex>
                         <Text fontSize="16px" mt="40px">
-                            尺码/中包
+                            {formatMessage({
+                                id: 'size_pkg',
+                                defaultMessage:  '尺码/中包',
+                            })}
                         </Text>
                         <Flex mt="20px">
                             {size?.split('/').map((item, i) => (
@@ -297,7 +302,10 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             }}
                         >
                             <Text color="#fff" textAlign="center">
-                                加入订单编辑器
+                                {formatMessage({
+                                    id: 'add_to_order_editor',
+                                    defaultMessage:  '加入订单编辑器',
+                                })}   
                             </Text>
                         </Box>
                     </Box>

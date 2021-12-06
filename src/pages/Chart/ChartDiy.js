@@ -1,10 +1,12 @@
 import { connect } from 'dva';
+import { useIntl } from 'umi';
 import { useEffect, useCallback } from 'react';
 import { Box, Flex } from 'rebass/styled-components';
 import { OrderRank, StyleRank, UserRank, ColorRank, ImgRank } from './ChartLibary';
 import Search from './Search';
 
 const ChartDiy = ({ dispatch, diyData }) => {
+    const { formatMessage } = useIntl()
     useEffect(() => {
         handleSearch();
     }, []);
@@ -23,7 +25,7 @@ const ChartDiy = ({ dispatch, diyData }) => {
                 handleSearch={val => {
                     handleSearch(val);
                 }}
-            ></Search>
+            />
             <Flex>
                 <Box width={1}>
                     <OrderRank data={diyData.orderRank}></OrderRank>

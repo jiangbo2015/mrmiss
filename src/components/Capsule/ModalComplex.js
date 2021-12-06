@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import { Arrow } from './Switcher';
+import { useIntl } from 'umi'
 
 export const CloseBtn = props => (
     <Flex py="40px" justifyContent="flex-end" pr="30px" css={{ cursor: 'pointer' }} {...props}>
@@ -66,6 +67,7 @@ export const StyleSwitcher = ({ bg, ...props }) => (
 );
 
 export default ({ visible, onClose }) => {
+    const { formatMessage } = useIntl()
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
         Modal.setAppElement('body');
@@ -134,7 +136,10 @@ export default ({ visible, onClose }) => {
                             ))}
                         </Flex>
                         <Text fontSize="16px" mt="90px">
-                            尺码/中包
+                            {formatMessage({
+                                id: 'size_pkg',
+                                defaultMessage:  '尺码/中包',
+                            })}
                         </Text>
                         <Flex mt="20px">
                             {['XS', 'S', 'M'].map((item, i) => (
@@ -146,7 +151,10 @@ export default ({ visible, onClose }) => {
                         </Flex>
                         <Box bg="#000" width="100%" py="16px" mt="80px" css={{ cursor: 'pointer' }}>
                             <Text color="#fff" textAlign="center">
-                                进入订单编辑器
+                                {formatMessage({
+                                    id: 'add_to_order_editor',
+                                    defaultMessage:  '进入订单编辑器',
+                                })}    
                             </Text>
                         </Box>
                     </Box>

@@ -2,6 +2,7 @@ import { Button, Cascader, DatePicker } from 'antd';
 import moment from 'moment';
 import { useState } from 'react';
 import { Box, Flex } from 'rebass/styled-components';
+import { useIntl } from 'umi';
 
 const { RangePicker } = DatePicker;
 
@@ -40,7 +41,7 @@ const options = [
     },
 ];
 
-export default ({ handleSearch }) => {
+export default ({ handleSearch,text }) => {
     const [search, setSearch] = useState({
         range: null,
         cascader: null,
@@ -65,7 +66,7 @@ export default ({ handleSearch }) => {
             range: value,
         });
     };
-
+    const { formatMessage } = useIntl()
     const onCascadeChange = value => {
         setSearch({
             ...search,
@@ -81,7 +82,10 @@ export default ({ handleSearch }) => {
             {/* <Box mx="10px">
                 <Cascader options={options} onChange={onCascadeChange} placeholder="Please select" />
             </Box> */}
-            <Button onClick={onSearch}>搜索</Button>
+            <Button onClick={onSearch}>{formatMessage({
+                    id: 'search',
+                    defaultMessage:  '搜索',
+                })}</Button>
         </Flex>
     );
 };

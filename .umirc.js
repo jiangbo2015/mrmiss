@@ -10,11 +10,8 @@ export default defineConfig({
         type: 'hash',
     },
     define: {
-        // 'process.env.API_URL': 'http://8.209.64.159:3001',
-        // 'process.env.API_URL': 'https://we-idesign.com',
         'process.env.VERSION': '1.2.0',
         'process.env.API_URL': 'http://localhost:3001',
-        // 'process.env.DOWNLOAD_URL': 'http://localhost:3001',
         'process.env.DOWNLOAD_URL': 'http://8.209.64.159:3001',
     },
     // proxy: {
@@ -28,7 +25,9 @@ export default defineConfig({
         'table-selected-row-bg': '#F3F3D3',
     },
 
-    locale: {}, // 开启多言语
+    locale: {
+        default: 'zh-CN',
+    }, // 开启多言语
     /**
      * 权限部分说明
      * 不设置authority，表示没有限制

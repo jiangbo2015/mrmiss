@@ -1,7 +1,7 @@
 import InputNumber from '@/components/InputNumber';
 import StyleItem from '@/components/StyleItem';
 import { filterImageUrl } from '@/utils/helper';
-import temp from '@/public/temp.jpg';
+import {useIntl} from 'umi';
 import { useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
@@ -85,6 +85,8 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 
 const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
     if (!currentShopStyle) return null;
+    // add_to_cart
+    const { } = useIntl()
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
     // // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
@@ -204,14 +206,26 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                     ))}
                 </Box>
                 <Flex mt="2px">
-                    <strong>中包:</strong>
+                    <strong>
+                        {formatMessage({
+                            id: 'pkg',
+                            defaultMessage:  '中包',
+                        })}:
+                    </strong>
                     <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
-                    <strong>装箱:</strong>
+                        <strong>{formatMessage({
+                                id: 'ctn',
+                                defaultMessage:  '装箱',
+                            })}:
+                        </strong>
                     <Text>{currentShopStyle.caseNum}pcs</Text>
                 </Flex>
                 <Box bg="#000" width="100%" py="10px" mt="6px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
                     <Text color="#fff" textAlign="center">
-                        加入购物车
+                        {formatMessage({
+                            id: 'add_to_cart',
+                            defaultMessage:  '加入购物车',
+                        })}
                     </Text>
                 </Box>
             </Box>
@@ -232,7 +246,7 @@ const ModalSimple = ({
     // console.log('currentBranch', currentBranch);
     // console.log('shopStyleTopAndBottomList', shopStyleTopAndBottomList)
     // console.log('currentShopBottomStyleIndex', currentShopBottomStyleIndex);
-    // const [current, setCurrent] = useState(0);
+    const { formatMessage } = useIntl();
     const curTopBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.top[0].branchKind)
     const curBomBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.bottom[0].branchKind)
     useEffect(() => {
