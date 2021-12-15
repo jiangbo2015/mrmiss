@@ -32,10 +32,7 @@ const UserCenter = function(props) {
             type: 'usercenter/createCurrentOrderToGroupList',
             payload: record,
         });
-        this.setState({
-            ...this.state,
-            showDetailOrder: true
-        })
+        setShowDetailOrder(true)
     };
 
     const handleShowShopOrderDetail = async (record) => {
@@ -43,10 +40,7 @@ const UserCenter = function(props) {
             type: 'usercenter/createCurrentShopOrderToGroupList',
             payload: record,
         });
-        this.setState({
-            ...this.state,
-            showShopDetailOrder: true
-        })
+        setShowShopDetailOrder(true)
     };
 
     return (
