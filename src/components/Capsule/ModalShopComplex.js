@@ -86,7 +86,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
     if (!currentShopStyle) return null;
     // add_to_cart
-    const { } = useIntl()
+    const { formatMessage } = useIntl()
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
     // // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
