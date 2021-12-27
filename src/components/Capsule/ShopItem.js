@@ -46,7 +46,7 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                     }}
                 />
                 <Flex justifyContent="center"  alignItems="center" flexDirection="column" sx={{minHeight: '320px'}}>
-                    <Image sx={{width: '95%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} mx="auto" />
+                    <Image sx={{width: '95%', height: 'auto'}} src={filterImageUrl(colorWithStyleImgs[current]?.imgs[0])} mx="auto" />
                 </Flex>
 
                 <Box
@@ -57,7 +57,7 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                     <Text fontSize="16px">{showNum} PCS</Text>
                     <Text mt="5px">Ref.{item.code}</Text>
                     <Text mt="5px">Size.{item.size}</Text>
-                    <Flex css={{ position: 'relative' }} mt="14px" justifyContent="center" alignItems="center">
+                    <Flex css={{ position: 'relative',minHeight: '21px' }} mt="14px" justifyContent="center" alignItems="center">
                         {onEditPrice ? (
                               <div onClick={e => {
                                 e.stopPropagation();
@@ -104,8 +104,8 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                                         setCurrent(i);
                                     }}
                                     isSelect={current === i}
-                                    src={c.colorObj.type ? filterImageUrl(c.colorObj.value) : ''}
-                                    bg={c.colorObj.type ? false : c.colorObj.value}
+                                    src={c.colorObj?.type ? filterImageUrl(c.colorObj?.value) : ''}
+                                    bg={c.colorObj?.type ? false : c.colorObj?.value}
                                     key={c._id}
                                 />
                             );

@@ -182,7 +182,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     ) : null}
                     {colorWithStyleImgs[current].type ? null : (
                         <Swiper>
-                            {colorWithStyleImgs[current].imgs.map((item, i) => (
+                            {colorWithStyleImgs[current]?.imgs.map((item, i) => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
                                     <Image src={filterImageUrl(item)} width="280px"></Image>
                                 </Flex>
@@ -236,10 +236,10 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
-                            type={item.colorObj.type}
-                            bg={item.colorObj.type ? filterImageUrl(item.colorObj.value) : item.colorObj.value}
-                            code={item.colorObj.code}
-                            text={item.colorObj.namecn}
+                            type={item.colorObj?.type}
+                            bg={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : item.colorObj?.value}
+                            code={item.colorObj?.code}
+                            text={item.colorObj?.namecn}
                             isSelect={i === current}
                         />
                     ))}

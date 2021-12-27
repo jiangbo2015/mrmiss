@@ -104,7 +104,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
     return (
         <Flex justifyContent="flex-start" width="1000px" p="0 50px">
             <Flex>
-                <Box mr="10px" height="355px" css={{ overflowY: 'auto' }}>
+                <Box mr="10px" height="355px" css={{ overflowY: 'auto',minWidth:'160px' }}>
                     <Flex flexDirection="column">
                         {colorWithStyleImgs.map((item, i) => (
                             <Box
@@ -148,7 +148,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                         }}
                     >
                         <Swiper>
-                            {colorWithStyleImgs[current].imgs.map((item, i) => (
+                            {colorWithStyleImgs[current]?.imgs.map((item, i) => (
                                 <Flex justifyContent="center" alignItems="center" height="100%">
                                     <Image src={filterImageUrl(item)} width="300px"></Image>
                                 </Flex>
@@ -168,10 +168,10 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
-                            type={item.colorObj.type}
-                            bg={item.colorObj.type ? filterImageUrl(item.colorObj.value) : item.colorObj.value}
-                            code={item.colorObj.code}
-                            text={item.colorObj.namecn}
+                            type={item.colorObj?.type}
+                            bg={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : item.colorObj?.value}
+                            code={item.colorObj?.code}
+                            text={item.colorObj?.namecn}
                             isSelect={i === current}
                         />
                     ))}
@@ -191,11 +191,11 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                     {colorWithStyleImgs.map((item, index) => (
                         <Flex>
                             <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                            <Dot type={item.colorObj.type}
-                                            bg={item.colorObj.type ? false : item.colorObj.value}
-                                            src = { item.colorObj.type ? filterImageUrl(item.colorObj.value) : '' }
-                                            code={item.colorObj.code}
-                                            text={item.colorObj.namecn} size='14px' />
+                            <Dot type={item.colorObj?.type}
+                                            bg={item.colorObj?.type ? false : item.colorObj?.value}
+                                            src = { item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : '' }
+                                            code={item.colorObj?.code}
+                                            text={item.colorObj?.namecn} size='14px' />
                             </SizeBox>
                             {size?.split('/').map((s, i) => (
                                 <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">

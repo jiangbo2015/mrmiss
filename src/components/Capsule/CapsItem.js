@@ -74,7 +74,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect, onSe
                     ) : (
                         <Image
                             sx={{ width: '95%', height: 'auto' }}
-                            src={filterImageUrl(colorWithStyleImgs[current].imgs[0])}
+                            src={filterImageUrl(colorWithStyleImgs[current]?.imgs[0])}
                             mx="auto"
                         />
                     )}
@@ -131,8 +131,8 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect, onSe
                                         setCurrent(i);
                                     }}
                                     isSelect={current === i}
-                                    src={c.colorObj.type ? filterImageUrl(c.colorObj.value) : ''}
-                                    bg={c.colorObj.type ? false : c.colorObj.value}
+                                    src={c.colorObj?.type ? filterImageUrl(c.colorObj?.value) : ''}
+                                    bg={c.colorObj?.type ? false : c.colorObj?.value}
                                     key={c._id}
                                 />
                             );

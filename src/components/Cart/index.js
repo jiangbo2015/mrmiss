@@ -49,9 +49,9 @@ const LineItem = ({ data, showNum, onUpdate, readOnly, branchKindObj, userRole }
 
                 <Box width="120px" m="0 58px">
                     {/* <Swiper> */}
-                    {/* {colorWithStyleImgs[current].imgs.map((item, i) => ( */}
+                    {/* {colorWithStyleImgs[current]?.imgs.map((item, i) => ( */}
                     <Flex justifyContent="center" alignItems="center" height="100%">
-                        <Image src={filterImageUrl(colorWithStyleImgs[current].imgs[0])} />
+                        <Image src={filterImageUrl(colorWithStyleImgs[current]?.imgs[0])} />
                     </Flex>
                     {/* ))} */}
                     {/* </Swiper> */}
@@ -66,10 +66,10 @@ const LineItem = ({ data, showNum, onUpdate, readOnly, branchKindObj, userRole }
                         {colorWithStyleImgs.map((item, i) => (
                             <StyleSwitcher
                                 key={`cart-${item._id}`}
-                                type={item.colorObj.type}
-                                bg={item.colorObj.type ? filterImageUrl(item.colorObj.value) : item.colorObj.value}
-                                code={item.colorObj.code}
-                                text={item.colorObj.namecn}
+                                type={item.colorObj?.type}
+                                bg={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : item.colorObj?.value}
+                                code={item.colorObj?.code}
+                                text={item.colorObj?.namecn}
                                 isSelect={i === current}
                                 size={16}
                                 onClick={() => {
@@ -94,11 +94,11 @@ const LineItem = ({ data, showNum, onUpdate, readOnly, branchKindObj, userRole }
                             <Flex>
                                 <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
                                     <Dot
-                                        type={item.colorObj.type}
-                                        bg={item.colorObj.type ? false : item.colorObj.value}
-                                        src={item.colorObj.type ? filterImageUrl(item.colorObj.value) : ''}
-                                        code={item.colorObj.code}
-                                        text={item.colorObj.namecn}
+                                        type={item.colorObj?.type}
+                                        bg={item.colorObj?.type ? false : item.colorObj?.value}
+                                        src={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : ''}
+                                        code={item.colorObj?.code}
+                                        text={item.colorObj?.namecn}
                                         size="14px"
                                     />
                                 </SizeBox>

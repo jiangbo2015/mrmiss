@@ -171,7 +171,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             }}
                         >
                             <Swiper>
-                                {colorWithStyleImgs[current].imgs.map((item, i) => (
+                                {colorWithStyleImgs[current]?.imgs.map((item, i) => (
                                     <Flex justifyContent="center" alignItems="center" height="100%">
                                         <Image src={filterImageUrl(item)} width="340px"></Image>
                                     </Flex>
@@ -197,10 +197,10 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             {colorWithStyleImgs.map((item, i) => (
                                 <StyleSwitcher
                                     key={i}
-                                    type={item.colorObj.type}
-                                    bg={item.colorObj.type ? filterImageUrl(item.colorObj.value) : item.colorObj.value}
-                                    code={item.colorObj.code}
-                                    text={item.colorObj.namecn}
+                                    type={item.colorObj?.type}
+                                    bg={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : item.colorObj?.value}
+                                    code={item.colorObj?.code}
+                                    text={item.colorObj?.namecn}
                                     isSelect={i === current}
                                 />
                             ))}
@@ -220,11 +220,11 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             {colorWithStyleImgs.map((item, index) => (
                                 <Flex key={`${item._id}-index`}>
                                     <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                        <Dot type={item.colorObj.type}
-                                            bg={item.colorObj.type ? false : item.colorObj.value}
-                                            src = { item.colorObj.type ? filterImageUrl(item.colorObj.value) : '' }
-                                            code={item.colorObj.code}
-                                            text={item.colorObj.namecn} size='14px' />
+                                        <Dot type={item.colorObj?.type}
+                                            bg={item.colorObj?.type ? false : item.colorObj?.value}
+                                            src = { item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : '' }
+                                            code={item.colorObj?.code}
+                                            text={item.colorObj?.namecn} size='14px' />
                                         {/* {item.code} */}
                                     </SizeBox>
                                     {size?.split('/').map((s, i) => (

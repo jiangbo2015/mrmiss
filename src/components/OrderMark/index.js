@@ -457,7 +457,7 @@ const OrderMark = ({ commodityToOrderGroupList, readOnly, visible, onCancel, loa
                                                                         {favorite.type === 'img' ? (
                                                                             <Box width="100px">
                                                                                 {/* <Swiper> */}
-                                                                                {/* {colorWithStyleImgs[current].imgs.map((item, i) => ( */}
+                                                                                {/* {colorWithStyleImgs[current]?.imgs.map((item, i) => ( */}
                                                                                 <Flex
                                                                                     justifyContent="center"
                                                                                     alignItems="center"
