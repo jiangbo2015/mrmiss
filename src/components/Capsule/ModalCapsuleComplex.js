@@ -9,7 +9,7 @@ import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
-import { useIntl } from 'umi'
+import { useIntl } from 'umi';
 export const CloseBtn = props => (
     <Flex alignSelf="flex-end" pt="12px" pb="12px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
@@ -73,12 +73,13 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
             <Box
                 css={{
                     position: 'absolute',
-                    top: '48px',
+                    top: '36px',
                     width: 'max-content',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
                 }}
             >
                 <Text>{code}</Text>
-                <Text>{text}</Text>
             </Box>
         </Flex>
     </Flex>
@@ -86,7 +87,7 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
 
 const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
     // console.log('currentCapsuleStyle', currentCapsuleStyle);
-    const { locale,formatMessage } = useIntl()
+    const { locale, formatMessage } = useIntl();
     const { colorWithStyleImgs = [], code, price, size, goodCategory } = currentCapsuleStyle;
     console.log('goodCategory', goodCategory);
     const [current, setCurrent] = useState(0);
@@ -193,7 +194,11 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
             </Box>
 
             <Box pl="30px">
-                <Text>{locale==='en-US' ? currentCapsuleStyle.goodCategory.enname : currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name}</Text>
+                <Text>
+                    {locale === 'en-US'
+                        ? currentCapsuleStyle.goodCategory.enname
+                        : currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name}
+                </Text>
 
                 <Text color="#313131" fontSize="28px" fontWeight="bold" my="6px">
                     ¥{price}
@@ -232,7 +237,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     </Flex>
                 ) : null}
 
-                <Flex mt="16px">
+                <Flex mt="10px">
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
@@ -244,15 +249,15 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                         />
                     ))}
                 </Flex>
-                <Text fontSize="16px" mt="20px">
-                        {formatMessage({
-                                id: 'size_pkg',
-                                defaultMessage:  '尺码/中包',
-                        })}
+                <Text fontSize="16px" mt="24px">
+                    {formatMessage({
+                        id: 'size_pkg',
+                        defaultMessage: '尺码/中包',
+                    })}
                 </Text>
-                <Flex mt="10px" minHeight="54px">
+                <Flex maxWidth="320px" minHeight="54px" flexWrap="wrap">
                     {size?.split('/').map((item, i) => (
-                        <Box key={i} mr="15px">
+                        <Box key={i} mr="15px" mb="24px">
                             <Text textAlign="center">{item}</Text>
                             <InputNumber></InputNumber>
                         </Box>
@@ -262,7 +267,7 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     bg="#000"
                     width="150px"
                     py="12px"
-                    mt="40px"
+                    mt="16px"
                     css={{ cursor: 'pointer' }}
                     onClick={() => {
                         onAddtoCart(currentCapsuleStyle);
@@ -271,8 +276,8 @@ const ItemBox = ({ currentCapsuleStyle, onAddtoCart }) => {
                     <Text color="#fff" textAlign="center">
                         {formatMessage({
                             id: 'add_to_order_editor',
-                            defaultMessage:  '加入订单编辑器',
-                        })}    
+                            defaultMessage: '加入订单编辑器',
+                        })}
                     </Text>
                 </Box>
             </Box>
@@ -286,7 +291,7 @@ const ModalSimple = ({
     dispatch,
     currentCapsuleTopStyleIndex,
     currentCapsuleBottomStyleIndex,
-    capsuleStyleTopAndBottomList = { '': {top: [], bottom: []} },
+    capsuleStyleTopAndBottomList = { '': { top: [], bottom: [] } },
 }) => {
     // const { colorWithStyleImgs = [], code, price, size, _id } = currentCapsuleStyle;
     // // console.log('currentCapsuleStyle', currentCapsuleStyle);

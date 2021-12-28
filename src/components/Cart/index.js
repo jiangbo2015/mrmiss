@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import { Box, Flex, Image, Text } from 'rebass/styled-components';
-
 import { useIntl } from 'umi';
 
 import Dot from '../Capsule/Dot';
@@ -199,6 +198,7 @@ const Cart = ({
             type: 'shop/fetchMyShopCart',
         });
     };
+
     const handleUpdate = data => {
         dispatch({
             type: 'shop/updateShopCart',
@@ -233,7 +233,13 @@ const Cart = ({
                 footer={null}
                 visible={visible}
                 width={'100%'}
-                onCancel={() => setVisible(false)}
+                onCancel={() => {
+                    dispatch({
+                        type: 'shop/updateShopCartToOrigin',
+                    });
+                    // updateShopCartToOrigin
+                    setVisible(false);
+                }}
                 style={{ background: '#E6E2E7' }}
                 bodyStyle={{
                     background: '#E6E2E7',
@@ -300,7 +306,7 @@ const Cart = ({
 };
 
 export default connect(({ shop = {}, user }) => ({
-    myShopCartList: shop.myShopCartList,
+    myShopCartList: shop.myShopCartList.filter(x => !x.isDel),
     currentUser: user.info,
     currentBranch: shop.currentBranch,
 }))(Cart);

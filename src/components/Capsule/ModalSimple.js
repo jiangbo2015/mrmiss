@@ -9,7 +9,7 @@ import { Box, Flex, Heading, Image, Text } from 'rebass/styled-components';
 import Dot from './Dot';
 import { Arrow } from './Switcher';
 import { connect } from 'dva';
-import { useIntl } from 'umi'
+import { useIntl } from 'umi';
 export const CloseBtn = props => (
     <Flex alignSelf="flex-end" pt="20px" pb="40px" justifyContent="flex-end" pr="20px" css={{ cursor: 'pointer' }} {...props}>
         <Box height="5px" width="30px" bg="#000"></Box>
@@ -55,31 +55,27 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, ...props }) => (
             <Box
                 css={{
                     position: 'absolute',
-                    top: '48px',
                     width: 'max-content',
+                    top: '36px',
+                    width: 'max-content',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
                 }}
             >
                 <Text>{code}</Text>
-                <Text>{text}</Text>
             </Box>
         </Flex>
     </Flex>
 );
 
 const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutList = [], dispatch }) => {
-    const { locale, formatMessage } = useIntl()
+    const { locale, formatMessage } = useIntl();
     const { colorWithStyleImgs = [], code, price, size, goodCategory = {} } = currentCapsuleStyle;
     const [current, setCurrent] = useState(0);
     let isTopOrBottom = false;
-    if (
-        (goodCategory.nameen && goodCategory.nameen.toUpperCase()) === 'TOP' ||
-        goodCategory.namecn === '单衣'
-    ) {
+    if ((goodCategory.nameen && goodCategory.nameen.toUpperCase()) === 'TOP' || goodCategory.namecn === '单衣') {
         isTopOrBottom = true;
-    } else if (
-        (goodCategory.nameen && goodCategory.nameen.toUpperCase()) === 'BOTTOM' ||
-        goodCategory.namecn === '单裤'
-    ) {
+    } else if ((goodCategory.nameen && goodCategory.nameen.toUpperCase()) === 'BOTTOM' || goodCategory.namecn === '单裤') {
         isTopOrBottom = true;
     } else if (
         (goodCategory.name && goodCategory.name.toUpperCase()) === 'BOTTOM' ||
@@ -215,7 +211,12 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             {colorWithStyleImgs[current].type ? null : (
                                 <Swiper>
                                     {colorWithStyleImgs[current]?.imgs.map((item, i) => (
-                                        <Flex justifyContent="center" alignItems="center" height="100%">
+                                        <Flex
+                                            alignItems="center"
+                                            flexDirection="column"
+                                            minHeight="375px"
+                                            justifyContent="center"
+                                        >
                                             <Image src={filterImageUrl(item)} width="300px"></Image>
                                         </Flex>
                                     ))}
@@ -225,7 +226,11 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                     </Box>
 
                     <Box pl="30px">
-                        <Text>{locale==='en-US' ? currentCapsuleStyle.goodCategory.enname : currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name}</Text>
+                        <Text>
+                            {locale === 'en-US'
+                                ? currentCapsuleStyle.goodCategory.enname
+                                : currentCapsuleStyle.goodCategory.namecn || currentCapsuleStyle.goodCategory.name}
+                        </Text>
                         <Text color="#313131" fontSize="28px" fontWeight="bold" my="10px">
                             ¥{price}
                         </Text>
@@ -265,7 +270,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             </Flex>
                         ) : null}
 
-                        <Flex mt="30px">
+                        <Flex mt="14px">
                             {colorWithStyleImgs.map((item, i) => (
                                 <StyleSwitcher
                                     key={i}
@@ -277,15 +282,15 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                                 />
                             ))}
                         </Flex>
-                        <Text fontSize="16px" mt="40px">
+                        <Text fontSize="16px" mt="30px">
                             {formatMessage({
                                 id: 'size_pkg',
-                                defaultMessage:  '尺码/中包',
+                                defaultMessage: '尺码/中包',
                             })}
                         </Text>
-                        <Flex mt="20px">
+                        <Flex maxWidth="320px" flexWrap="wrap">
                             {size?.split('/').map((item, i) => (
-                                <Box key={i} mr="15px">
+                                <Box key={i} mr="15px" mb="24px">
                                     <Text textAlign="center">{item}</Text>
                                     <InputNumber></InputNumber>
                                 </Box>
@@ -295,7 +300,7 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             bg="#000"
                             width="100%"
                             py="12px"
-                            mt="40px"
+                            mt="16px"
                             css={{ cursor: 'pointer' }}
                             onClick={() => {
                                 handleAddOrder();
@@ -304,8 +309,8 @@ const ModalSimple = ({ visible, onClose, currentCapsuleStyle, capsuleStyleAboutL
                             <Text color="#fff" textAlign="center">
                                 {formatMessage({
                                     id: 'add_to_order_editor',
-                                    defaultMessage:  '加入订单编辑器',
-                                })}   
+                                    defaultMessage: '加入订单编辑器',
+                                })}
                             </Text>
                         </Box>
                     </Box>

@@ -149,8 +149,8 @@ export default {
             const topAndBottomMap = payload;
             const topAndBottomData = {};
             for (const key in topAndBottomMap) {
-                const {top, bottom} = topAndBottomMap[key]
-                if(top && bottom) {
+                const { top, bottom } = topAndBottomMap[key];
+                if (top && bottom) {
                     const resTop = yield call(api.getCapsuleStyleList, {
                         capsule: top._id.split('-')[1],
                         goodCategray: top.namecn,
@@ -165,7 +165,7 @@ export default {
                     topAndBottomData[key] = {
                         top: resTop.data.docs,
                         bottom: resBottom.data.docs,
-                    }
+                    };
                 }
             }
 
@@ -243,13 +243,14 @@ export default {
             }
 
             let saveItems = saveOrder
-                .filter(x => x?.items[0]?.favorite)
+                .filter(x => x?.items[0]?.favorite || x?.items[0]?.imgs)
                 .map((o, k) => {
+                    let type = o.items[0].type;
                     let item = o.items[0];
                     let now = new Date();
                     let key = `${now.getTime()}-${o.styleNos}`;
                     let sizeArr = [];
-                    let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
+                    // let price = _.sumBy(item.favorite.styleAndColor, x => x.styleId.price);
                     sizeArr = o.size ? o.size?.split('/') : [];
 
                     let sizeObjInit = {};
@@ -257,8 +258,6 @@ export default {
                         sizeObjInit[s] = 0;
                     });
 
-                    console.log('size', o.size);
-                    console.log('sizeObjInit', sizeObjInit);
                     return {
                         list: o.items.map(i => ({
                             _id: i._id,
@@ -339,6 +338,7 @@ export default {
                     };
                 }),
             );
+            console.log('saveItems', saveItems);
             yield put({
                 type: 'setCapsuleToOrderGroupList',
                 payload: saveItems,

@@ -64,6 +64,12 @@ export default {
                 myShopCartList: action.payload,
             };
         },
+        setOriginMyShopCartList(state, action) {
+            return {
+                ...state,
+                originMyShopCartList: action.payload,
+            };
+        },
         setCurrentShopKey(state, action) {
             return {
                 ...state,
@@ -135,16 +141,19 @@ export default {
             const topAndBottomMap = payload;
             const topAndBottomData = {};
             for (const key in topAndBottomMap) {
-                const {top, bottom} = topAndBottomMap[key]
-                if(top && bottom) {
+                const { top, bottom } = topAndBottomMap[key];
+                if (top && bottom) {
                     const resTop = yield call(api.getShopStyleList, { branch: top.branch, branchKind: top._id, limit: 1000 });
-                    const resBottom = yield call(api.getShopStyleList, { branch: bottom.branch, branchKind: bottom._id, limit: 1000 });
-            
+                    const resBottom = yield call(api.getShopStyleList, {
+                        branch: bottom.branch,
+                        branchKind: bottom._id,
+                        limit: 1000,
+                    });
 
                     topAndBottomData[key] = {
                         top: resTop.data.docs,
                         bottom: resBottom.data.docs,
-                    }
+                    };
                 }
             }
 
@@ -161,6 +170,10 @@ export default {
             if (res && Array.isArray(res.data)) {
                 yield put({
                     type: 'setMyShopCartList',
+                    payload: res.data.filter(x => x.shopStyle),
+                });
+                yield put({
+                    type: 'setOriginMyShopCartList',
                     payload: res.data.filter(x => x.shopStyle),
                 });
             }
@@ -185,22 +198,57 @@ export default {
                 message.info('不能更少了～');
                 return;
             }
-            const res = yield call(api.updateShopCart, payload);
-            if (res && res.data) {
-                // message.info('已为您添加到购购物车');
+            const { myShopCartList } = yield select(state => state.shop);
+            const item = myShopCartList.find(x => x._id === payload._id);
+            if (!item) {
+                return;
+            }
+            if (payload.count) {
+                item.count = payload.count;
                 yield put({
-                    type: 'fetchMyShopCart',
+                    type: 'setMyShopCartList',
+                    payload: [...myShopCartList],
+                });
+            } else if (payload.isDel) {
+                item.isDel = 1;
+                yield put({
+                    type: 'setMyShopCartList',
+                    payload: [...myShopCartList],
                 });
             }
+
             // { styleAndColor: params, goodId: goodId }
+        },
+        *updateShopCartToOrigin({ payload }, { call, put, select }) {
+            const { myShopCartList, originMyShopCartList } = yield select(state => state.shop);
+            let patchs = [];
+            for (let i = 0; i < myShopCartList.length; i++) {
+                if (myShopCartList[i].isDel) {
+                    patchs.push({
+                        isDel: 1,
+                        _id: myShopCartList[i]._id,
+                    });
+                } else if (myShopCartList[i].count !== originMyShopCartList[i].count) {
+                    // console.log('myShopCartList[i].count', myShopCartList[i].count)
+                    patchs.push({
+                        count: myShopCartList[i].count,
+                        _id: myShopCartList[i]._id,
+                    });
+                }
+            }
+            for (let i = 0; i < patchs.length; i++) {
+                yield call(api.updateShopCart, patchs[i]);
+            }
+            yield put({
+                type: 'fetchMyShopCart',
+            });
         },
         *updateOrder({ payload }, { call, put, select }) {
             const res = yield call(api.updateShopOrder, payload);
             if (res && res.data) {
-                 message.info('更新成功');
+                message.info('更新成功');
             }
             // { styleAndColor: params, goodId: goodId }
         },
-        
     },
 };

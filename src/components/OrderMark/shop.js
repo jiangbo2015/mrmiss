@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from 'antd';
 import { Box, Flex, Image, Text } from 'rebass/styled-components';
 
+import Dot from '../Capsule/Dot';
 // import temp from '@/public/temp.jpg';
 
 // import Dot from '../Capsule/Dot';
@@ -28,22 +29,24 @@ const RoundBtn = props => (
     />
 );
 
-const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
+const LineItem = ({ data, showNum, onUpdate, readOnly, userRole }) => {
     // console.log('showNum', showNum);
     const { shopStyleObj, count, _id } = data;
-    const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum } = shopStyleObj;
+    const { price, code, size, colorWithStyleImgs = [], numInBag, bagsNum } = shopStyleObj;
     const [current, setCurrent] = useState(0);
     return (
         <Box p="50px" mb="25px" sx={{ background: '#fff', borderRadius: '6px' }}>
             <Flex alignItems="center" justifyContent="space-between">
-                {readOnly ? null :  <RoundBtn
-                    mr="10px"
-                    onClick={() => {
-                        onUpdate({ _id, isDel: 1 });
-                    }}
-                >
-                    x
-                </RoundBtn>}
+                {readOnly ? null : (
+                    <RoundBtn
+                        mr="10px"
+                        onClick={() => {
+                            onUpdate({ _id, isDel: 1 });
+                        }}
+                    >
+                        x
+                    </RoundBtn>
+                )}
 
                 <Box width="120px" m="0 58px">
                     {/* <Swiper> */}
@@ -91,7 +94,14 @@ const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
                         {colorWithStyleImgs.map((item, index) => (
                             <Flex>
                                 <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                    {item.colorObj?.code}
+                                    <Dot
+                                        type={item.colorObj?.type}
+                                        bg={item.colorObj?.type ? false : item.colorObj?.value}
+                                        src={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : ''}
+                                        code={item.colorObj?.code}
+                                        text={item.colorObj?.namecn}
+                                        size="14px"
+                                    />
                                 </SizeBox>
                                 {size?.split('/').map((s, i) => (
                                     <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
@@ -101,6 +111,7 @@ const LineItem = ({ data, showNum, onUpdate,readOnly }) => {
                             </Flex>
                         ))}
                     </Box>
+                    <Text>{userRole === 4 ? `${numInBag}pcs` : `${numInBag}pcs*${bagsNum}`}</Text>
                 </Box>
                 <Text>¥.{price}</Text>
                 <Box mx="30px">
@@ -152,7 +163,7 @@ const Cart = ({
     currentOrder = {},
     clearSelected = () => {},
     onCancel,
-    readOnly
+    readOnly,
 }) => {
     // const [visible, setVisible] = useState(false);
     let sumCount = 0;
@@ -176,44 +187,46 @@ const Cart = ({
 
     const handleUpdate = data => {
         // console.log('data', data)
-        onUpdate(data)
+        onUpdate(data);
     };
 
     const handleOrder = async () => {
         if (currentShopOrderData.length < 1) {
             return;
         }
-        onSave(currentShopOrderData)
+        onSave(currentShopOrderData);
     };
     return (
         <Modal
-                footer={null}
-                visible={visible}
-                width={'100%'}
-                onCancel={onCancel}
-                style={{ background: '#E6E2E7' }}
-                bodyStyle={{
-                    background: '#E6E2E7',
-                }}
-            >
-                <Flex justifyContent="center" fontSize="18px" pb="20px">
-                    <b>{currentOrder.orderNo}</b>
-                </Flex>
-                
-                {currentShopOrderData.map((item, index) => (
-                    <LineItem
-                        readOnly={readOnly}
-                        key={`shop-cart-${index}-${item._id}`}
-                        showNum={currentUser.role == 1 ? item.shopStyleObj.caseNum : item.shopStyleObj.numInBag}
-                        data={item}
-                        onUpdate={handleUpdate}
-                    />
-                ))}
-                <Flex>
-                    <Text mr="18px">总数:{sumCount}</Text>
-                    <Text>总金额:¥{sumPrice}</Text>
-                </Flex>
-                {readOnly ? null : <Flex justifyContent="flex-end">
+            footer={null}
+            visible={visible}
+            width={'100%'}
+            onCancel={onCancel}
+            style={{ background: '#E6E2E7' }}
+            bodyStyle={{
+                background: '#E6E2E7',
+            }}
+        >
+            <Flex justifyContent="center" fontSize="18px" pb="20px">
+                <b>{currentOrder.orderNo}</b>
+            </Flex>
+
+            {currentShopOrderData.map((item, index) => (
+                <LineItem
+                    readOnly={readOnly}
+                    key={`shop-cart-${index}-${item._id}`}
+                    userRole={currentUser.role}
+                    showNum={currentUser.role == 1 ? item.shopStyleObj.caseNum : item.shopStyleObj.numInBag}
+                    data={item}
+                    onUpdate={handleUpdate}
+                />
+            ))}
+            <Flex>
+                <Text mr="18px">总数:{sumCount}</Text>
+                <Text>总金额:¥{sumPrice}</Text>
+            </Flex>
+            {readOnly ? null : (
+                <Flex justifyContent="flex-end">
                     <Button
                         type="primary"
                         style={{
@@ -225,10 +238,10 @@ const Cart = ({
                     >
                         保存
                     </Button>
-                </Flex>}
-                
-            </Modal>
+                </Flex>
+            )}
+        </Modal>
     );
 };
 
-export default Cart
+export default Cart;

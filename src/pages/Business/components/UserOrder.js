@@ -1,6 +1,6 @@
 import IconDelete from '@/public/icons/icon-delete.svg';
 import IconDownload from '@/public/icons/icon-download.svg';
-import { Popconfirm, DatePicker, Button, message } from 'antd';
+import { Popconfirm, DatePicker, Button, message, Badge } from 'antd';
 import { connect } from 'dva';
 import React, { useEffect, useState } from 'react';
 import { ReactSVG } from 'react-svg';
@@ -173,20 +173,22 @@ const OrderTable = ({ ownOrderList = {}, dispatch, userId, currentOrder, unReade
             dataIndex: 'orderNo',
             key: 'orderNo',
             render: (value, record) => (
-                <a
-                    style={{ textDecoration: 'underline' }}
-                    onClick={() => {
-                        if (record.orderType === 'shop') {
-                            handleShowShopOrderDetail(record);
-                        } else {
-                            handleShowOrderDetail(record);
-                        }
+                <Badge dot={!record.isReaded}>
+                    <a
+                        style={{ textDecoration: 'underline' }}
+                        onClick={() => {
+                            if (record.orderType === 'shop') {
+                                handleShowShopOrderDetail(record);
+                            } else {
+                                handleShowOrderDetail(record);
+                            }
 
-                        // setUserInfoModal(true)
-                    }}
-                >
-                    {value}
-                </a>
+                            // setUserInfoModal(true)
+                        }}
+                    >
+                        {value}
+                    </a>
+                </Badge>
             ),
         },
         {
