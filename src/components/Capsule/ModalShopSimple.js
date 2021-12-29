@@ -83,15 +83,15 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
     </Flex>
 );
 
-const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = [], dispatch,currentBranch}) => {
-    const { colorWithStyleImgs = [], code, price, size, _id,branchKind } = currentShopStyle;
+const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = [], dispatch, currentBranch }) => {
+    const { colorWithStyleImgs = [], code, price, size, _id, goodCategoryId } = currentShopStyle;
 
-    const curBranchKind = currentBranch.children.find(x => x._id === branchKind)
-    let isTopOrBottom = false
-    if(curBranchKind.namecn.includes('单衣') || curBranchKind.namecn.includes('单裤') ){
-        isTopOrBottom = true
+    const curBranchKind = currentBranch.children.find(x => x._id === goodCategoryId);
+    let isTopOrBottom = false;
+    if (curBranchKind.namecn.includes('单衣') || curBranchKind.namecn.includes('单裤')) {
+        isTopOrBottom = true;
     }
-    const { locale, formatMessage } = useIntl()
+    const { locale, formatMessage } = useIntl();
     const [current, setCurrent] = useState(0);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
@@ -193,7 +193,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                         </Text>
                         <Text>Ref {code} </Text>
 
-                        <Flex mt="8px" pb='12px'>
+                        <Flex mt="8px" pb="12px">
                             {colorWithStyleImgs.map((item, i) => (
                                 <StyleSwitcher
                                     key={i}
@@ -220,11 +220,14 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             {colorWithStyleImgs.map((item, index) => (
                                 <Flex key={`${item._id}-index`}>
                                     <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                                        <Dot type={item.colorObj?.type}
+                                        <Dot
+                                            type={item.colorObj?.type}
                                             bg={item.colorObj?.type ? false : item.colorObj?.value}
-                                            src = { item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : '' }
+                                            src={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : ''}
                                             code={item.colorObj?.code}
-                                            text={item.colorObj?.namecn} size='14px' />
+                                            text={item.colorObj?.namecn}
+                                            size="14px"
+                                        />
                                         {/* {item.code} */}
                                     </SizeBox>
                                     {size?.split('/').map((s, i) => (
@@ -239,15 +242,17 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             <strong>
                                 {formatMessage({
                                     id: 'pkg',
-                                    defaultMessage:  '中包',
-                                })}:
+                                    defaultMessage: '中包',
+                                })}
+                                :
                             </strong>
                             <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
                             <strong>
                                 {formatMessage({
                                     id: 'ctn',
-                                    defaultMessage:  '装箱',
-                                })}:
+                                    defaultMessage: '装箱',
+                                })}
+                                :
                             </strong>
                             <Text>{currentShopStyle.caseNum}pcs</Text>
                         </Flex>
@@ -255,7 +260,7 @@ const ModalSimple = ({ visible, onClose, currentShopStyle, shopStyleAboutList = 
                             <Text color="#fff" textAlign="center">
                                 {formatMessage({
                                     id: 'add_to_cart',
-                                    defaultMessage:  '加入购物车',
+                                    defaultMessage: '加入购物车',
                                 })}
                             </Text>
                         </Box>

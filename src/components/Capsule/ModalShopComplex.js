@@ -1,7 +1,7 @@
 import InputNumber from '@/components/InputNumber';
 import StyleItem from '@/components/StyleItem';
 import { filterImageUrl } from '@/utils/helper';
-import {useIntl} from 'umi';
+import { useIntl } from 'umi';
 import { useEffect, useState } from 'react';
 import Swiper from 'react-id-swiper';
 import Modal from 'react-modal';
@@ -83,10 +83,10 @@ export const StyleSwitcher = ({ bg, type, code, text, isSelect, size = 26, ...pr
     </Flex>
 );
 
-const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
+const ItemBox = ({ currentShopStyle, onAddtoCart, curBranchKind }) => {
     if (!currentShopStyle) return null;
     // add_to_cart
-    const { formatMessage } = useIntl()
+    const { formatMessage } = useIntl();
     const { colorWithStyleImgs = [], code, price, size, _id } = currentShopStyle;
     // // console.log('currentShopStyle', currentShopStyle);
     const [current, setCurrent] = useState(0);
@@ -104,7 +104,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
     return (
         <Flex justifyContent="flex-start" width="1000px" p="0 50px">
             <Flex>
-                <Box mr="10px" height="355px" css={{ overflowY: 'auto',minWidth:'160px' }}>
+                <Box mr="10px" height="355px" css={{ overflowY: 'auto', minWidth: '160px' }}>
                     <Flex flexDirection="column">
                         {colorWithStyleImgs.map((item, i) => (
                             <Box
@@ -164,7 +164,7 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                 </Text>
                 <Text>Ref {code} </Text>
 
-                <Flex mt="8px" pb='12px'>
+                <Flex mt="8px" pb="12px">
                     {colorWithStyleImgs.map((item, i) => (
                         <StyleSwitcher
                             key={i}
@@ -191,11 +191,14 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                     {colorWithStyleImgs.map((item, index) => (
                         <Flex>
                             <SizeBox key={`${index}-sizetitle`} bg="#F7F7F7">
-                            <Dot type={item.colorObj?.type}
-                                            bg={item.colorObj?.type ? false : item.colorObj?.value}
-                                            src = { item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : '' }
-                                            code={item.colorObj?.code}
-                                            text={item.colorObj?.namecn} size='14px' />
+                                <Dot
+                                    type={item.colorObj?.type}
+                                    bg={item.colorObj?.type ? false : item.colorObj?.value}
+                                    src={item.colorObj?.type ? filterImageUrl(item.colorObj?.value) : ''}
+                                    code={item.colorObj?.code}
+                                    text={item.colorObj?.namecn}
+                                    size="14px"
+                                />
                             </SizeBox>
                             {size?.split('/').map((s, i) => (
                                 <SizeBox key={`${i}-sizebox`} width="41px" bg="#F7F7F7">
@@ -209,22 +212,25 @@ const ItemBox = ({ currentShopStyle, onAddtoCart,curBranchKind }) => {
                     <strong>
                         {formatMessage({
                             id: 'pkg',
-                            defaultMessage:  '中包',
-                        })}:
+                            defaultMessage: '中包',
+                        })}
+                        :
                     </strong>
                     <Text mr="30px">{currentShopStyle.numInBag}pcs</Text>
-                        <strong>{formatMessage({
-                                id: 'ctn',
-                                defaultMessage:  '装箱',
-                            })}:
-                        </strong>
+                    <strong>
+                        {formatMessage({
+                            id: 'ctn',
+                            defaultMessage: '装箱',
+                        })}
+                        :
+                    </strong>
                     <Text>{currentShopStyle.caseNum}pcs</Text>
                 </Flex>
                 <Box bg="#000" width="100%" py="10px" mt="6px" css={{ cursor: 'pointer' }} onClick={handleAddtoCart}>
                     <Text color="#fff" textAlign="center">
                         {formatMessage({
                             id: 'add_to_cart',
-                            defaultMessage:  '加入购物车',
+                            defaultMessage: '加入购物车',
                         })}
                     </Text>
                 </Box>
@@ -247,8 +253,8 @@ const ModalSimple = ({
     // console.log('shopStyleTopAndBottomList', shopStyleTopAndBottomList)
     // console.log('currentShopBottomStyleIndex', currentShopBottomStyleIndex);
     const { locale } = useIntl();
-    const curTopBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.top[0].branchKind)
-    const curBomBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.bottom[0].branchKind)
+    const curTopBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.top[0].goodCategoryId);
+    const curBomBranchKind = currentBranch.children.find(x => x._id === shopStyleTopAndBottomList.bottom[0].goodCategoryId);
     useEffect(() => {
         // document.querySelector('body').style = 'overflow:hidden';
         Modal.setAppElement('body');
@@ -330,7 +336,7 @@ const ModalSimple = ({
                                 }}
                             ></ArrowBtn>
                             <ItemBox
-                                curBranchKind={locale==='zh-US' ? curBomBranchKind.nameen : curBomBranchKind.namecn}
+                                curBranchKind={locale === 'zh-US' ? curBomBranchKind.nameen : curBomBranchKind.namecn}
                                 onAddtoCart={handleAddtoCart}
                                 currentShopStyle={shopStyleTopAndBottomList.bottom[currentShopBottomStyleIndex]}
                             />

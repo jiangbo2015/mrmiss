@@ -27,7 +27,7 @@ const RoundBtn = props => (
     />
 );
 
-const LineItem = ({ data, showNum, onUpdate, readOnly, branchKindObj, userRole }) => {
+const LineItem = ({ data, showNum, onUpdate, readOnly, goodCategoryIdObj, userRole }) => {
     // // console.log('showNum', showNum);
     const { shopStyle, count, _id } = data;
     const { price, code, size, colorWithStyleImgs = [], numInBag, caseNum, bagsNum } = shopStyle;
@@ -57,7 +57,7 @@ const LineItem = ({ data, showNum, onUpdate, readOnly, branchKindObj, userRole }
                 </Box>
                 <Box width="200px" mx="30px">
                     <Text fontSize="20px" fontWeight="bold" mb="10px">
-                        {branchKindObj ? branchKindObj.namecn : ' '}
+                        {goodCategoryIdObj ? goodCategoryIdObj.namecn : ' '}
                     </Text>
                     <Text>Ref.{code}</Text>
                     <Text>SIZE.{size}</Text>
@@ -166,7 +166,7 @@ const Cart = ({
     const [visible, setVisible] = useState(false);
     let sumCount = 0;
     let sumPrice = 0;
-    // let branchKindObjArr = []
+    // let goodCategoryIdObjArr = []
     myShopCartList.map(sc => {
         // // console.log('sc.count', sc.count);
         let { shopStyle = { caseNum: 0, numInBag: 0, price: 0 } } = sc;
@@ -262,7 +262,7 @@ const Cart = ({
                         showNum={currentUser.role == 1 ? item.shopStyle.caseNum : item.shopStyle.numInBag}
                         userRole={currentUser.role}
                         data={item}
-                        branchKindObj={currentBranch.children.find(x => x._id === item.shopStyle.branchKind)}
+                        goodCategoryIdObj={currentBranch.children.find(x => x._id === item.shopStyle.goodCategoryId)}
                         onUpdate={handleUpdate}
                     />
                 ))}

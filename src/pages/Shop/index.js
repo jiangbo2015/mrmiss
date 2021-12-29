@@ -3,8 +3,8 @@ import { Box, Flex } from 'rebass/styled-components';
 import { Button } from 'antd';
 import { ReactSVG } from 'react-svg';
 import { connect } from 'dva';
-import lodash from 'lodash'
-import { useIntl } from 'umi'
+import lodash from 'lodash';
+import { useIntl } from 'umi';
 
 import CapsItem from '@/components/Capsule/ShopItem';
 import ModalShopSimple from '@/components/Capsule/ModalShopSimple';
@@ -26,7 +26,7 @@ import IconShopCar from '@/public/icons/icon-shop.svg';
 const Shop = ({
     branchList,
     dispatch,
-    currentBranch = { children: []},
+    currentBranch = { children: [] },
     currentShopStyle = {},
     currentSelectedBar = {},
     shopStyleList,
@@ -44,7 +44,7 @@ const Shop = ({
     const [selectedList, setSelectedList] = useState([]);
     const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
 
-    const {locale,formatMessage } = useIntl()
+    const { locale, formatMessage } = useIntl();
     useEffect(() => {
         dispatch({
             type: 'shop/fetchBranchList',
@@ -52,39 +52,38 @@ const Shop = ({
     }, []);
     useEffect(() => {
         // console.log('queryKey', queryKey);
-        
-        if(currentSelectedBar._id) {
+
+        if (currentSelectedBar._id) {
             // console.log('currentSelectedBar', currentSelectedBar);
             handleLoadMore(1);
         }
-        
     }, [queryKey, currentSelectedBar]);
 
     useEffect(() => {
         if (currentAdminChannel.codename === 'A' && currentBranch) {
-            let haveTopMap = {}
+            let haveTopMap = {};
             currentBranch.children.map(x => {
                 if ((x.nameen && x.nameen.toUpperCase()) === 'TOP' || x.namecn.includes('单衣')) {
-                    let key = x.namecn.replace('单衣','')
-                    if(!haveTopMap[key]) {
-                        haveTopMap[key] = {}
+                    let key = x.namecn.replace('单衣', '');
+                    if (!haveTopMap[key]) {
+                        haveTopMap[key] = {};
                     }
-                    
-                    haveTopMap[key].top = x
+
+                    haveTopMap[key].top = x;
                 } else if ((x.nameen && x.nameen.toUpperCase()) === 'BOTTOM' || x.namecn.includes('单裤')) {
-                    let key = x.namecn.replace('单裤','')
-                    if(!haveTopMap[key]) {
-                        haveTopMap[key] = {}
+                    let key = x.namecn.replace('单裤', '');
+                    if (!haveTopMap[key]) {
+                        haveTopMap[key] = {};
                     }
-                    haveTopMap[key].bottom = x
+                    haveTopMap[key].bottom = x;
                 }
             });
 
-            console.log('haveTopMap', haveTopMap)
+            console.log('haveTopMap', haveTopMap);
 
             for (const key in haveTopMap) {
-                if(!haveTopMap[key].top || !haveTopMap[key].bottom) {
-                    delete haveTopMap[key]
+                if (!haveTopMap[key].top || !haveTopMap[key].bottom) {
+                    delete haveTopMap[key];
                 }
             }
 
@@ -109,7 +108,7 @@ const Shop = ({
 
     useEffect(() => {
         if (currentShopStyle._id) {
-            let payload = { branch: currentBranch._id, branchKind: currentShopStyle.branchKind, limit: 4 };
+            let payload = { branch: currentBranch._id, goodCategoryId: currentShopStyle.goodCategoryId, limit: 4 };
 
             dispatch({
                 type: 'shop/fetchShopStyleAboutList',
@@ -126,7 +125,7 @@ const Shop = ({
                 payload.code = queryKey;
             }
             if (currentBranch._id !== currentSelectedBar._id) {
-                payload.branchKind = currentSelectedBar._id;
+                payload.goodCategoryId = currentSelectedBar._id;
             }
             dispatch({
                 type: 'shop/fetchShopStyleList',
@@ -161,7 +160,7 @@ const Shop = ({
         if (currentAdminChannel.codename === 'A') {
             for (const key in haveTopAndBottom) {
                 const element = haveTopAndBottom[key];
-                if(capsule.branchKind === element.top._id){
+                if (capsule.goodCategoryId === element.top._id) {
                     const index = shopStyleTopAndBottomList[key].top.findIndex(x => x._id === capsule._id);
                     dispatch({
                         type: 'shop/setCurrentShopKey',
@@ -177,7 +176,7 @@ const Shop = ({
                     });
                     setVisibleComplex(true);
                     return;
-                }else if (capsule.branchKind === element.bottom._id) {
+                } else if (capsule.goodCategoryId === element.bottom._id) {
                     // console.log('--bottom--');
                     const index = shopStyleTopAndBottomList[key].bottom.findIndex(x => x._id === capsule._id);
                     dispatch({
@@ -266,45 +265,47 @@ const Shop = ({
             <section>
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title
-                        title={locale==='en-US' ? currentBranch.nameen : currentBranch.namecn}
+                        title={locale === 'en-US' ? currentBranch.nameen : currentBranch.namecn}
                         subtitle={currentBranch.description}
                     />
                 </Box>
                 <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">
-                <Flex mx="auto" pt="30px" pb="20px" px="8px" maxWidth="1480px"  justifyContent="space-between" sx={{ position: 'relative' }}>
-                            <Search
-                                mode="white"
-                                style={{ width: '200px' }}
-                                placeholder="SEARCH STYLE"
-                                onSearch={handleOnSearch}
-                            />
-                            
+                    <Flex
+                        mx="auto"
+                        pt="30px"
+                        pb="20px"
+                        px="8px"
+                        maxWidth="1480px"
+                        justifyContent="space-between"
+                        sx={{ position: 'relative' }}
+                    >
+                        <Search mode="white" style={{ width: '200px' }} placeholder="SEARCH STYLE" onSearch={handleOnSearch} />
 
-                            <Switcher assigned={currentBranch} ref={ref} noRelative>
-                                <Box
-                                    bg="#DFDFDF"
-                                    p="4px"
-                                    mt="20px"
-                                    width="24px"
-                                    height="24px"
-                                    sx={{
-                                        borderRadius: '4px',
-                                        visibility: currentAdminChannel.codename === 'A' ? 'hidden' : 'visible',
+                        <Switcher assigned={currentBranch} ref={ref} noRelative>
+                            <Box
+                                bg="#DFDFDF"
+                                p="4px"
+                                mt="20px"
+                                width="24px"
+                                height="24px"
+                                sx={{
+                                    borderRadius: '4px',
+                                    visibility: currentAdminChannel.codename === 'A' ? 'hidden' : 'visible',
+                                }}
+                            >
+                                <ReactSVG
+                                    src={SelectedIcon}
+                                    style={{
+                                        width: '16px',
+                                        height: '16px',
+                                        opacity: selectedAll ? '1' : '0.3',
                                     }}
-                                >
-                                    <ReactSVG
-                                        src={SelectedIcon}
-                                        style={{
-                                            width: '16px',
-                                            height: '16px',
-                                            opacity: selectedAll ? '1' : '0.3',
-                                        }}
-                                        onClick={handleSelectAll}
-                                    />
-                                </Box>
-                            </Switcher>
+                                    onClick={handleSelectAll}
+                                />
+                            </Box>
+                        </Switcher>
 
-                            <Flex width="200px" justifyContent="flex-end" alignItems="flex-start">
+                        <Flex width="200px" justifyContent="flex-end" alignItems="flex-start">
                             {currentAdminChannel.codename === 'A' ? ( //通道A才能下单
                                 <Cart
                                     triggle={
@@ -325,58 +326,59 @@ const Shop = ({
                                         setSelectedList([]);
                                     }}
                                 />
-                            ) : <Button
-                            onClick={handleAssigned}
-                            shape="circle"
-                            size="large"
-                            icon={
-                                <ReactSVG
-                                    style={{ width: '20px', height: '20px', margin: '4px 11px 10px 11px' }}
-                                    src={SaveIcon}
+                            ) : (
+                                <Button
+                                    onClick={handleAssigned}
+                                    shape="circle"
+                                    size="large"
+                                    icon={
+                                        <ReactSVG
+                                            style={{ width: '20px', height: '20px', margin: '4px 11px 10px 11px' }}
+                                            src={SaveIcon}
+                                        />
+                                    }
+                                    style={{ backgroundColor: '#D2D2D2', marginTop: '-4px' }}
                                 />
-                            }
-                            style={{ backgroundColor: '#D2D2D2', marginTop: '-4px'}}
-                        />}
-                                </Flex>
+                            )}
                         </Flex>
-                        
-                    
-                    <Flex py='80px' css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
+                    </Flex>
+
+                    <Flex py="80px" css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
                         <SidebarStyles data={branchList} selectedItem={currentSelectedBar} onSelect={handleSelectBranch} />
                         <Container>
-                        <Box
-                            sx={{
-                                display: 'grid',
-                                gridTemplateColumns: 'repeat(auto-fill, 32%)',
-                                placeItems: 'center',
-                                gap: '20px',
-                            }}
-                        >
-                            {shopStyleList.docs.map((item, index) => {
-                                const selected =
-                                    currentAdminChannel.codename === 'A'
-                                        ? selectedList.find(x => x.style === item._id)
-                                        : selectAssignedStyleList.find(x => x.style === item._id);
-                                return (
-                                    <CapsItem
-                                        bg="#ffffff"
-                                        item={item}
-                                        key={`${item._id}-capsule`}
-                                        showNum={currentUser.role == 1 ? item.caseNum : item.numInBag}
-                                        handleOpen={() => handleOpenDetail(item)}
-                                        curChannelPrice={selected ? selected.price : item.price}
-                                        isSelect={!!selected}
-                                        isAssign={currentAdminChannel.codename !== 'A'}
-                                        onSelect={handleSelect}
-                                        onEditPrice={currentAdminChannel.codename === 'A' || !selected ? null : handleEditPrice}
-                                    />
-                                );
-                            })}
-                        </Box>
-                        
-
+                            <Box
+                                sx={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fill, 32%)',
+                                    placeItems: 'center',
+                                    gap: '20px',
+                                }}
+                            >
+                                {shopStyleList.docs.map((item, index) => {
+                                    const selected =
+                                        currentAdminChannel.codename === 'A'
+                                            ? selectedList.find(x => x.style === item._id)
+                                            : selectAssignedStyleList.find(x => x.style === item._id);
+                                    return (
+                                        <CapsItem
+                                            bg="#ffffff"
+                                            item={item}
+                                            key={`${item._id}-capsule`}
+                                            showNum={currentUser.role == 1 ? item.caseNum : item.numInBag}
+                                            handleOpen={() => handleOpenDetail(item)}
+                                            curChannelPrice={selected ? selected.price : item.price}
+                                            isSelect={!!selected}
+                                            isAssign={currentAdminChannel.codename !== 'A'}
+                                            onSelect={handleSelect}
+                                            onEditPrice={
+                                                currentAdminChannel.codename === 'A' || !selected ? null : handleEditPrice
+                                            }
+                                        />
+                                    );
+                                })}
+                            </Box>
                         </Container>
-<More
+                        <More
                             onLoadMore={() => {
                                 handleLoadMore();
                             }}
