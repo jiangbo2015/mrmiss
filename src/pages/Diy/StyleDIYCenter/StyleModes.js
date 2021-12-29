@@ -4,7 +4,7 @@ import { ReactSVG } from 'react-svg';
 import { Form, Spin } from 'antd';
 import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
-import StyleItem from '@/components/StyleItem';
+import { useIntl } from 'umi';
 // import InfiniteScroll from 'react-infinite-scroll-component';
 import MultipleModeStyles from './MultipleModeStyles';
 
@@ -60,7 +60,7 @@ const App = ({
 }) => {
     const [queryKey, setQueryKey] = useState('');
     const [form] = Form.useForm();
-
+    const { locale } = useIntl();
     const currentGoodCategory = currentGoodCategoryMultiple;
     // console.log('assign', assign);
 
@@ -334,7 +334,7 @@ const App = ({
     }, [currentAdminChannel._id, currentGoodCategoryMultiple]);
 
     const handleSetCurrentGoodCategory = category => {
-        if(!category) return;
+        if (!category) return;
         console.log('handleSetCurrentGoodCategory', category);
         dispatch({
             type: 'diy/setCurrentGoodCategoryMultiple',
@@ -402,7 +402,7 @@ const App = ({
                         width="98px"
                         options={currentGood.category
                             .filter(x => (collocationPattern !== 'single' ? x.name.indexOf('分体') < 0 : true))
-                            .map(c => ({ label: c.name, value: c._id }))}
+                            .map(c => ({ label: locale === 'en-US' ? c.enname : c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
                     <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />

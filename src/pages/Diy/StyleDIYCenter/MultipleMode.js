@@ -6,7 +6,7 @@ import SearchInput from '@/components/SearchInput';
 import Select from '@/components/Select';
 import StyleItem from '@/components/StyleItem';
 // import InfiniteScroll from 'react-infinite-scroll-component';
-import {useIntl} from 'umi';
+import { useIntl } from 'umi';
 // react-list
 import SelectedIcon from '@/public/icons/icon-selected.svg';
 import SingleIcon from '@/public/icons/icon-single.svg';
@@ -36,7 +36,7 @@ const App = ({
     assign,
     // curChannslPrice,
 }) => {
-    // console.log('assign', assign);
+    const { formatMessage, locale } = useIntl();
     // const [selectAssignedStyleList, setSelectAssignedStyleList] = useState([]);
     const [currentGoodCategoryIsTop, setCurrentGoodCategoryIsTop] = useState(false);
     let docs = [];
@@ -291,7 +291,7 @@ const App = ({
                         width="98px"
                         options={currentGood.category
                             .filter(x => x.name.indexOf('分体') < 0)
-                            .map(c => ({ label: c.name, value: c._id }))}
+                            .map(c => ({ label: locale === 'en-US' ? c.enname : c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
                     <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />

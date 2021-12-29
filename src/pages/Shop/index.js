@@ -266,7 +266,7 @@ const Shop = ({
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
                     <Title
                         title={locale === 'en-US' ? currentBranch.nameen : currentBranch.namecn}
-                        subtitle={currentBranch.description}
+                        subtitle={locale === 'en-US' ? currentBranch.descriptionen : currentBranch.description}
                     />
                 </Box>
                 <Box css={{ position: 'relative' }} maxWidth="1480px" mx="auto">

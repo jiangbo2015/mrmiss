@@ -54,7 +54,7 @@ const Capsule = ({
 
     const { capsuleStyles = [] } = currentAdminChannel;
 
-    const {locale,formatMessage } = useIntl()
+    const { locale, formatMessage } = useIntl();
 
     useEffect(() => {
         dispatch({
@@ -120,30 +120,30 @@ const Capsule = ({
 
     useEffect(() => {
         if (currentAdminChannel.codename === 'A' && currentCapsule.children) {
-            let haveTopMap = {}
-            let haveTopOrBottom = false
+            let haveTopMap = {};
+            let haveTopOrBottom = false;
             currentCapsule.children.map(x => {
                 if ((x.nameen && x.nameen.toUpperCase()) === 'TOP' || x.namecn.includes('单衣')) {
-                    let key = x.namecn.replace('单衣','')
-                    if(!haveTopMap[key]) {
-                        haveTopMap[key] = {}
+                    let key = x.namecn.replace('单衣', '');
+                    if (!haveTopMap[key]) {
+                        haveTopMap[key] = {};
                     }
-                    
-                    haveTopMap[key].top = x
-                    haveTopOrBottom=true
+
+                    haveTopMap[key].top = x;
+                    haveTopOrBottom = true;
                 } else if ((x.nameen && x.nameen.toUpperCase()) === 'BOTTOM' || x.namecn.includes('单裤')) {
-                    let key = x.namecn.replace('单裤','')
-                    if(!haveTopMap[key]) {
-                        haveTopMap[key] = {}
+                    let key = x.namecn.replace('单裤', '');
+                    if (!haveTopMap[key]) {
+                        haveTopMap[key] = {};
                     }
-                    haveTopMap[key].bottom = x
-                    haveTopOrBottom=true
+                    haveTopMap[key].bottom = x;
+                    haveTopOrBottom = true;
                 }
             });
 
             for (const key in haveTopMap) {
-                if(!haveTopMap[key].top || !haveTopMap[key].bottom) {
-                    delete haveTopMap[key]
+                if (!haveTopMap[key].top || !haveTopMap[key].bottom) {
+                    delete haveTopMap[key];
                 }
             }
 
@@ -159,13 +159,12 @@ const Capsule = ({
 
     const handleOpenDetail = capsule => {
         if (currentAdminChannel.codename === 'A') {
-            console.log('haveTopAndBottom', haveTopAndBottom)
+            console.log('haveTopAndBottom', haveTopAndBottom);
             if (haveTopAndBottom && capsule.goodCategory) {
-               
                 let index = 0;
                 for (const key in haveTopAndBottom) {
                     const element = haveTopAndBottom[key];
-                    if(capsule.goodCategory.name === element.top.namecn){
+                    if (capsule.goodCategory.name === element.top.namecn) {
                         index = capsuleStyleTopAndBottomList[key].top.findIndex(x => x._id === capsule._id);
                         dispatch({
                             type: 'capsule/setCurrentCapsuleKey',
@@ -181,7 +180,7 @@ const Capsule = ({
                         });
                         setVisibleComplex(true);
                         return;
-                    } else if(capsule.goodCategory.name === element.bottom.namecn) {
+                    } else if (capsule.goodCategory.name === element.bottom.namecn) {
                         index = capsuleStyleTopAndBottomList[key].bottom.findIndex(x => x._id === capsule._id);
                         dispatch({
                             type: 'capsule/setCurrentCapsuleKey',
@@ -200,7 +199,6 @@ const Capsule = ({
                         return;
                     }
                 }
-                
             }
 
             dispatch({
@@ -288,86 +286,84 @@ const Capsule = ({
         <Layout pt="74px" bg="#F7F7F7">
             <section>
                 <Box bg="#F7F7F7" py="90px" maxWidth="1480px" mx="auto">
-                    <Title title={locale === 'en-US' ?  currentCapsule.nameen : currentCapsule.namecn} subtitle={currentCapsule.description} />
+                    <Title
+                        title={locale === 'en-US' ? currentCapsule.nameen : currentCapsule.namecn}
+                        subtitle={locale === 'en-US' ? currentCapsule.descriptionen : currentCapsule.description}
+                    />
                 </Box>
-                <Flex mx="auto" pt="30px" pb="20px" px="8px" maxWidth="1480px"  justifyContent="space-between" sx={{ position: 'relative' }}>
-                            <Search
-                                onSearch={handleOnSearch}
-                                mode="white"
-                                style={{ width: '200px' }}
-                                placeholder="SEARCH STYLE"
-                            />
-                            {/* {currentAdminChannel.codename === 'A' ? null : } */}
+                <Flex
+                    mx="auto"
+                    pt="30px"
+                    pb="20px"
+                    px="8px"
+                    maxWidth="1480px"
+                    justifyContent="space-between"
+                    sx={{ position: 'relative' }}
+                >
+                    <Search onSearch={handleOnSearch} mode="white" style={{ width: '200px' }} placeholder="SEARCH STYLE" />
+                    {/* {currentAdminChannel.codename === 'A' ? null : } */}
 
-                            <Switcher assigned={currentCapsule} ref={ref} noRelative>
-                                <Box
-                                    bg="#DFDFDF"
-                                    p="4px"
-                                    mt="20px"
-                                    width="24px"
-                                    height="24px"
-                                    sx={{
-                                        borderRadius: '4px',
-                                        visibility: currentAdminChannel.codename === 'A' ? 'hidden' : 'visible',
-                                    }}
-                                >
+                    <Switcher assigned={currentCapsule} ref={ref} noRelative>
+                        <Box
+                            bg="#DFDFDF"
+                            p="4px"
+                            mt="20px"
+                            width="24px"
+                            height="24px"
+                            sx={{
+                                borderRadius: '4px',
+                                visibility: currentAdminChannel.codename === 'A' ? 'hidden' : 'visible',
+                            }}
+                        >
+                            <ReactSVG
+                                src={SelectedIcon}
+                                style={{
+                                    width: '16px',
+                                    height: '16px',
+                                    opacity: selectedAll ? '1' : '0.3',
+                                }}
+                                onClick={handleSelectAll}
+                            />
+                        </Box>
+                    </Switcher>
+                    <Flex width="200px" justifyContent="flex-end" alignItems="flex-start">
+                        {currentAdminChannel.codename === 'A' ? ( // 通道A才能下单
+                            <Button
+                                onClick={() => {
+                                    setOrderVisible(true);
+                                }}
+                                shape="circle"
+                                size="large"
+                                icon={<ReactSVG style={{ width: '20px', height: '20px', margin: 'auto' }} src={IconCapsuleCar} />}
+                                style={{ backgroundColor: '#D2D2D2', marginTop: '-4px' }}
+                            />
+                        ) : (
+                            // <Flex alignItems="center">
+                            //     <SaveOutlined
+                            //         size="24px"
+                            //         style={{ fontSize: '24px', cursor: 'pointer', margin: '4px 0' }}
+                            //         onClick={handleAssigned}
+                            //     />
+                            // </Flex>
+                            <Button
+                                onClick={handleAssigned}
+                                shape="circle"
+                                size="large"
+                                icon={
                                     <ReactSVG
-                                        src={SelectedIcon}
-                                        style={{
-                                            width: '16px',
-                                            height: '16px',
-                                            opacity: selectedAll ? '1' : '0.3',
-                                        }}
-                                        onClick={handleSelectAll}
+                                        style={{ width: '20px', height: '20px', margin: '4px 11px 10px 11px' }}
+                                        src={SaveIcon}
                                     />
-                                </Box>
-                            </Switcher>
-                            <Flex width="200px" justifyContent="flex-end" alignItems="flex-start">
-                                {currentAdminChannel.codename === 'A' ? ( // 通道A才能下单
-                                    <Button
-                                        onClick={() => {
-                                            setOrderVisible(true);
-                                        }}
-                                        shape="circle"
-                                        size="large"
-                                        icon={
-                                            <ReactSVG
-                                                style={{ width: '20px', height: '20px', margin: 'auto' }}
-                                                src={IconCapsuleCar}
-                                            />
-                                        }
-                                        style={{ backgroundColor: '#D2D2D2', marginTop: '-4px' }}
-                                    />
-                                ) : (
-                                    // <Flex alignItems="center">
-                                    //     <SaveOutlined
-                                    //         size="24px"
-                                    //         style={{ fontSize: '24px', cursor: 'pointer', margin: '4px 0' }}
-                                    //         onClick={handleAssigned}
-                                    //     />
-                                    // </Flex>
-                                    <Button
-                                    onClick={handleAssigned}
-                                    shape="circle"
-                                    size="large"
-                                    icon={
-                                        <ReactSVG
-                                            style={{ width: '20px', height: '20px', margin: '4px 11px 10px 11px' }}
-                                            src={SaveIcon}
-                                        />
-                                    }
-                                    style={{ backgroundColor: '#D2D2D2', marginTop: '-4px'}}
-                                />
-                                    
-                                )}
-                            </Flex>
-                        </Flex>
+                                }
+                                style={{ backgroundColor: '#D2D2D2', marginTop: '-4px' }}
+                            />
+                        )}
+                    </Flex>
+                </Flex>
 
                 <Flex css={{ position: 'relative' }} justifyContent="space-between" maxWidth="1480px" mx="auto">
-
                     <SidebarStyles data={capsuleList} selectedItem={currentSelectedBar} onSelect={handleSelectCapsule} />
                     <Container>
-
                         <Box
                             sx={{
                                 display: 'grid',
