@@ -104,15 +104,13 @@ export default ({ handleOpen, item, showNum, bg='#F7F7F7', curChannelPrice, onEd
                                         setCurrent(i);
                                     }}
                                     isSelect={current === i}
+                                    circle={c.colorObj?.code === "1500亮白" ? true : false}
                                     src={c.colorObj?.type ? filterImageUrl(c.colorObj?.value) : ''}
                                     bg={c.colorObj?.type ? false : c.colorObj?.value}
                                     key={c._id}
                                 />
                             );
                         })}
-                        {/* {new Array(3).fill(0).map((x, i) => (
-                            <Dot src={temp} key={i}></Dot>
-                        ))} */}
                     </Flex>
                 </Box>
             </Box>

@@ -1,7 +1,7 @@
 import { Box } from 'rebass/styled-components';
 
 // 背景色或者图片
-export default ({ bg, size, src, isSelect, onClick = () => {}, ...props }) => {
+export default ({ bg, size, src, isSelect, circle, onClick = () => {}, ...props }) => {
     const bgProps = bg
         ? {
               background: bg,
@@ -29,8 +29,7 @@ export default ({ bg, size, src, isSelect, onClick = () => {}, ...props }) => {
                     position: 'relative',
                     cursor: 'pointer',
                     borderRadius: '50%',
-                    // border: '1px solid #888',
-
+                    border: circle ? '1px solid #888' : 'none',
                     ...bgProps,
                 }}
                 {...props}

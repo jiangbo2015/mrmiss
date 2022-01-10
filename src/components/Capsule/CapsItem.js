@@ -130,6 +130,7 @@ export default ({ handleOpen, item, curChannelPrice, onEditPrice, isSelect, onSe
                                         e.stopPropagation();
                                         setCurrent(i);
                                     }}
+                                    circle={c.colorObj?.code === "1500亮白" ? true : false}
                                     isSelect={current === i}
                                     src={c.colorObj?.type ? filterImageUrl(c.colorObj?.value) : ''}
                                     bg={c.colorObj?.type ? false : c.colorObj?.value}

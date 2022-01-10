@@ -89,7 +89,7 @@ const Capsule = ({
 
     const handleLoadMore = page => {
         if (currentCapsule._id) {
-            let payload = { capsule: currentCapsule._id, page: page ? page : capsuleStyleList.page + 1 };
+            let payload = { capsule: currentCapsule._id, page: page ? page : capsuleStyleList.page + 1,limit:15 };
             if (queryKey) {
                 payload.code = queryKey;
             }

@@ -120,7 +120,7 @@ const Shop = ({
     const handleLoadMore = page => {
         console.log('handleLoadMore', page);
         if (currentBranch._id) {
-            let payload = { branch: currentBranch._id, page: page ? page : shopStyleList.page + 1 };
+            let payload = { branch: currentBranch._id, page: page ? page : shopStyleList.page + 1, limit: 15 };
             if (queryKey) {
                 payload.code = queryKey;
             }
@@ -377,13 +377,14 @@ const Shop = ({
                                     );
                                 })}
                             </Box>
-                        </Container>
-                        <More
+                            <More
                             onLoadMore={() => {
                                 handleLoadMore();
                             }}
                             hasMore={shopStyleList.page < shopStyleList.pages}
                         />
+                        </Container>
+                        
                     </Flex>
                 </Box>
             </section>
