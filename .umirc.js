@@ -10,7 +10,7 @@ export default defineConfig({
         type: 'hash',
     },
     define: {
-        'process.env.VERSION': '1.3.1',
+        'process.env.VERSION': '1.3.2',
         // 'process.env.API_URL': 'http://localhost:3001',
         'process.env.API_URL': 'https://we-idesign.com',
         'process.env.DOWNLOAD_URL': 'http://8.209.64.159:3001',
