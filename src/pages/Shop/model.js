@@ -139,14 +139,15 @@ export default {
         },
         *fetchShopStyleTopAndList({ payload }, { call, put, select }) {
             const topAndBottomMap = payload;
+            console.log('topAndBottomMap',topAndBottomMap)
             const topAndBottomData = {};
             for (const key in topAndBottomMap) {
                 const { top, bottom } = topAndBottomMap[key];
                 if (top && bottom) {
-                    const resTop = yield call(api.getShopStyleList, { branch: top.branch, branchKind: top._id, limit: 1000 });
+                    const resTop = yield call(api.getShopStyleList, { branch: top.branch, goodCategoryId: top._id, limit: 1000 });
                     const resBottom = yield call(api.getShopStyleList, {
                         branch: bottom.branch,
-                        branchKind: bottom._id,
+                        goodCategoryId: bottom._id,
                         limit: 1000,
                     });
 
