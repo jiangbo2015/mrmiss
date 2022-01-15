@@ -8,12 +8,12 @@ import { extend } from 'umi-request';
  * 配置request请求时的默认参数
  */
 
-// const request = extend({
-//     // errorHandler,
-//     prefix: process.env.API_URL,
-//     // 默认错误处理
-//     // credentials: 'include', // 默认请求是否带上cookie
-// });
+const request = extend({
+    // errorHandler,
+    prefix: window.location.hostname === 'we-idesign.com' ? process.env.API_URL : 'http://8.209.64.159:3001',
+    // 默认错误处理
+    // credentials: 'include', // 默认请求是否带上cookie
+});
 
 request.interceptors.request.use(async (url, options) => {
     const { token } = localStorage;
