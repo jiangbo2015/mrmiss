@@ -10,9 +10,9 @@ export default defineConfig({
         type: 'hash',
     },
     define: {
-        'process.env.VERSION': '1.3.6',
+        'process.env.VERSION': '1.3.7',
         // 'process.env.API_URL': 'http://localhost:3001',
-        'process.env.API_URL': 'http://8.209.64.159:3001',
+        'process.env.API_URL': 'http://8.209.64.159:3002',
         'process.env.DOWNLOAD_URL': 'http://8.209.64.159:3001',
     },
     // proxy: {
