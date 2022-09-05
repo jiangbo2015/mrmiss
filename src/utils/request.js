@@ -10,7 +10,8 @@ import { extend } from 'umi-request';
 
 const request = extend({
     // errorHandler,
-    prefix: window.location.hostname.includes('we-idesign.com') ? process.env.API_URL : 'http://8.209.64.159:3002',
+    prefix: process.env.API_URL,
+    // prefix: window.location.hostname.includes('we-idesign.com') ? process.env.API_URL : 'http://8.209.64.159:3002',
     // 默认错误处理
     // credentials: 'include', // 默认请求是否带上cookie
 });

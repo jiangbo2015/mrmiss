@@ -118,8 +118,8 @@ const App = ({ styleList = { docs: [] }, collocationBg, dispatch, currentStyle =
                             }}
                         >
                             <StyleItem
-                                // width="170px"
-                                width={`${(currentStyle.styleSize / 27) * 16}vw`}
+                                width="320px"
+                                // width={`${(currentStyle.styleSize / 27) * 16}vw`}
                                 styleId={`expand-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
@@ -138,7 +138,8 @@ const App = ({ styleList = { docs: [] }, collocationBg, dispatch, currentStyle =
                             }}
                         >
                             <StyleItem
-                                width={`${(currentStyle.styleBackSize / 27) * 16}vw`}
+                                // width={`${(currentStyle.styleBackSize / 27) * 16}vw`}
+                                width="320px"
                                 colors={selectColorList}
                                 {...currentStyle}
                                 styleId={`expand-back-${currentStyle._id}`}

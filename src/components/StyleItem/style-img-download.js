@@ -110,7 +110,7 @@ export default props => {
                     svg.setAttribute('id', svgId || key);
                     let svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                     svg.appendChild(svgDefs);
-                    svg.setAttribute('style', `width: ${width}; height: 100%`);
+                    svg.setAttribute('style', `width: ${width}; height: 100%; font-size: 0px;`);
 
                     for (let i = 0; i < colors.length; i++) {
                         let color = colors[i];

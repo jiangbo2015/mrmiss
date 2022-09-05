@@ -398,14 +398,13 @@ const App = ({
                 >
                     <Select
                         value={currentGoodCategoryMultiple}
-                        style={{ marginRight: '20px' }}
-                        width="98px"
+                        style={{ marginRight: '10px' }}
+                        width="158px"
                         options={currentGood.category
                             .filter(x => (collocationPattern !== 'single' ? x.name.indexOf('分体') < 0 : true))
                             .map(c => ({ label: locale === 'en-US' ? c.enname : c.name, value: c._id }))}
                         onSelect={val => handleSetCurrentGoodCategory(val)}
                     />
-                    <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} />
                     {collocationPattern === 'single' ? null : (
                         <ReactSVG
                             src={AllIcon}
@@ -413,7 +412,7 @@ const App = ({
                                 width: '20px',
                                 height: '20px',
                                 padding: '4px',
-                                marginLeft: '24px',
+                                marginLeft: '14px',
                                 marginBottom: '6px',
                                 opacity: selectedNum < docs.length ? 0.3 : 1,
                             }}
@@ -453,7 +452,7 @@ const App = ({
                     </Form.Item>
                 </Form>
                 {collocationPattern === 'single' ? (
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex',alignItems: 'center', }}>
                         <ReactSVG
                             src={ExpandIcon}
                             className="mode-icon"
@@ -480,9 +479,10 @@ const App = ({
                                 handleChangeCollocationPattern('multiple');
                             }}
                         />
+                        <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} style={{ marginLeft: '10px' }}/>
                     </div>
                 ) : (
-                    <div style={{ display: 'flex' }}>
+                    <div style={{ display: 'flex',alignItems: 'center', }}>
                         <ReactSVG
                             src={SingleIcon}
                             className="mode-icon"
@@ -494,8 +494,10 @@ const App = ({
                                 handleChangeCollocationPattern('single');
                             }}
                         />
+                        <Select onClick={handleToggleTime} value="Time" disabled options={[{ label: 'Time', value: 'time' }]} style={{ marginLeft: '10px' }}/>
                     </div>
                 )}
+
             </div>
             <div
                 style={{

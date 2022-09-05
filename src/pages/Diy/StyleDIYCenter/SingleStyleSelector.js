@@ -55,8 +55,8 @@ const App = ({
                             }}
                         >
                             <StyleItem
-                                // width="170px"
-                                width={`${(currentStyle.styleSize / 27) * 14}vw`}
+                                width="280px"
+                                // width={`${(currentStyle.styleSize / 27) * 14}vw`}
                                 styleId={`single-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
@@ -73,7 +73,8 @@ const App = ({
                             }}
                         >
                             <StyleItem
-                                width={`${(currentStyle.styleBackSize / 27) * 14}vw`}
+                                width="280px"
+                                // width={`${(currentStyle.styleBackSize / 27) * 14}vw`}
                                 colors={selectColorList}
                                 {...currentStyle}
                                 styleId={`single-back-${currentStyle._id}`}

@@ -96,7 +96,7 @@ export default props => {
                     svg.setAttribute('id', svgId || key);
                     let svgDefs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
                     svg.appendChild(svgDefs);
-                    svg.setAttribute('style', `width: ${width}; height: 100%`);
+                    svg.setAttribute('style', `width: ${width}; height: 100%; font-size: 0px;`);
 
                     for (let i = 0; i < colors.length; i++) {
                         let color = colors[i];
@@ -110,7 +110,10 @@ export default props => {
                             let svgPattern = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
 
                             svgPattern.setAttribute('id', `${styleId}-${color._id}-${i}`);
-                            // editPatterns[color._id] = svgPattern
+                            // editPatterns[color._id] = svgPattern objectBoundingBox
+                            // svgPattern.setAttribute('patternUnits', 'objectBoundingBox');
+                            // svgPattern.setAttribute('patternContentUnits', 'objectBoundingBox');
+
                             svgPattern.setAttribute('patternUnits', 'userSpaceOnUse');
                             svgPattern.setAttribute('patternContentUnits', 'userSpaceOnUse');
                             if (svg.width.baseVal.unitType === 2) {
@@ -119,15 +122,15 @@ export default props => {
                             let W = ((color.size * svg.width.baseVal.value) / styleSize) * imgVals.scale;
                             let H = (W * color.height) / color.width;
 
-                            svgPattern.setAttribute('width', `${W}px`);
-                            svgPattern.setAttribute('height', `${H}px`);
+                            svgPattern.setAttribute('width', `${parseInt(W)}px`);
+                            svgPattern.setAttribute('height', `${parseInt(H)}px`);
                             svgPattern.x.baseVal.value = imgVals.x;
                             svgPattern.y.baseVal.value = imgVals.y;
 
                             let svgPatternImage = document.createElementNS('http://www.w3.org/2000/svg', 'image');
 
-                            svgPatternImage.setAttribute('width', `${W}px`);
-                            svgPatternImage.setAttribute('height', `${H}px`);
+                            svgPatternImage.setAttribute('width', `${parseInt(W)}px`);
+                            svgPatternImage.setAttribute('height', `${parseInt(H)}px`);
                             svgPatternImage.href.baseVal = `${filterImageUrl(color.value)}`;
 
                             // editSvgs.svgDefs.appendChild(svgPattern)
