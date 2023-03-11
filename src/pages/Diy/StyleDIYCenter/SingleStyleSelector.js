@@ -55,8 +55,8 @@ const App = ({
                             }}
                         >
                             <StyleItem
-                                width="280px"
-                                // width={`${(currentStyle.styleSize / 27) * 14}vw`}
+                                // width="280px"
+                                width={`${(currentStyle.styleSize / 27) * 14}vw`}
                                 styleId={`single-${currentStyle._id}`}
                                 colors={selectColorList}
                                 {...currentStyle}
@@ -73,14 +73,15 @@ const App = ({
                             }}
                         >
                             <StyleItem
-                                width="280px"
-                                // width={`${(currentStyle.styleBackSize / 27) * 14}vw`}
+                                // width="280px"
+                                width={`${(currentStyle.styleBackSize / 27) * 14}vw`}
                                 colors={selectColorList}
                                 {...currentStyle}
                                 styleId={`single-back-${currentStyle._id}`}
                                 svgUrl={currentStyle.svgUrlBack}
                                 showGroupStroke={true}
                                 shadowUrl={currentStyle.shadowUrlBack}
+                                styleSize={currentStyle.styleBackSize}
                                 curStylesEditGroupIndex={currentStyleRegion - 1}
                                 onSetEditSvgGroupIndex={handleSetCurrentStyleRegion}
                             />
