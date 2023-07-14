@@ -2,7 +2,7 @@ import Banner from '@/components/Banner';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
 // import Footer from '@/components/Footer';
-import map from '@/public/map.png';
+// import map from '@/public/map.png';
 // import mp4 from '@/public/imgs/08.mp4';
 import { connect } from 'dva';
 import { useIntl } from 'umi';
@@ -44,7 +44,7 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
                         })}
                     />
                 </Box>
-                <FeatureImage imgsInfo={systemDetail}></FeatureImage>
+                {/* <FeatureImage imgsInfo={systemDetail}></FeatureImage> */}
                 <Carousel carousels={systemDetail.carousels}></Carousel>
             </Box>
             <Box bg="#fff" px="40px" py="40px">
@@ -61,14 +61,14 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
                                 '我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。',
                         })}
                     />
-                    <Box
+                    {/* <Box
                         mt="40px"
                         height="500px"
                         css={{
                             background: `url(${map}) no-repeat`,
                             backgroundSize: 'cover',
                         }}
-                    />
+                    /> */}
                 </Box>
             </Box>
         </Layout>
