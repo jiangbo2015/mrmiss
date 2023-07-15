@@ -30,7 +30,7 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
         <Layout bg="#fbf8fa" setOpenLogin={setOpenLogin} isLogin={openLogin}>
             {/* <Login /> */}
             <Banner imgsInfo={systemDetail} />
-            <Box p="40px" maxWidth="1480px" m="auto">
+            {/* <Box p="40px" maxWidth="1480px" m="auto">
                 <Box mb="40px">
                     <Title
                         title={intl.formatMessage({
@@ -44,12 +44,12 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
                         })}
                     />
                 </Box>
-                {/* <FeatureImage imgsInfo={systemDetail}></FeatureImage> */}
+                <FeatureImage imgsInfo={systemDetail}></FeatureImage>
                 <Carousel carousels={systemDetail.carousels}></Carousel>
-            </Box>
-            <Box bg="#fff" px="40px" py="40px">
+            </Box> */}
+            {/* <Box bg="#fff" px="40px" py="40px">
                 <Box bg="#fff" maxWidth="1480px" m="auto">
-                    {/* <div id="aboutas">aboutas</div> */}
+                    <div id="aboutas">aboutas</div>
                     <Title
                         title={intl.formatMessage({
                             id: 'about_us',
@@ -61,16 +61,16 @@ const App = ({ dispatch, currentUser, location, systemDetail }) => {
                                 '我们有效地整合了流程，产品和客户的工作和需求，以设计创意，市场美学和差异化需求设计产品，我们专注于并制造产品。',
                         })}
                     />
-                    {/* <Box
+                    <Box
                         mt="40px"
                         height="500px"
                         css={{
                             background: `url(${map}) no-repeat`,
                             backgroundSize: 'cover',
                         }}
-                    /> */}
+                    />
                 </Box>
-            </Box>
+            </Box> */}
         </Layout>
     );
 };
