@@ -1,5 +1,5 @@
 // import { parse } from "querystring";
-export const baseUrl = window.location.hostname === 'we-idesign.com' ? process.env.API_URL + '/' : 'http://8.209.64.159:3007/';
+export const baseUrl = '/';
 // export const baseUrl = 'http://we-idesign.com/';
 
 export const imgUrl = 'https://ik.imagekit.io/';
