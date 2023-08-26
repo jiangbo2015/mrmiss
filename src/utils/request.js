@@ -27,7 +27,7 @@ request.interceptors.request.use(async (url, options) => {
 
 request.use(async (ctx, next) => {
     await next();
-
+    console.log('process.env.API_URL', process.env.API_URL);
     const { res } = ctx;
     const { success = false, message } = res; // 假设返回结果为 : { success: false, errorCode: 'B001' }
     if (!success) {
